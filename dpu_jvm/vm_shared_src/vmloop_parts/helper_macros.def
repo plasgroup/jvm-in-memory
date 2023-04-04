@@ -1,0 +1,51 @@
+#define DMA_B 1024
+#define DMA_INNER_BLOCK_MASK 1023
+#define PAGE_NUMBER(ADDR) ADDR & ~DMA_INNER_BLOCK_MASK
+
+#define INC_PC pc++;
+
+#define WRITE_INT32_BIT_BY_BIT(ADDR, NUM) \
+	*(ADDR) =  NUM & (0b11111111); \
+    *((ADDR)+1) =  (NUM >> 8) & (0b11111111); \
+    *((ADDR)+2) =  (NUM >> 16) & (0b11111111); \
+    *((ADDR)+3) =  (NUM >> 24) & (0b11111111); \
+
+#define ARRAY_ACCESS_DEBUG_PRINT_WRITE_BACK(CACHE_LINE_ID) \
+   DEBUG_PRINT("* write back array in cache_%d, to mram %p\n", CACHE_LINE_ID, \
+                    (void*) (inline_array_buffer_cache.cache_lines[CACHE_LINE_ID].array + \
+                        (uint32_t)(inline_array_buffer_cache.cache_lines[CACHE_LINE_ID].page_num) * DMA_B));
+
+#define ARR_CACHE_WRITEBACK(CACHE_LINE_ID) \
+    mram_write(inline_array_buffer_cache.cache_lines[CACHE_LINE_ID].buffer, \
+                    (void*) (inline_array_buffer_cache.cache_lines[CACHE_LINE_ID].array + \
+                    (uint32_t)(inline_array_buffer_cache.cache_lines[CACHE_LINE_ID].page_num) * DMA_B) \
+                    , DMA_B);
+
+#define ARR_CACHE_WRITEBACK_AND_CLEAR_DIRTY_BIT(CACHE_LINE_ID) \
+    ARR_CACHE_WRITEBACK(CACHE_LINE_ID); \
+    array_cache_##CACHE_LINE_ID##_dirty = 0;
+
+#define ARR_CACHE_WRITEBACK_IFDIRTY(CACHE_LINE_ID) \
+    if (array_cache_##CACHE_LINE_ID##_dirty) { \
+         ARRAY_ACCESS_DEBUG_PRINT_WRITE_BACK(CACHE_LINE_ID); \
+         ARR_CACHE_WRITEBACK(CACHE_LINE_ID); \
+    }
+
+#define ARR_CACHE_WRITEBACK_IFDIRTY_ALL_CACHELINE \
+    ARR_CACHE_WRITEBACK_IFDIRTY(0); \
+    ARR_CACHE_WRITEBACK_IFDIRTY(1); \
+    ARR_CACHE_WRITEBACK_IFDIRTY(2);
+
+#define SET_DIRTY(INDEX) \
+      if (INDEX == 0) { \
+          array_cache_0_dirty = 1; \
+      } \
+      else if (INDEX == 1) { \
+          array_cache_1_dirty = 1; \
+      } \
+      else if (INDEX == 2) { \
+          array_cache_2_dirty = 1; \
+      }
+
+#define DMA_TO_CACHELINE(CACHELINE_ID, FROM) \
+     mram_read(PAGE_NUMBER(FROM), inline_array_buffer_cache.cache_lines[CACHELINE_ID].buffer, DMA_B);

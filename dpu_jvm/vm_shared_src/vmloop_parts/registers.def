@@ -1,0 +1,31 @@
+
+    struct function_thunk callee;
+    uint8_t* frame;
+    uint8_t* tmp_frame_begin;
+
+    //two pointers, point to function bytecode in mram and function structure beginning i the MRAM
+    uint8_t __mram_ptr *code_buffer;
+    struct function __mram_ptr *func = func_thunk.func;
+
+    REGVAL pc;
+    int times;
+    int i;
+
+    //registers for arithmetic
+    REGVAL op1;
+    REGVAL op2;
+    REGVAL op3;
+    REGVAL op4;
+
+
+
+    #ifdef INMEMORY && ARRAYCACHE
+    //some registers for array_cache_access (for reduce wram access cost)
+    uint8_t array_cache_0_dirty = 0;
+    uint8_t array_cache_1_dirty = 0;
+    uint8_t array_cache_2_dirty = 0;
+    #endif
+
+    #ifdef HOST
+         uint8_t* ref;
+    #endif
