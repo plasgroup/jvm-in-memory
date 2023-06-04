@@ -604,6 +604,8 @@ struct function_thunk jvm_cons_func_ret() {
 
 	//int params[..] = {...}
 
+	//{return; }
+	
 	//uint32_t tokens[1] = { 0x1 };
 	uint8_t bytecodes[4] = {
 		IRETURN

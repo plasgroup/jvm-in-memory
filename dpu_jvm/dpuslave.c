@@ -57,8 +57,8 @@ void test_dpu_side() {
 
     // //DCALL 
     // interp(fc);
-    fc = jvm_cons_func_ret();
-    interp(fc);
+    // fc = jvm_cons_func_ret();
+    // interp(fc);
     
 
     release_global_memory();

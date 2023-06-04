@@ -1,6 +1,5 @@
 #ifndef VM_MEMORY_H
 #define VM_MEMORY_H
-
 #include <stdint.h>
 
 #ifdef INMEMORY
@@ -50,6 +49,9 @@ extern int debug_eval;
     REG |= (*(uint8_t __mram_ptr *)((ADDR) + 1) << 8); \
     REG |= ( *(uint8_t __mram_ptr *)((ADDR) + 2) << 16); \
     REG |= ( *(uint8_t __mram_ptr *)((ADDR) + 3) << 24);
+
+#define GET_CLASSSTRUT(OBJREF, OUTVAR) \
+    OUTVAR = *(uint32_t __mram_ptr) OBJREF
 
 #ifdef LOG_STACK_POP_EVENT
 #define PUSH_EVAL_STACK(X) \

@@ -17,6 +17,8 @@
     REGVAL op3;
     REGVAL op4;
 
+    struct j_method __mram_ptr* jmethod;
+
 
 
     #ifdef INMEMORY && ARRAYCACHE

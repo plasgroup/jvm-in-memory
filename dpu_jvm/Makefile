@@ -25,6 +25,7 @@ DPU_DEPS := \
 	vm_shared_src/memory.h \
 	vm_shared_src/frame_helper.h \
 	vm_shared_src/function.h \
+	vm_shared_src/jclass.h \
 
 CFILES := \
 	dpu_rt.c \
