@@ -50,17 +50,15 @@
 #pragma region FRAME_GETTER
 //// Getter
 
-
-
-#define FRAME_GET_OLDFP(FP) *(uint8 __mram_ptr**)FRAME_LOC(FP, FRAME_OFFSET_OLDFP_PT)
-#define FRAME_GET_LOCALS(FP, LOCAL_INDEX) *(uint8 __mram_ptr**)FRAME_LOC(FP, FRAME_OFFSET_LOCALS_PT(LOCAL_INDEX))
-#define FRAME_GET_OLDSP(FP) *(uint8 __mram_ptr**)FRAME_LOC(FP, FRAME_OFFSET_OLDSP_PT)
-#define FRAME_GET_RETPC(FP) *(uint8 __mram_ptr**)FRAME_LOC(FP, FRAME_OFFSET_RETPC_PT)
+#define FRAME_GET_OLDFP(FP) *(uint8_t**)FRAME_LOC(FP, FRAME_OFFSET_OLDFP_PT)
+#define FRAME_GET_LOCALS(FP, LOCAL_INDEX) *(uint8_t**)FRAME_LOC(FP, FRAME_OFFSET_LOCALS_PT(LOCAL_INDEX))
+#define FRAME_GET_OLDSP(FP) *(uint8_t**)FRAME_LOC(FP, FRAME_OFFSET_OLDSP_PT)
+#define FRAME_GET_RETPC(FP) *(uint8_t**)FRAME_LOC(FP, FRAME_OFFSET_RETPC_PT)
 #define FRAME_GET_METHOD(FP) *(struct j_method __mram_ptr**)FRAME_LOC(FP, FRAME_OFFSET_METHOD_PT)
 #define FRAME_GET_CLASS(FP) *(struct j_class __mram_ptr**)FRAME_LOC(FP, FRAME_OFFSET_CLASS_PT)
-#define FRAME_GET_CONSTANTPOOL(FP) *(uint8 __mram_ptr**)FRAME_LOC(FP, FRAME_OFFSET_CONSTANTPOOL_PT)
-#define FRAME_GET_BYTECODE(FP) *(uint8 __mram_ptr**)FRAME_LOC(FP, FRAME_OFFSET_BYTECODE_PT)
-#define FRAME_GET_OPERAND_STACK_ELEM(FP, OPRAND_INDEX) *(uint8 __mram_ptr**)FRAME_LOC(FP, FRAME_OFFSET_OPERAND_STACK_ELEM_PT(OPRAND_INDEX))
+#define FRAME_GET_CONSTANTPOOL(FP) *(uint8_t __mram_ptr**)FRAME_LOC(FP, FRAME_OFFSET_CONSTANTPOOL_PT)
+#define FRAME_GET_BYTECODE(FP) *(uint8_t __mram_ptr**)FRAME_LOC(FP, FRAME_OFFSET_BYTECODE_PT)
+#define FRAME_GET_OPERAND_STACK_ELEM(FP, OPRAND_INDEX) *(uint8_t**)FRAME_LOC(FP, FRAME_OFFSET_OPERAND_STACK_ELEM_PT(OPRAND_INDEX))
 
 
 #pragma endregion
@@ -69,9 +67,13 @@
 
 //helper functions
 
-void print_frame(uint8_t __mram_ptr* fp, uint8_t __mram_ptr* sp);
-uint8_t* create_new_vmframe(struct function_thunk func_thunk, uint8_t** stack_top_pt, uint8_t* return_addr, uint8_t* last_frame_eval_stack_top, int pc, uint8_t* current_vm_frame);
-
 #pragma endregion
+void print_frame(uint8_t* fp, uint8_t* sp);
+uint8_t* create_new_vmframe(struct function_thunk func_thunk,
+                            uint8_t** sp_pt, uint8_t* fp, 
+                            uint8_t* return_pc, uint8_t* old_sp);
+
+
+
 
 #endif

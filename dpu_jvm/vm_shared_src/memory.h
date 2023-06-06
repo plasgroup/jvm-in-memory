@@ -1,5 +1,6 @@
 #ifndef VM_MEMORY_H
 #define VM_MEMORY_H
+
 #include <stdint.h>
 
 #ifdef INMEMORY
@@ -14,6 +15,8 @@
 #define DEBUG_STACK
 #define STRUCT_PADDING(X) uint8_t padding[X]
 
+#define u2 uint16_t
+#define u4 uint32_t
 
 #ifdef HOST
 #define __mram_ptr
@@ -38,10 +41,9 @@ extern int debug_eval;
 #define LOG_STACK_POP(X) printf(RED "\t[Pop %d]\n" RESET, X);
 #endif
 
-#define INC_EVAL_STACK evaluation_stack_pt += SLOTSIZE;
-#define DESC_EVAL_STACK evaluation_stack_pt -= SLOTSIZE;
-#define REF_EVAL_STACK_CURRENT_SLOT *SLOTPT (evaluation_stack_pt)
-
+#define INC_EVAL_STACK current_sp += SLOTSIZE;
+#define DESC_EVAL_STACK current_sp -= SLOTSIZE;
+#define REF_EVAL_STACK_CURRENT_SLOT *SLOTPT (current_sp + 4)
 
 #define READ_INT32_BIT_BY_BIT(ADDR, REG) \
 	REG = 0; \
@@ -51,7 +53,7 @@ extern int debug_eval;
     REG |= ( *(uint8_t __mram_ptr *)((ADDR) + 3) << 24);
 
 #define GET_CLASSSTRUT(OBJREF, OUTVAR) \
-    OUTVAR = *(uint32_t __mram_ptr) OBJREF
+    OUTVAR = (uint8_t __mram_ptr*)*(struct j_class __mram_ptr**) OBJREF
 
 #ifdef LOG_STACK_POP_EVENT
 #define PUSH_EVAL_STACK(X) \
@@ -62,15 +64,12 @@ extern int debug_eval;
 #else
 #define PUSH_EVAL_STACK(X) \
       REF_EVAL_STACK_CURRENT_SLOT = X; \
-      INC_EVAL_STACK 
+      INC_EVAL_STACK \
+      printf(">> new sp = %p\n", current_sp);
 #endif
 
 
-
-
-
-#define EVAL_STACK_TOPSLOT_VALUE *SLOTPT (evaluation_stack_pt - SLOTSIZE)
-
+#define EVAL_STACK_TOPSLOT_VALUE *SLOTPT (current_sp)
 
 #ifdef LOG_STACK_POP_EVENT
 #define POP_EVAL_STACK(X) \
@@ -81,21 +80,18 @@ extern int debug_eval;
 #else
 #define POP_EVAL_STACK(X) \
     X = EVAL_STACK_TOPSLOT_VALUE; \
-    DESC_EVAL_STACK
+    DESC_EVAL_STACK \
+    printf(">> new sp = %p\n", current_sp);
+    
 #endif
 
 #pragma endregion
 
 
-
-
-
 struct memory {
     uint8_t __mram_ptr *mram_heap;
     uint8_t __mram_ptr* meta_space;
-    uint8_t __mram_ptr* method_space;
     uint8_t* wram;
-
 };
 
 #define WRAM_SIZE (8 * 1024)
@@ -103,36 +99,29 @@ struct memory {
 #define PARAMS_BUFFER_SIZE (4 * 1024)
 #define WRAM_DATA_SPACE_SIZE (4 * 1024)
 #define META_SPACE_SIZE (4 * 1024)
-#define METHOD_SPACE_SIZE (4 * 1024)
 
 
 extern struct memory mem;
 
 
 extern uint8_t* params_buffer_pt;
-
+extern uint8_t* current_sp;
+extern uint8_t* current_fp;
 extern uint8_t* stack_top;
 
 extern __host uint8_t __mram_ptr *mram_heap_pt;
 extern __host uint8_t __mram_ptr *func_pt;
 extern __host uint8_t __mram_ptr* meta_space_pt;
-extern __host uint8_t __mram_ptr* method_space_pt;
-
-
-extern uint8_t* evaluation_stack_pt;
-
-extern uint8_t* current_frame_end;
-extern uint8_t* current_frame_top;
 
 
 extern uint8_t __mram_noinit mram_heap_space[MRAM_HEAP_SIZE];
 extern uint8_t __mram_noinit mram_meta_space[META_SPACE_SIZE];
-extern uint8_t __mram_noinit mram_method_space[METHOD_SPACE_SIZE];
+
 
 
 extern __host uint8_t wram_data_space[WRAM_DATA_SPACE_SIZE];
-extern __host uint8_t wram_frames_space[WRAM_SIZE];
 extern __host uint8_t params_buffer[PARAMS_BUFFER_SIZE];
+extern __host uint8_t* return_val;
 
 extern struct static_fields_table __mram_ptr* sfields_table;
 extern struct static_field_line __mram_ptr* static_var_m;

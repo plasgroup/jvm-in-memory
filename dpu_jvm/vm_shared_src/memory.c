@@ -3,19 +3,16 @@ struct memory mem;
 
 
 uint8_t* params_buffer_pt;
-
+uint8_t* current_sp = wram_data_space;
+uint8_t* current_fp = 0;
 uint8_t* stack_top;
 
 __host uint8_t __mram_ptr *mram_heap_pt = 0;
 __host uint8_t __mram_ptr* func_pt;
 
 __host uint8_t __mram_ptr* meta_space_pt;
-__host uint8_t __mram_ptr* method_space_pt;
 
 uint8_t* evaluation_stack_pt;
-
-uint8_t* current_frame_end;
-uint8_t* current_frame_top;
 
 #ifdef DEBUG_STACK
 int debug_eval;
@@ -33,7 +30,6 @@ uint8_t wram_frames_space[WRAM_SIZE];
 __host uint8_t params_buffer[PARAMS_BUFFER_SIZE];
 
 uint8_t __mram_noinit mram_meta_space[META_SPACE_SIZE];
-uint8_t __mram_noinit mram_method_space[METHOD_SPACE_SIZE];
 
 uint8_t* wram_data_space_pt = wram_data_space;
 
@@ -41,6 +37,7 @@ uint8_t* wram_data_space_pt = wram_data_space;
 struct static_fields_table __mram_ptr* sfields_table;
 struct static_field_line __mram_ptr* static_var_m;
 
+__host uint8_t* return_val;
 
 void init_memory() {
     int i;
@@ -53,7 +50,6 @@ void init_memory() {
     mem.mram_heap = (uint8_t __mram_ptr*)(mram_heap_space);
     mem.wram = wram_frames_space;
     mem.meta_space = mram_meta_space;
-    mem.method_space = mram_method_space;
 
 #ifdef INMEMORY && ARRAY_CACHE
     printf("%x\n", ARRAY_CACHE_ITEM_COUNT * ARRAY_CACHE_LINE_SIZE);
@@ -67,10 +63,8 @@ void init_memory() {
 
     mram_heap_pt = (uint8_t __mram_ptr *)(mem.mram_heap) + (SLOTVAL) (mram_heap_pt);
     meta_space_pt = mram_meta_space;
-    method_space_pt = mram_method_space;
     stack_top = (uint8_t*)mem.wram;
     params_buffer_pt = params_buffer;
-    current_frame_end = stack_top;
 
 
 
@@ -78,22 +72,22 @@ void init_memory() {
 
     //allocate to method space
     
-    sfields_table = MRAM_METHODSPACE_ALLOC_STRUT(struct static_fields_table);
+    // sfields_table = MRAM_METHODSPACE_ALLOC_STRUT(struct static_fields_table);
     
 
     // | table |(mpt) |
-    sfields_table->length = 3;
-    sfields_table->lines = (struct static_field_line __mram_ptr*) method_space_pt;
+    // sfields_table->length = 3;
+    // sfields_table->lines = (struct static_field_line __mram_ptr*) method_space_pt;
 
-    static_var_m = (struct static_field_line __mram_ptr*) method_space_pt;
-    static_var_m->type_token = 0x1;  //a
-    MRAM_METHODSPACE_ALLOC_S(sizeof(struct static_field_line) * 1);
-    static_var_m = (struct static_field_line __mram_ptr*) method_space_pt;
-    static_var_m->type_token = 0x1;  //b
-    MRAM_METHODSPACE_ALLOC_S(sizeof(struct static_field_line) * 1);
-    static_var_m = (struct static_field_line __mram_ptr*) method_space_pt;
-    static_var_m->type_token = 0x1;  //c
-    MRAM_METHODSPACE_ALLOC_S(sizeof(struct static_field_line) * 1);
+    // static_var_m = (struct static_field_line __mram_ptr*) method_space_pt;
+    // static_var_m->type_token = 0x1;  //a
+    // MRAM_METHODSPACE_ALLOC_S(sizeof(struct static_field_line) * 1);
+    // static_var_m = (struct static_field_line __mram_ptr*) method_space_pt;
+    // static_var_m->type_token = 0x1;  //b
+    // MRAM_METHODSPACE_ALLOC_S(sizeof(struct static_field_line) * 1);
+    // static_var_m = (struct static_field_line __mram_ptr*) method_space_pt;
+    // static_var_m->type_token = 0x1;  //c
+    // MRAM_METHODSPACE_ALLOC_S(sizeof(struct static_field_line) * 1);
 
     
 }

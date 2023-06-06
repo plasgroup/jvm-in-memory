@@ -7,23 +7,22 @@
 
 #include "memory.h"
 
-#define u2 uint16_t;
-#define u4 uint32_t;
-#define ref_type uint8_t __mram_ptr*
 
 struct j_method{
     u4 total_size;
     u2 access_flags;
-    ref_type return_type;
     u2 params_count;
-    ref_type params; // type_refs
     u2 name_index;
     u2 max_stack;
     u2 max_locals;
+    u2 retained;
     u4 code_length;
-    ref_type bytecodes;
-
+    struct j_class __mram_ptr* return_type;
+    struct j_method __mram_ptr* params;
+    uint8_t __mram_ptr* bytecodes;
+    
 };
+
 
 struct function {
     int size;
@@ -41,7 +40,9 @@ struct function {
 struct function_thunk
 {
     struct j_method __mram_ptr *func;
+    struct j_class __mram_ptr *jc;
     uint8_t* params;
 };
 
 #endif // !VM_FUNCTION_H
+

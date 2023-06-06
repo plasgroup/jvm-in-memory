@@ -1,22 +1,29 @@
 #ifndef JCLASS_H
 #define JCLASS_H
+
+#include "memory.h"
 struct j_field{
 
-}
-
+};
+struct constant_table_item{
+    u4 info;
+    u4 direct_value;
+};
 struct j_class{
-    uint16_t class_name_index;
-    uint8_t* this_class;
-    uint8_t* super_class;
-    uint16_t access_flag;
-    int cp_item_count;
-    constant_table_item* items;
-    int fields_count;
-    j_field* fields;
-    int jmethod_count;
-    j_methods* methods;
-    int string_constant_pool_length;
-    uint8_t* string_constant_pool;
-}
+    u4 total_size;
+    u2 this_class_name_index;
+    u2 super_class_name_index;
+    struct j_class __mram_ptr* super_class;
+    u2 access_flag;
+    u2 cp_2b_offset;
+    u4 cp_item_count;
+    struct constant_table_item __mram_ptr* items;
+    u4 fields_count;
+    struct j_field __mram_ptr* fields;
+    u4 jmethod_count;
+    struct j_methods __mram_ptr* methods;
+    u4 string_constant_pool_length;
+    uint8_t __mram_ptr* string_constant_pool;
+};
 
 #endif

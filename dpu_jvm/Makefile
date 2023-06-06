@@ -74,4 +74,4 @@ dpu_rt: $(DEPS)
 	$(CC) $(DPU_CFLAGE) $(CFILES) -o main
 
 dpuslave: $(DPU_DEPS)
-	$(CC) $(DPU_CFLAGE) -o dpuslave $(DPU_SLAVE_CFILES)
+	$(CC) $(DPU_CFLAGE) -w -o dpuslave $(DPU_SLAVE_CFILES)

@@ -21,7 +21,7 @@ extern __host SLOTVAL ret_val;
 
 
 #ifdef DEBUG_OUTPUT_INSN_PARSED
-#define DEBUG_OUT_INSN_PARSED(X) printf("addr:0x%x op = %d, %s\n", pc - 1, code_buffer[pc - 1], X);
+#define DEBUG_OUT_INSN_PARSED(X) printf("addr:0x%x op = 0x%02x, %s\n", pc - 1, code_buffer[pc - 1], X);
 #else
 #define DEBUG_OUT_INSN_PARSED(X) ;
 #endif // DEBUG_OUTPUT_

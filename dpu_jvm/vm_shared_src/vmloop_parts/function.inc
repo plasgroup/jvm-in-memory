@@ -18,7 +18,6 @@
                 for (i = 0; i < func->local_slots_count; i++) {
                     DEBUG_PRINT("slot %d: - %p\n", i, *SLOTPT (FRAME_GET_LOCAL_VARS(frame) + SLOTSIZE * i));
                 }
-
                 printf("final frame\n");
                 current_frame_top = 0;
             
