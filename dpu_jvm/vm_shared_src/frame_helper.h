@@ -2,7 +2,7 @@
 #define VM_FRAME_HELPER_H
 
 #include <stdint.h>
-#include "function.h"
+#include "method.h"
 #include "jclass.h"
 
 
@@ -70,10 +70,6 @@
 #pragma endregion
 void print_frame(uint8_t* fp, uint8_t* sp);
 uint8_t* create_new_vmframe(struct function_thunk func_thunk,
-                            uint8_t** sp_pt, uint8_t* fp, 
-                            uint8_t* return_pc, uint8_t* old_sp);
-
-
-
+                            uint8_t* return_pc);
 
 #endif

@@ -8,7 +8,7 @@
 #include "../ir/bytecode.h"
 #endif
 
-#include "function.h"
+#include "method.h"
 #include "memory.h"
 #include "vm_loop.h"
 #include "vmloop_parts/helper_macros.def"
@@ -20,23 +20,9 @@
 struct MethodTable* array_type;
 #endif
 
-__host SLOTVAL ret_val;
 
 
 
-struct method {
-    uint16_t access_flag;
-    uint32_t class_ref;
-    uint32_t return_type;
-    uint16_t params_count;
-    uint8_t* params;
-    uint16_t name_index;
-    uint16_t attribute_count;
-    uint16_t max_stack;
-    uint16_t max_locals;
-    uint16_t code_len;
-    uint8_t* code;
-};
 
 void interp(struct function_thunk func_thunk) {
 #include "vmloop_parts/registers.def"
@@ -44,22 +30,20 @@ void interp(struct function_thunk func_thunk) {
     code_buffer = func->bytecodes;
     pc = 0;
     times = 0;
-    // TODO
-    current_fp = create_new_vmframe(func_thunk, &current_sp, NULL, NULL, (uint8_t*)(&current_sp) - 4);
+    #ifdef INMEMORY
+    printf(RED);
+    #endif
 
+
+
+    current_fp = create_new_vmframe(func_thunk, NULL);
     printf("code_buffer = %p\n", code_buffer);
 
-    
-    // evaluation_stack_pt = FRAME_GET_EVAL_STACK(frame);
-    // params_buffer_pt -= SLOTSIZE * func->params_count;
 #define DEBUG
     DEBUG_PRINT("create frame finished\n");
-    
-    // print_frame(frame);
-    
-#ifdef INMEMORY
-    printf(RED);
-#endif
+
+
+
 
 
 #ifdef HOST
@@ -284,40 +268,13 @@ void interp(struct function_thunk func_thunk) {
             printf(" -- new sp = %p\n", current_sp);
             printf(" -- params-pt = %p\n", callee.params);
             printf(" -- return pc = %d\n", pc + 2);
-            /*
-            
-uint8_t* create_new_vmframe(struct function_thunk func_thunk
-, uint8_t** sp_pt, uint8_t* fp, uint8_t* return_pc, uint8_t* old_sp)
-            */
-            current_fp = create_new_vmframe(callee, &current_sp, current_fp, pc + 2, current_sp);
+         
+            current_fp = create_new_vmframe(callee,  pc + 2);
 
             pc = 0;
             func = callee.func;
             code_buffer = func->bytecodes;
-            // pc += 2;
-            // method_ptr = FRAME_GET_FUNC_PT(frame)
-            // jmethod = *(struct j_method __mram_ptr*)(method_ptr->class_ref + 8 * op1 + 4;) // the address of target method
             
-            // callee.func = jmethod;
-            // callee.params = evaluation_stack_pt;
-
-            // // create frame, and put all params to locals
-            // printf("new func size = %p\n", jmethod->code_len);
-            
-            
-            
-            // mp_frame_begin = create_new_vmframe(callee, &stack_top,  // (uint8_t*)func->bytecodes + 
-            //     pc + 4, evaluation_stack_pt - SLOTSIZE * callee.func->params_count, pc, frame);
-            
-            // print_frame(tmp_frame_begin);
-            // evaluation_stack_pt = FRAME_GET_EVAL_STACK(tmp_frame_begin);
-            
-            // //reset some register and process return vals
-            // pc = 0;
-            // #ifdef HOST
-            //     code_buffer = (module1->funcs[op3]).ft->func->bytecodes;
-            // #endif
-            // frame = tmp_frame_begin;
             break;
         
         case NEW:
@@ -372,19 +329,13 @@ uint8_t* create_new_vmframe(struct function_thunk func_thunk
             printf(" - value 2 = %d\n", op1);
             printf(" - value 1 = %d\n", op2);
             printf(" - mul result = %d\n", op2 * op1);
-            PUSH_EVAL_STACK(op2 - op1);
+            PUSH_EVAL_STACK(op2 * op1);
             break;
 
 
         default:
             DEBUG_OUT_INSN_PARSED("UNKNOW")
             printf(code_buffer[pc]);
-            break;
-
-
-
-                    
-
             break;
 
 

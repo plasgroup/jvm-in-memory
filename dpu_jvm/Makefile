@@ -18,13 +18,14 @@ DEPS := \
 	classloader/printers/accessflags_printer.h \
 	classloader/printers/attribute_printer.h \
 	utils/memory_read_helper.h \
+	utils/jstruct_printer.h
 	
 
 DPU_DEPS := \
 	vm_shared_src/vm_loop.h \
 	vm_shared_src/memory.h \
 	vm_shared_src/frame_helper.h \
-	vm_shared_src/function.h \
+	vm_shared_src/method.h \
 	vm_shared_src/jclass.h \
 
 CFILES := \
@@ -47,12 +48,13 @@ DPU_CILES := \
 SHARD_CFILES += vm_shared_src/frame_helper.c \
           vm_shared_src/memory.c \
           vm_shared_src/vm_loop.c \
-           sample_ils/test_cases_gen.c \
+		  utils/jstruct_printer.c \
+          sample_ils/test_cases_gen.c \
 				
 SHARD_DEPS += ir/opcode.h \
 	   ir/bytecode.h \
 	   vm_shared_src/frame_helper.h \
-       vm_shared_src/function.h \
+       vm_shared_src/method.h \
        vm_shared_src/memory.h \
        vm_shared_src/vm_loop.h \
        sample_ils/test_cases_gen.h \

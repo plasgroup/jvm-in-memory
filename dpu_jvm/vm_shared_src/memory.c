@@ -3,7 +3,7 @@ struct memory mem;
 
 
 uint8_t* params_buffer_pt;
-uint8_t* current_sp = wram_data_space;
+uint8_t* current_sp = wram_data_space - 4;
 uint8_t* current_fp = 0;
 uint8_t* stack_top;
 

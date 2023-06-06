@@ -1,7 +1,7 @@
 #ifndef TEST_IL_TEST_CASES_GEN_H
 #define TEST_IL_TEST_CASES_GEN_H
 
-#include "../vm_shared_src/function.h"
+#include "../vm_shared_src/method.h"
 #include "../vm_shared_src/frame_helper.h"
 
 #ifdef HOST
