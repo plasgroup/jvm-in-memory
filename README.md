@@ -125,3 +125,28 @@ end:
 6. compiler the java project and get a `Dpu.jar`
 
 7. copy the `Dpu.jar` to `./lib/` of this repository
+
+
+
+## 1.3 Compile DPU JVM
+
+1. It need set up the environment for UPMEM
+
+   + This can be done by `source <path-to-upmem-sdk>/upmem_env.sh`
+
+   + A more convenient way is add these lines to the  `~/.bashrc`
+
+     ``` bash
+     export UPMEM_HOME="<path-to-upmem-sdk>"
+     export LD_LIBRARY_PATH="${UPMEM_HOME}/lib${LD_LIBRARY_PATH+:$LD_LIBRARY_PATH}"
+     export PATH="${UPMEM_HOME}/bin:${PATH}"
+     ```
+
+2. In the root of `dpu_jvm`
+   + `rm dpuslave; make dpuslave;`
+3. Move the `dpuslave` binary to the root of `jdpulib`
+
+
+
+
+
