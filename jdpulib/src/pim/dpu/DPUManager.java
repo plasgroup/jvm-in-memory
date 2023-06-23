@@ -34,8 +34,15 @@ public class DPUManager {
         BytesUtils.writeU4LittleEndian(data, methodPt, 0);
         dpu.copy("exec_method_pt", data);
     }
+
+    int calcFieldCount(Class c){
+        if(c.getSuperclass() == null){
+            return c.getDeclaredFields().length;
+        }
+        return calcFieldCount(c.getSuperclass()) + c.getDeclaredFields().length;
+    }
     public <T> PIMObjectHandler createObject(Class c, Object[] params) throws DpuException, IOException {
-        int fieldCount = c.getDeclaredFields().length;
+        int fieldCount = calcFieldCount(c);
         int instanceSize = 8 + fieldCount * 4;
         byte[] objectDataStream = new byte[(instanceSize + 7) & ~7];
         int classAddr = 0;

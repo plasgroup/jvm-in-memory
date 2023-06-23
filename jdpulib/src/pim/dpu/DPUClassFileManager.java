@@ -451,11 +451,6 @@ public class DPUClassFileManager {
             BytesUtils.writeU4LittleEndian(bs, classAddr + pos + 4, pos);
             pos += 4;
 
-
-//            int bytecodeAddr = classPointer + pos + 4;
-//            writeU4(bs, bytecodeAddr, pos);
-//            pos += 4;
-
             for(int k = 0; k < dm.methodAttrCode.codeLength; k++){
                 bs[pos + k] = dm.methodAttrCode.code[k];
             }
