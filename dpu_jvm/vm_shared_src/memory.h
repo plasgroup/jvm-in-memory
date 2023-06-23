@@ -19,14 +19,13 @@
 #define u4 uint32_t
 
 #ifdef HOST
+
 #define __mram_ptr
 #define __host
 #define __mram_noinit
 #define __mram__
 #define SLOTVAL uint64_t
 #define REGVAL SLOTVAL
-
-
 
 #else
 #define SLOTVAL uint32_t
@@ -98,30 +97,32 @@ struct memory {
 #define MRAM_HEAP_SIZE (16 * 1024 * 1024)
 #define PARAMS_BUFFER_SIZE (4 * 1024)
 #define WRAM_DATA_SPACE_SIZE (4 * 1024)
-#define META_SPACE_SIZE (4 * 1024)
+#define META_SPACE_SIZE (16 * 1024 * 1024)
 
 
 extern struct memory mem;
 
 
-extern uint8_t* params_buffer_pt;
 extern uint8_t* current_sp;
 extern uint8_t* current_fp;
 extern uint8_t* stack_top;
 
-extern __host uint8_t __mram_ptr *mram_heap_pt;
-extern __host uint8_t __mram_ptr *func_pt;
+extern __host uint8_t __mram_ptr* mram_heap_pt;
+extern __host uint8_t __mram_ptr* func_pt;
 extern __host uint8_t __mram_ptr* meta_space_pt;
 
+extern __host uint8_t __mram_ptr* exec_method_pt;
+extern __host uint8_t __mram_ptr* exec_class_pt;
 
-extern uint8_t __mram_noinit mram_heap_space[MRAM_HEAP_SIZE];
-extern uint8_t __mram_noinit mram_meta_space[META_SPACE_SIZE];
 
 
+extern __dma_aligned __mram_noinit uint8_t m_heapspace[MRAM_HEAP_SIZE];
+extern __dma_aligned __mram_noinit uint8_t m_metaspace[META_SPACE_SIZE];
 
 extern __host uint8_t wram_data_space[WRAM_DATA_SPACE_SIZE];
 extern __host uint8_t params_buffer[PARAMS_BUFFER_SIZE];
 extern __host uint8_t* return_val;
+extern __host uint8_t* params_buffer_pt;
 
 extern struct static_fields_table __mram_ptr* sfields_table;
 extern struct static_field_line __mram_ptr* static_var_m;

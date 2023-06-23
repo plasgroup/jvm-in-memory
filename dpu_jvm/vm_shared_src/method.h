@@ -17,8 +17,6 @@ struct j_method{
     u2 max_locals;
     u2 retained;
     u4 code_length;
-    struct j_class __mram_ptr* return_type;
-    struct j_method __mram_ptr* params;
     uint8_t __mram_ptr* bytecodes;
     
 };

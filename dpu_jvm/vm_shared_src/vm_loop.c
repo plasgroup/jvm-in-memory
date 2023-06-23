@@ -57,7 +57,7 @@ void interp(struct function_thunk func_thunk) {
 
     printf("FP = (%p)\n", current_fp);
     while (1) {
-        if(times > 19) return;
+        if(times > 1) return;
         switch (code_buffer[pc++])
         {
         case NOP:
@@ -83,6 +83,7 @@ void interp(struct function_thunk func_thunk) {
             break;
         case ILOAD_0:
 		    DEBUG_OUT_INSN_PARSED("ILOAD_0")
+            
             break;
         case ILOAD_1:
             DEBUG_OUT_INSN_PARSED("ILOAD_1")
@@ -212,25 +213,22 @@ void interp(struct function_thunk func_thunk) {
         case GETFIELD:
             DEBUG_OUT_INSN_PARSED("GETFIELD")
 
+
             // op1 <- constant table index
-            op1 = (code_buffer[pc + 1] << 8) | code_buffer[pc + 2];
+            op1 = (code_buffer[pc] << 8) | code_buffer[pc + 1];
             pc += 2;
+            printf(" - fieldref index = %d\n", op1);
+            op2 = func_thunk.jc->items[op1].direct_value;
+            POP_EVAL_STACK(op3)
+            printf(" - instance addr(m) = %p, field index = %d, addr(m) = %p\n",
+                op3, op2, op3 + 8 + 4 * op2);
 
-            // op2 <- instance ref
-            POP_EVAL_STACK(op2)
+
+            // read field
+            op4 = *(uint8_t __mram_ptr**) ( op3 + 8 + 4 * op2);
+            printf("field val = %d\n", op4);
+            PUSH_EVAL_STACK(op4);
             
-            // op3 <- class structure's addr, from instance addr = op2
-            GET_CLASSSTRUT(op2, op3);
-
-
-            // locate fieldref
-            op3 += op1 * 8;
-
-            READ_INT32_BIT_BY_BIT((uint8_t __mram_ptr*)(op3 + 4), op1); // field offset
-
-
-            // read field value and push to stack
-            PUSH_EVAL_STACK(*(uint32_t __mram_ptr*)(op2 + 4 + op1 * 4))
 
             break;
         case PUTFIELD:
@@ -283,7 +281,11 @@ void interp(struct function_thunk func_thunk) {
 
         case IRETURN:
             DEBUG_OUT_INSN_PARSED("IRETURN")
-            if(func->return_type != 0){
+            // if(func->return_type != 0){
+            //     POP_EVAL_STACK(op1);
+            //     printf(" - ret val = %d\n", op1);
+            // }
+            if(FRAME_GET_OPERAND_STACK_SIZE(current_fp, current_sp) >= 0){
                 POP_EVAL_STACK(op1);
                 printf(" - ret val = %d\n", op1);
             }

@@ -21,9 +21,8 @@ DEPS := \
 	utils/jstruct_printer.h
 	
 
-DPU_DEPS := \
+DPU_DEPS := vm_shared_src/memory.h \
 	vm_shared_src/vm_loop.h \
-	vm_shared_src/memory.h \
 	vm_shared_src/frame_helper.h \
 	vm_shared_src/method.h \
 	vm_shared_src/jclass.h \
@@ -45,8 +44,8 @@ DPU_CILES := \
 	vm_shared_src/vm_loop.c \
 	vm_shared_src/memory.c \
 	
-SHARD_CFILES += vm_shared_src/frame_helper.c \
-          vm_shared_src/memory.c \
+SHARD_CFILES += vm_shared_src/memory.c \
+		  vm_shared_src/frame_helper.c \
           vm_shared_src/vm_loop.c \
 		  utils/jstruct_printer.c \
           sample_ils/test_cases_gen.c \
@@ -73,7 +72,10 @@ main: $(DEPS)
 	$(CC) $(DPU_CFLAGE) -o main $(CFILES)
 
 dpu_rt: $(DEPS) 
-	$(CC) $(DPU_CFLAGE) $(CFILES) -o main
+	$(CXX) --std=c++11 $(HOST_CFLAGE) dpu_rt.c -o dpurt `dpu-pkg-config --cflags --libs dpu` -g
 
 dpuslave: $(DPU_DEPS)
 	$(CC) $(DPU_CFLAGE) -w -o dpuslave $(DPU_SLAVE_CFILES)
+
+test: vm_shared_src/memory.h
+	$(CC) -DINMEMORY test.c vm_shared_src/memory.c -o test

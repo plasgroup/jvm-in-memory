@@ -11,8 +11,9 @@ void print_class(struct j_class __mram_ptr* jc){
     loc += 2;
     printf("-- (%p) super_class_index = %d\n", loc, *(u2 __mram_ptr*)loc);
     loc += 2;
-    printf("-- (%p) super_class_ref = %p\n", loc, *(uint8_t __mram_ptr**)loc);
+    printf("-- (%p) super_class_ref = %p\n", loc, *(u4 __mram_ptr*)loc);
     loc += sizeof(uint8_t __mram_ptr*);
+    
     printf("-- (%p) access_flags = 0x%04x\n", loc, *(u2 __mram_ptr*)loc);
     loc += 2;
     printf("-- (%p) cp_2b_offset = %d\n", loc, *(u2 __mram_ptr*)loc);
@@ -22,7 +23,7 @@ void print_class(struct j_class __mram_ptr* jc){
     printf("-- (%p) constant_table_ref = %p\n", loc, (struct constant_table_item __mram_ptr*)*(u4 __mram_ptr*)loc);
     loc += sizeof(struct constant_table_item __mram_ptr*);
     for(i = 0; i < jc->cp_item_count; i++){
-        printf("---- (%p) CP item #%d: 0x%x | 0x%x\n",  &jc->items[i],i + 1, jc->items[i].info, jc->items[i].direct_value);
+        printf("---- (%p) CP item #%d: 0x%08x | 0x%08x\n",  &jc->items[i],i + 1, jc->items[i].info, jc->items[i].direct_value);
     }
     printf("-- (%p) field_count = %d\n", loc, *(u4 __mram_ptr*)loc);
     loc += 4;
@@ -32,7 +33,7 @@ void print_class(struct j_class __mram_ptr* jc){
     loc += 4;
     printf("-- (%p) jmethod_pt = %p\n", loc, *(u4 __mram_ptr*)loc);
     loc += 4;
-    printf("-- (%p) string_constant_area_length = %p\n", loc, *(u4 __mram_ptr*)loc);
+    printf("-- (%p) string_constant_area_length = %d\n", loc, *(u4 __mram_ptr*)loc);
     loc += 4;
     printf("-- (%p) constant_area_pt = %p\n", loc, *(u4 __mram_ptr*)loc);
     loc += 4;
