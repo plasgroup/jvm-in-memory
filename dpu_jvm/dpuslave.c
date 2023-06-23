@@ -362,7 +362,8 @@ void exec_task_from_host() {
     fc.jc = jc;
     fc.params = params_buffer_pt;
     printf("params_buffer_pt = 0x%x\n", params_buffer_pt);
-    
+    print_class(jc);
+    print_method(jm);
     interp(fc);
     release_global_memory();
     printf(RED " --------------------- (END DPU) -----------------------------\n" RESET);

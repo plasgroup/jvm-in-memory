@@ -448,7 +448,7 @@ public class DPUClassFileManager {
             pos += 4;
 
             // bytecode pt
-            BytesUtils.writeU4LittleEndian(bs, DPUGarbageCollector.metaSpaceBeginAddr + pos + 4, pos);
+            BytesUtils.writeU4LittleEndian(bs, classAddr + pos + 4, pos);
             pos += 4;
 
 
