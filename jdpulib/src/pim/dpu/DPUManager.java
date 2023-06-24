@@ -19,8 +19,6 @@ public class DPUManager {
 
     public Dpu dpu;
 
-
-
     public <T> PIMObjectHandler createObject(Class c) throws DpuException, IOException {
         return createObject(c, new Object[]{});
     }
@@ -104,9 +102,6 @@ public class DPUManager {
         return handler;
     }
 
-    
-
-    // DPUGarbageCollector.allocate(dpuID, DPU_METASPACE, dpuClassData.length);
     public DPUManager(Dpu upmemdpu, int dpuID) throws DpuException {
         this.dpuID = dpuID;
         this.dpu = upmemdpu;

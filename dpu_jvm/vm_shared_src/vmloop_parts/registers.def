@@ -1,11 +1,13 @@
 
     struct function_thunk callee;
+    struct function_thunk last_func;
     uint8_t* frame;
     uint8_t* tmp_frame_begin;
 
     //two pointers, point to function bytecode in mram and function structure beginning i the MRAM
     uint8_t __mram_ptr *code_buffer;
     struct j_method __mram_ptr *func = func_thunk.func;
+    struct j_class __mram_ptr *jc = func_thunk.jc;
 
     REGVAL pc;
     int times;

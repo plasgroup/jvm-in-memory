@@ -181,7 +181,7 @@ public class DPUClassFileManager {
                     DPUFieldCacheItem fieldCacheItem = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager
                             .getFieldCacheItem(formalClassName(classNameUTF8), fieldName);
 
-                    jc.entryItems[i] &= 0xFFFFFFFF00000000L;
+                    jc.entryItems[i] &= 0xFFFFFFFFFFFF0000L;
                     if(fieldCacheItem == null){
                         // TODO, maybe static of final field
                         //throw new RuntimeException("field analysis exception");
