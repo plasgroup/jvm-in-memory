@@ -89,13 +89,13 @@ void interp(struct function_thunk func_thunk) {
             break;
         case ILOAD_1:
             DEBUG_OUT_INSN_PARSED("ILOAD_1")
-            op1 = FRAME_GET_LOCALS(current_fp, (func->params_count - 1));
+            op1 = FRAME_GET_LOCALS(current_fp, func->max_locals, 1);
             printf(" - Load INT %d to stack\n", op1);
             PUSH_EVAL_STACK(op1)
             break;
         case ILOAD_2:
             DEBUG_OUT_INSN_PARSED("ILOAD_2")
-            op1 = FRAME_GET_LOCALS(current_fp, (func->params_count - 2));
+            op1 = FRAME_GET_LOCALS(current_fp, func->max_locals, 2);
             printf(" - Load INT %d to stack\n", op1);
             PUSH_EVAL_STACK(op1)
             break;
@@ -140,7 +140,7 @@ void interp(struct function_thunk func_thunk) {
             break;
         case ALOAD_0:
             DEBUG_OUT_INSN_PARSED("ALOAD_0")
-            op1 = FRAME_GET_LOCALS(current_fp, (func->params_count - 0));
+            op1 = FRAME_GET_LOCALS(current_fp, func->params_count, 0);
             printf(" - Load ref %p to stack\n", op1);
             PUSH_EVAL_STACK(op1)
             break;
@@ -320,10 +320,6 @@ void interp(struct function_thunk func_thunk) {
             break;
         case IRETURN:
             DEBUG_OUT_INSN_PARSED("IRETURN")
-            // if(func->return_type != 0){
-            //     POP_EVAL_STACK(op1);
-            //     printf(" - ret val = %d\n", op1);
-            // }
             if(FRAME_GET_OPERAND_STACK_SIZE(current_fp, current_sp) >= 0){
                 POP_EVAL_STACK(op1);
                 printf(" - ret val = %d\n", op1);

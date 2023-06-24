@@ -354,9 +354,7 @@ void exec_task_from_host() {
     /* ================================ Write Params ================================ */
 #define PUSH_PARAM(X) \ 
                     *(uint32_t*)params_buffer_pt = X; \
-                    params_buffer_pt += 4;
-    
-    
+                    params_buffer_pt += 4;    
   
     fc.func = jm;
     fc.jc = jc;
