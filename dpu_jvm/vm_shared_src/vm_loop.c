@@ -27,7 +27,9 @@ struct MethodTable* array_type;
 void interp(struct function_thunk func_thunk) {
 #include "vmloop_parts/registers.def"
     func = func_thunk.func;
+    jc = func_thunk.jc;
     code_buffer = func->bytecodes;
+
     pc = 0;
     times = 0;
     #ifdef INMEMORY
@@ -87,14 +89,14 @@ void interp(struct function_thunk func_thunk) {
             break;
         case ILOAD_1:
             DEBUG_OUT_INSN_PARSED("ILOAD_1")
-            op1 = FRAME_GET_LOCALS(current_fp, 1);
+            op1 = FRAME_GET_LOCALS(current_fp, (func->params_count - 1));
             printf(" - Load INT %d to stack\n", op1);
             PUSH_EVAL_STACK(op1)
             break;
         case ILOAD_2:
             DEBUG_OUT_INSN_PARSED("ILOAD_2")
-            op2 = FRAME_GET_LOCALS(current_fp, 2);
-            printf(" - Load INT %d to stack\n", op2);
+            op1 = FRAME_GET_LOCALS(current_fp, (func->params_count - 2));
+            printf(" - Load INT %d to stack\n", op1);
             PUSH_EVAL_STACK(op1)
             break;
         case ILOAD_3:
@@ -138,7 +140,7 @@ void interp(struct function_thunk func_thunk) {
             break;
         case ALOAD_0:
             DEBUG_OUT_INSN_PARSED("ALOAD_0")
-            op1 = FRAME_GET_LOCALS(current_fp, 0);
+            op1 = FRAME_GET_LOCALS(current_fp, (func->params_count - 0));
             printf(" - Load ref %p to stack\n", op1);
             PUSH_EVAL_STACK(op1)
             break;
@@ -277,6 +279,9 @@ void interp(struct function_thunk func_thunk) {
             pc = 0;
             func = callee.func;
             code_buffer = func->bytecodes;
+            jc = callee.jc;
+            last_func = func_thunk;
+            func_thunk = callee;
             
             break;
         
@@ -284,6 +289,9 @@ void interp(struct function_thunk func_thunk) {
             DEBUG_OUT_INSN_PARSED("NEW")
             break;
 
+        case RETURN:
+            DEBUG_OUT_INSN_PARSED("RETURN")
+            break;
         case IRETURN:
             DEBUG_OUT_INSN_PARSED("IRETURN")
             // if(func->return_type != 0){
@@ -317,6 +325,7 @@ void interp(struct function_thunk func_thunk) {
             
             pc = op4;
 
+            func_thunk = last_func;
             break;
 
         case ISUB:
@@ -338,7 +347,7 @@ void interp(struct function_thunk func_thunk) {
             printf(" - mul result = %d\n", op2 * op1);
             PUSH_EVAL_STACK(op2 * op1);
             break;
-
+        
         case INVOKESPECIAL:
             DEBUG_OUT_INSN_PARSED("INVOKESPECIAL")
             
@@ -364,6 +373,9 @@ void interp(struct function_thunk func_thunk) {
             pc = 0;
             func = callee.func;
             code_buffer = func->bytecodes;
+            jc = callee.jc;
+            last_func = func_thunk;
+            func_thunk = callee;
             
 
             break;

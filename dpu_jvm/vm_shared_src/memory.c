@@ -3,6 +3,7 @@ struct memory mem;
 
 uint8_t* current_sp = wram_data_space - 4;
 uint8_t* current_fp = 0;
+uint8_t* current_fbegin = 0;
 uint8_t* stack_top;
 __host uint8_t __mram_ptr* exec_method_pt;
 __host uint8_t __mram_ptr* exec_class_pt;

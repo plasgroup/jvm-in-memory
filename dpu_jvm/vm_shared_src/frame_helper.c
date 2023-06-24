@@ -95,6 +95,7 @@ uint8_t* create_new_vmframe(struct function_thunk func_thunk
      printf("\n--------------------------------- Create Frame ---------------------------------\n");
      printf("--------- Frame from (%p) ------------\n", current_sp);
      
+     
 
 
      if(func_thunk.params == current_sp + 4 * params_count){
@@ -117,7 +118,7 @@ uint8_t* create_new_vmframe(struct function_thunk func_thunk
               if(i < params_count){
                      printf("(param) ");
               }
-              printf("local %d = %d\n", i, *(u4*)func_thunk.params);
+              printf("local %d = %d (addr(w): 0x%08x)\n", i, *(u4*)func_thunk.params, func_thunk.params);
               *(uint8_t**)current_sp = *(uint8_t **)func_thunk.params;
               func_thunk.params += sizeof(uint8_t*);
               INC_SP(sizeof(uint8_t*))

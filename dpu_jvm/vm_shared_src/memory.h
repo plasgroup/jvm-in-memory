@@ -105,6 +105,7 @@ extern struct memory mem;
 
 extern uint8_t* current_sp;
 extern uint8_t* current_fp;
+extern uint8_t* current_fbegin;
 extern uint8_t* stack_top;
 
 extern __host uint8_t __mram_ptr* mram_heap_pt;
