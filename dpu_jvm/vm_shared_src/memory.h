@@ -119,8 +119,10 @@ extern __host uint8_t __mram_ptr* exec_class_pt;
 extern __dma_aligned __mram_noinit uint8_t m_heapspace[MRAM_HEAP_SIZE];
 extern __dma_aligned __mram_noinit uint8_t m_metaspace[META_SPACE_SIZE];
 
-extern __host uint8_t wram_data_space[WRAM_DATA_SPACE_SIZE];
+
 extern __host uint8_t params_buffer[PARAMS_BUFFER_SIZE];
+extern __host uint8_t wram_data_space[WRAM_DATA_SPACE_SIZE];
+extern __host uint8_t wram_frames_space[WRAM_SIZE];
 extern __host uint8_t* return_val;
 extern __host uint8_t* params_buffer_pt;
 

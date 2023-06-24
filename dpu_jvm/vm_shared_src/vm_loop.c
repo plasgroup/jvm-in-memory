@@ -57,7 +57,7 @@ void interp(struct function_thunk func_thunk) {
 
     printf("FP = (%p)\n", current_fp);
     while (1) {
-        if(times > 1) return;
+        if(times > 15) return;
         switch (code_buffer[pc++])
         {
         case NOP:
@@ -93,6 +93,9 @@ void interp(struct function_thunk func_thunk) {
             break;
         case ILOAD_2:
             DEBUG_OUT_INSN_PARSED("ILOAD_2")
+            op2 = FRAME_GET_LOCALS(current_fp, 2);
+            printf(" - Load INT %d to stack\n", op2);
+            PUSH_EVAL_STACK(op1)
             break;
         case ILOAD_3:
             DEBUG_OUT_INSN_PARSED("ILOAD_3")
@@ -217,8 +220,10 @@ void interp(struct function_thunk func_thunk) {
             // op1 <- constant table index
             op1 = (code_buffer[pc] << 8) | code_buffer[pc + 1];
             pc += 2;
-            printf(" - fieldref index = %d\n", op1);
-            op2 = func_thunk.jc->items[op1].direct_value;
+            printf(" - fieldref in cp index = %d\n", op1);
+            printf(" - cp val = 0x%08x | 0x%08x\n", func_thunk.jc->items[op1].info, func_thunk.jc->items[op1].direct_value);
+            op2 = func_thunk.jc->items[op1].direct_value & 0xFFFF;
+            printf(" - field index in instance = %d\n", op2);
             POP_EVAL_STACK(op3)
             printf(" - instance addr(m) = %p, field index = %d, addr(m) = %p\n",
                 op3, op2, op3 + 8 + 4 * op2);
@@ -334,6 +339,34 @@ void interp(struct function_thunk func_thunk) {
             PUSH_EVAL_STACK(op2 * op1);
             break;
 
+        case INVOKESPECIAL:
+            DEBUG_OUT_INSN_PARSED("INVOKESPECIAL")
+            
+            op1 = (code_buffer[pc] << 8) | code_buffer[pc + 1]; // constant table index to methoderef
+            printf(" - method-ref-cp-index = %d\n", op1);
+            printf(" - jmethod-ref = %p\n", func_thunk.jc->items[op1].direct_value);
+
+
+            callee.func = func_thunk.jc->items[op1].direct_value;
+            op2 = (func_thunk.jc->items[op1].info >> 16) & 0xFFFF;
+            printf(" - class-ref-cp-index = %d\n", op2);
+            printf(" - jclass-ref = %p\n", func_thunk.jc->items[op2].direct_value);
+            callee.jc = func_thunk.jc->items[op2].direct_value;
+            callee.params = current_sp;
+            current_sp -= 4 * callee.func->params_count;
+            printf(" - pop %d elements from operand stack\n", callee.func->params_count);
+            printf(" -- new sp = %p\n", current_sp);
+            printf(" -- params-pt = %p\n", callee.params);
+            printf(" -- return pc = %d\n", pc + 2);
+         
+            current_fp = create_new_vmframe(callee,  pc + 2);
+
+            pc = 0;
+            func = callee.func;
+            code_buffer = func->bytecodes;
+            
+
+            break;
 
         default:
             DEBUG_OUT_INSN_PARSED("UNKNOW")

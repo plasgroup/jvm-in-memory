@@ -119,6 +119,8 @@ public class DPUClassFileManager {
 
         System.out.println(" - In class " + c.getName());
 
+
+        // resolve each entry item from preprocessed entry table.
         for(int i = 0; i < jc.cpItemCount; i++){
             int tag = (int) ((jc.entryItems[i] >> 56) & 0xFF);
             int classIndex;
@@ -299,7 +301,9 @@ public class DPUClassFileManager {
                             methodName + ":" + TypeDesc);
 
 
-                    jc.entryItems[i] &= 0xFFFFFFFF00000000L;
+                    jc.entryItems[i] = 0;
+                    jc.entryItems[i] |= ((long)classIndex << 48) & 0xFFFF000000000000L;
+                    jc.entryItems[i] |= ((long)nameAndTypeIndex << 32) & 0x0000FFFF00000000L;
                     if(jmc != null){
                         jc.entryItems[i] |=  jmc.mramAddr;
                         System.out.printf("%x\n", jmc.mramAddr);

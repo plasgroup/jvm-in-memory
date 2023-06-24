@@ -355,7 +355,7 @@ public class ClassFileAnalyzer {
         fillConstantArea();
         // Print Entry Table after resolution 2
         System.out.println("==== Entries Table After Resolution Phase 2 - fill constant value to constantDataArea ====\n");
-        printEntryTable(jc);
+        // printEntryTable(jc);
         System.out.println("==== ----------------------------------------------------------------------- ====\n");
         System.out.println();
         constantAreaSize = 0;
@@ -391,10 +391,6 @@ public class ClassFileAnalyzer {
             int forward = analysisFieldItem(pos, jc, i);
             pos += forward;
         }
-//        System.out.println("---------- Fill field ref ---------");
-//
-//        fillFieldRef();
-
         System.out.println("======================= Begin Method Analysis ===========================");
 
         // method count

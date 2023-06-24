@@ -14,13 +14,26 @@ public class DPUTreeNodeProxyAutoGen extends DPUTreeNode implements IDPUProxyObj
     byte[] method_ptr = new byte[4];
     static UPMEM upmem = UPMEM.getInstance();
 
+    @Override
+    public int getDpuID() {
+        return objectHandler.dpuID;
+    }
+
+    @Override
+    public int getAddr() {
+        return objectHandler.address;
+    }
+
     public DPUTreeNodeProxyAutoGen(int k, int v) {
+
         super(k, v);
     }
 
     public static DPUTreeNodeProxyAutoGen fromHandler(PIMObjectHandler handler) {
         return null;
     }
+
+
 
     @Override
     public TreeNode getLeft() {

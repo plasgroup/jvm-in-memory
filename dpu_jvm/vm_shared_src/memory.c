@@ -30,9 +30,9 @@ __dma_aligned __mram_noinit uint8_t m_heapspace[MRAM_HEAP_SIZE];
 __dma_aligned __mram_noinit uint8_t m_metaspace[META_SPACE_SIZE];
 
 
+__host uint8_t params_buffer[PARAMS_BUFFER_SIZE];
 uint8_t wram_data_space[WRAM_DATA_SPACE_SIZE];
 uint8_t wram_frames_space[WRAM_SIZE];
-__host uint8_t params_buffer[PARAMS_BUFFER_SIZE];
 
 
 uint8_t* wram_data_space_pt = wram_data_space;

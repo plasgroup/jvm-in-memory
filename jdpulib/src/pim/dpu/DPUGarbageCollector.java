@@ -14,7 +14,7 @@ public class DPUGarbageCollector {
     int parameterBufferPt;
     public final static int heapSpaceBeginAddr = 0x000000;
     public final static int metaSpaceBeginAddr = 16 * 1024 * 1024;
-    public final static int parameterBufferBeginAddr = 0x3d68;
+    public final static int parameterBufferBeginAddr = 0x40d8;
     public final static int heapSpaceSize = 16 * 1024 * 1024;
     public final static int metaSpaceSize = 16 * 1024 * 1024;
 
@@ -41,9 +41,14 @@ public class DPUGarbageCollector {
         int size = params.length * 4;
         byte[] data = new byte[size];
         int addr = allocate(DPUJVMMemSpaceKind.DPU_PARAMETER_BUFFER, size);
+        System.out.println(" - allocate " + size + " byte in parameter buffer");
+        System.out.println(" - push ");
         for(int i = 0; i < params.length; i++){
+            System.out.println(" -- " + params[i]);
             BytesUtils.writeU4LittleEndian(data, params[i], i * 4);
         }
+
+        transfer(DPUJVMMemSpaceKind.DPU_PARAMETER_BUFFER, data, addr);
         return addr;
     }
     public void transfer(DPUJVMMemSpaceKind spaceKind, byte[] data, int pt) throws DpuException{
@@ -55,6 +60,9 @@ public class DPUGarbageCollector {
         } else if (spaceKind == DPUJVMMemSpaceKind.DPU_HEAP){
             spaceVarName = "m_heapspace";
             beginAddr = heapSpaceBeginAddr;
+        } else if (spaceKind == DPUJVMMemSpaceKind.DPU_PARAMETER_BUFFER) {
+            spaceVarName = "params_buffer";
+            beginAddr = parameterBufferBeginAddr;
         }
 
         if(!"".equals(spaceVarName) && beginAddr != -1){
