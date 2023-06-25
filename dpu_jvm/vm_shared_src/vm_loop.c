@@ -59,7 +59,7 @@ void interp(struct function_thunk func_thunk) {
 
     printf("FP = (%p)\n", current_fp);
     while (1) {
-        if(times > 14) return;
+        if(times > 140) return;
         switch (code_buffer[pc++])
         {
         case NOP:
@@ -232,12 +232,9 @@ void interp(struct function_thunk func_thunk) {
 
             // read field
             //READ_INT32_BIT_BY_BIT((uint8_t __mram_ptr*)(op3 + 8 + 4 * op2), op4)
-            op4 = op3 + 8 + 4 * op2;
-            printf("field val = %x %x %x %x\n", 
-                *(uint8_t __mram_ptr*)(op4), 
-                *(uint8_t __mram_ptr*)(op4 + 1),
-                *(uint8_t __mram_ptr*)(op4 + 2),
-                *(uint8_t __mram_ptr*)(op4 + 3)
+            READ_INT32_BIT_BY_BIT((uint8_t __mram_ptr*)(op3 + 8 + 4 * op2), op4);
+            printf("field val = 0x%x\n", 
+                op4
             );
             PUSH_EVAL_STACK(op4);
             
@@ -295,6 +292,33 @@ void interp(struct function_thunk func_thunk) {
         
         case NEW:
             DEBUG_OUT_INSN_PARSED("NEW")
+            op1 = (code_buffer[pc] << 8) | code_buffer[pc + 1]; // index in constant table (classref)
+            pc += 2;
+            op2 = (func_thunk.jc->items[op1].direct_value);
+            printf(" - class addr: %08x\n", op2);
+            op3 = 0;
+            printf(" - count field count\n");
+            while(op2 != NULL){
+                printf(" - + %d\n",  ((struct j_class __mram_ptr*)op2)->fields_count);
+                op3 += ((struct j_class __mram_ptr*)op2)->fields_count;
+                printf(" -- super class index = %d\n", (int)((struct j_class __mram_ptr*)op2)->super_class);
+                op4 = (int)((struct j_class __mram_ptr*)op2)->super_class;
+                printf(" -- super class addr = %p\n", ((struct j_class __mram_ptr*)op2)->items[op4].direct_value);
+                op2 = ((struct j_class __mram_ptr*)op2)->items[op4].direct_value;
+            }
+            printf(" - field count = %d, instance size = %d\n", op3, 8 + op3 * 4);
+            PUSH_EVAL_STACK(mram_heap_pt);
+            
+            for(op4 = 0; op4 < 8 + op3 * 4; op4++){
+                *(uint8_t __mram_ptr*)(mram_heap_pt + op4) = 0;
+            }
+            mram_heap_pt += 8 + op3 * 4;
+            break;
+        case DUP:
+            DEBUG_OUT_INSN_PARSED("DUP")
+            op1 = EVAL_STACK_TOPSLOT_VALUE;
+            printf(" - dup %d(hex: %x)\n", op1, op1);
+            PUSH_EVAL_STACK(op1);
             break;
 
         case RETURN:
@@ -308,6 +332,8 @@ void interp(struct function_thunk func_thunk) {
             if(op3 == NULL){
                 printf(" - >> final frame\n");
                 return_val = op1;
+                current_fp = 0;
+                current_sp = wram_data_space - 4;
                 return;
             }
             current_sp = op2;
@@ -325,6 +351,41 @@ void interp(struct function_thunk func_thunk) {
             func_thunk.jc = func;
 
             break;
+        case ARETURN:
+            DEBUG_OUT_INSN_PARSED("ARETURN")
+            if(FRAME_GET_OPERAND_STACK_SIZE(current_fp, current_sp) >= 0){
+                POP_EVAL_STACK(op1);
+                printf(" - ret val = %d\n", op1);
+            }
+            printf(" - last-sp = %p\n", FRAME_GET_OLDSP(current_fp));
+            printf(" - last-fp = %p\n", FRAME_GET_OLDFP(current_fp));
+            printf(" - return-pc = %p\n", FRAME_GET_RETPC(current_fp));
+            op2 = FRAME_GET_OLDSP(current_fp);
+            op3 = FRAME_GET_OLDFP(current_fp);
+            op4 =  FRAME_GET_RETPC(current_fp);
+            if(op3 == NULL){
+                printf(" - >> final frame\n");
+                return_val = op1;
+                current_fp = 0;
+                current_sp = wram_data_space - 4;
+                return;
+            }
+            current_sp = op2;
+            printf(" - change sp to %p\n", op2);
+            printf(" - push ret val %d\n", op1);
+            PUSH_EVAL_STACK(op1)
+            printf(" - reset pc to 0x%02x\n", op4);
+            
+            
+            func = FRAME_GET_METHOD(op3);
+            printf(" - reset func pt to 0x%08x\n", func);
+            current_fp = op3;
+            code_buffer = func->bytecodes;
+            jc = FRAME_GET_CLASS(op3);
+            pc = op4;
+            printf(" - bytecodes addr: %08x\n", func->bytecodes);
+            func_thunk.func = func;
+            func_thunk.jc = func;
         case IRETURN:
             DEBUG_OUT_INSN_PARSED("IRETURN")
             if(FRAME_GET_OPERAND_STACK_SIZE(current_fp, current_sp) >= 0){
@@ -340,6 +401,9 @@ void interp(struct function_thunk func_thunk) {
             if(op3 == NULL){
                 printf(" - >> final frame\n");
                 return_val = op1;
+                
+                current_fp = 0;
+                current_sp = wram_data_space - 4;
                 return;
             }
             current_sp = op2;

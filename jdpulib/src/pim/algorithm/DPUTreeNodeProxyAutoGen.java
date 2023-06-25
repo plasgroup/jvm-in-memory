@@ -64,7 +64,15 @@ public class DPUTreeNodeProxyAutoGen extends DPUTreeNode implements IDPUProxyObj
         } catch (DpuException e) {
             throw new RuntimeException(e);
         }
-        throw new RuntimeException("call to dpu");
+
+        // get return val
+        try {
+            int returnVal = upmem.getDPUManager(getDpuID()).garbageCollector.getReturnVal();
+            System.out.printf("right treenode pointer = 0x%d\n", returnVal);
+            return DPUTreeNodeProxyAutoGen.fromHandler(new PIMObjectHandler(getDpuID(), returnVal));
+        } catch (DpuException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -87,9 +95,33 @@ public class DPUTreeNodeProxyAutoGen extends DPUTreeNode implements IDPUProxyObj
 
     @Override
     public TreeNode createNode(int k, int v){
-        if(true)
-            throw new RuntimeException("wait for test");
-        return null;
+
+        System.out.println("--------- Invoke proxy createNode() handler = " + objectHandler + " ------------");
+        System.out.println(" - DPUID = " + objectHandler.dpuID);
+        DPUCacheManager cm = upmem.getDPUManager(objectHandler.dpuID).classCacheManager;
+        System.out.println(cm);
+
+        int methodMramAddr = upmem.getDPUManager(objectHandler.dpuID)
+                .classCacheManager.getMethodCacheItem("pim/algorithm/DPUTreeNode", "createNode:(II)Lpim/algorithm/TreeNode;").mramAddr;
+        int classMramAddr = upmem.getDPUManager(objectHandler.dpuID)
+                .classCacheManager.getClassStrutCacheLine("pim/algorithm/DPUTreeNode").marmAddr;
+        System.out.printf("class mram addr = 0x%x, method mram addr = 0x%x, instance addr = 0x%x\n", classMramAddr, methodMramAddr, objectHandler.address);
+
+        try {
+            upmem.getDPUManager(getDpuID()).callNonstaticMethod(classMramAddr, methodMramAddr, objectHandler.address, new Object[]{k, v});
+        } catch (DpuException e) {
+            throw new RuntimeException(e);
+        }
+
+        // get return val
+        try {
+            int returnVal = upmem.getDPUManager(getDpuID()).garbageCollector.getReturnVal();
+            System.out.printf("right treenode pointer = 0x%d\n", returnVal);
+            return DPUTreeNodeProxyAutoGen.fromHandler(new PIMObjectHandler(getDpuID(), returnVal));
+        } catch (DpuException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
 

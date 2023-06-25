@@ -14,14 +14,14 @@ public class DPUGarbageCollector {
     int parameterBufferPt;
     public final static int heapSpaceBeginAddr = 0x000000;
     public final static int metaSpaceBeginAddr = 16 * 1024 * 1024;
-    public final static int parameterBufferBeginAddr = 0x4198;
+    public final static int parameterBufferBeginAddr = 0x4240;
     public final static int heapSpaceSize = 16 * 1024 * 1024;
     public final static int metaSpaceSize = 16 * 1024 * 1024;
 
     public DPUGarbageCollector(int dpuID, Dpu dpu) throws DpuException {
         this.dpuID = dpuID;
         this.dpu = dpu;
-        this.heapSpacePt = heapSpaceBeginAddr;
+        this.heapSpacePt = 0x00000008;
         this.metaSpacePt = metaSpaceBeginAddr;
         this.parameterBufferPt = parameterBufferBeginAddr;
         byte[] ptBytes = new byte[4];
@@ -120,9 +120,8 @@ public class DPUGarbageCollector {
     }
 
     public static PIMObjectHandler dpuAddress2ObjHandler(int addr, int dpuID) {
-        PIMObjectHandler handler = new PIMObjectHandler();
-        handler.dpuID = dpuID;
-        handler.address = addr;
+        PIMObjectHandler handler = new PIMObjectHandler(dpuID, addr);
+
         return handler;
     }
 
@@ -132,5 +131,11 @@ public class DPUGarbageCollector {
 
     public int getRemainMetaMemory() {
         return metaSpaceSize - (metaSpacePt - metaSpaceBeginAddr);
+    }
+
+    public int getReturnVal() throws DpuException {
+        byte[] returnValBytes = new byte[4];
+        dpu.copy(returnValBytes, "return_val");
+        return BytesUtils.readU4LittleEndian(returnValBytes, 0);
     }
 }
