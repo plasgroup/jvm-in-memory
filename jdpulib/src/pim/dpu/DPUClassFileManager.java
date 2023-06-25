@@ -47,6 +47,7 @@ public class DPUClassFileManager {
         return loadClassForDPU(Class.forName(className));
     }
     private DPUJClass loadClassIfNotLoaded(Class c) throws DpuException, IOException {
+        if("".equals(c.getName())) return null;
         String className = c.getName().replace(".", "/");
         DPUClassFileCacheItem item = upmem.getDPUManager(dpuID).classCacheManager.getClassStrutCacheLine(className);
         if(item != null) return item.dpuClassStrut;
@@ -60,6 +61,9 @@ public class DPUClassFileManager {
     public String formalClassName(String className){
         return className.replace(".", "/").split("\\$")[0];
     }
+
+
+
     public DPUJClass loadClassForDPU(Class c) throws IOException, DpuException {
         String className = formalClassName(c.getName());
         System.out.println(" ==========--> Try load class " + className + " to dpu#" + dpuID + " <--==========");
@@ -74,8 +78,8 @@ public class DPUClassFileManager {
         // get bytes of class file
         InputStream is = c.getResourceAsStream((c.getSimpleName().split("\\$")[0] + ".class"));
         if(is == null) {
-            // TODO class with form of "[....;" cannot be load
-            throw new IOException();
+            // TODO class name with form of "[....;" cannot be load
+            throw new IOException("cannot find class " + c.getSimpleName().split("\\$")[0] + ".class");
         }
         byte[] classFileBytes = is.readAllBytes();
         is.close();
@@ -84,41 +88,39 @@ public class DPUClassFileManager {
         ClassFileAnalyzer classFileAnalyzer = ClassFileAnalyzer.fromClassBytes(classFileBytes);
         DPUJClass jc = classFileAnalyzer.preResolve();
 
-        // Super class ref
-        System.out.println(" =================== Resolve class of " + c.getName() + " ==================");
+        // load super class recursively
         String superClassName = jc.superClassNameIndex == 0 ? "" : getUTF8(jc, jc.superClassNameIndex);
         System.out.println("super class name = " + superClassName);
-
         className = formalClassName(superClassName);
+
 
         // recursive resolve super class
         if(!"".equals(className)) {
             if(!isClassLoaded(superClassName)){
                 System.out.println(" ---- load super class " + className + ", index " + jc.superClassNameIndex);
-
-                loadClassIfNotLoaded(c.getSuperclass());
+                loadClassForDPU(c.getSuperclass());
             }
         }else{
-            System.out.println(" ---- No superclass");
+            System.out.println(" ---- No superclass ----");
             className = formalClassName(c.getName());
             System.out.println(" - Push class " + className + " to DPU#" + dpuID);
             // TODO, currently skip the resolution of java/lang/Object
             int classAddr = pushJClassToDPU(jc);
             recordClass(className, jc, classAddr);
             recordMethodDistribution(c, jc, classAddr);
+            recordFieldDistribution(c, jc);
             return jc;
         }
 
         int classAddr =
                 upmem.getDPUManager(dpuID).garbageCollector.allocate(DPUJVMMemSpaceKind.DPU_METASPACE, jc.totalSize);
-
-
         recordClass(formalClassName(c.getName()), jc, classAddr);
         recordMethodDistribution(c, jc, classAddr);
         recordFieldDistribution(c, jc);
 
-        System.out.println(" - In class " + c.getName());
 
+        /*  */
+        System.out.println(" - In class " + c.getName() + " resolve unknow name");
 
         // resolve each entry item from preprocessed entry table.
         for(int i = 0; i < jc.cpItemCount; i++){
@@ -180,7 +182,6 @@ public class DPUClassFileManager {
                     System.out.println("fieldName = " + fieldName);
                     DPUFieldCacheItem fieldCacheItem = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager
                             .getFieldCacheItem(formalClassName(classNameUTF8), fieldName);
-
                     jc.entryItems[i] &= 0xFFFFFFFFFFFF0000L;
                     if(fieldCacheItem == null){
                         // TODO, maybe static of final field
@@ -352,23 +353,20 @@ public class DPUClassFileManager {
         byte[] classBytes =
                 cvtDPUClassStrut2Bytes(jc, addr);
         upmem.getDPUManager(dpuID).garbageCollector.transfer(DPUJVMMemSpaceKind.DPU_METASPACE, classBytes, addr);
-
         return addr;
     }
 
-
     public static byte[] cvtDPUClassStrut2Bytes(DPUJClass ds, int classAddr){
         byte[] bs = new byte[(ds.totalSize + 0b111) & ~(0b111)];
-
         int pos = 0;
-        int entryTablePointer = 0;
-        int fieldPointer = 0;
-        int methodPointer = 0;
-        int constantAreaPointer = 0;
-        int entryTablePointerPos = 0;
-        int fieldPointerPos = 0;
-        int methodPointerPos = 0;
-        int constantAreaPointerPos = 0;
+        int entryTablePointer;
+        int fieldPointer;
+        int methodPointer;
+        int constantAreaPointer;
+        int entryTablePointerPos;
+        int fieldPointerPos;
+        int methodPointerPos;
+        int constantAreaPointerPos;
         BytesUtils.writeU4LittleEndian(bs, ds.totalSize, pos);
         pos += 4;
         BytesUtils.writeU2LittleEndian(bs, ds.thisClassNameIndex, pos);
@@ -432,7 +430,6 @@ public class DPUClassFileManager {
         for(int i = 0; i < ds.methodCount; i++){
             System.out.printf("method %d from 0x%x === 0x%x\n", i, pos, ds.methodOffset[i]);
             DPUJMethod dm = ds.methodTable[i];
-            // writeU4(bs, pos, methodPointer + i * 4);
 
             BytesUtils.writeU4LittleEndian(bs, dm.size, pos);
             pos += 4;
@@ -464,7 +461,6 @@ public class DPUClassFileManager {
         }
 
         constantAreaPointer = DPUGarbageCollector.metaSpaceBeginAddr + pos;
-
         BytesUtils.writeU4LittleEndian(bs, constantAreaPointer, constantAreaPointerPos);
 
         for(int offset = 0; offset < ds.stringINTConstantPoolLength; offset ++){
@@ -478,12 +474,8 @@ public class DPUClassFileManager {
 
     public static String getUTF8(DPUJClass ds, int utf8Index)
     {
-        return StringUtils.getStringFromBuffer(ds.constantBytes,
-                (int) (ds.entryItems[utf8Index] & 0xFFFF),
-                (int) (((ds.entryItems[utf8Index]) >> 40) & 0xFFFF)
-        );
+        return StringUtils.getStringFromBuffer(ds.constantBytes, (int) (ds.entryItems[utf8Index] & 0xFFFF), (int) (((ds.entryItems[utf8Index]) >> 40) & 0xFFFF));
     }
-
 
 }
 

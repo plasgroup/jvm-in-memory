@@ -300,7 +300,7 @@ public class ClassFileAnalyzer {
         System.out.println("tEntries Table After Resolution Phase 1 - read CPs, and mark information. This_class ref index = " + jc.thisClassNameIndex);
         pos += 2;
 
-        // super_class (the entry should point to a class file structure;
+
         jc.superClass = (short)  BytesUtils.readU2BigEndian(classFileBytes, pos);
         System.out.println(" - super class = " + jc.superClass);
         System.out.println("super_class ref index = " + jc.superClassNameIndex);

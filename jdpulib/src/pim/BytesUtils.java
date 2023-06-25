@@ -1,6 +1,9 @@
 package pim;
 
 public class BytesUtils {
+    public static int upperTo8(int x){
+        return (x + 0b111) & ~(0b111);
+    }
     public static int readU4BigEndian(byte[] bs, int offset){
         return ((0xFF & bs[offset]) << 24) | ((0xFF & bs[offset + 1]) << 16) |
                 ((0xFF & bs[offset + 2]) << 8) | (0xFF & bs[offset + 3]);
