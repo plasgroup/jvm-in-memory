@@ -16,8 +16,6 @@ public class BytesUtils {
         return ((0xFF & (bs[offset]) << 8)) | ((0xFF & (bs[offset + 1])));
     }
 
-
-
     public static void writeU4LittleEndian(byte[] bs, int num, int offset){
         bs[offset + 3] = (byte) ((num >> 24) & 0xFF);
         bs[offset + 2] = (byte) ((num >> 16) & 0xFF);

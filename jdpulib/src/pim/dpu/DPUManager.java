@@ -8,7 +8,7 @@ import pim.IDPUProxyObject;
 import java.io.IOException;
 import java.io.PrintStream;
 
-import static pim.dpu.DPUJVMMemSpaceKind.DPU_HEAP;
+import static pim.dpu.DPUJVMMemSpaceKind.DPU_HEAPSPACE;
 
 
 public class DPUManager {
@@ -94,7 +94,7 @@ public class DPUManager {
 
         BytesUtils.writeU4LittleEndian(objectDataStream, classAddr, 4);
 
-        int objAddr = garbageCollector.allocate(DPU_HEAP, objectDataStream);
+        int objAddr = garbageCollector.allocate(DPU_HEAPSPACE, objectDataStream);
         PIMObjectHandler handler = garbageCollector.dpuAddress2ObjHandler(objAddr, dpuID);
         System.out.println("---> Object Create Finish, handler = " + " (addr: " + handler.address + "," + "dpu: " + handler.dpuID + ") <---");
 

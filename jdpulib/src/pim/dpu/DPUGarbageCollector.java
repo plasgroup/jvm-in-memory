@@ -4,8 +4,6 @@ import com.upmem.dpu.Dpu;
 import com.upmem.dpu.DpuException;
 import pim.BytesUtils;
 
-
-// object autowired
 public class DPUGarbageCollector {
     int dpuID;
     Dpu dpu;
@@ -36,7 +34,6 @@ public class DPUGarbageCollector {
         dpu.copy("params_buffer_pt", ptBytes, 0);
 
     }
-
 
     public int pushParameters(int[] params) throws DpuException {
         int size = params.length * 4;
@@ -77,7 +74,7 @@ public class DPUGarbageCollector {
         if(spaceKind == DPUJVMMemSpaceKind.DPU_METASPACE){
             spaceVarName = "m_metaspace";
             beginAddr = metaSpaceBeginAddr;
-        } else if (spaceKind == DPUJVMMemSpaceKind.DPU_HEAP){
+        } else if (spaceKind == DPUJVMMemSpaceKind.DPU_HEAPSPACE){
             spaceVarName = "m_heapspace";
             beginAddr = heapSpaceBeginAddr;
         } else if (spaceKind == DPUJVMMemSpaceKind.DPU_PARAMETER_BUFFER) {

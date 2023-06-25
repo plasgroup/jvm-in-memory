@@ -3,6 +3,7 @@ package pim.dpu;
 import com.upmem.dpu.Dpu;
 import com.upmem.dpu.DpuException;
 import pim.BytesUtils;
+import pim.StringUtils;
 import pim.UPMEM;
 
 import java.io.IOException;
@@ -477,7 +478,7 @@ public class DPUClassFileManager {
 
     public static String getUTF8(DPUJClass ds, int utf8Index)
     {
-        return  ClassFileAnalyzer.getStringFromBuffer(ds.constantBytes,
+        return StringUtils.getStringFromBuffer(ds.constantBytes,
                 (int) (ds.entryItems[utf8Index] & 0xFFFF),
                 (int) (((ds.entryItems[utf8Index]) >> 40) & 0xFFFF)
         );

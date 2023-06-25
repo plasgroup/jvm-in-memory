@@ -1,6 +1,7 @@
 package pim.dpu;
 
 import pim.BytesUtils;
+import pim.StringUtils;
 import pim.Tester;
 
 import java.nio.ByteBuffer;
@@ -19,37 +20,6 @@ public class ClassFileAnalyzer {
         cfa.classFileBytes = bs;
         return cfa;
     }
-
-//
-//    public void fillFieldRef(){
-//        int filled = 0;
-//        for(int i = 0; i < jc.cpItemCount; i++){
-//            int pos = jc.itemBytesEntries[i];
-//            int tag = classFileBytes[pos];
-//
-//            switch (tag){
-//                case ClassFileAnalyzerConstants.CT_Fieldref:
-//                    System.out.println("in entry #" + (i + 1) + " fieldref");
-//                    int classIndex = BytesUtils.readU2BigEndian(classFileBytes, pos + 1);
-//                    int typeAndNameIndex = BytesUtils.readU2BigEndian(classFileBytes, pos + 3);
-//
-//                    if(classIndex == thisClassIndex){
-//                        System.out.println(" -- #" + classIndex + ".#" + typeAndNameIndex);
-//                        int nameIndex = (int) (jc.entryItems[typeAndNameIndex] >> 16 & 0xFFFF);
-//                        if(jc.entryItems[nameIndex] == 0) continue;
-//                        if(jc.entryItems[i] == 0x10){
-//                            // TODO: static field
-//                            jc.entryItems[i] &= 0xFFFFFFFF00000000L;
-//                        } else{
-//                            jc.entryItems[i] |= filledFields;
-//                            System.out.println("set non-static field index = " + filledFields);
-//                            filledFields += 1;
-//                        }
-//                    }
-//                    break;
-//            }
-//        }
-//    }
 
     public void fillConstantArea(){
         int filled = 0;
@@ -70,7 +40,6 @@ public class ClassFileAnalyzer {
                     System.out.printf("Fill UTF8 string in constantArea offset = %d\n", filled);
                     filled += len;
                     break;
-
                 case ClassFileAnalyzerConstants.CT_Integer:
                     int iv = BytesUtils.readU4BigEndian(classFileBytes, pos + 1);
                     System.out.println("in entry #" + i + " int, val = " + iv);
@@ -101,12 +70,11 @@ public class ClassFileAnalyzer {
 
     public int readConstantTableItem(int offset, int i){
         byte tag = classFileBytes[offset];
-        jc.entryItems[i] = (long)tag << 56;
+        jc.entryItems[i] = (long)tag << 56; // set tag to high 8 bits
         switch (tag){
             case ClassFileAnalyzerConstants.CT_Class:
                 System.out.println("Class");
-                System.out.println("\t -> Mark UTF8 index " + i +": " +
-                         BytesUtils.readU2BigEndian(classFileBytes, offset + 1) );
+                System.out.println("\t -> Mark UTF8 index " + i +": " + BytesUtils.readU2BigEndian(classFileBytes, offset + 1) );
                 jc.entryItems[i] &= 0xFFFFFFFF00000000L;
                 jc.entryItems[i] |= BytesUtils.readU2BigEndian(classFileBytes, offset + 1);
                 jc.entryItems[i] |= ((long) BytesUtils.readU2BigEndian(classFileBytes, offset + 1) & 0x0000FFFF) << 32;
@@ -127,6 +95,7 @@ public class ClassFileAnalyzer {
 
                 return 5;
             case ClassFileAnalyzerConstants.CT_InterfaceMethodref:
+                // TODO
                 System.out.println("InterfaceMethodref");
                 return 5;
             case ClassFileAnalyzerConstants.CT_String:
@@ -159,8 +128,6 @@ public class ClassFileAnalyzer {
                 return 5;
             case ClassFileAnalyzerConstants.CT_Utf8:
                 int len = (((classFileBytes[offset + 1]) & 0xFF) << 8) | ((int)(classFileBytes[offset + 2]) & 0xFF);
-
-
                 jc.entryItems[i] |= len;
                 constantAreaSize += len;
                 return 3 + len;
@@ -228,11 +195,7 @@ public class ClassFileAnalyzer {
         return pos - beginPos;
     }
 
-    public static String getStringFromBuffer(byte[] bs, int offset, int len){
-        byte[] sb = new byte[len];
-        for(int i = 0; i < len; i++) sb[i] = bs[offset + i];
-        return new String(sb);
-    }
+
 
     public static void printEntryTable(DPUJClass jc){
         for(int i = 1; i < jc.cpItemCount; i++){
@@ -448,7 +411,7 @@ public class ClassFileAnalyzer {
                 System.out.printf("Attr From Addr: 0x%x / 0x%x\n", pos, classFileBytes.length);
                 int attrNameIndex =  BytesUtils.readU2BigEndian(classFileBytes, pos);
                 pos += 2;
-                String attrName =  getStringFromBuffer(jc.constantBytes,
+                String attrName = StringUtils.getStringFromBuffer(jc.constantBytes,
                         (int) (jc.entryItems[attrNameIndex] & 0xFFFF),
                         (int) (((jc.entryItems[attrNameIndex]) >> 40) & 0xFF)
                 );
