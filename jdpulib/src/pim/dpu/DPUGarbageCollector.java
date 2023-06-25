@@ -18,17 +18,6 @@ public class DPUGarbageCollector {
     public final static int heapSpaceSize = 16 * 1024 * 1024;
     public final static int metaSpaceSize = 16 * 1024 * 1024;
 
-    private boolean metaSpaceDirty = false;
-    private boolean heapSpaceDirty = false;
-
-
-    public void setMetaSpaceDirty() {
-        this.metaSpaceDirty = true;
-    }
-
-    public void setHeapSpaceDirty() {
-        this.heapSpaceDirty = true;
-    }
 
     public DPUGarbageCollector(int dpuID, Dpu dpu) throws DpuException {
         this.dpuID = dpuID;

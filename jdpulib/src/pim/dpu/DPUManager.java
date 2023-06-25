@@ -32,8 +32,6 @@ public class DPUManager {
     }
 
     public void dpuExec(PrintStream printStream) throws DpuException {
-        garbageCollector.setHeapSpaceDirty();
-        garbageCollector.setMetaSpaceDirty();
         dpu.exec(printStream);
         garbageCollector.readBackHeapSpacePt();
         garbageCollector.readBackMetaSpacePt();

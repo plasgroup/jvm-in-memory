@@ -29,11 +29,11 @@ public class DPUTreeNodeProxyAutoGen extends DPUTreeNode implements IDPUProxyObj
         System.out.printf("--------- Invoke proxy %s handler = " + objectHandler + " ------------\n", methodDescriptor.split(":")[0]);
         System.out.println(" - DPUID = " + objectHandler.dpuID);
         DPUCacheManager cm = upmem.getDPUManager(objectHandler.dpuID).classCacheManager;
-        int methodMramAddr = cm.getMethodCacheItem(className, methodDescriptor).mramAddr;
-        int classMramAddr = cm.getClassStrutCacheLine(className).marmAddr;
-        System.out.printf("class mram addr = 0x%x, method mram addr = 0x%x, instance addr = 0x%x\n", classMramAddr, methodMramAddr, objectHandler.address);
+        int methodMRAMAddr = cm.getMethodCacheItem(className, methodDescriptor).mramAddr;
+        int classMRAMAddr = cm.getClassStrutCacheLine(className).marmAddr;
+        System.out.printf("class mram addr = 0x%x, method mram addr = 0x%x, instance addr = 0x%x\n", classMRAMAddr, methodMRAMAddr, objectHandler.address);
         try {
-            upmem.getDPUManager(getDpuID()).callNonstaticMethod(classMramAddr, methodMramAddr, objectHandler.address, params);
+            upmem.getDPUManager(getDpuID()).callNonstaticMethod(classMRAMAddr, methodMRAMAddr, objectHandler.address, params);
         } catch (DpuException e) {
             throw new RuntimeException(e);
         }
