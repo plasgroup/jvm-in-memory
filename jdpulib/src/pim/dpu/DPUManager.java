@@ -6,6 +6,7 @@ import pim.BytesUtils;
 import pim.IDPUProxyObject;
 
 import java.io.IOException;
+import java.io.PrintStream;
 
 import static pim.dpu.DPUJVMMemSpaceKind.DPU_HEAP;
 
@@ -14,7 +15,6 @@ public class DPUManager {
     public final int dpuID;
     public DPUGarbageCollector garbageCollector;
     public DPUClassFileManager dpuClassFileManager;
-
     public DPUCacheManager classCacheManager;
 
     public Dpu dpu;
@@ -34,6 +34,13 @@ public class DPUManager {
         dpu.copy("exec_method_pt", data);
     }
 
+    public void dpuExec(PrintStream printStream) throws DpuException {
+        garbageCollector.setHeapSpaceDirty();
+        garbageCollector.setMetaSpaceDirty();
+        dpu.exec(printStream);
+        garbageCollector.readBackHeapSpacePt();
+        garbageCollector.readBackMetaSpacePt();
+    }
     public void callNonstaticMethod(int classPt, int methodPt, int instanceAddr, Object[] params) throws DpuException {
         setClassPt(classPt);
         setMethodPt(methodPt);
@@ -52,7 +59,7 @@ public class DPUManager {
             i++;
         }
         garbageCollector.pushParameters(paramsConverted);
-        dpu.exec(System.out);
+        dpuExec(System.out);
     }
 
     int calcFieldCount(Class c){

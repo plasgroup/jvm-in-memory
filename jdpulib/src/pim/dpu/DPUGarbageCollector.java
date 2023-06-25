@@ -18,6 +18,18 @@ public class DPUGarbageCollector {
     public final static int heapSpaceSize = 16 * 1024 * 1024;
     public final static int metaSpaceSize = 16 * 1024 * 1024;
 
+    private boolean metaSpaceDirty = false;
+    private boolean heapSpaceDirty = false;
+
+
+    public void setMetaSpaceDirty() {
+        this.metaSpaceDirty = true;
+    }
+
+    public void setHeapSpaceDirty() {
+        this.heapSpaceDirty = true;
+    }
+
     public DPUGarbageCollector(int dpuID, Dpu dpu) throws DpuException {
         this.dpuID = dpuID;
         this.dpu = dpu;
@@ -50,6 +62,25 @@ public class DPUGarbageCollector {
 
         transfer(DPUJVMMemSpaceKind.DPU_PARAMETER_BUFFER, data, addr);
         return addr;
+    }
+    public void readBackHeapSpacePt(){
+        byte[] bs = new byte[4];
+        try {
+            dpu.copy(bs, "mram_heap_pt");
+            heapSpacePt = BytesUtils.readU4LittleEndian(bs, 0);
+        } catch (DpuException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+    public void readBackMetaSpacePt(){
+        byte[] bs = new byte[4];
+        try {
+            dpu.copy(bs, "meta_space_pt");
+            heapSpacePt = BytesUtils.readU4LittleEndian(bs, 0);
+        } catch (DpuException e) {
+            throw new RuntimeException(e);
+        }
     }
     public void transfer(DPUJVMMemSpaceKind spaceKind, byte[] data, int pt) throws DpuException{
         String spaceVarName = "";

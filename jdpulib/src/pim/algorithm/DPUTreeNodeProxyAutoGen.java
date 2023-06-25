@@ -86,7 +86,7 @@ public class DPUTreeNodeProxyAutoGen extends DPUTreeNode implements IDPUProxyObj
                 " " + " DPU id = " + objectHandler.dpuID + " heap offset = " + objectHandler.address + " ------------");
 
         try {
-            upmem.getDPUManager(objectHandler.dpuID).dpu.exec(System.out);
+            upmem.getDPUManager(objectHandler.dpuID).dpuExec(System.out);
         } catch (DpuException e) {
             throw new RuntimeException(e);
         }
@@ -131,24 +131,7 @@ public class DPUTreeNodeProxyAutoGen extends DPUTreeNode implements IDPUProxyObj
     // DPU program: return
     // dispatch
 
-    // DPU class struct.  dpu class include methodtable, bytecodes
-    public void setMethodPtr(int methodTableIndex) throws DpuException {
-        //set pointer
-        DPUClassFileCacheItem cacheLine =
-                upmem.getDPUManager(objectHandler.dpuID).classCacheManager.getClassStrutCacheLine(TreeNode.class.getName());
 
-        DPUClassFileManager.printDPUClassStrut(cacheLine.dpuClassStrut);
-        int methodOffset = cacheLine.dpuClassStrut.methodOffset[1];
-        int addr = methodOffset + cacheLine.marmAddr;
-
-        // 32 bit int -> byte[] -> DPU
-        if(method_ptr == null) method_ptr = new byte[4];
-        method_ptr[0] = (byte) ((addr >> 24) & 0xFF);
-        method_ptr[1] = (byte) ((addr >> 16) & 0xFF);
-        method_ptr[2] = (byte) ((addr >> 8) & 0xFF);
-        method_ptr[3] = (byte) (addr & 0xFF);
-        upmem.getDPUManager(objectHandler.dpuID).dpu.copy("method_ptr", method_ptr);
-    }
     @Override
     public int getKey() {
 
@@ -157,13 +140,12 @@ public class DPUTreeNodeProxyAutoGen extends DPUTreeNode implements IDPUProxyObj
         System.out.println("--------- Invoke proxy getKey() ------------");
 
         try {
-            setMethodPtr(1);
 
             // parameter (count == 0)
             //// write to parameter buffer
             //UPMEM.getDPUManager(objectHandler.dpuID).dpu.copy("parameter_buffer", ...);
 
-            upmem.getDPUManager(objectHandler.dpuID).dpu.exec(System.out);
+            upmem.getDPUManager(objectHandler.dpuID).dpuExec(System.out);
 
             // return
         } catch (DpuException e) {

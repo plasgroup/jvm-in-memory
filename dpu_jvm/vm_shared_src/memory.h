@@ -68,6 +68,7 @@ extern int debug_eval;
 #endif
 
 
+
 #define EVAL_STACK_TOPSLOT_VALUE *SLOTPT (current_sp)
 
 #ifdef LOG_STACK_POP_EVENT
