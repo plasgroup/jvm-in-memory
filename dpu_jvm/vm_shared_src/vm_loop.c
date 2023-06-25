@@ -231,8 +231,14 @@ void interp(struct function_thunk func_thunk) {
 
 
             // read field
-            op4 = *(uint8_t __mram_ptr**) ( op3 + 8 + 4 * op2);
-            printf("field val = %d\n", op4);
+            //READ_INT32_BIT_BY_BIT((uint8_t __mram_ptr*)(op3 + 8 + 4 * op2), op4)
+            op4 = op3 + 8 + 4 * op2;
+            printf("field val = %x %x %x %x\n", 
+                *(uint8_t __mram_ptr*)(op4), 
+                *(uint8_t __mram_ptr*)(op4 + 1),
+                *(uint8_t __mram_ptr*)(op4 + 2),
+                *(uint8_t __mram_ptr*)(op4 + 3)
+            );
             PUSH_EVAL_STACK(op4);
             
 
@@ -244,9 +250,10 @@ void interp(struct function_thunk func_thunk) {
             pc += 2;
             op2 = (jc->items[op1].direct_value >> 16 & 0xFFFF);
             printf(" - field index in instance = %d\n", (jc->items[op1].direct_value & 0xFFFF));
+            op1 = jc->items[op1].direct_value & 0xFFFF;
             POP_EVAL_STACK(op3); // val
             POP_EVAL_STACK(op4); // instance addr
-            printf("set val = %d (hex:0x%08x), instance addr: %08x\n", op3, op3, op4);
+            printf("set val = %d (hex:0x%08x), at addr(m):%08x, instance addr: %08x\n", op3, op3, op4 + 8 + op1 * 4, op4);
             op4 += 8 + op1 * 4; // offset in instance
             WRITE_INT32_BIT_BY_BIT((uint8_t __mram_ptr*)(op4), op2);
             break;

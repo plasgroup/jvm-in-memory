@@ -37,7 +37,9 @@ public class DPUTreeNodeProxyAutoGen extends DPUTreeNode implements IDPUProxyObj
 
     @Override
     public TreeNode getLeft() {
-        //return super.getLeft();
+
+        if(true)
+            throw new RuntimeException("wait for test");
 
         System.out.println("--------- Invoke proxy getLeft() ------------");
         throw new RuntimeException("call to dpu");
@@ -45,8 +47,8 @@ public class DPUTreeNodeProxyAutoGen extends DPUTreeNode implements IDPUProxyObj
 
     @Override
     public TreeNode getRight() {
-        System.out.println("--------- Invoke proxy getRight() handler = " + objectHandler +
-                " ------------");
+
+        System.out.println("--------- Invoke proxy getRight() handler = " + objectHandler + " ------------");
         System.out.println(" - DPUID = " + objectHandler.dpuID);
         DPUCacheManager cm = upmem.getDPUManager(objectHandler.dpuID).classCacheManager;
         System.out.println(cm);
@@ -56,27 +58,9 @@ public class DPUTreeNodeProxyAutoGen extends DPUTreeNode implements IDPUProxyObj
         int classMramAddr = upmem.getDPUManager(objectHandler.dpuID)
                 .classCacheManager.getClassStrutCacheLine("pim/algorithm/TreeNode").marmAddr;
         System.out.printf("class mram addr = 0x%x, method mram addr = 0x%x, instance addr = 0x%x\n", classMramAddr, methodMramAddr, objectHandler.address);
-        try {
-            upmem.getDPUManager(objectHandler.dpuID).setMethodPt(methodMramAddr);
-            upmem.getDPUManager(objectHandler.dpuID).setClassPt(classMramAddr);
-
-        } catch (DpuException e) {
-            throw new RuntimeException(e);
-        }
-
-        // parameters
-        try {
-            upmem.getDPUManager(objectHandler.dpuID).garbageCollector.pushParameters(new int[]{objectHandler.address});
-            DPUCacheManager classCacheManager = upmem.getDPUManager(objectHandler.dpuID).classCacheManager;
-
-            System.out.printf("push instance addr =  %x\n", objectHandler.address);
-        } catch (DpuException e) {
-            throw new RuntimeException(e);
-        }
-
 
         try {
-            upmem.getDPUManager(objectHandler.dpuID).dpu.exec(System.out);
+            upmem.getDPUManager(getDpuID()).callNonstaticMethod(classMramAddr, methodMramAddr, objectHandler.address, new Object[]{});
         } catch (DpuException e) {
             throw new RuntimeException(e);
         }
@@ -85,6 +69,8 @@ public class DPUTreeNodeProxyAutoGen extends DPUTreeNode implements IDPUProxyObj
 
     @Override
     public int getVal() {
+        if(true)
+            throw new RuntimeException("wait for test");
         // send this method's order in method table
         // --> set function pointer
         // for each DPU, host save
@@ -101,6 +87,8 @@ public class DPUTreeNodeProxyAutoGen extends DPUTreeNode implements IDPUProxyObj
 
     @Override
     public TreeNode createNode(int k, int v){
+        if(true)
+            throw new RuntimeException("wait for test");
         return null;
     }
 
@@ -131,6 +119,9 @@ public class DPUTreeNodeProxyAutoGen extends DPUTreeNode implements IDPUProxyObj
     }
     @Override
     public int getKey() {
+
+        if(true)
+            throw new RuntimeException("wait for test");
         System.out.println("--------- Invoke proxy getKey() ------------");
 
         try {

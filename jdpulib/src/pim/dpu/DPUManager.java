@@ -78,8 +78,8 @@ public class DPUManager {
         int fieldCount = calcFieldCount(c);
         int instanceSize = 8 + fieldCount * 4;
         byte[] objectDataStream = new byte[(instanceSize + 7) & ~7];
-        int classAddr = 0;
-        int initMethodAddr = 0;
+        int classAddr;
+        int initMethodAddr;
         if(classCacheManager.getClassStrutCacheLine(c.getName().replace(".","/")) == null){
             dpuClassFileManager.loadClassForDPU(c);
         }
