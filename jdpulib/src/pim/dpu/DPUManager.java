@@ -19,9 +19,6 @@ public class DPUManager {
 
     public Dpu dpu;
 
-    public <T> PIMObjectHandler createObject(Class c) throws DpuException, IOException {
-        return createObject(c, new Object[]{});
-    }
 
     public void setClassPt(int classPt) throws DpuException {
         byte[] data = new byte[4];

@@ -31,6 +31,13 @@ public class UPMEM {
     }
 
 
+    public static IDPUProxyObject createProxyObjectFromHandler(Class proxyClass, PIMObjectHandler objectHandler) throws NoSuchFieldException, InstantiationException {
+        IDPUProxyObject proxyObject;
+        proxyObject = (IDPUProxyObject) unsafe.allocateInstance(proxyClass);
+        long handlerOffset = unsafe.objectFieldOffset(proxyClass.getField("objectHandler"));
+        unsafe.getAndSetObject(proxyObject, handlerOffset, objectHandler);
+        return proxyObject;
+    }
     public IDPUProxyObject createObject(int dpuID, Class objClass, Object... params){
         IDPUProxyObject proxyObject;
         PIMObjectHandler handler;
