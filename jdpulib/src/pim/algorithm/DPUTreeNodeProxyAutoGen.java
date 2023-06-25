@@ -4,8 +4,6 @@ import com.upmem.dpu.DpuException;
 import pim.IDPUProxyObject;
 import pim.UPMEM;
 import pim.dpu.DPUCacheManager;
-import pim.dpu.DPUClassFileCacheItem;
-import pim.dpu.DPUClassFileManager;
 import pim.dpu.PIMObjectHandler;
 
 
@@ -27,162 +25,68 @@ public class DPUTreeNodeProxyAutoGen extends DPUTreeNode implements IDPUProxyObj
         super(k, v);
     }
 
-
-
-
-    @Override
-    public TreeNode getLeft() {
-
-        System.out.println("--------- Invoke proxy getLeft() handler = " + objectHandler + " ------------");
+    public void invokeMethod(String className, String methodDescriptor, Object[] params){
+        System.out.printf("--------- Invoke proxy %s handler = " + objectHandler + " ------------\n", methodDescriptor.split(":")[0]);
         System.out.println(" - DPUID = " + objectHandler.dpuID);
         DPUCacheManager cm = upmem.getDPUManager(objectHandler.dpuID).classCacheManager;
-        System.out.println(cm);
-
-        int methodMramAddr = upmem.getDPUManager(objectHandler.dpuID)
-                .classCacheManager.getMethodCacheItem("pim/algorithm/TreeNode", "getLeft:()Lpim/algorithm/TreeNode;").mramAddr;
-        int classMramAddr = upmem.getDPUManager(objectHandler.dpuID)
-                .classCacheManager.getClassStrutCacheLine("pim/algorithm/TreeNode").marmAddr;
+        int methodMramAddr = cm.getMethodCacheItem(className, methodDescriptor).mramAddr;
+        int classMramAddr = cm.getClassStrutCacheLine(className).marmAddr;
         System.out.printf("class mram addr = 0x%x, method mram addr = 0x%x, instance addr = 0x%x\n", classMramAddr, methodMramAddr, objectHandler.address);
-
         try {
-            upmem.getDPUManager(getDpuID()).callNonstaticMethod(classMramAddr, methodMramAddr, objectHandler.address, new Object[]{});
+            upmem.getDPUManager(getDpuID()).callNonstaticMethod(classMramAddr, methodMramAddr, objectHandler.address, params);
         } catch (DpuException e) {
             throw new RuntimeException(e);
         }
+    }
 
-        // get return val
+    public IDPUProxyObject getAReturnVal(){
         try {
             int returnVal = upmem.getDPUManager(getDpuID()).garbageCollector.getReturnVal();
-            System.out.printf("right treenode pointer = 0x%d\n", returnVal);
-            return (TreeNode) UPMEM.createProxyObjectFromHandler(DPUTreeNodeProxyAutoGen.class, new PIMObjectHandler(getDpuID(), returnVal));
+            System.out.printf("return pointer = 0x%x\n", returnVal);
+            return UPMEM.createProxyObjectFromHandler(DPUTreeNodeProxyAutoGen.class, new PIMObjectHandler(getDpuID(), returnVal));
         } catch (DpuException | NoSuchFieldException | InstantiationException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public int getIReturnVal(){
+        try {
+            int returnVal = upmem.getDPUManager(getDpuID()).garbageCollector.getReturnVal();
+            System.out.printf("return int = %d\n", returnVal);
+            return returnVal;
+        } catch (DpuException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public TreeNode getLeft() {
+        invokeMethod("pim/algorithm/TreeNode", "\"getLeft:()Lpim/algorithm/TreeNode;", new Object[]{});
+        return (TreeNode) getAReturnVal();
     }
 
     @Override
     public TreeNode getRight() {
-
-        System.out.println("--------- Invoke proxy getRight() handler = " + objectHandler + " ------------");
-        System.out.println(" - DPUID = " + objectHandler.dpuID);
-        DPUCacheManager cm = upmem.getDPUManager(objectHandler.dpuID).classCacheManager;
-        System.out.println(cm);
-
-        int methodMramAddr = upmem.getDPUManager(objectHandler.dpuID)
-                                .classCacheManager.getMethodCacheItem("pim/algorithm/TreeNode", "getRight:()Lpim/algorithm/TreeNode;").mramAddr;
-        int classMramAddr = upmem.getDPUManager(objectHandler.dpuID)
-                .classCacheManager.getClassStrutCacheLine("pim/algorithm/TreeNode").marmAddr;
-        System.out.printf("class mram addr = 0x%x, method mram addr = 0x%x, instance addr = 0x%x\n", classMramAddr, methodMramAddr, objectHandler.address);
-
-        try {
-            upmem.getDPUManager(getDpuID()).callNonstaticMethod(classMramAddr, methodMramAddr, objectHandler.address, new Object[]{});
-        } catch (DpuException e) {
-            throw new RuntimeException(e);
-        }
-
-        // get return val
-        try {
-            int returnVal = upmem.getDPUManager(getDpuID()).garbageCollector.getReturnVal();
-            System.out.printf("right treenode pointer = 0x%d\n", returnVal);
-            return (TreeNode) UPMEM.createProxyObjectFromHandler(DPUTreeNodeProxyAutoGen.class, new PIMObjectHandler(getDpuID(), returnVal));
-        } catch (DpuException | NoSuchFieldException | InstantiationException e) {
-            throw new RuntimeException(e);
-        }
+        invokeMethod("pim/algorithm/TreeNode", "getRight:()Lpim/algorithm/TreeNode;", new Object[]{});
+        return (TreeNode) getAReturnVal();
     }
 
     @Override
     public int getVal() {
-        System.out.println("--------- Invoke proxy getVal() handler = " + objectHandler + " ------------");
-        System.out.println(" - DPUID = " + objectHandler.dpuID);
-        DPUCacheManager cm = upmem.getDPUManager(objectHandler.dpuID).classCacheManager;
-        System.out.println(cm);
-
-        int methodMramAddr = upmem.getDPUManager(objectHandler.dpuID)
-                .classCacheManager.getMethodCacheItem("pim/algorithm/TreeNode", "getVal:()I").mramAddr;
-        int classMramAddr = upmem.getDPUManager(objectHandler.dpuID)
-                .classCacheManager.getClassStrutCacheLine("pim/algorithm/TreeNode").marmAddr;
-        System.out.printf("class mram addr = 0x%x, method mram addr = 0x%x, instance addr = 0x%x\n", classMramAddr, methodMramAddr, objectHandler.address);
-
-        try {
-            upmem.getDPUManager(getDpuID()).callNonstaticMethod(classMramAddr, methodMramAddr, objectHandler.address, new Object[]{});
-        } catch (DpuException e) {
-            throw new RuntimeException(e);
-        }
-
-        // get return val
-        try {
-            int returnVal = upmem.getDPUManager(getDpuID()).garbageCollector.getReturnVal();
-            System.out.printf("val = 0x%d\n", returnVal);
-            return returnVal;
-        } catch (DpuException e) {
-            throw new RuntimeException(e);
-        }
+        invokeMethod("pim/algorithm/TreeNode", "getVal:()I", new Object[]{});
+        return getIReturnVal();
     }
 
     @Override
     public TreeNode createNode(int k, int v){
-
-        System.out.println("--------- Invoke proxy createNode() handler = " + objectHandler + " ------------");
-        System.out.println(" - DPUID = " + objectHandler.dpuID);
-        DPUCacheManager cm = upmem.getDPUManager(objectHandler.dpuID).classCacheManager;
-        System.out.println(cm);
-
-        int methodMramAddr = upmem.getDPUManager(objectHandler.dpuID)
-                .classCacheManager.getMethodCacheItem("pim/algorithm/DPUTreeNode", "createNode:(II)Lpim/algorithm/TreeNode;").mramAddr;
-        int classMramAddr = upmem.getDPUManager(objectHandler.dpuID)
-                .classCacheManager.getClassStrutCacheLine("pim/algorithm/DPUTreeNode").marmAddr;
-        System.out.printf("class mram addr = 0x%x, method mram addr = 0x%x, instance addr = 0x%x\n", classMramAddr, methodMramAddr, objectHandler.address);
-
-        try {
-            upmem.getDPUManager(getDpuID()).callNonstaticMethod(classMramAddr, methodMramAddr, objectHandler.address, new Object[]{k, v});
-        } catch (DpuException e) {
-            throw new RuntimeException(e);
-        }
-
-        // get return val
-        try {
-            int returnVal = upmem.getDPUManager(getDpuID()).garbageCollector.getReturnVal();
-            System.out.printf("right treenode pointer = 0x%d\n", returnVal);
-            return (TreeNode) UPMEM.createProxyObjectFromHandler(DPUTreeNodeProxyAutoGen.class, new PIMObjectHandler(getDpuID(), returnVal));
-        } catch (DpuException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchFieldException e) {
-            throw new RuntimeException(e);
-        } catch (InstantiationException e) {
-            throw new RuntimeException(e);
-        }
-
+        invokeMethod("pim/algorithm/DPUTreeNode", "createNode:(II)Lpim/algorithm/TreeNode;", new Object[]{k, v});
+        return (TreeNode) getAReturnVal();
     }
-
-
 
     @Override
     public int getKey() {
-        System.out.println("--------- Invoke proxy getVal() handler = " + objectHandler + " ------------");
-        System.out.println(" - DPUID = " + objectHandler.dpuID);
-        DPUCacheManager cm = upmem.getDPUManager(objectHandler.dpuID).classCacheManager;
-        System.out.println(cm);
-
-        int methodMramAddr = upmem.getDPUManager(objectHandler.dpuID)
-                .classCacheManager.getMethodCacheItem("pim/algorithm/TreeNode", "getKey:()I").mramAddr;
-        int classMramAddr = upmem.getDPUManager(objectHandler.dpuID)
-                .classCacheManager.getClassStrutCacheLine("pim/algorithm/TreeNode").marmAddr;
-        System.out.printf("class mram addr = 0x%x, method mram addr = 0x%x, instance addr = 0x%x\n", classMramAddr, methodMramAddr, objectHandler.address);
-
-        try {
-            upmem.getDPUManager(getDpuID()).callNonstaticMethod(classMramAddr, methodMramAddr, objectHandler.address, new Object[]{});
-        } catch (DpuException e) {
-            throw new RuntimeException(e);
-        }
-
-        // get return val
-        try {
-            int returnVal = upmem.getDPUManager(getDpuID()).garbageCollector.getReturnVal();
-            System.out.printf("key = 0x%d\n", returnVal);
-            return returnVal;
-        } catch (DpuException e) {
-            throw new RuntimeException(e);
-        }
+        invokeMethod("pim/algorithm/TreeNode", "getKey:()I", new Object[]{});
+        return getIReturnVal();
     }
 }
 
