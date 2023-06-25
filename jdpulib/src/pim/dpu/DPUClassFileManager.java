@@ -484,15 +484,6 @@ public class DPUClassFileManager {
         );
     }
 
-    public static void printDPUClassStrut(DPUJClass ds){
-        System.out.println("-----------------------");
-        int thisClassNameIndex = (int) ((ds.entryItems[ds.thisClassNameIndex] >> 40) & 0xFF) - 1;
-        int superClassNameIndex =  (int) ((ds.entryItems[ds.superClass] >> 40) & 0xFF) - 1;
-        String thisClassName = getUTF8(ds, thisClassNameIndex);
-        String superClassName = getUTF8(ds, superClassNameIndex);
-        System.out.println("This class = #" + (ds.thisClassNameIndex) + " #" + ((ds.entryItems[ds.thisClassNameIndex - 1] >> 40) & 0xFF)+ " " + thisClassName);
-        System.out.println("Super class = #" + (ds.superClassNameIndex) + " #" + ((ds.entryItems[ds.superClassNameIndex - 2] >> 40) & 0xFF)+ " " + superClassName);
-    }
 
 }
 
