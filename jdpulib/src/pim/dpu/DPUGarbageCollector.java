@@ -2,7 +2,7 @@ package pim.dpu;
 
 import com.upmem.dpu.Dpu;
 import com.upmem.dpu.DpuException;
-import pim.BytesUtils;
+import pim.utils.BytesUtils;
 
 public class DPUGarbageCollector {
     int dpuID;
@@ -137,8 +137,8 @@ public class DPUGarbageCollector {
         return addr;
     }
 
-    public static PIMObjectHandler dpuAddress2ObjHandler(int addr, int dpuID) {
-        PIMObjectHandler handler = new PIMObjectHandler(dpuID, addr);
+    public static DPUObjectHandler dpuAddress2ObjHandler(int addr, int dpuID) {
+        DPUObjectHandler handler = new DPUObjectHandler(dpuID, addr);
 
         return handler;
     }

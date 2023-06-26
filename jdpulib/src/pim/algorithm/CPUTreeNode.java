@@ -30,7 +30,7 @@ public class CPUTreeNode extends TreeNode {
     int allocateDPU(){
         if(true) return 1;
         for (int i = 0; i < UPMEM.TOTAL_DPU_COUNT; i++) {
-            int remainHeapMemory = UPMEM.getInstance().getDPURemainHeapMemory(i);
+            int remainHeapMemory = UPMEM.getInstance().getDPUHeapMemoryRemain(i);
             if (remainHeapMemory > 32) {
                 return i;
             }

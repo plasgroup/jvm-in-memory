@@ -1,4 +1,4 @@
-package pim;
+package pim.utils;
 
 public class StringUtils {
     public static String getStringFromBuffer(byte[] bs, int offset, int len){

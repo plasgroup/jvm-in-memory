@@ -2,7 +2,7 @@ package pim.dpu;
 import com.upmem.dpu.Dpu;
 
 import com.upmem.dpu.DpuException;
-import pim.BytesUtils;
+import pim.utils.BytesUtils;
 import pim.IDPUProxyObject;
 
 import java.io.IOException;
@@ -77,7 +77,7 @@ public class DPUManager {
 
         return desc + ")V";
     }
-    public <T> PIMObjectHandler createObject(Class c, Object[] params) throws DpuException, IOException {
+    public <T> DPUObjectHandler createObject(Class c, Object[] params) throws DpuException, IOException {
         int fieldCount = calcFieldCount(c);
         int instanceSize = 8 + fieldCount * 4;
         byte[] objectDataStream = new byte[(instanceSize + 7) & ~7];
@@ -96,7 +96,7 @@ public class DPUManager {
         BytesUtils.writeU4LittleEndian(objectDataStream, classAddr, 4);
 
         int objAddr = garbageCollector.allocate(DPU_HEAPSPACE, objectDataStream);
-        PIMObjectHandler handler = garbageCollector.dpuAddress2ObjHandler(objAddr, dpuID);
+        DPUObjectHandler handler = garbageCollector.dpuAddress2ObjHandler(objAddr, dpuID);
         System.out.println("---> Object Create Finish, handler = " + " (addr: " + handler.address + "," + "dpu: " + handler.dpuID + ") <---");
 
         // call the init func

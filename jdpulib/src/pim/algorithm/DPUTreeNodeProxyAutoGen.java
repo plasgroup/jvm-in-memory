@@ -4,11 +4,10 @@ import com.upmem.dpu.DpuException;
 import pim.IDPUProxyObject;
 import pim.UPMEM;
 import pim.dpu.DPUCacheManager;
-import pim.dpu.PIMObjectHandler;
-
+import pim.dpu.DPUObjectHandler;
 
 public class DPUTreeNodeProxyAutoGen extends DPUTreeNode implements IDPUProxyObject {
-    public PIMObjectHandler objectHandler = null;
+    public DPUObjectHandler objectHandler = null;
     static UPMEM upmem = UPMEM.getInstance();
 
     @Override
@@ -43,7 +42,8 @@ public class DPUTreeNodeProxyAutoGen extends DPUTreeNode implements IDPUProxyObj
         try {
             int returnVal = upmem.getDPUManager(getDpuID()).garbageCollector.getReturnVal();
             System.out.printf("return pointer = 0x%x\n", returnVal);
-            return UPMEM.createProxyObjectFromHandler(DPUTreeNodeProxyAutoGen.class, new PIMObjectHandler(getDpuID(), returnVal));
+            if(returnVal == 0) return null;
+            return UPMEM.generateProxyObjectFromHandler(DPUTreeNodeProxyAutoGen.class, new DPUObjectHandler(getDpuID(), returnVal));
         } catch (DpuException | NoSuchFieldException | InstantiationException e) {
             throw new RuntimeException(e);
         }
@@ -61,8 +61,7 @@ public class DPUTreeNodeProxyAutoGen extends DPUTreeNode implements IDPUProxyObj
 
     @Override
     public TreeNode getLeft() {
-        if(true) throw new RuntimeException();
-        invokeMethod("pim/algorithm/TreeNode", "\"getLeft:()Lpim/algorithm/TreeNode;", new Object[]{});
+        invokeMethod("pim/algorithm/TreeNode", "getLeft:()Lpim/algorithm/TreeNode;", new Object[]{});
         return (TreeNode) getAReturnVal();
     }
 
@@ -91,6 +90,5 @@ public class DPUTreeNodeProxyAutoGen extends DPUTreeNode implements IDPUProxyObj
         int retVal = getIReturnVal();
         return retVal;
     }
-
 }
 

@@ -43,12 +43,13 @@ public class BSTBuilder {
     }
 
     private static ArrayList<Pair<Integer, Integer>> pairs =
-            IntIntValuePairGenerator.getInstance().genPairs(200);
+            IntIntValuePairGenerator.getInstance().genPairs(100);
 
     public static void build() {
         if (pairs.size() == 0) return;
         TreeNode root = new CPUTreeNode(pairs.get(0).key, pairs.get(0).val);
         for (int i = 1; i < pairs.size(); i++) {
+            System.out.printf("(TreeBuilder) ===> insert %d 'th node, key = %d, val = %d\n", i + 1, pairs.get(i).key, pairs.get(i).val);
             root.insert(pairs.get(i).key, pairs.get(i).val);
         }
     }

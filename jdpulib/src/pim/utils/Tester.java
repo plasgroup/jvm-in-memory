@@ -1,4 +1,4 @@
-package pim;
+package pim.utils;
 public class Tester {
     public static void alert(boolean cond){
 

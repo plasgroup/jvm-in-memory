@@ -1,9 +1,14 @@
-package pim;
+package pim.utils;
 
 public class BytesUtils {
-    public static int upperTo8(int x){
+    public static int upperToAlignPow2N(int n, int x){
+        int mask = (1 << n) - 1;
+        return (x + mask) & ~(mask);
+    }
+    public static int upperToAlign8(int x){
         return (x + 0b111) & ~(0b111);
     }
+    public static int upperToAlign4(int x) {return (x + 0b11) & ~(0b11);}
     public static int readU4BigEndian(byte[] bs, int offset){
         return ((0xFF & bs[offset]) << 24) | ((0xFF & bs[offset + 1]) << 16) |
                 ((0xFF & bs[offset + 2]) << 8) | (0xFF & bs[offset + 3]);

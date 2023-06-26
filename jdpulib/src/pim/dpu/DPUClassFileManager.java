@@ -2,8 +2,8 @@ package pim.dpu;
 
 import com.upmem.dpu.Dpu;
 import com.upmem.dpu.DpuException;
-import pim.BytesUtils;
-import pim.StringUtils;
+import pim.utils.BytesUtils;
+import pim.utils.StringUtils;
 import pim.UPMEM;
 
 import java.io.IOException;

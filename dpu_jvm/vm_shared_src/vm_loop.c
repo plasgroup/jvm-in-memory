@@ -231,14 +231,12 @@ void interp(struct function_thunk func_thunk) {
 
 
             // read field
-            //READ_INT32_BIT_BY_BIT((uint8_t __mram_ptr*)(op3 + 8 + 4 * op2), op4)
             READ_INT32_BIT_BY_BIT((uint8_t __mram_ptr*)(op3 + 8 + 4 * op2), op4);
             printf("field val = 0x%x\n", 
                 op4
             );
             PUSH_EVAL_STACK(op4);
             
-
             break;
         case PUTFIELD:
             DEBUG_OUT_INSN_PARSED("PUTFIELD")
@@ -247,12 +245,11 @@ void interp(struct function_thunk func_thunk) {
             pc += 2;
             op2 = (jc->items[op1].direct_value >> 16 & 0xFFFF);
             printf(" - field index in instance = %d\n", (jc->items[op1].direct_value & 0xFFFF));
-            op1 = jc->items[op1].direct_value & 0xFFFF;
+            op1 = jc->items[op1].direct_value & 0xFFFF; // index in instance fields
             POP_EVAL_STACK(op3); // val
             POP_EVAL_STACK(op4); // instance addr
-            printf("set val = %d (hex:0x%08x), at addr(m):%08x, instance addr: %08x\n", op3, op3, op4 + 8 + op1 * 4, op4);
-            op4 += 8 + op1 * 4; // offset in instance
-            WRITE_INT32_BIT_BY_BIT((uint8_t __mram_ptr*)(op4), op2);
+            printf("set val = %d (hex:0x%08x), at addr(m):0x%08x, instance addr: 0x%08x\n", op3, op3, op4 + 8 + op1 * 4, op4);
+            WRITE_INT32_BIT_BY_BIT((uint8_t __mram_ptr*)(op4 + 8 + op1 * 4), op3);
             break;
 
         case INVOKEVIRTUAL: // function call
@@ -334,6 +331,7 @@ void interp(struct function_thunk func_thunk) {
                 return_val = op1;
                 current_fp = 0;
                 current_sp = wram_data_space - 4;
+                params_buffer_pt = params_buffer;
                 return;
             }
             current_sp = op2;
@@ -368,6 +366,7 @@ void interp(struct function_thunk func_thunk) {
                 return_val = op1;
                 current_fp = 0;
                 current_sp = wram_data_space - 4;
+                params_buffer_pt = params_buffer;
                 return;
             }
             current_sp = op2;
@@ -404,6 +403,7 @@ void interp(struct function_thunk func_thunk) {
                 
                 current_fp = 0;
                 current_sp = wram_data_space - 4;
+                params_buffer_pt = params_buffer;
                 return;
             }
             current_sp = op2;
