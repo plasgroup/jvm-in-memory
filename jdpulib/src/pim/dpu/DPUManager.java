@@ -35,6 +35,7 @@ public class DPUManager {
         dpu.exec(printStream);
         garbageCollector.readBackHeapSpacePt();
         garbageCollector.readBackMetaSpacePt();
+        garbageCollector.parameterBufferPt = DPUGarbageCollector.parameterBufferBeginAddr;
     }
     public void callNonstaticMethod(int classPt, int methodPt, int instanceAddr, Object[] params) throws DpuException {
         setClassPt(classPt);

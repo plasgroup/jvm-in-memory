@@ -44,14 +44,14 @@ public abstract class TreeNode{
 
     // Algorithm
     public void insert(int k, int v){
-        if(k < key){
+        if(k < getKey()){
             if (getLeft() == null)
-                left = createNode(k, v);
+                setLeft(createNode(k, v));
             else
                 getLeft().insert(k, v);
         }else{
             if (getRight() == null)
-                right = createNode(k, v);
+                setRight(createNode(k, v));
             else
                 getRight().insert(k, v);
         }

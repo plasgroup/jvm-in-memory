@@ -61,6 +61,7 @@ public class DPUTreeNodeProxyAutoGen extends DPUTreeNode implements IDPUProxyObj
 
     @Override
     public TreeNode getLeft() {
+        if(true) throw new RuntimeException();
         invokeMethod("pim/algorithm/TreeNode", "\"getLeft:()Lpim/algorithm/TreeNode;", new Object[]{});
         return (TreeNode) getAReturnVal();
     }
@@ -73,6 +74,7 @@ public class DPUTreeNodeProxyAutoGen extends DPUTreeNode implements IDPUProxyObj
 
     @Override
     public int getVal() {
+        if(true) throw new RuntimeException();
         invokeMethod("pim/algorithm/TreeNode", "getVal:()I", new Object[]{});
         return getIReturnVal();
     }
@@ -86,7 +88,9 @@ public class DPUTreeNodeProxyAutoGen extends DPUTreeNode implements IDPUProxyObj
     @Override
     public int getKey() {
         invokeMethod("pim/algorithm/TreeNode", "getKey:()I", new Object[]{});
-        return getIReturnVal();
+        int retVal = getIReturnVal();
+        return retVal;
     }
+
 }
 

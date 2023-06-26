@@ -43,7 +43,7 @@ public class BSTBuilder {
     }
 
     private static ArrayList<Pair<Integer, Integer>> pairs =
-            IntIntValuePairGenerator.getInstance().genPairs(1000);
+            IntIntValuePairGenerator.getInstance().genPairs(200);
 
     public static void build() {
         if (pairs.size() == 0) return;

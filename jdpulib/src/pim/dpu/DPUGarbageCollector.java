@@ -12,7 +12,7 @@ public class DPUGarbageCollector {
     int parameterBufferPt;
     public final static int heapSpaceBeginAddr = 0x000000;
     public final static int metaSpaceBeginAddr = 16 * 1024 * 1024;
-    public final static int parameterBufferBeginAddr = 0x4240;
+    public final static int parameterBufferBeginAddr = 0x4248;
     public final static int heapSpaceSize = 16 * 1024 * 1024;
     public final static int metaSpaceSize = 16 * 1024 * 1024;
 
@@ -88,6 +88,7 @@ public class DPUGarbageCollector {
             dpu.copy(spaceVarName, data, pt - beginAddr);
         }
     }
+
     public int allocate(DPUJVMMemSpaceKind spaceKind, byte[] data) throws DpuException {
         int addr = allocate(spaceKind, data.length);
         transfer(spaceKind, data, addr);
