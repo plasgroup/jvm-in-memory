@@ -257,15 +257,26 @@ void interp(struct function_thunk func_thunk) {
 
 
             op1 = (code_buffer[pc] << 8) | code_buffer[pc + 1]; // constant table index to methoderef
+
             printf(" - method-ref-cp-index = %d\n", op1);
             printf(" - jmethod-ref = %p\n", func_thunk.jc->items[op1].direct_value);
 
 
-            // TODO, need support static
-            
+            // A a;
+            // if(x == 1){
+            //     a = new A();
+            // } else {
+            //     a = new B(); 
+            // }
 
+            // a.f(); // method ref    classref = B | A::f() method address 
+            
+            // TODO, need support static
             callee.func = func_thunk.jc->items[op1].direct_value;
-            op2 = (func_thunk.jc->items[op1].info >> 16) & 0xFFFF;
+
+            // instance -> class structure
+            op2 = (func_thunk.jc->items[op1].info >> 16) & 0xFFFF; // class ref index
+
             printf(" - class-ref-cp-index = %d\n", op2);
             printf(" - jclass-ref = %p\n", func_thunk.jc->items[op2].direct_value);
             callee.jc = func_thunk.jc->items[op2].direct_value;
@@ -295,6 +306,9 @@ void interp(struct function_thunk func_thunk) {
             printf(" - class addr: %08x\n", op2);
             op3 = 0;
             printf(" - count field count\n");
+            
+
+            // |4 bytes ()| 4 byte (class ref) |   fields (4 * field_count bytes) |
             while(op2 != NULL){
                 printf(" - + %d\n",  ((struct j_class __mram_ptr*)op2)->fields_count);
                 op3 += ((struct j_class __mram_ptr*)op2)->fields_count;
@@ -304,12 +318,15 @@ void interp(struct function_thunk func_thunk) {
                 op2 = ((struct j_class __mram_ptr*)op2)->items[op4].direct_value;
             }
             printf(" - field count = %d, instance size = %d\n", op3, 8 + op3 * 4);
+
             PUSH_EVAL_STACK(mram_heap_pt);
             
             for(op4 = 0; op4 < 8 + op3 * 4; op4++){
                 *(uint8_t __mram_ptr*)(mram_heap_pt + op4) = 0;
             }
             mram_heap_pt += 8 + op3 * 4;
+
+
             break;
         case DUP:
             DEBUG_OUT_INSN_PARSED("DUP")

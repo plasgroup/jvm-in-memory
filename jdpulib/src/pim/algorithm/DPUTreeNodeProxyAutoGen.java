@@ -72,8 +72,27 @@ public class DPUTreeNodeProxyAutoGen extends DPUTreeNode implements IDPUProxyObj
     }
 
     @Override
+    public void setRight(TreeNode right) {
+        invokeMethod("pim/algorithm/TreeNode", "setRight:(Lpim/algorithm/TreeNode;)V", new Object[]{right});
+    }
+
+    @Override
+    public void setLeft(TreeNode left) {
+        invokeMethod("pim/algorithm/TreeNode", "setLeft:(Lpim/algorithm/TreeNode;)V", new Object[]{left});
+    }
+
+    @Override
+    public void setKey(int key) {
+        invokeMethod("pim/algorithm/TreeNode", "setKey:(I)V", new Object[]{key});
+    }
+
+    @Override
+    public void setVal(int key) {
+        invokeMethod("pim/algorithm/TreeNode", "setVal:(I)V", new Object[]{key});
+    }
+
+    @Override
     public int getVal() {
-        if(true) throw new RuntimeException();
         invokeMethod("pim/algorithm/TreeNode", "getVal:()I", new Object[]{});
         return getIReturnVal();
     }

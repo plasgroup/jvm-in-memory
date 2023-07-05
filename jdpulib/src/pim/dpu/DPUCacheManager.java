@@ -23,9 +23,12 @@ public class DPUCacheManager {
     static class DPUFieldCache{
         public Dictionary<String, Dictionary<String, DPUFieldCacheItem>> cache = new Hashtable<>();
     }
+
     DPUClassCache dpuClassCache;
     DPUMethodCache methodCache;
     DPUFieldCache fieldCache;
+
+
     public DPUCacheManager(int dpuID, Dpu dpu){
         this.dpuID = dpuID;
         this.dpu = dpu;

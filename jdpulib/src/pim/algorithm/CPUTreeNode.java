@@ -18,6 +18,8 @@ public class CPUTreeNode extends TreeNode {
 
     @Override
     public TreeNode createNode(int k, int v) {
+        System.out.println("create node at CPU. new height = " + (this.height + 1));
+        if(true) return new CPUTreeNode(k, v, this.height + 1);
         if (height >= this.CriticalHeight) {
             System.out.println("create node at DPU from CPU.");
             return (TreeNode) UPMEM.getInstance().createObject(allocateDPU(), DPUTreeNode.class, k, v);

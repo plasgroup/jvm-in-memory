@@ -1,5 +1,7 @@
 package pim.algorithm;
 
+import pim.UPMEM;
+
 public abstract class TreeNode{
     private int key;
     private int val;
@@ -42,8 +44,13 @@ public abstract class TreeNode{
         return val;
     }
 
+
     // Algorithm
     public void insert(int k, int v){
+        if(k == getKey()){
+            setVal(v);
+            throw new RuntimeException();
+        }
         if(k < getKey()){
             if (getLeft() == null)
                 setLeft(createNode(k, v));
@@ -58,12 +65,11 @@ public abstract class TreeNode{
     }
 
     public int search(int k){
-        if(this.left == null && this.right == null && k == this.key){
-            return this.val;
-        }else if(k < this.key && this.left != null){
-            return this.left.search(k);
-        }else if(this.right != null){
-            return this.right.search(k);
+        if(k == getKey()) return getVal();
+        if(k < getKey() && getLeft() != null){
+            return getLeft().search(k);
+        }else if(k >= getKey() && getRight() != null){
+            return getRight().search(k);
         }
 
         return -1;
