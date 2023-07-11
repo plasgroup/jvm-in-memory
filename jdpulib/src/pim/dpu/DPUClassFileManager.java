@@ -108,25 +108,31 @@ public class DPUClassFileManager {
             className = formalClassName(c.getName());
             System.out.println(" - Push class " + className + " to DPU#" + dpuID);
             // TODO, currently skip the resolution of java/lang/Object
+            createVirtualTable(jc, classFileBytes);
             int classAddr = pushJClassToDPU(jc);
             recordClass(className, jc, classAddr);
             recordMethodDistribution(c, jc, classAddr);
             recordFieldDistribution(c, jc);
-            createVirtualTable(jc, classFileBytes);
             return jc;
         }
 
+        createVirtualTable(jc, classFileBytes);
         int classAddr =
                 upmem.getDPUManager(dpuID).garbageCollector.allocate(DPUJVMMemSpaceKind.DPU_METASPACE, jc.totalSize);
+
         recordClass(formalClassName(c.getName()), jc, classAddr);
         recordMethodDistribution(c, jc, classAddr);
         recordFieldDistribution(c, jc);
 
-
         /*  */
         System.out.println(" - In class " + c.getName() + " resolve unknow name");
 
+
         // resolve each entry item from preprocessed entry table.
+
+        if("pim/algorithm/DPUTreeNode".equals(formalClassName(c.getName()))){
+            System.out.println();
+        }
         for(int i = 0; i < jc.cpItemCount; i++){
             int tag = (int) ((jc.entryItems[i] >> 56) & 0xFF);
             int classIndex;
@@ -316,10 +322,10 @@ public class DPUClassFileManager {
                     break;
             }
         }
-        
+
+
 
         createVirtualTable(jc, classFileBytes);
-
         pushJClassToDPU(jc, classAddr);
 
         return jc;
@@ -479,7 +485,7 @@ public class DPUClassFileManager {
 
 
             System.out.println();
-
+            ClassFileAnalyzer.printEntryTable(jc);
         }
 
 
