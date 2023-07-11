@@ -599,9 +599,14 @@ public class DPUClassFileManager {
         System.out.printf("print 0x%x to %x\n", ds.stringINTConstantPoolLength, pos);
         pos += 4;
 
-
         constantAreaPointerPos = pos;
         pos += 4;
+
+        BytesUtils.writeU4LittleEndian(bs, ds.virtualTable.items.size(), pos);
+        pos += 4;
+        int virtualTablePointerPos = pos;
+        pos += 4;
+
         entryTablePointer = classAddr + pos;
         BytesUtils.writeU4LittleEndian(bs, entryTablePointer, entryTablePointerPos);
         System.out.printf("print %x in %x\n", entryTablePointer, entryTablePointerPos);
@@ -623,6 +628,8 @@ public class DPUClassFileManager {
         methodPointer = classAddr + pos;
         BytesUtils.writeU4LittleEndian(bs, methodPointer, methodPointerPos);
         System.out.printf("print 0x%x to %x\n", methodPointer, methodPointerPos);
+
+
 
         for(int i = 0; i < ds.methodCount; i++){
             System.out.printf("method %d from 0x%x === 0x%x\n", i, pos, ds.methodOffset[i]);
@@ -657,7 +664,7 @@ public class DPUClassFileManager {
 
         }
 
-        constantAreaPointer = DPUGarbageCollector.metaSpaceBeginAddr + pos;
+        constantAreaPointer = classAddr + pos;
         BytesUtils.writeU4LittleEndian(bs, constantAreaPointer, constantAreaPointerPos);
 
         for(int offset = 0; offset < ds.stringINTConstantPoolLength; offset ++){
@@ -666,9 +673,14 @@ public class DPUClassFileManager {
         pos += (ds.stringINTConstantPoolLength + 0b111) & (~0b111);
 
         // vtable
-        //// length
-        BytesUtils.writeU4LittleEndian(bs, ds.virtualTable.items.size(), pos);
-        pos += 4;
+        int virtualTablePointer = classAddr + pos;
+        BytesUtils.writeU4LittleEndian(bs, virtualTablePointer, virtualTablePointerPos);
+
+        for(int offset = 0; offset < ds.stringINTConstantPoolLength; offset ++){
+            bs[pos + offset] = ds.constantBytes[offset];
+        }
+        pos += (ds.stringINTConstantPoolLength + 0b111) & (~0b111);
+
         // items
         for(int i = 0; i < ds.virtualTable.items.size(); i++){
             VirtualTableItem item = ds.virtualTable.items.get(i);
@@ -676,6 +688,7 @@ public class DPUClassFileManager {
             pos += 4;
         }
         pos = (pos + 0b111) & (~0b111);
+
         System.out.printf("=============== !Alert pos = %d === total-size = %d ================\n", pos, ds.totalSize);
         if(pos != ds.totalSize) throw new RuntimeException();
         return bs;
