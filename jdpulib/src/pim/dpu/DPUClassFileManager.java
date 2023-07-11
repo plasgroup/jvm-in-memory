@@ -497,7 +497,12 @@ public class DPUClassFileManager {
         }
 
 
-
+        jc.totalSize = 48 + jc.cpItemCount * 8 +
+                Arrays.stream(jc.fields).map(e -> e.size).reduce((s1, s2) -> s1 + s2).orElseGet(()->0) +
+                Arrays.stream(jc.methodTable).map(e -> e.size).reduce((s1, s2) -> s1 + s2).orElseGet(()->0)
+                + ((jc.stringINTConstantPoolLength + 0b111) & (~0b111))
+                + 8 + 8 * jc.virtualTable.items.size();
+        ;
     }
 
     private void recordFieldDistribution(Class c, DPUJClass jc) {
@@ -648,6 +653,21 @@ public class DPUClassFileManager {
             bs[pos + offset] = ds.constantBytes[offset];
         }
         pos += (ds.stringINTConstantPoolLength + 0b111) & (~0b111);
+
+        // vtable
+        //// length
+        BytesUtils.writeU4LittleEndian(bs, 0, pos);
+        pos += 4;
+        BytesUtils.writeU4LittleEndian(bs, ds.virtualTable.items.size(), pos);
+        pos += 4;
+        for(int i = 0; i < ds.virtualTable.items.size(); i++){
+            VirtualTableItem item = ds.virtualTable.items.get(i);
+            BytesUtils.writeU4LittleEndian(bs, 0, pos);
+            pos += 4;
+            BytesUtils.writeU4LittleEndian(bs, ds.virtualTable.items.size(), pos);
+            pos += item.methodReferenceAddress;
+        }
+
         System.out.printf("=============== !Alert pos = %d === total-size = %d ================\n", pos, ds.totalSize);
         if(pos != ds.totalSize) throw new RuntimeException();
         return bs;
