@@ -73,9 +73,6 @@ void init_memory() {
 
 
 
-    printf("init sfields_table in %p\n", mram_heap_pt);
-
-
     
 }
 

@@ -12,7 +12,7 @@ public class DPUGarbageCollector {
     int parameterBufferPt;
     public final static int heapSpaceBeginAddr = 0x000000;
     public final static int metaSpaceBeginAddr = 16 * 1024 * 1024;
-    public final static int parameterBufferBeginAddr = 0x4248;
+    public final static int parameterBufferBeginAddr = 0x4250;
     public final static int heapSpaceSize = 16 * 1024 * 1024;
     public final static int metaSpaceSize = 16 * 1024 * 1024;
 
@@ -84,7 +84,6 @@ public class DPUGarbageCollector {
 
         if(!"".equals(spaceVarName) && beginAddr != -1){
             System.out.printf("copy %d bytes to MRAM, pt = 0x%x" + " [%s]", data.length, pt, spaceVarName);
-            System.out.println(" ********* current remain = \n" + getRemainMetaMemory());
             dpu.copy(spaceVarName, data, pt - beginAddr);
         }
     }

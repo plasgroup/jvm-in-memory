@@ -13,7 +13,7 @@ public class Main {
                 .setDpuInUseCount(UPMEM.TOTAL_DPU_COUNT)
                 .setThreadPerDPU(UPMEM.perDPUThreadsInUse));
 
-        ArrayList<BSTBuilder.Pair<Integer, Integer>> pairs = new IntIntValuePairGenerator(10000).genPairs(1000);
+        ArrayList<BSTBuilder.Pair<Integer, Integer>> pairs = new IntIntValuePairGenerator(1000).genPairs(500);
 
 
         TreeNode root = BSTBuilder.build(pairs);

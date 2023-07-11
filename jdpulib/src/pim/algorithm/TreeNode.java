@@ -47,10 +47,6 @@ public abstract class TreeNode{
 
     // Algorithm
     public void insert(int k, int v){
-        if(k == getKey()){
-            setVal(v);
-            throw new RuntimeException();
-        }
         if(k < getKey()){
             if (getLeft() == null)
                 setLeft(createNode(k, v));

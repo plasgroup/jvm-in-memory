@@ -7,6 +7,7 @@
     //two pointers, point to function bytecode in mram and function structure beginning i the MRAM
     uint8_t __mram_ptr *code_buffer;
     struct j_method __mram_ptr *func = func_thunk.func;
+    struct j_method __mram_ptr *func2;
     struct j_class __mram_ptr *jc = func_thunk.jc;
 
     REGVAL pc;

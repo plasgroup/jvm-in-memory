@@ -21,4 +21,12 @@ public class DPUJClass {
     public int[] bytecodeOffset;
 
     public byte[] staticArea;
+
+
+
+    public VirtualTable virtualTable;
+
+
+
+
 }

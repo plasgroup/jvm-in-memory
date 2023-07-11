@@ -8,7 +8,10 @@ import pim.UPMEM;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.CacheRequest;
 import java.util.Arrays;
+import java.util.Dictionary;
+import java.util.Hashtable;
 
 
 public class DPUClassFileManager {
@@ -109,6 +112,7 @@ public class DPUClassFileManager {
             recordClass(className, jc, classAddr);
             recordMethodDistribution(c, jc, classAddr);
             recordFieldDistribution(c, jc);
+            createVirtualTable(jc, classFileBytes);
             return jc;
         }
 
@@ -312,10 +316,174 @@ public class DPUClassFileManager {
                     break;
             }
         }
+        
+
+        createVirtualTable(jc, classFileBytes);
 
         pushJClassToDPU(jc, classAddr);
 
         return jc;
+    }
+
+
+    String getClassNameFromClassRef(DPUJClass jc, byte[] classBytes, int classRefIndex){
+        int classNameUTF8Index = BytesUtils.readU2BigEndian(classBytes, jc.itemBytesEntries[classRefIndex] + 1);
+        return getUTF8(jc, classNameUTF8Index);
+    }
+    String getMethodDescriptor(DPUJClass jc, byte[] classBytes, int methodRefIndex){
+        int classIndex = BytesUtils.readU2BigEndian(classBytes, jc.itemBytesEntries[methodRefIndex] + 1);
+        int nameAndTypeIndex =  BytesUtils.readU2BigEndian(classBytes, jc.itemBytesEntries[methodRefIndex] + 3);
+        int classUTF8Index = BytesUtils.readU2BigEndian(classBytes, jc.itemBytesEntries[classIndex] + 1);
+        int nameUTF8Index = BytesUtils.readU2BigEndian(classBytes, jc.itemBytesEntries[nameAndTypeIndex] + 1);
+        int typeUTF8Index = BytesUtils.readU2BigEndian(classBytes, jc.itemBytesEntries[nameAndTypeIndex] + 3);
+
+        String classUTF8 = getUTF8(jc, classUTF8Index);
+        String nameUTF8 = getUTF8(jc, nameUTF8Index);
+        String typeUTF8 = getUTF8(jc, typeUTF8Index);
+        String descriptor = classUTF8 + "." + nameUTF8 + ":" + typeUTF8;
+        return descriptor;
+    }
+
+    Dictionary<String, Integer> globalVirtualTableIndexCache = new Hashtable<>();
+    private void createVirtualTable(DPUJClass jc, byte[] classBytes) {
+        /* iterate method table */
+        String thisClassName = getUTF8(jc, jc.thisClassNameIndex);
+        if("pim/algorithm/DPUTreeNode".equals(thisClassName)){
+            System.out.println();
+        }
+
+        System.out.println("in java class = " + thisClassName);
+        VirtualTable thisClassVirtualTable = new VirtualTable();
+        jc.virtualTable = thisClassVirtualTable;
+        if(jc.superClass == 0){
+            // java/lang/Object
+            /* iterate method table to put all methods to v_table */
+            thisClassVirtualTable.items.add(new VirtualTableItem("", ""));
+            for(int i = 0; i < jc.methodTable.length; i++){
+                DPUJMethod method = jc.methodTable[i];
+                String methodName = getUTF8(jc, method.nameIndex);
+                String methodDescriptor = getUTF8(jc, method.descriptorIndex);
+                String descriptor = methodName + ":" + methodDescriptor;
+                int index = thisClassVirtualTable.items.size();
+                thisClassVirtualTable.items.add(new VirtualTableItem(thisClassName, descriptor));
+
+                System.out.printf(" - Add method %s to Vtable of %s, className = %s, index = %d\n", descriptor, thisClassName, thisClassName, index);
+
+                globalVirtualTableIndexCache.put(thisClassName + "." + descriptor, index);
+            }
+
+            for(int i = 0; i < jc.entryItems.length; i++){
+                int tag = classBytes[jc.itemBytesEntries[i]];
+                if(tag == ClassFileAnalyzerConstants.CT_Methodref){
+                    String description = getMethodDescriptor(jc, classBytes, i);
+                    String className = description.split("\\.")[0];
+                    String descriptor = description.split("\\.")[1];
+                    System.out.println(" - #" + i + " is MethodRef, description = " + className + "." + descriptor);
+                    if(isClassLoaded(className)){
+                        System.out.println(className + " is loaded");
+                        int index = globalVirtualTableIndexCache.get(className + "." + descriptor);
+                        System.out.println(" - get method index = " + index);
+                        jc.entryItems[i] &= 0xFFFFFFFF00000000L;
+                        jc.entryItems[i] |= index;
+                    }else{
+                        System.out.println(className + " is not loaded, skip");
+                    }
+                }
+            }
+        }else{
+            // get super jc;
+            String superClassName = getUTF8(jc, jc.superClassNameIndex);
+            DPUJClass superClassJc = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getClassStrutCacheLine(superClassName).dpuClassStrut;
+            if(superClassJc == null) throw new RuntimeException("super class not loaded");
+
+            /* copy all methods from super */
+            VirtualTable superVirtualTable = superClassJc.virtualTable;
+            for(int i = 0; i < superVirtualTable.items.size(); i++){
+                VirtualTableItem item = superVirtualTable.items.get(i);
+                jc.virtualTable.items.add(new VirtualTableItem(item.className, item.description));
+            }
+
+            /* append or rewrite virtual table item */
+            for(int i = 0; i < jc.methodTable.length; i++){
+                DPUJMethod method = jc.methodTable[i];
+                String methodName = getUTF8(jc, method.nameIndex);
+                String methodDescriptor = getUTF8(jc, method.descriptorIndex);
+                String descriptor = methodName + ":" + methodDescriptor;
+
+                /* find whether super classes/interfaces has the method with the same descriptor */
+                boolean written = false;
+                for(int j = 0; j < jc.virtualTable.items.size(); j++){
+                    String vClassName = jc.virtualTable.items.get(j).className;
+                    String vDescriptor = jc.virtualTable.items.get(j).description;
+                    if(vDescriptor.equals(descriptor)) {
+                        try {
+                            Class thisClass = Class.forName(thisClassName.replace("/", "."));
+                            Class vClass = Class.forName(vClassName.replace("/", "."));
+                            if (vClass.isAssignableFrom(thisClass)) {
+                                // rewrite
+                                jc.virtualTable.items.get(j).className = thisClassName;
+                                written = true;
+                                break;
+                            }
+                        } catch (ClassNotFoundException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                }
+                if(!written) {
+                    int index = jc.virtualTable.items.size();
+                    jc.virtualTable.items.add(new VirtualTableItem(thisClassName, descriptor));
+                    globalVirtualTableIndexCache.put(thisClassName + "." + descriptor, index);
+                }
+
+
+
+
+
+            }
+
+
+            /* set index in entry table */
+            for(int i = 0; i < jc.entryItems.length; i++){
+                int tag = classBytes[jc.itemBytesEntries[i]];
+                if(tag == ClassFileAnalyzerConstants.CT_Methodref){
+                    String description = getMethodDescriptor(jc, classBytes, i);
+                    String className = description.split("\\.")[0];
+                    String descriptor = description.split("\\.")[1];
+                    System.out.println(" - #" + i + " is MethodRef, description = " + className + "." + descriptor);
+                    while(!"".equals(className)){
+                       if(globalVirtualTableIndexCache.get(className + "." + descriptor) != null){
+                           Integer index = globalVirtualTableIndexCache.get(className + "." + descriptor);
+                           System.out.println("set #" + i + " " + className + "." + descriptor + " index " + index);
+                           jc.entryItems[i] &= 0xFFFFFFFF00000000L;
+                           jc.entryItems[i] |= index;
+                           break;
+                       }else{
+                           DPUJClass methodReferenceJc = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getClassStrutCacheLine(className).dpuClassStrut;
+                           if(methodReferenceJc.superClassNameIndex != 0){
+                               className = getUTF8(methodReferenceJc, methodReferenceJc.superClassNameIndex);
+                           }else{
+                               className = "";
+                           }
+
+                       }
+                    }
+                }
+            }
+
+            for(int j = 0; j < jc.virtualTable.items.size(); j++){
+                String vClassName = jc.virtualTable.items.get(j).className;
+                String vDescriptor = jc.virtualTable.items.get(j).description;
+                System.out.println("vtable #" + j + " " + vClassName + "." + vDescriptor);
+            }
+
+
+            System.out.println();
+
+        }
+
+
+
     }
 
     private void recordFieldDistribution(Class c, DPUJClass jc) {

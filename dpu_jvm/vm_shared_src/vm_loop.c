@@ -27,6 +27,7 @@ struct MethodTable* array_type;
 void interp(struct function_thunk func_thunk) {
 #include "vmloop_parts/registers.def"
     func = func_thunk.func;
+    func2 = func;
     jc = func_thunk.jc;
     code_buffer = func->bytecodes;
 
@@ -59,30 +60,14 @@ void interp(struct function_thunk func_thunk) {
 
     printf("FP = (%p)\n", current_fp);
     while (1) {
-        if(times > 140) return;
+        if((func2 ==  0x01000ba0) && times > 20) return;
         switch (code_buffer[pc++])
         {
         case NOP:
             DEBUG_OUT_INSN_PARSED("NOP");
             break;
-        case RET:
-            DEBUG_OUT_INSN_PARSED("RET");
-            break;
-        case ILOAD:
-            DEBUG_OUT_INSN_PARSED("ILOAD");
-            break;
-        case LLOAD:
-            DEBUG_OUT_INSN_PARSED("LLOAD");
-            break;
-        case FLOAD:
-            DEBUG_OUT_INSN_PARSED("FLOAD");
-            break;
-        case DLOAD:
-            DEBUG_OUT_INSN_PARSED("DLOAD");
-            break;
-        case ALOAD:
-            DEBUG_OUT_INSN_PARSED("ALOAD");
-            break;
+      
+     
         case ILOAD_0:
 		    DEBUG_OUT_INSN_PARSED("ILOAD_0")
             
@@ -99,9 +84,7 @@ void interp(struct function_thunk func_thunk) {
             printf(" - Load INT %d to stack\n", op1);
             PUSH_EVAL_STACK(op1)
             break;
-        case ILOAD_3:
-            DEBUG_OUT_INSN_PARSED("ILOAD_3")
-            break;
+       
         case LLOAD_0:
             DEBUG_OUT_INSN_PARSED("LLOAD_0")
             break;
@@ -111,30 +94,15 @@ void interp(struct function_thunk func_thunk) {
         case LLOAD_2:
             DEBUG_OUT_INSN_PARSED("LLOAD_2")
             break;
-        case LLOAD_3:
-            DEBUG_OUT_INSN_PARSED("LLOAD_3")
-            break;
-        case FLOAD_0:
-            DEBUG_OUT_INSN_PARSED("FLOAD_0")
-            break;
-        case FLOAD_1:
-            DEBUG_OUT_INSN_PARSED("FLOAD_1")
-            break;
-        case FLOAD_2:
-            DEBUG_OUT_INSN_PARSED("FLOAD_2")
-            break;
-        case FLOAD_3:
-            DEBUG_OUT_INSN_PARSED("FLOAD_3")
-            break;
-        case DLOAD_0:
-            DEBUG_OUT_INSN_PARSED("DLOAD_0")
-            break;
-        case DLOAD_1:
-            DEBUG_OUT_INSN_PARSED("DLOAD_1")
-            break;
-        case DLOAD_2:
-            DEBUG_OUT_INSN_PARSED("DLOAD_2")
-            break;
+        // // case DLOAD_0:
+        // //     DEBUG_OUT_INSN_PARSED("DLOAD_0")
+        // //     break;
+        // // case DLOAD_1:
+        // //     DEBUG_OUT_INSN_PARSED("DLOAD_1")
+        // //     break;
+        // // case DLOAD_2:
+        // //     DEBUG_OUT_INSN_PARSED("DLOAD_2")
+        //     break;
         case DLOAD_3:
             DEBUG_OUT_INSN_PARSED("DLOAD_3")
             break;
@@ -150,9 +118,9 @@ void interp(struct function_thunk func_thunk) {
         case ALOAD_2:
             DEBUG_OUT_INSN_PARSED("ALOAD_2")
             break;
-        case ALOAD_3:
-            DEBUG_OUT_INSN_PARSED("ALOAD_3")
-            break;
+        // case ALOAD_3:
+        //     DEBUG_OUT_INSN_PARSED("ALOAD_3")
+        //     break;
         case IALOAD:
             DEBUG_OUT_INSN_PARSED("IALOAD")
             break;
@@ -165,18 +133,7 @@ void interp(struct function_thunk func_thunk) {
         case DALOAD:
             DEBUG_OUT_INSN_PARSED("DALOAD")
             break;
-        case AALOAD:
-            DEBUG_OUT_INSN_PARSED("AALOAD")
-            break;
-        case BALOAD:
-            DEBUG_OUT_INSN_PARSED("BALOAD")
-            break;
-        case CALOAD:
-            DEBUG_OUT_INSN_PARSED("CALOAD")
-            break;
-        case SALOAD:
-            DEBUG_OUT_INSN_PARSED("SALOAD")
-            break;
+       
         case ICONST_0:
             DEBUG_OUT_INSN_PARSED("ICONST_0")
             printf(" - push const 0 to stack\n");
@@ -184,35 +141,96 @@ void interp(struct function_thunk func_thunk) {
             break;
         case ICONST_1:
             DEBUG_OUT_INSN_PARSED("ICONST_1")
-            printf(" - push const 1 to stack\n");
-            printf(" ? current sp = %p\n", current_sp);
+            printf(" - push const 1 to stack\n");;
             PUSH_EVAL_STACK(1);
+            break;
+        case ICONST_M1:
+            DEBUG_OUT_INSN_PARSED("ICONST_M1")
+            printf(" - push const -1 to stack\n");;
+            PUSH_EVAL_STACK(-1);
             break;
         case IFGE:
             DEBUG_OUT_INSN_PARSED("IFGE")
             op1 = (uint8_t)code_buffer[pc] << 8 | code_buffer[pc + 1];
             POP_EVAL_STACK(op2)
+            op1 = pc + (short)op1 - 1;
             printf(" - branch addr = %p\n - cmp value = %d\n", op1, op2);
+            pc += 2;
             if(op2 >= 0){
                 pc = op1;
                 printf(" - branch to pc = %p\n", op1);
-            }else{
-                pc += 2;
             }
             break;
         case IF_ICMPNE:
             DEBUG_OUT_INSN_PARSED("IF_ICMPNE")
+            op1 = ((uint8_t)code_buffer[pc] << 8 | code_buffer[pc + 1]);
+           
+            POP_EVAL_STACK(op2);
+            POP_EVAL_STACK(op3);
+            printf(" - value 2 = %d\n", op2);
+            printf(" - value 1 = %d\n", op3);
+            op1 = pc + (short)op1 - 1;
+            printf(" - branch-target-offset = 0x%02x\n", op1);
+            pc += 2;
+            if(op2 != op3){
+                pc = op1;
+                printf(" - branch to pc = %p\n", op1);
+            }
+            break;
+        case IF_ICMPGE:
+            DEBUG_OUT_INSN_PARSED("IF_ICMPGE")
             op1 = (uint8_t)code_buffer[pc] << 8 | code_buffer[pc + 1];
             POP_EVAL_STACK(op2);
             POP_EVAL_STACK(op3);
             printf(" - value 2 = %d\n", op2);
             printf(" - value 1 = %d\n", op3);
+            op1 = pc + (short)op1 - 1;
             printf(" - branch-target = 0x%02x\n", op1);
-            if(op2 != op3){
+            pc += 2;
+            if(op2 >= op3){
                 pc = op1;
                 printf(" - branch to pc = %p\n", op1);
-            }else{
-                pc += 2;
+            }
+            break;
+        case IF_ICMPLT:
+            DEBUG_OUT_INSN_PARSED("IF_ICMPLT")
+            op1 = (uint8_t)code_buffer[pc] << 8 | code_buffer[pc + 1];
+            POP_EVAL_STACK(op2);
+            POP_EVAL_STACK(op3);
+            printf(" - value 2 = %d\n", op2);
+            printf(" - value 1 = %d\n", op3);
+            op1 = pc + (short)op1 - 1;
+            printf(" - branch-target = 0x%02x\n", op1);
+            pc += 2;
+            if(op2 < op3){
+                pc = op1;
+                printf(" - branch to pc = %p\n", op1);
+            }
+            break;
+        case IFNONNULL:
+            DEBUG_OUT_INSN_PARSED("IFNONNULL")
+            op1 = (uint8_t)code_buffer[pc] << 8 | code_buffer[pc + 1];
+            POP_EVAL_STACK(op2); //ref
+            printf(" - value 1 = %d\n", op2);
+            op1 = pc + (short)op1 - 1;
+            printf(" - branch-target = 0x%02x\n", op1);
+            pc += 2;
+            if(op2 != 0){
+                pc = op1;
+                printf(" - branch to pc = %p\n", op1);
+            }
+            break;
+        case IFNULL:
+            DEBUG_OUT_INSN_PARSED("IFNULL")
+            op1 = (uint8_t)code_buffer[pc] << 8 | code_buffer[pc + 1];
+            POP_EVAL_STACK(op2); //ref
+            printf(" - value 1 = %d\n", op2);
+            op1 = pc + (short)op1 - 1;
+            printf(" - branch-target = 0x%02x\n", op1);
+            pc += 2;
+            if(op2 == 0){
+                pc = op1;
+                printf(" - branch to pc = %p\n", op1);
             }
             break;
         case GETFIELD:
@@ -256,20 +274,15 @@ void interp(struct function_thunk func_thunk) {
             DEBUG_OUT_INSN_PARSED("INVOKEVIRTUAL")
 
 
-            op1 = (code_buffer[pc] << 8) | code_buffer[pc + 1]; // constant table index to methoderef
+            op1 = (uint8_t)(code_buffer[pc] << 8) | code_buffer[pc + 1]; // constant table index to methoderef
 
+
+            READ_INT32_BIT_BY_BIT((uint8_t*)(current_sp - 4 * (callee.func->params_count)), op4);
+
+            printf(" - current-class-ref = %p\n", func_thunk.jc);
             printf(" - method-ref-cp-index = %d\n", op1);
+            printf(" - instance-address = 0x%p, %p\n", *(uint32_t*)op4, (uint8_t*)(current_sp - 4 * (callee.func->params_count - 1)));
             printf(" - jmethod-ref = %p\n", func_thunk.jc->items[op1].direct_value);
-
-
-            // A a;
-            // if(x == 1){
-            //     a = new A();
-            // } else {
-            //     a = new B(); 
-            // }
-
-            // a.f(); // method ref    classref = B | A::f() method address 
             
             // TODO, need support static
             callee.func = func_thunk.jc->items[op1].direct_value;
@@ -279,6 +292,8 @@ void interp(struct function_thunk func_thunk) {
 
             printf(" - class-ref-cp-index = %d\n", op2);
             printf(" - jclass-ref = %p\n", func_thunk.jc->items[op2].direct_value);
+            
+
             callee.jc = func_thunk.jc->items[op2].direct_value;
             callee.params = current_sp;
             current_sp -= 4 * callee.func->params_count;
@@ -286,9 +301,10 @@ void interp(struct function_thunk func_thunk) {
             printf(" -- new sp = %p\n", current_sp);
             printf(" -- params-pt = %p\n", callee.params);
             printf(" -- return pc = %d\n", pc + 2);
+            
          
             current_fp = create_new_vmframe(callee,  pc + 2);
-
+            
             pc = 0;
             func = callee.func;
             code_buffer = func->bytecodes;
@@ -326,7 +342,6 @@ void interp(struct function_thunk func_thunk) {
             }
             mram_heap_pt += 8 + op3 * 4;
 
-
             break;
         case DUP:
             DEBUG_OUT_INSN_PARSED("DUP")
@@ -334,7 +349,6 @@ void interp(struct function_thunk func_thunk) {
             printf(" - dup %d(hex: %x)\n", op1, op1);
             PUSH_EVAL_STACK(op1);
             break;
-
         case RETURN:
             DEBUG_OUT_INSN_PARSED("RETURN")
             printf(" - last-sp = %p\n", FRAME_GET_OLDSP(current_fp));
@@ -363,7 +377,7 @@ void interp(struct function_thunk func_thunk) {
             pc = op4;
             printf(" - bytecodes addr: %08x\n", func->bytecodes);
             func_thunk.func = func;
-            func_thunk.jc = func;
+            func_thunk.jc = jc;
 
             break;
         case ARETURN:
@@ -401,7 +415,8 @@ void interp(struct function_thunk func_thunk) {
             pc = op4;
             printf(" - bytecodes addr: %08x\n", func->bytecodes);
             func_thunk.func = func;
-            func_thunk.jc = func;
+            func_thunk.jc = jc;
+            break;
         case IRETURN:
             DEBUG_OUT_INSN_PARSED("IRETURN")
             if(FRAME_GET_OPERAND_STACK_SIZE(current_fp, current_sp) >= 0){
@@ -438,7 +453,7 @@ void interp(struct function_thunk func_thunk) {
             pc = op4;
             printf(" - bytecodes addr: %08x\n", func->bytecodes);
             func_thunk.func = func;
-            func_thunk.jc = func;
+            func_thunk.jc = jc;
             break;
 
         case ISUB:
@@ -463,7 +478,6 @@ void interp(struct function_thunk func_thunk) {
         
         case INVOKESPECIAL:
             DEBUG_OUT_INSN_PARSED("INVOKESPECIAL")
-            
             op1 = (code_buffer[pc] << 8) | code_buffer[pc + 1]; // constant table index to methoderef
             printf(" - method-ref-cp-index = %d\n", op1);
             printf(" - jmethod-ref = %p\n", func_thunk.jc->items[op1].direct_value);
@@ -492,7 +506,14 @@ void interp(struct function_thunk func_thunk) {
             
 
             break;
-
+        case GOTO:
+            DEBUG_OUT_INSN_PARSED("GOTO")
+            op1 = (uint8_t)(code_buffer[pc] << 8) | code_buffer[pc + 1];
+            op1 = pc + (short)op1 - 1;
+            pc += 2;
+            printf(" - goto %d\n", op1);
+            pc = op1;
+            break;
         default:
             DEBUG_OUT_INSN_PARSED("UNKNOW")
             printf(code_buffer[pc]);
