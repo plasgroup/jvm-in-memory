@@ -108,21 +108,32 @@ public class DPUClassFileManager {
             className = formalClassName(c.getName());
             System.out.println(" - Push class " + className + " to DPU#" + dpuID);
             // TODO, currently skip the resolution of java/lang/Object
-            createVirtualTable(jc, classFileBytes);
-            int classAddr = pushJClassToDPU(jc);
+
+            int classAddr =
+                    upmem.getDPUManager(dpuID).garbageCollector.allocate(DPUJVMMemSpaceKind.DPU_METASPACE, jc.totalSize);
+
+
             recordClass(className, jc, classAddr);
             recordMethodDistribution(c, jc, classAddr);
             recordFieldDistribution(c, jc);
+            createVirtualTable(jc, classFileBytes);
+
+            pushJClassToDPU(jc,classAddr);
             return jc;
         }
 
-        createVirtualTable(jc, classFileBytes);
+
         int classAddr =
                 upmem.getDPUManager(dpuID).garbageCollector.allocate(DPUJVMMemSpaceKind.DPU_METASPACE, jc.totalSize);
 
         recordClass(formalClassName(c.getName()), jc, classAddr);
         recordMethodDistribution(c, jc, classAddr);
         recordFieldDistribution(c, jc);
+        createVirtualTable(jc, classFileBytes);
+        upmem.getDPUManager(dpuID).garbageCollector.allocate(DPUJVMMemSpaceKind.DPU_METASPACE,
+                ((4 + 4 * jc.virtualTable.items.size()) + 0b111) & (~0b111));
+
+
 
 
         System.out.println(" - In class " + c.getName() + " resolve unknow name");
@@ -501,7 +512,7 @@ public class DPUClassFileManager {
                 Arrays.stream(jc.fields).map(e -> e.size).reduce((s1, s2) -> s1 + s2).orElseGet(()->0) +
                 Arrays.stream(jc.methodTable).map(e -> e.size).reduce((s1, s2) -> s1 + s2).orElseGet(()->0)
                 + ((jc.stringINTConstantPoolLength + 0b111) & (~0b111))
-                + 8 + 8 * jc.virtualTable.items.size();
+                + ((4 + 4 * jc.virtualTable.items.size()) + 0b111 & (~0b111));
         ;
     }
 
@@ -656,18 +667,15 @@ public class DPUClassFileManager {
 
         // vtable
         //// length
-        BytesUtils.writeU4LittleEndian(bs, 0, pos);
-        pos += 4;
         BytesUtils.writeU4LittleEndian(bs, ds.virtualTable.items.size(), pos);
         pos += 4;
+        // items
         for(int i = 0; i < ds.virtualTable.items.size(); i++){
             VirtualTableItem item = ds.virtualTable.items.get(i);
-            BytesUtils.writeU4LittleEndian(bs, 0, pos);
+            BytesUtils.writeU4LittleEndian(bs, item.methodReferenceAddress , pos);
             pos += 4;
-            BytesUtils.writeU4LittleEndian(bs, ds.virtualTable.items.size(), pos);
-            pos += item.methodReferenceAddress;
         }
-
+        pos = (pos + 0b111) & (~0b111);
         System.out.printf("=============== !Alert pos = %d === total-size = %d ================\n", pos, ds.totalSize);
         if(pos != ds.totalSize) throw new RuntimeException();
         return bs;
