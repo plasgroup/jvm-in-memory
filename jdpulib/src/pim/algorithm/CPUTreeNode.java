@@ -1,6 +1,7 @@
 package pim.algorithm;
 
 import pim.UPMEM;
+import pim.dpu.DPUJClass;
 
 public class CPUTreeNode extends TreeNode {
     final int CriticalHeight = 10;

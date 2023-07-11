@@ -2,6 +2,7 @@ package pim.dpu;
 
 import com.upmem.dpu.Dpu;
 import com.upmem.dpu.DpuException;
+import pim.algorithm.DPUTreeNode;
 import pim.utils.BytesUtils;
 import pim.utils.StringUtils;
 import pim.UPMEM;
@@ -119,6 +120,16 @@ public class DPUClassFileManager {
             createVirtualTable(jc, classFileBytes);
             upmem.getDPUManager(dpuID).garbageCollector.allocate(DPUJVMMemSpaceKind.DPU_METASPACE,
                     ((4 * jc.virtualTable.items.size()) + 0b111) & (~0b111));
+            for(int i = 0; i < jc.virtualTable.items.size(); i++){
+                String vClassName = jc.virtualTable.items.get(i).className;
+                String vDescriptor = jc.virtualTable.items.get(i).descriptor;
+                DPUCacheManager classCacheManager = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager;
+                System.out.println(classCacheManager);
+                DPUMethodCacheItem methodCacheItem =
+                        UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getMethodCacheItem(vClassName, vDescriptor);
+                if(methodCacheItem != null)
+                    jc.virtualTable.items.get(i).methodReferenceAddress = methodCacheItem.mramAddr;
+            }
             pushJClassToDPU(jc, classAddr);
             return jc;
         }
@@ -222,10 +233,10 @@ public class DPUClassFileManager {
                     DPUMethodCacheItem methodCacheItem = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getMethodCacheItem(
                             vItem.className, vItem.descriptor
                     );
+
                     if(methodCacheItem != null){
 
                     }
-
 
                     cacheLine =
                             upmem.getDPUManager(dpuID).classCacheManager.dpuClassCache.cache.get(vItem.className);
@@ -346,6 +357,18 @@ public class DPUClassFileManager {
 
 
 
+        for(int i = 0; i < jc.virtualTable.items.size(); i++){
+            String vClassName = jc.virtualTable.items.get(i).className;
+            String vDescriptor = jc.virtualTable.items.get(i).descriptor;
+            DPUMethodCacheItem methodCacheItem =
+                    UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getMethodCacheItem(vClassName, vDescriptor);
+            if(methodCacheItem != null)
+                jc.virtualTable.items.get(i).methodReferenceAddress = methodCacheItem.mramAddr;
+        }
+        UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getClassStrut(formalClassName(c.getName()))
+                .virtualTable = jc.virtualTable;
+        DPUCacheManager classCacheManager = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager;
+        System.out.println(classCacheManager);
         pushJClassToDPU(jc, classAddr);
 
         return jc;
@@ -461,11 +484,6 @@ public class DPUClassFileManager {
                     jc.virtualTable.items.add(new VirtualTableItem(thisClassName, descriptor));
                     globalVirtualTableIndexCache.put(thisClassName + "." + descriptor, index);
                 }
-
-
-
-
-
             }
 
 
@@ -522,7 +540,7 @@ public class DPUClassFileManager {
             String className = formalClassName(c.getName());
             String fieldName = getUTF8(jc, jc.fields[i].nameIndex);
             UPMEM.getInstance().getDPUManager(dpuID).classCacheManager
-                    .setFieldCacheItem(className,fieldName , jc.fields[i].indexInInstance);
+                    .setFieldCacheItem(className,fieldName, jc.fields[i].indexInInstance);
         }
     }
 
@@ -531,7 +549,7 @@ public class DPUClassFileManager {
             upmem.getDPUManager(dpuID).classCacheManager
                     .setMethodCacheItem(c.getName().replace(".", "/"),
                             getUTF8(jc, jc.methodTable[mIndex].nameIndex) + ":" + getUTF8(jc,jc.methodTable[mIndex].descriptorIndex),
-                            jc.methodOffset[mIndex] + 48
+                            jc.methodOffset[mIndex] + 48 + 8 +
                                     + 8 * jc.cpItemCount +
                                     Arrays.stream(jc.fields).map(e -> e.size).reduce((s1, s2) -> s1 + s2).orElseGet(()->0)
                                     + classAddr
@@ -629,8 +647,6 @@ public class DPUClassFileManager {
         BytesUtils.writeU4LittleEndian(bs, methodPointer, methodPointerPos);
         System.out.printf("print 0x%x to %x\n", methodPointer, methodPointerPos);
 
-
-
         for(int i = 0; i < ds.methodCount; i++){
             System.out.printf("method %d from 0x%x === 0x%x\n", i, pos, ds.methodOffset[i]);
             DPUJMethod dm = ds.methodTable[i];
@@ -683,7 +699,6 @@ public class DPUClassFileManager {
             pos += 4;
         }
         pos = (pos + 0b111) & (~0b111);
-
 
 
         System.out.printf("=============== !Alert pos = %d === total-size = %d ================\n", pos, ds.totalSize);

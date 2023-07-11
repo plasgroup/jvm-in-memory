@@ -72,8 +72,14 @@ struct j_class{
 
 
 
+void print_virtual_table(struct j_class __mram_ptr* jc){
+    int len = jc->virtual_table_length;
+    for(int i = 0; i < len; i++){
+        printf("#%d ref = %p\n", i, jc->virtual_table[i]);
+    }
+}
+
 void print_method(struct j_method __mram_ptr* jm){
-     
     uint8_t __mram_ptr* loc = (uint8_t __mram_ptr*) jm;
     int i = 0;
     printf("-------------------------------------------------------------------\n");
@@ -114,7 +120,6 @@ void print_method(struct j_method __mram_ptr* jm){
                 *(uint8_t __mram_ptr*)loc);
         loc++;
     }
-return;
     printf("-------------------------------------------------------------------\n");
 }
 
@@ -360,9 +365,12 @@ void exec_task_from_host() {
     fc.jc = jc;
     fc.params = params_buffer_pt;
     printf("params_buffer_pt = 0x%x\n", params_buffer_pt);
+    
     print_class(jc);
-    return;
     print_method(jm);
+    
+    print_virtual_table(jc);
+    return;
     interp(fc);
     release_global_memory();
     printf(RED " --------------------- (END DPU) -----------------------------\n" RESET);

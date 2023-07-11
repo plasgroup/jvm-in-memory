@@ -4,6 +4,7 @@ import com.upmem.dpu.DpuException;
 import pim.IDPUProxyObject;
 import pim.UPMEM;
 import pim.dpu.DPUCacheManager;
+import pim.dpu.DPUJClass;
 import pim.dpu.DPUObjectHandler;
 
 public class DPUTreeNodeProxyAutoGen extends DPUTreeNode implements IDPUProxyObject {
@@ -99,6 +100,7 @@ public class DPUTreeNodeProxyAutoGen extends DPUTreeNode implements IDPUProxyObj
 
     @Override
     public TreeNode createNode(int k, int v){
+
         invokeMethod("pim/algorithm/DPUTreeNode", "createNode:(II)Lpim/algorithm/TreeNode;", new Object[]{k, v});
         return (TreeNode) getAReturnVal();
     }
@@ -112,9 +114,9 @@ public class DPUTreeNodeProxyAutoGen extends DPUTreeNode implements IDPUProxyObj
 
     @Override
     public void insert(int k, int v) {
-        DPUCacheManager classCacheManager = UPMEM.getInstance().getDPUManager(getDpuID()).classCacheManager;
         invokeMethod("pim/algorithm/TreeNode", "insert:(II)V", new Object[]{k, v});
     }
+
 
     @Override
     public int search(int k) {

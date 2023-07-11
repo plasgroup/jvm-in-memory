@@ -2,6 +2,7 @@ package pim.dpu;
 import com.upmem.dpu.Dpu;
 
 import com.upmem.dpu.DpuException;
+import pim.UPMEM;
 import pim.utils.BytesUtils;
 import pim.IDPUProxyObject;
 
@@ -83,6 +84,7 @@ public class DPUManager {
         byte[] objectDataStream = new byte[(instanceSize + 7) & ~7];
         int classAddr;
         int initMethodAddr;
+
         if(classCacheManager.getClassStrutCacheLine(c.getName().replace(".","/")) == null){
             dpuClassFileManager.loadClassForDPU(c);
         }
@@ -99,6 +101,8 @@ public class DPUManager {
         DPUObjectHandler handler = garbageCollector.dpuAddress2ObjHandler(objAddr, dpuID);
         System.out.println("---> Object Create Finish, handler = " + " (addr: " + handler.address + "," + "dpu: " + handler.dpuID + ") <---");
 
+        VirtualTable virtualTable = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getClassStrut("pim/algorithm/DPUTreeNode").virtualTable;
+        System.out.println(virtualTable);
         // call the init func
         callNonstaticMethod(classAddr, initMethodAddr, handler.address, params);
 
