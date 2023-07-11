@@ -30,6 +30,9 @@ struct j_class{
     
     u4 constant_area_length;
     uint8_t __mram_ptr* constant_area;
+
+    u4 virtual_table_length;
+    uint32_t __mram_ptr* virtual_table;
 };
 
 

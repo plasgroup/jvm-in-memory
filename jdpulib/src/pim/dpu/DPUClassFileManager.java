@@ -117,8 +117,9 @@ public class DPUClassFileManager {
             recordMethodDistribution(c, jc, classAddr);
             recordFieldDistribution(c, jc);
             createVirtualTable(jc, classFileBytes);
-
-            pushJClassToDPU(jc,classAddr);
+            upmem.getDPUManager(dpuID).garbageCollector.allocate(DPUJVMMemSpaceKind.DPU_METASPACE,
+                    ((4 * jc.virtualTable.items.size()) + 0b111) & (~0b111));
+            pushJClassToDPU(jc, classAddr);
             return jc;
         }
 
@@ -131,7 +132,7 @@ public class DPUClassFileManager {
         recordFieldDistribution(c, jc);
         createVirtualTable(jc, classFileBytes);
         upmem.getDPUManager(dpuID).garbageCollector.allocate(DPUJVMMemSpaceKind.DPU_METASPACE,
-                ((4 + 4 * jc.virtualTable.items.size()) + 0b111) & (~0b111));
+                ((4 * jc.virtualTable.items.size()) + 0b111) & (~0b111));
 
 
 
@@ -508,11 +509,11 @@ public class DPUClassFileManager {
         }
 
 
-        jc.totalSize = 48 + jc.cpItemCount * 8 +
+        jc.totalSize = 48 + jc.cpItemCount * 8 + 8 +
                 Arrays.stream(jc.fields).map(e -> e.size).reduce((s1, s2) -> s1 + s2).orElseGet(()->0) +
                 Arrays.stream(jc.methodTable).map(e -> e.size).reduce((s1, s2) -> s1 + s2).orElseGet(()->0)
                 + ((jc.stringINTConstantPoolLength + 0b111) & (~0b111))
-                + ((4 + 4 * jc.virtualTable.items.size()) + 0b111 & (~0b111));
+                + ((4 * jc.virtualTable.items.size()) + 0b111 & (~0b111));
         ;
     }
 
@@ -598,7 +599,6 @@ public class DPUClassFileManager {
         BytesUtils.writeU4LittleEndian(bs, ds.stringINTConstantPoolLength, pos);
         System.out.printf("print 0x%x to %x\n", ds.stringINTConstantPoolLength, pos);
         pos += 4;
-
         constantAreaPointerPos = pos;
         pos += 4;
 
@@ -676,11 +676,6 @@ public class DPUClassFileManager {
         int virtualTablePointer = classAddr + pos;
         BytesUtils.writeU4LittleEndian(bs, virtualTablePointer, virtualTablePointerPos);
 
-        for(int offset = 0; offset < ds.stringINTConstantPoolLength; offset ++){
-            bs[pos + offset] = ds.constantBytes[offset];
-        }
-        pos += (ds.stringINTConstantPoolLength + 0b111) & (~0b111);
-
         // items
         for(int i = 0; i < ds.virtualTable.items.size(); i++){
             VirtualTableItem item = ds.virtualTable.items.get(i);
@@ -688,6 +683,8 @@ public class DPUClassFileManager {
             pos += 4;
         }
         pos = (pos + 0b111) & (~0b111);
+
+
 
         System.out.printf("=============== !Alert pos = %d === total-size = %d ================\n", pos, ds.totalSize);
         if(pos != ds.totalSize) throw new RuntimeException();
