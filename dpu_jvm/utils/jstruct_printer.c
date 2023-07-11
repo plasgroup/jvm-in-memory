@@ -37,6 +37,10 @@ void print_class(struct j_class __mram_ptr* jc){
     loc += 4;
     printf("-- (%p) constant_area_pt = %p\n", loc, *(u4 __mram_ptr*)loc);
     loc += 4;
+    printf("-- (%p) virtual_table_length = %d\n", loc, *(u4 __mram_ptr*)loc);
+    loc += 4;
+    printf("-- (%p) virtual_table_pt = %p\n", loc, *(u4 __mram_ptr*)loc);
+    loc += 4;
 
     printf("-------------------------------------------------------------------\n");
 }

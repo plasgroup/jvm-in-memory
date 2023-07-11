@@ -361,6 +361,7 @@ void exec_task_from_host() {
     fc.params = params_buffer_pt;
     printf("params_buffer_pt = 0x%x\n", params_buffer_pt);
     print_class(jc);
+    return;
     print_method(jm);
     interp(fc);
     release_global_memory();
