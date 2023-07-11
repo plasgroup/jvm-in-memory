@@ -64,7 +64,7 @@ public class DPUCacheManager {
         if(methodCache.cache.get(classDesc) == null) return null;
         return methodCache.cache.get(classDesc).get(methodDesc);
     }
-    public void setMethodCacheItem(String classDesc, String methodDesc, int marmAddr) {
+    public void setMethodCacheItem(String classDesc, String methodDesc, int marmAddr, DPUJMethod dpujMethod) {
         Dictionary<String, DPUMethodCacheItem> classCacheItem = methodCache.cache.get(classDesc);
         if(classCacheItem == null) {
             classCacheItem = new Hashtable<>();
@@ -72,6 +72,7 @@ public class DPUCacheManager {
         }
         DPUMethodCacheItem dpuMethodCacheItem = new DPUMethodCacheItem();
         dpuMethodCacheItem.mramAddr = marmAddr;
+        dpuMethodCacheItem.dpujMethod = dpujMethod;
         this.methodCache.cache.get(classDesc).put(methodDesc, dpuMethodCacheItem);
 
         System.out.printf("set method: " + methodDesc + " of class " + classDesc + " to " + dpu + " v = %x\n", marmAddr);
