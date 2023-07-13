@@ -255,8 +255,11 @@ void interp(struct function_thunk func_thunk) {
             op3 = *(uint32_t*)op4 + 4;
             READ_INT32_BIT_BY_BIT((uint8_t __mram_ptr*)(op3), op1);
             printf(" - instance-class-address = %p\n", op1); 
-            callee.jc = op1;
+            
+            
+            printf(" - jclass-ref = %p\n", callee.jc->virtual_table[op2].classref);
             printf(" - jmethod-ref = %p\n", callee.jc->virtual_table[op2].methodref);
+            callee.jc = callee.jc->virtual_table[op2].classref;
             callee.func = callee.jc->virtual_table[op2].methodref;
             callee.params = current_sp;
            
