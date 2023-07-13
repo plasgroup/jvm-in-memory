@@ -1,22 +1,36 @@
+import com.sun.source.tree.Tree;
 import pim.UPMEMConfigurator;
-import pim.algorithm.BSTBuilder;
+import pim.algorithm.*;
 import pim.UPMEM;
-import pim.algorithm.IntIntValuePairGenerator;
-import pim.algorithm.TreeNode;
 
 import java.util.ArrayList;
 
 
 public class Main {
+
     public static void main(String[] args) {
         UPMEM.initialize(new UPMEMConfigurator()
                 .setDpuInUseCount(UPMEM.TOTAL_DPU_COUNT)
                 .setThreadPerDPU(UPMEM.perDPUThreadsInUse));
 
-        ArrayList<BSTBuilder.Pair<Integer, Integer>> pairs = new IntIntValuePairGenerator(1000).genPairs(500);
+        TreeNode cpuNode = new CPUTreeNode(53, 21);
+        TreeNode dr1 = (TreeNode) UPMEM.getInstance().createObject(0, DPUTreeNode.class, 48, 29);
+//        TreeNode dr2 = (TreeNode) UPMEM.getInstance().createObject(0, DPUTreeNode.class, 56, 45);
+//        cpuNode.setLeft(dr1);
+//        cpuNode.setRight(dr2);
+//
+//        System.out.println("retrieve " + cpuNode.search(53));
+//        System.out.println("retrieve " + cpuNode.search(48));
+//        System.out.println("retrieve " + cpuNode.search(56));
+
+        if(true) return;
+        ArrayList<BSTBuilder.Pair<Integer, Integer>> pairs = new IntIntValuePairGenerator(1000).genPairs(100);
 
 
         TreeNode root = BSTBuilder.build(pairs);
+        UPMEM.getInstance().getDPUManager(0).garbageCollector.readBackHeapSpacePt();
+
+
 
         int correct = 0;
         // test
@@ -33,7 +47,6 @@ public class Main {
             }
         }
         System.out.printf("test finished. Correct %d/%d\n", correct, pairs.size());
-
 
 
     }

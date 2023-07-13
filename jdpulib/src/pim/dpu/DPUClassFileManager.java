@@ -119,7 +119,7 @@ public class DPUClassFileManager {
             recordFieldDistribution(c, jc);
             createVirtualTable(jc, classFileBytes);
             upmem.getDPUManager(dpuID).garbageCollector.allocate(DPUJVMMemSpaceKind.DPU_METASPACE,
-                    ((4 * jc.virtualTable.items.size()) + 0b111) & (~0b111));
+                    ((8 * jc.virtualTable.items.size()) + 0b111) & (~0b111));
             for(int i = 0; i < jc.virtualTable.items.size(); i++){
                 String vClassName = jc.virtualTable.items.get(i).className;
                 String vDescriptor = jc.virtualTable.items.get(i).descriptor;
@@ -128,7 +128,10 @@ public class DPUClassFileManager {
                 DPUMethodCacheItem methodCacheItem =
                         UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getMethodCacheItem(vClassName, vDescriptor);
                 if(methodCacheItem != null)
+                {
                     jc.virtualTable.items.get(i).methodReferenceAddress = methodCacheItem.mramAddr;
+                    jc.virtualTable.items.get(i).classReferenceAddress = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getClassStrutCacheLine(vClassName).marmAddr;
+                }
             }
             pushJClassToDPU(jc, classAddr);
             return jc;
@@ -143,7 +146,7 @@ public class DPUClassFileManager {
         recordFieldDistribution(c, jc);
         createVirtualTable(jc, classFileBytes);
         upmem.getDPUManager(dpuID).garbageCollector.allocate(DPUJVMMemSpaceKind.DPU_METASPACE,
-                ((4 * jc.virtualTable.items.size()) + 0b111) & (~0b111));
+                ((8 * jc.virtualTable.items.size()) + 0b111) & (~0b111));
 
 
 
@@ -365,8 +368,10 @@ public class DPUClassFileManager {
             String vDescriptor = jc.virtualTable.items.get(i).descriptor;
             DPUMethodCacheItem methodCacheItem =
                     UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getMethodCacheItem(vClassName, vDescriptor);
-            if(methodCacheItem != null)
+            if(methodCacheItem != null){
                 jc.virtualTable.items.get(i).methodReferenceAddress = methodCacheItem.mramAddr;
+                jc.virtualTable.items.get(i).classReferenceAddress = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getClassStrutCacheLine(vClassName).marmAddr;
+            }
         }
         UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getClassStrut(formalClassName(c.getName()))
                 .virtualTable = jc.virtualTable;
@@ -537,7 +542,7 @@ public class DPUClassFileManager {
                 Arrays.stream(jc.fields).map(e -> e.size).reduce((s1, s2) -> s1 + s2).orElseGet(()->0) +
                 Arrays.stream(jc.methodTable).map(e -> e.size).reduce((s1, s2) -> s1 + s2).orElseGet(()->0)
                 + ((jc.stringINTConstantPoolLength + 0b111) & (~0b111))
-                + ((4 * jc.virtualTable.items.size()) + 0b111 & (~0b111));
+                + ((8 * jc.virtualTable.items.size()) + 0b111 & (~0b111));
         ;
     }
 
@@ -694,8 +699,9 @@ public class DPUClassFileManager {
         // items
         for(int i = 0; i < ds.virtualTable.items.size(); i++){
             VirtualTableItem item = ds.virtualTable.items.get(i);
-            BytesUtils.writeU4LittleEndian(bs, item.methodReferenceAddress , pos);
-            pos += 4;
+            BytesUtils.writeU4LittleEndian(bs, item.classReferenceAddress , pos);
+            BytesUtils.writeU4LittleEndian(bs, item.methodReferenceAddress , pos + 4);
+            pos += 8;
         }
         pos = (pos + 0b111) & (~0b111);
 

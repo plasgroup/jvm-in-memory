@@ -9,6 +9,10 @@ struct constant_table_item{
     u4 info;
     u4 direct_value;
 };
+struct v_table_item{
+    u4 classref;
+    u4 methodref;
+};
 struct j_class{
     u4 total_size;
     
@@ -32,7 +36,7 @@ struct j_class{
     uint8_t __mram_ptr* constant_area;
 
     u4 virtual_table_length;
-    u4 __mram_ptr* virtual_table;
+    struct v_table_item __mram_ptr* virtual_table;
 };
 
 

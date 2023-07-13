@@ -84,7 +84,7 @@ public class DPUManager {
         byte[] objectDataStream = new byte[(instanceSize + 7) & ~7];
         int classAddr;
         int initMethodAddr;
-
+        garbageCollector.readBackHeapSpacePt();
         if(classCacheManager.getClassStrutCacheLine(c.getName().replace(".","/")) == null){
             dpuClassFileManager.loadClassForDPU(c);
         }
@@ -97,9 +97,11 @@ public class DPUManager {
 
         BytesUtils.writeU4LittleEndian(objectDataStream, classAddr, 4);
 
-        int objAddr = garbageCollector.allocate(DPU_HEAPSPACE, objectDataStream);
+        int objAddr = garbageCollector.allocate(DPU_HEAPSPACE, instanceSize);
+        garbageCollector.transfer(DPU_HEAPSPACE, objectDataStream, objAddr);
         DPUObjectHandler handler = garbageCollector.dpuAddress2ObjHandler(objAddr, dpuID);
         System.out.println("---> Object Create Finish, handler = " + " (addr: " + handler.address + "," + "dpu: " + handler.dpuID + ") <---");
+
 
         VirtualTable virtualTable = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getClassStrut("pim/algorithm/DPUTreeNode").virtualTable;
         System.out.println(virtualTable);

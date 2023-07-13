@@ -75,7 +75,9 @@ struct j_class{
 void print_virtual_table(struct j_class __mram_ptr* jc){
     int len = jc->virtual_table_length;
     for(int i = 0; i < len; i++){
-        printf("Vtable #%d, method ref = %p\n", i, jc->virtual_table[i]);
+        printf("Vtable #%d, classref = %p, method ref = %p\n", i, 
+        jc->virtual_table[i].classref,
+        jc->virtual_table[i].methodref);
     }
 }
 
@@ -155,8 +157,10 @@ void exec_task_from_host() {
     
     print_class(jc);
     print_method(jm);
-    
+
     print_virtual_table(jc);
+
+    
     interp(fc);
     release_global_memory();
     printf(RED " --------------------- (END DPU) -----------------------------\n" RESET);

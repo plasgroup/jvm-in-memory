@@ -60,7 +60,7 @@ void interp(struct function_thunk func_thunk) {
 
     printf("FP = (%p)\n", current_fp);
     while (1) {
-        if((func2 ==  0x1000bf0) && times > 100) return;
+        //if((func2 ==  0x1000bf0) && times > 100) return;
         switch (code_buffer[pc++])
         {
         case NOP:
@@ -248,7 +248,7 @@ void interp(struct function_thunk func_thunk) {
             printf(" - method-ref-cp-index = %d\n", op1);
             printf(" - jmethod-v-index = %p\n", func_thunk.jc->items[op1].direct_value);
             op2 = func_thunk.jc->items[op1].direct_value;
-            callee.func = func_thunk.jc->virtual_table[op2];
+            callee.func = func_thunk.jc->virtual_table[op2].methodref;
             op4 = (uint8_t*)(current_sp - 4 * (callee.func->params_count - 1));
           
             printf(" - instance-address = %p, %p\n", *(uint32_t*)op4, op4);
@@ -256,8 +256,8 @@ void interp(struct function_thunk func_thunk) {
             READ_INT32_BIT_BY_BIT((uint8_t __mram_ptr*)(op3), op1);
             printf(" - instance-class-address = %p\n", op1); 
             callee.jc = op1;
-            printf(" - jmethod-ref = %p\n", callee.jc->virtual_table[op2]);
-            callee.func = callee.jc->virtual_table[op2];
+            printf(" - jmethod-ref = %p\n", callee.jc->virtual_table[op2].methodref);
+            callee.func = callee.jc->virtual_table[op2].methodref;
             callee.params = current_sp;
            
             //op2 = (func_thunk.jc->items[op1].info >> 16) & 0xFFFF; // class ref index
@@ -450,9 +450,9 @@ void interp(struct function_thunk func_thunk) {
             printf(" - method-ref-cp-index = %d\n", op1);
             printf(" - jmethod-v-index = %p\n", func_thunk.jc->items[op1].direct_value);
             op4 = func_thunk.jc->items[op1].direct_value;
-            printf(" - jmethod-ref = %p\n", func_thunk.jc->virtual_table[op4]);
+            printf(" - jmethod-ref = %p\n", func_thunk.jc->virtual_table[op4].methodref);
             
-            callee.func = func_thunk.jc->virtual_table[op4];
+            callee.func = func_thunk.jc->virtual_table[op4].methodref;
             op2 = (func_thunk.jc->items[op1].info >> 16) & 0xFFFF;
             printf(" - class-ref-cp-index = %d\n", op2);
             printf(" - jclass-ref = %p\n", func_thunk.jc->items[op2].direct_value);

@@ -12,7 +12,7 @@ public class DPUGarbageCollector {
     int parameterBufferPt;
     public final static int heapSpaceBeginAddr = 0x000000;
     public final static int metaSpaceBeginAddr = 16 * 1024 * 1024;
-    public final static int parameterBufferBeginAddr = 0x42a8;
+    public final static int parameterBufferBeginAddr = 0x42e8;
     public final static int heapSpaceSize = 16 * 1024 * 1024;
     public final static int metaSpaceSize = 16 * 1024 * 1024;
 
@@ -54,6 +54,7 @@ public class DPUGarbageCollector {
         try {
             dpu.copy(bs, "mram_heap_pt");
             heapSpacePt = BytesUtils.readU4LittleEndian(bs, 0);
+            System.out.println("read back heap pt "  + heapSpacePt);
         } catch (DpuException e) {
             throw new RuntimeException(e);
         }
