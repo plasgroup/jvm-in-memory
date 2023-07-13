@@ -345,8 +345,8 @@ public class DPUClassFileManager {
 
                     // find cache
                     jc.entryItems[i] = 0;
-                    jc.entryItems[i] |= (long)BytesUtils.readU2BigEndian(classFileBytes, classFileBytes[jc.itemBytesEntries[i]] + 1) & 0xFFFF000000000000L;
-                    jc.entryItems[i] |= (long)BytesUtils.readU2BigEndian(classFileBytes, classFileBytes[jc.itemBytesEntries[i]] + 3) & 0x0000FFFF00000000L;
+                    jc.entryItems[i] |= ((long)BytesUtils.readU2BigEndian(classFileBytes, classFileBytes[jc.itemBytesEntries[i]] + 1) << 48) & 0xFFFF000000000000L;
+                    jc.entryItems[i] |= ((long)BytesUtils.readU2BigEndian(classFileBytes, classFileBytes[jc.itemBytesEntries[i]] + 3) << 32) & 0x0000FFFF00000000L;
 
                     jc.entryItems[i] |=  methodTableIndex;
                     System.out.printf("%x\n", methodCacheItem.mramAddr);
@@ -464,6 +464,9 @@ public class DPUClassFileManager {
                 for(int j = 0; j < jc.virtualTable.items.size(); j++){
                     String vClassName = jc.virtualTable.items.get(j).className;
                     String vDescriptor = jc.virtualTable.items.get(j).descriptor;
+                    if(vDescriptor.startsWith("<init>")){
+                        continue;
+                    }
                     if(vDescriptor.equals(descriptor)) {
                         try {
                             Class thisClass = Class.forName(thisClassName.replace("/", "."));
@@ -559,18 +562,11 @@ public class DPUClassFileManager {
 
 
     public void pushJClassToDPU(DPUJClass jc, int addr) throws DpuException {
+
         byte[] classBytes = cvtDPUClassStrut2Bytes(jc, addr);
         upmem.getDPUManager(dpuID).garbageCollector.transfer(DPUJVMMemSpaceKind.DPU_METASPACE, classBytes, addr);
     }
 
-
-    public int pushJClassToDPU(DPUJClass jc) throws DpuException {
-        int addr = upmem.getDPUManager(dpuID).garbageCollector.allocate(DPUJVMMemSpaceKind.DPU_METASPACE, jc.totalSize);
-        byte[] classBytes =
-                cvtDPUClassStrut2Bytes(jc, addr);
-        upmem.getDPUManager(dpuID).garbageCollector.transfer(DPUJVMMemSpaceKind.DPU_METASPACE, classBytes, addr);
-        return addr;
-    }
 
     public static byte[] cvtDPUClassStrut2Bytes(DPUJClass ds, int classAddr){
         byte[] bs = new byte[(ds.totalSize + 0b111) & ~(0b111)];

@@ -485,7 +485,7 @@ public class ClassFileAnalyzer {
 
         /* Calculate total size (bytes) of whole the whole class that need for transferring to DPU*/
         jc.totalSize =
-                48 + jc.cpItemCount * 8 +
+                48 + jc.cpItemCount * 8 + 8 +
                 Arrays.stream(jc.fields).map(e -> e.size).reduce((s1, s2) -> s1 + s2).orElseGet(()->0) +
                 Arrays.stream(jc.methodTable).map(e -> e.size).reduce((s1, s2) -> s1 + s2).orElseGet(()->0)
                 + ((jc.stringINTConstantPoolLength + 0b111) & (~0b111));
