@@ -66,12 +66,7 @@ void interp(struct function_thunk func_thunk) {
         case NOP:
             DEBUG_OUT_INSN_PARSED("NOP");
             break;
-      
      
-        case ILOAD_0:
-		    DEBUG_OUT_INSN_PARSED("ILOAD_0")
-            
-            break;
         case ILOAD_1:
             DEBUG_OUT_INSN_PARSED("ILOAD_1")
             op1 = FRAME_GET_LOCALS(current_fp, func->max_locals, 1);
@@ -85,24 +80,7 @@ void interp(struct function_thunk func_thunk) {
             PUSH_EVAL_STACK(op1)
             break;
        
-        case LLOAD_0:
-            DEBUG_OUT_INSN_PARSED("LLOAD_0")
-            break;
-        case LLOAD_1:
-            DEBUG_OUT_INSN_PARSED("LLOAD_1")
-            break;
-        case LLOAD_2:
-            DEBUG_OUT_INSN_PARSED("LLOAD_2")
-            break;
-        // // case DLOAD_0:
-        // //     DEBUG_OUT_INSN_PARSED("DLOAD_0")
-        // //     break;
-        // // case DLOAD_1:
-        // //     DEBUG_OUT_INSN_PARSED("DLOAD_1")
-        // //     break;
-        // // case DLOAD_2:
-        // //     DEBUG_OUT_INSN_PARSED("DLOAD_2")
-        //     break;
+     
         case DLOAD_3:
             DEBUG_OUT_INSN_PARSED("DLOAD_3")
             break;
@@ -124,15 +102,7 @@ void interp(struct function_thunk func_thunk) {
         case IALOAD:
             DEBUG_OUT_INSN_PARSED("IALOAD")
             break;
-        case LALOAD:
-            DEBUG_OUT_INSN_PARSED("LALOAD")
-            break;
-        case FALOAD:
-            DEBUG_OUT_INSN_PARSED("FALOAD")
-            break;
-        case DALOAD:
-            DEBUG_OUT_INSN_PARSED("DALOAD")
-            break;
+   
        
         case ICONST_0:
             DEBUG_OUT_INSN_PARSED("ICONST_0")
@@ -277,13 +247,15 @@ void interp(struct function_thunk func_thunk) {
             op1 = (uint8_t)(code_buffer[pc] << 8) | code_buffer[pc + 1]; // constant table index to methoderef
 
 
-            READ_INT32_BIT_BY_BIT((uint8_t*)(current_sp - 4 * (callee.func->params_count)), op4);
-
+            READ_INT32_BIT_BY_BIT((uint8_t*)(current_sp - 4 * (func->params_count)), op4);
+          
             printf(" - current-class-ref = %p\n", func_thunk.jc);
             printf(" - method-ref-cp-index = %d\n", op1);
-            printf(" - instance-address = 0x%p, %p\n", *(uint32_t*)op4, (uint8_t*)(current_sp - 4 * (callee.func->params_count - 1)));
-            printf(" - jmethod-ref = %p\n", func_thunk.jc->items[op1].direct_value);
-            
+            printf(" - instance-address = 0x%p, %p\n", *(uint32_t*)op4, (uint8_t*)(current_sp - 4 * (func->params_count - 1)));
+            printf(" - jmethod-v-index = %p\n", func_thunk.jc->items[op1].direct_value);
+            op3 = func_thunk.jc->items[op1].direct_value;
+            printf(" - jmethod-ref = %p\n", func_thunk.jc->virtual_table[op3]);
+            return;
             // TODO, need support static
             callee.func = func_thunk.jc->items[op1].direct_value;
 
@@ -480,10 +452,11 @@ void interp(struct function_thunk func_thunk) {
             DEBUG_OUT_INSN_PARSED("INVOKESPECIAL")
             op1 = (code_buffer[pc] << 8) | code_buffer[pc + 1]; // constant table index to methoderef
             printf(" - method-ref-cp-index = %d\n", op1);
-            printf(" - jmethod-ref = %p\n", func_thunk.jc->items[op1].direct_value);
-
-
-            callee.func = func_thunk.jc->items[op1].direct_value;
+            printf(" - jmethod-v-index = %p\n", func_thunk.jc->items[op1].direct_value);
+            op4 = func_thunk.jc->items[op1].direct_value;
+            printf(" - jmethod-ref = %p\n", func_thunk.jc->virtual_table[op4]);
+            
+            callee.func = func_thunk.jc->virtual_table[op4];
             op2 = (func_thunk.jc->items[op1].info >> 16) & 0xFFFF;
             printf(" - class-ref-cp-index = %d\n", op2);
             printf(" - jclass-ref = %p\n", func_thunk.jc->items[op2].direct_value);
@@ -494,7 +467,7 @@ void interp(struct function_thunk func_thunk) {
             printf(" -- new sp = %p\n", current_sp);
             printf(" -- params-pt = %p\n", callee.params);
             printf(" -- return pc = %d\n", pc + 2);
-         
+           
             current_fp = create_new_vmframe(callee,  pc + 2);
 
             pc = 0;

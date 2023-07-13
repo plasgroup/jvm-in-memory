@@ -75,10 +75,7 @@ struct j_class{
 void print_virtual_table(struct j_class __mram_ptr* jc){
     int len = jc->virtual_table_length;
     for(int i = 0; i < len; i++){
-        printf("Vtable #%d, method ref = %p\n", i, 
-        jc->virtual_table[i]
-        );
-        
+        printf("Vtable #%d, method ref = %p\n", i, jc->virtual_table[i]);
     }
 }
 
