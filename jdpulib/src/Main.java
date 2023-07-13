@@ -2,29 +2,30 @@ import com.sun.source.tree.Tree;
 import pim.UPMEMConfigurator;
 import pim.algorithm.*;
 import pim.UPMEM;
+import pim.dpu.DPUCacheManager;
 
 import java.util.ArrayList;
 
 
 public class Main {
 
+    static void tryTestCase(TreeNode root, int k, int v){
+        int rv = root.search(k);
+        if(rv != v) try {
+            throw new Exception("when retrieval " + k + " correct val = " + v + " get " + rv);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
     public static void main(String[] args) {
         UPMEM.initialize(new UPMEMConfigurator()
                 .setDpuInUseCount(UPMEM.TOTAL_DPU_COUNT)
                 .setThreadPerDPU(UPMEM.perDPUThreadsInUse));
 
-        TreeNode cpuNode = new CPUTreeNode(53, 21);
-        TreeNode dr1 = (TreeNode) UPMEM.getInstance().createObject(0, DPUTreeNode.class, 48, 29);
-//        TreeNode dr2 = (TreeNode) UPMEM.getInstance().createObject(0, DPUTreeNode.class, 56, 45);
-//        cpuNode.setLeft(dr1);
-//        cpuNode.setRight(dr2);
-//
-//        System.out.println("retrieve " + cpuNode.search(53));
-//        System.out.println("retrieve " + cpuNode.search(48));
-//        System.out.println("retrieve " + cpuNode.search(56));
 
-        if(true) return;
-        ArrayList<BSTBuilder.Pair<Integer, Integer>> pairs = new IntIntValuePairGenerator(1000).genPairs(100);
+
+
+        ArrayList<BSTBuilder.Pair<Integer, Integer>> pairs = new IntIntValuePairGenerator(10000).genPairs(1000);
 
 
         TreeNode root = BSTBuilder.build(pairs);

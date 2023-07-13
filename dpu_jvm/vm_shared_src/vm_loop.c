@@ -60,7 +60,7 @@ void interp(struct function_thunk func_thunk) {
 
     printf("FP = (%p)\n", current_fp);
     while (1) {
-        //if((func2 ==  0x1000bf0) && times > 100) return;
+      //  if((func2 == 0x1000c88) && times > 45) return;
         switch (code_buffer[pc++])
         {
         case NOP:
@@ -90,16 +90,12 @@ void interp(struct function_thunk func_thunk) {
             break;
         case ALOAD_1:
             DEBUG_OUT_INSN_PARSED("ALOAD_1")
+            op1 = FRAME_GET_LOCALS(current_fp, func->params_count, 1);
+            printf(" - Load ref %p to stack\n", op1);
+            PUSH_EVAL_STACK(op1)
             break;
-        case ALOAD_2:
-            DEBUG_OUT_INSN_PARSED("ALOAD_2")
-            break;
-        // case ALOAD_3:
-        //     DEBUG_OUT_INSN_PARSED("ALOAD_3")
-        //     break;
-        case IALOAD:
-            DEBUG_OUT_INSN_PARSED("IALOAD")
-            break;
+     
+        
    
        
         case ICONST_0:
@@ -140,7 +136,7 @@ void interp(struct function_thunk func_thunk) {
             op1 = pc + (short)op1 - 1;
             printf(" - branch-target-offset = 0x%02x\n", op1);
             pc += 2;
-            if(op2 != op3){
+            if(op3 != op2){
                 pc = op1;
                 printf(" - branch to pc = %p\n", op1);
             }
@@ -155,7 +151,7 @@ void interp(struct function_thunk func_thunk) {
             op1 = pc + (short)op1 - 1;
             printf(" - branch-target = 0x%02x\n", op1);
             pc += 2;
-            if(op2 >= op3){
+            if(op3 >= op2){
                 pc = op1;
                 printf(" - branch to pc = %p\n", op1);
             }
@@ -170,7 +166,7 @@ void interp(struct function_thunk func_thunk) {
             op1 = pc + (short)op1 - 1;
             printf(" - branch-target = 0x%02x\n", op1);
             pc += 2;
-            if(op2 < op3){
+            if(op3 < op2){
                 pc = op1;
                 printf(" - branch to pc = %p\n", op1);
             }
@@ -246,8 +242,9 @@ void interp(struct function_thunk func_thunk) {
 
             printf(" - current-class-ref = %p\n", func_thunk.jc);
             printf(" - method-ref-cp-index = %d\n", op1);
-            printf(" - jmethod-v-index = %p\n", func_thunk.jc->items[op1].direct_value);
+            
             op2 = func_thunk.jc->items[op1].direct_value;
+            printf(" - v-index = %p\n", op2);
             callee.func = func_thunk.jc->virtual_table[op2].methodref;
             op4 = (uint8_t*)(current_sp - 4 * (callee.func->params_count - 1));
           
@@ -257,10 +254,10 @@ void interp(struct function_thunk func_thunk) {
             printf(" - instance-class-address = %p\n", op1); 
             
             
-            printf(" - jclass-ref = %p\n", callee.jc->virtual_table[op2].classref);
-            printf(" - jmethod-ref = %p\n", callee.jc->virtual_table[op2].methodref);
-            callee.jc = callee.jc->virtual_table[op2].classref;
-            callee.func = callee.jc->virtual_table[op2].methodref;
+            printf(" - jclass-ref = %p\n", ((struct j_class __mram_ptr*)(op1))->virtual_table[op2].classref);
+            printf(" - jmethod-ref = %p\n", ((struct j_class __mram_ptr*)(op1))->virtual_table[op2].methodref);
+            callee.jc = ((struct j_class __mram_ptr*)(op1))->virtual_table[op2].classref;
+            callee.func = ((struct j_class __mram_ptr*)(op1))->virtual_table[op2].methodref;
             callee.params = current_sp;
            
             //op2 = (func_thunk.jc->items[op1].info >> 16) & 0xFFFF; // class ref index

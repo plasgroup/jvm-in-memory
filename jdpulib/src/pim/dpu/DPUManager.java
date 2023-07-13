@@ -84,7 +84,7 @@ public class DPUManager {
         byte[] objectDataStream = new byte[(instanceSize + 7) & ~7];
         int classAddr;
         int initMethodAddr;
-        garbageCollector.readBackHeapSpacePt();
+
         if(classCacheManager.getClassStrutCacheLine(c.getName().replace(".","/")) == null){
             dpuClassFileManager.loadClassForDPU(c);
         }
