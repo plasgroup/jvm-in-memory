@@ -12,7 +12,7 @@ public class DPUGarbageCollector {
     int parameterBufferPt;
     public final static int heapSpaceBeginAddr = 0x000000;
     public final static int metaSpaceBeginAddr = 16 * 1024 * 1024;
-    public final static int parameterBufferBeginAddr = 0x42b0;
+    public final static int parameterBufferBeginAddr = 0x42a8;
     public final static int heapSpaceSize = 16 * 1024 * 1024;
     public final static int metaSpaceSize = 16 * 1024 * 1024;
 

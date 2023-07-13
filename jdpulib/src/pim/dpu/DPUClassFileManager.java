@@ -345,8 +345,11 @@ public class DPUClassFileManager {
 
                     // find cache
                     jc.entryItems[i] = 0;
-                    jc.entryItems[i] |= ((long)BytesUtils.readU2BigEndian(classFileBytes, classFileBytes[jc.itemBytesEntries[i]] + 1) << 48) & 0xFFFF000000000000L;
-                    jc.entryItems[i] |= ((long)BytesUtils.readU2BigEndian(classFileBytes, classFileBytes[jc.itemBytesEntries[i]] + 3) << 32) & 0x0000FFFF00000000L;
+                    if(getUTF8(jc, jc.thisClassNameIndex).equals("pim/algorithm/TreeNode")){
+                        System.out.println();
+                    }
+                    jc.entryItems[i] |= ((long)BytesUtils.readU2BigEndian(classFileBytes, jc.itemBytesEntries[i] + 1) << 48) & 0xFFFF000000000000L;
+                    jc.entryItems[i] |= ((long)BytesUtils.readU2BigEndian(classFileBytes, jc.itemBytesEntries[i] + 3) << 32) & 0x0000FFFF00000000L;
 
                     jc.entryItems[i] |=  methodTableIndex;
                     System.out.printf("%x\n", methodCacheItem.mramAddr);

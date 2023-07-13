@@ -60,7 +60,7 @@ void interp(struct function_thunk func_thunk) {
 
     printf("FP = (%p)\n", current_fp);
     while (1) {
-        if((func2 ==  0x01000ba0) && times > 20) return;
+        if((func2 ==  0x1000bf0) && times > 2) return;
         switch (code_buffer[pc++])
         {
         case NOP:
@@ -247,34 +247,35 @@ void interp(struct function_thunk func_thunk) {
             op1 = (uint8_t)(code_buffer[pc] << 8) | code_buffer[pc + 1]; // constant table index to methoderef
 
 
-            READ_INT32_BIT_BY_BIT((uint8_t*)(current_sp - 4 * (func->params_count)), op4);
-          
+           
             printf(" - current-class-ref = %p\n", func_thunk.jc);
             printf(" - method-ref-cp-index = %d\n", op1);
-            printf(" - instance-address = 0x%p, %p\n", *(uint32_t*)op4, (uint8_t*)(current_sp - 4 * (func->params_count - 1)));
             printf(" - jmethod-v-index = %p\n", func_thunk.jc->items[op1].direct_value);
             op3 = func_thunk.jc->items[op1].direct_value;
             printf(" - jmethod-ref = %p\n", func_thunk.jc->virtual_table[op3]);
-            return;
-            // TODO, need support static
-            callee.func = func_thunk.jc->items[op1].direct_value;
+            
+            callee.func = func_thunk.jc->virtual_table[op3];
+            callee.params = current_sp;
+            //READ_INT32_BIT_BY_BIT((uint8_t*)(current_sp - 4 * (callee.func->params_count - 1)), op4);
+            op4 = (uint8_t*)(current_sp - 4 * (callee.func->params_count - 1));
+          
+            printf(" - instance-address = %p, %p\n", *(uint32_t*)op4, op4);
+
+          
 
             // instance -> class structure
             op2 = (func_thunk.jc->items[op1].info >> 16) & 0xFFFF; // class ref index
 
             printf(" - class-ref-cp-index = %d\n", op2);
             printf(" - jclass-ref = %p\n", func_thunk.jc->items[op2].direct_value);
-            
-
             callee.jc = func_thunk.jc->items[op2].direct_value;
-            callee.params = current_sp;
             current_sp -= 4 * callee.func->params_count;
             printf(" - pop %d elements from operand stack\n", callee.func->params_count);
             printf(" -- new sp = %p\n", current_sp);
             printf(" -- params-pt = %p\n", callee.params);
             printf(" -- return pc = %d\n", pc + 2);
-            
-         
+
+
             current_fp = create_new_vmframe(callee,  pc + 2);
             
             pc = 0;
