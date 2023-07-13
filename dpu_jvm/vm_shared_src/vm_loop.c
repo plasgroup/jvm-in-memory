@@ -214,9 +214,7 @@ void interp(struct function_thunk func_thunk) {
 
             // read field
             READ_INT32_BIT_BY_BIT((uint8_t __mram_ptr*)(op3 + 8 + 4 * op2), op4);
-            printf("field val = 0x%x\n", 
-                op4
-            );
+            printf("field val = 0x%x\n", op4);
             PUSH_EVAL_STACK(op4);
             
             break;

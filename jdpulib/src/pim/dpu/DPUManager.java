@@ -33,7 +33,7 @@ public class DPUManager {
     }
 
     public void dpuExec(PrintStream printStream) throws DpuException {
-        dpu.exec(printStream);
+        dpu.exec();
         garbageCollector.readBackHeapSpacePt();
         garbageCollector.readBackMetaSpacePt();
         garbageCollector.parameterBufferPt = DPUGarbageCollector.parameterBufferBeginAddr;
