@@ -60,7 +60,7 @@ void interp(struct function_thunk func_thunk) {
 
     printf("FP = (%p)\n", current_fp);
     while (1) {
-        if((func2 ==  0x1000bf0) && times > 2) return;
+        if((func2 ==  0x1000bf0) && times > 100) return;
         switch (code_buffer[pc++])
         {
         case NOP:
@@ -81,9 +81,7 @@ void interp(struct function_thunk func_thunk) {
             break;
        
      
-        case DLOAD_3:
-            DEBUG_OUT_INSN_PARSED("DLOAD_3")
-            break;
+        
         case ALOAD_0:
             DEBUG_OUT_INSN_PARSED("ALOAD_0")
             op1 = FRAME_GET_LOCALS(current_fp, func->params_count, 0);
@@ -243,32 +241,27 @@ void interp(struct function_thunk func_thunk) {
         case INVOKEVIRTUAL: // function call
             DEBUG_OUT_INSN_PARSED("INVOKEVIRTUAL")
 
-
+        
             op1 = (uint8_t)(code_buffer[pc] << 8) | code_buffer[pc + 1]; // constant table index to methoderef
 
-
-           
             printf(" - current-class-ref = %p\n", func_thunk.jc);
             printf(" - method-ref-cp-index = %d\n", op1);
             printf(" - jmethod-v-index = %p\n", func_thunk.jc->items[op1].direct_value);
-            op3 = func_thunk.jc->items[op1].direct_value;
-            printf(" - jmethod-ref = %p\n", func_thunk.jc->virtual_table[op3]);
-            
-            callee.func = func_thunk.jc->virtual_table[op3];
-            callee.params = current_sp;
-            //READ_INT32_BIT_BY_BIT((uint8_t*)(current_sp - 4 * (callee.func->params_count - 1)), op4);
+            op2 = func_thunk.jc->items[op1].direct_value;
+            callee.func = func_thunk.jc->virtual_table[op2];
             op4 = (uint8_t*)(current_sp - 4 * (callee.func->params_count - 1));
           
             printf(" - instance-address = %p, %p\n", *(uint32_t*)op4, op4);
+            op3 = *(uint32_t*)op4 + 4;
+            READ_INT32_BIT_BY_BIT((uint8_t __mram_ptr*)(op3), op1);
+            printf(" - instance-class-address = %p\n", op1); 
+            callee.jc = op1;
+            printf(" - jmethod-ref = %p\n", callee.jc->virtual_table[op2]);
+            callee.func = callee.jc->virtual_table[op2];
+            callee.params = current_sp;
+           
+            //op2 = (func_thunk.jc->items[op1].info >> 16) & 0xFFFF; // class ref index
 
-          
-
-            // instance -> class structure
-            op2 = (func_thunk.jc->items[op1].info >> 16) & 0xFFFF; // class ref index
-
-            printf(" - class-ref-cp-index = %d\n", op2);
-            printf(" - jclass-ref = %p\n", func_thunk.jc->items[op2].direct_value);
-            callee.jc = func_thunk.jc->items[op2].direct_value;
             current_sp -= 4 * callee.func->params_count;
             printf(" - pop %d elements from operand stack\n", callee.func->params_count);
             printf(" -- new sp = %p\n", current_sp);
@@ -284,7 +277,6 @@ void interp(struct function_thunk func_thunk) {
             jc = callee.jc;
             last_func = func_thunk;
             func_thunk = callee;
-            
             break;
         
         case NEW:
@@ -292,7 +284,7 @@ void interp(struct function_thunk func_thunk) {
             op1 = (code_buffer[pc] << 8) | code_buffer[pc + 1]; // index in constant table (classref)
             pc += 2;
             op2 = (func_thunk.jc->items[op1].direct_value);
-            printf(" - class addr: %08x\n", op2);
+            op1 = op2;
             op3 = 0;
             printf(" - count field count\n");
             
@@ -307,12 +299,14 @@ void interp(struct function_thunk func_thunk) {
                 op2 = ((struct j_class __mram_ptr*)op2)->items[op4].direct_value;
             }
             printf(" - field count = %d, instance size = %d\n", op3, 8 + op3 * 4);
-
+            printf(" - allocate instance in mram %p\n", mram_heap_pt);
             PUSH_EVAL_STACK(mram_heap_pt);
-            
+            printf(" - write class addr: %p\n", op1);
+          
             for(op4 = 0; op4 < 8 + op3 * 4; op4++){
                 *(uint8_t __mram_ptr*)(mram_heap_pt + op4) = 0;
             }
+            WRITE_INT32_BIT_BY_BIT((uint8_t __mram_ptr*)(mram_heap_pt + 4), op1);
             mram_heap_pt += 8 + op3 * 4;
 
             break;
@@ -451,6 +445,7 @@ void interp(struct function_thunk func_thunk) {
         
         case INVOKESPECIAL:
             DEBUG_OUT_INSN_PARSED("INVOKESPECIAL")
+            
             op1 = (code_buffer[pc] << 8) | code_buffer[pc + 1]; // constant table index to methoderef
             printf(" - method-ref-cp-index = %d\n", op1);
             printf(" - jmethod-v-index = %p\n", func_thunk.jc->items[op1].direct_value);
