@@ -29,6 +29,10 @@ public class UPMEM {
     private static volatile UPMEM instance = null;
     private static Object locker = new Object();
 
+    static Logger upmemLogger = Logger.getLogger("pi:upmem");
+    {
+        upmemLogger.setEnable(false);
+    }
 
     public DPUManager getDPUManager(int dpuID){
         return pimManager.getDPUManager(dpuID);
@@ -72,7 +76,7 @@ public class UPMEM {
             throw new RuntimeException(e);
         }
 
-        Logger.log(0,"pim:object", "----> create proxy object of Class = " + objectClass + "ProxyAutoGen <----");
+        upmemLogger.logln("----> create proxy object of Class = " + objectClass + "ProxyAutoGen <----");
 
         try {
             Class pClass = Class.forName( objectClass.getName() + "ProxyAutoGen");

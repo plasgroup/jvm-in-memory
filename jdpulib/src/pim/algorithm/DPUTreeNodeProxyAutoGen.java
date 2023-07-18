@@ -35,7 +35,7 @@ public class DPUTreeNodeProxyAutoGen extends DPUTreeNode implements IDPUProxyObj
         DPUCacheManager cm = upmem.getDPUManager(objectHandler.dpuID).classCacheManager;
         int methodMRAMAddr = cm.getMethodCacheItem(className, methodDescriptor).mramAddr;
         int classMRAMAddr = cm.getClassStrutCacheLine(className).marmAddr;
-        Logger.logf("pim:proxy","class mram addr = 0x%x, method mram addr = 0x%x, instance addr = 0x%x\n", classMRAMAddr, methodMRAMAddr, objectHandler.address);
+        pimProxy.logf("pim:proxy","class mram addr = 0x%x, method mram addr = 0x%x, instance addr = 0x%x\n", classMRAMAddr, methodMRAMAddr, objectHandler.address);
         try {
             upmem.getDPUManager(getDpuID()).callNonstaticMethod(classMRAMAddr, methodMRAMAddr, objectHandler.address, params);
         } catch (DpuException e) {
