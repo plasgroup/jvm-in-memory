@@ -1,5 +1,7 @@
 package pim.algorithm;
 
+import pim.logger.Logger;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
@@ -56,11 +58,10 @@ public class BSTBuilder {
     public static TreeNode build(ArrayList<Pair<Integer, Integer>> pairs) {
         if (pairs.size() == 0) return null;
         TreeNode root = new CPUTreeNode(pairs.get(0).key, pairs.get(0).val);
-        System.out.printf("(TreeBuilder) ===> insert %d 'th node, key = %d, val = %d\n", 1, pairs.get(0).key, pairs.get(0).val);
+        Logger.logf("bst:building","(TreeBuilder) ===> insert %d 'th node, key = %d, val = %d\n", 1, pairs.get(0).key, pairs.get(0).val);
 
         for (int i = 1; i < pairs.size(); i++) {
-            System.out.printf("(TreeBuilder) ===> insert %d 'th node, key = %d, val = %d\n", i + 1, pairs.get(i).key, pairs.get(i).val);
-
+            Logger.logf("bst:building", "(TreeBuilder) ===> insert %d 'th node, key = %d, val = %d\n", i + 1, pairs.get(i).key, pairs.get(i).val);
             root.insert(pairs.get(i).key, pairs.get(i).val);
         }
         return root;

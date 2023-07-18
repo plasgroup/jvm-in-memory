@@ -3,6 +3,7 @@ package pim.dpu;
 import com.upmem.dpu.Dpu;
 import com.upmem.dpu.DpuException;
 import pim.algorithm.DPUTreeNode;
+import pim.logger.Logger;
 import pim.utils.BytesUtils;
 import pim.utils.StringUtils;
 import pim.UPMEM;
@@ -16,7 +17,7 @@ import java.util.Hashtable;
 
 
 public class DPUClassFileManager {
-
+    static Logger classfileLogger = Logger.getLogger("pim:classfile");
     static final int block = 1024;
     int dpuID;
     Dpu dpu;
@@ -70,12 +71,12 @@ public class DPUClassFileManager {
 
     public DPUJClass loadClassForDPU(Class c) throws IOException, DpuException {
         String className = formalClassName(c.getName());
-        System.out.println(" ==========--> Try load class " + className + " to dpu#" + dpuID + " <--==========");
+        classfileLogger.logln(" ==========--> Try load class " + className + " to dpu#" + dpuID + " <--==========");
 
         // query cache
         DPUClassFileCacheItem cl = getLoadedClassRecord(className);
         if(cl != null){
-            System.out.println("- Class " + className + " already loaded in DPU#" + dpuID);
+            classfileLogger.logln("- Class " + className + " already loaded in DPU#" + dpuID);
             return cl.dpuClassStrut;
         }
 
@@ -94,20 +95,20 @@ public class DPUClassFileManager {
 
         // load super class recursively
         String superClassName = jc.superClassNameIndex == 0 ? "" : getUTF8(jc, jc.superClassNameIndex);
-        System.out.println("super class name = " + superClassName);
+        classfileLogger.logln("super class name = " + superClassName);
         className = formalClassName(superClassName);
-
+        
 
         // recursive resolve super class
         if(!"".equals(className)) {
             if(!isClassLoaded(superClassName)){
-                System.out.println(" ---- load super class " + className + ", index " + jc.superClassNameIndex);
+                classfileLogger.logln(" ---- load super class " + className + ", index " + jc.superClassNameIndex);
                 loadClassForDPU(c.getSuperclass());
             }
         }else{
-            System.out.println(" ---- No superclass ----");
+            classfileLogger.logln(" ---- No superclass ----");
             className = formalClassName(c.getName());
-            System.out.println(" - Push class " + className + " to DPU#" + dpuID);
+            classfileLogger.logln(" - Push class " + className + " to DPU#" + dpuID);
             // TODO, currently skip the resolution of java/lang/Object
 
             int classAddr =
@@ -124,7 +125,7 @@ public class DPUClassFileManager {
                 String vClassName = jc.virtualTable.items.get(i).className;
                 String vDescriptor = jc.virtualTable.items.get(i).descriptor;
                 DPUCacheManager classCacheManager = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager;
-                System.out.println(classCacheManager);
+                classfileLogger.logln("" + classCacheManager);
                 DPUMethodCacheItem methodCacheItem =
                         UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getMethodCacheItem(vClassName, vDescriptor);
                 if(methodCacheItem != null)
@@ -151,7 +152,7 @@ public class DPUClassFileManager {
 
 
 
-        System.out.println(" - In class " + c.getName() + " resolve unknow name");
+        classfileLogger.logln(" - In class " + c.getName() + " resolve unknow name");
 
 
         // resolve each entry item from preprocessed entry table.
@@ -162,25 +163,25 @@ public class DPUClassFileManager {
             int nameAndTypeIndex;
             switch (tag){
                 case ClassFileAnalyzerConstants.CT_Class:
-                    System.out.println("In #" + (i) + " ClassRef: ");
+                    classfileLogger.logln("In #" + (i) + " ClassRef: ");
                     String classNameUTF8 = getUTF8(jc, (int) ((jc.entryItems[i]) & 0xFFFF));
-                    System.out.println("className = " + classNameUTF8 + ", index = #" + (jc.entryItems[i] & 0xFFFF));
+                    classfileLogger.logln("className = " + classNameUTF8 + ", index = #" + (jc.entryItems[i] & 0xFFFF));
                     DPUClassFileCacheItem cacheLine =
                             upmem.getDPUManager(dpuID).classCacheManager.dpuClassCache.cache.get(classNameUTF8);
                     if(cacheLine != null){
-                        System.out.printf("class %s loaded, mram addr = 0x%x\n", classNameUTF8, cacheLine.marmAddr);
+                        classfileLogger.logf("class %s loaded, mram addr = 0x%x\n", classNameUTF8, cacheLine.marmAddr);
                     }else{
                         if(!"java/lang/System".equals(classNameUTF8)){
                             try {
                                 // TODO className$1 loading..
                                 loadClassForDPU(Class.forName(classNameUTF8.replace("/", ".")));
                             } catch (ClassNotFoundException e) {
-                                System.out.println("cannot find class " + classNameUTF8);
+                                classfileLogger.logln("cannot find class " + classNameUTF8);
                             } catch (IOException ioException){
-                                System.out.println("cannot find class " + classNameUTF8);
+                                classfileLogger.logln("cannot find class " + classNameUTF8);
                             }
                         }else{
-                            System.out.println("ignore " + classNameUTF8);
+                            classfileLogger.logln("ignore " + classNameUTF8);
                         }
                     }
 
@@ -190,18 +191,18 @@ public class DPUClassFileManager {
                     }
                     break;
                 case ClassFileAnalyzerConstants.CT_Fieldref:
-                    System.out.println("In #" + (i) + " FieldRef: ");
+                    classfileLogger.logln("In #" + (i) + " FieldRef: ");
                     classIndex = (int) ((jc.entryItems[i] >> 16) & 0xFFFF);
                     nameAndTypeIndex = (int) ((jc.entryItems[i]) & 0xFFFF);
                     classNameUTF8 = getUTF8(jc, (int) ((jc.entryItems[classIndex] >> 32) & 0xFFFF));
-                    System.out.println("class name = " + classNameUTF8);
+                    classfileLogger.logln("class name = " + classNameUTF8);
                     cacheLine =
                             upmem.getDPUManager(dpuID).classCacheManager.dpuClassCache.cache.get(classNameUTF8);
                     if(cacheLine != null){
-                        System.out.printf("class %s loaded, mram addr = 0x%x\n", classNameUTF8, cacheLine.marmAddr);
+                        classfileLogger.logf("class %s loaded, mram addr = 0x%x\n", classNameUTF8, cacheLine.marmAddr);
                     } else{
                         if("java/io/PrintStream".equals(classNameUTF8)){
-                            System.out.println("ignore " + classNameUTF8);
+                            classfileLogger.logln("ignore " + classNameUTF8);
                         }else{
                             try {
                                 loadClassForDPU(Class.forName(classNameUTF8.replace("/", ".")));
@@ -212,7 +213,7 @@ public class DPUClassFileManager {
                     }
 
                     String fieldName = getUTF8(jc, (int) ((jc.entryItems[nameAndTypeIndex] >> 16) & 0xFFFF));
-                    System.out.println("fieldName = " + fieldName);
+                    classfileLogger.logln("fieldName = " + fieldName);
                     DPUFieldCacheItem fieldCacheItem = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager
                             .getFieldCacheItem(formalClassName(classNameUTF8), fieldName);
                     jc.entryItems[i] &= 0xFFFFFFFFFFFF0000L;
@@ -224,14 +225,14 @@ public class DPUClassFileManager {
                     }
                     break;
                 case ClassFileAnalyzerConstants.CT_Methodref:
-                    System.out.println("In #" + (i) + " MethodRef: ");
+                    classfileLogger.logln("In #" + (i) + " MethodRef: ");
 
                     int methodTableIndex = (int) ((jc.entryItems[i]) & 0xFFFFFFFF);
-                    System.out.println("method Table Index = " + methodTableIndex);
+                    classfileLogger.logln("method Table Index = " + methodTableIndex);
 
                     if(methodTableIndex == 0) continue;
                     VirtualTableItem vItem = jc.virtualTable.items.get(methodTableIndex);
-                    System.out.println("description = " + vItem.className + "." + vItem.descriptor);
+                    classfileLogger.logln("description = " + vItem.className + "." + vItem.descriptor);
 
                     DPUMethodCacheItem methodCacheItem = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getMethodCacheItem(
                             vItem.className, vItem.descriptor
@@ -244,10 +245,10 @@ public class DPUClassFileManager {
                     cacheLine =
                             upmem.getDPUManager(dpuID).classCacheManager.dpuClassCache.cache.get(vItem.className);
                     if(cacheLine != null){
-                        System.out.printf("class %s loaded, mram addr = 0x%x\n", vItem.className, cacheLine.marmAddr);
+                        classfileLogger.logf("class %s loaded, mram addr = 0x%x\n", vItem.className, cacheLine.marmAddr);
                     } else{
                         if("java/io/PrintStream".equals(vItem.className)){
-                            System.out.println("ignore " + vItem.className);
+                            classfileLogger.logln("ignore " + vItem.className);
                         }else{
                             try {
                                 // formalize class file name
@@ -272,26 +273,26 @@ public class DPUClassFileManager {
 
                     DPUJClass methodJc = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getClassStrut(vItem.className);
                     String methodName = getUTF8(methodJc, methodCacheItem.dpujMethod.nameIndex);
-                    System.out.println("methodName = " + methodName);
+                    classfileLogger.logln("methodName = " + methodName);
                     String TypeDesc = getUTF8(methodJc, methodCacheItem.dpujMethod.descriptorIndex);
-                    System.out.println("type desc = " + TypeDesc);
+                    classfileLogger.logln("type desc = " + TypeDesc);
                     String returnVal = TypeDesc.substring(1).split("\\)")[1];
-                    System.out.println("return val = " + returnVal);
+                    classfileLogger.logln("return val = " + returnVal);
                     String paramsDesc = TypeDesc.substring(1).split("\\)")[0];
-                    System.out.println("params desc = " + paramsDesc);
+                    classfileLogger.logln("params desc = " + paramsDesc);
 
                     if(returnVal.length() > 1 && returnVal.charAt(0) == 'L'){
                         int returnTypeNameLen = returnVal.length();
                         String returnTypeName = returnVal.substring(1, returnTypeNameLen - 1);
                         if(upmem.getDPUManager(dpuID).classCacheManager.getClassStrutCacheLine(returnTypeName) == null){
-                            System.out.println("class " + returnVal + " unloaded");
+                            classfileLogger.logln("class " + returnVal + " unloaded");
                             try {
                                 loadClassForDPU(Class.forName((returnVal.substring(1).replace("/", ".").replace(";", "")) ));
                             } catch (ClassNotFoundException e) {
                                 throw new RuntimeException(e);
                             }
                         }else{
-                            System.out.println("class " + returnTypeName + " loaded");
+                            classfileLogger.logln("class " + returnTypeName + " loaded");
                         }
                     }
 
@@ -324,9 +325,9 @@ public class DPUClassFileManager {
                                 String[] ignores = new String[]{"java/lang/String"};
 
                                 if(upmem.getDPUManager(dpuID).classCacheManager.getClassStrutCacheLine(matched) == null){
-                                    System.out.println("class " + matched + " unloaded");
+                                    classfileLogger.logln("class " + matched + " unloaded");
                                     if("java/lang/String".equals(matched)){
-                                        System.out.println("ignore class " + matched);
+                                        classfileLogger.logln("ignore class " + matched);
                                     }else{
                                         try {
                                             loadClassForDPU(Class.forName(matched.replace("/", ".")));
@@ -336,7 +337,7 @@ public class DPUClassFileManager {
                                     }
 
                                 }else{
-                                    System.out.println("class " + matched + " loaded");
+                                    classfileLogger.logln("class " + matched + " loaded");
                                 }
                                 matched = "";
                                 state = 0;
@@ -349,13 +350,13 @@ public class DPUClassFileManager {
                     // find cache
                     jc.entryItems[i] = 0;
                     if(getUTF8(jc, jc.thisClassNameIndex).equals("pim/algorithm/TreeNode")){
-                        System.out.println();
+                        classfileLogger.logln("");
                     }
                     jc.entryItems[i] |= ((long)BytesUtils.readU2BigEndian(classFileBytes, jc.itemBytesEntries[i] + 1) << 48) & 0xFFFF000000000000L;
                     jc.entryItems[i] |= ((long)BytesUtils.readU2BigEndian(classFileBytes, jc.itemBytesEntries[i] + 3) << 32) & 0x0000FFFF00000000L;
 
                     jc.entryItems[i] |=  methodTableIndex;
-                    System.out.printf("%x\n", methodCacheItem.mramAddr);
+                    classfileLogger.logf("%x\n", methodCacheItem.mramAddr);
 
                     break;
             }
@@ -376,7 +377,7 @@ public class DPUClassFileManager {
         UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getClassStrut(formalClassName(c.getName()))
                 .virtualTable = jc.virtualTable;
         DPUCacheManager classCacheManager = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager;
-        System.out.println(classCacheManager);
+        classfileLogger.logln("" + classCacheManager);
         pushJClassToDPU(jc, classAddr);
 
         return jc;
@@ -406,10 +407,10 @@ public class DPUClassFileManager {
         /* iterate method table */
         String thisClassName = getUTF8(jc, jc.thisClassNameIndex);
         if("pim/algorithm/DPUTreeNode".equals(thisClassName)){
-            System.out.println();
+            classfileLogger.logln("");
         }
 
-        System.out.println("in java class = " + thisClassName);
+        classfileLogger.logln("in java class = " + thisClassName);
         VirtualTable thisClassVirtualTable = new VirtualTable();
         jc.virtualTable = thisClassVirtualTable;
         if(jc.superClass == 0){
@@ -424,7 +425,7 @@ public class DPUClassFileManager {
                 int index = thisClassVirtualTable.items.size();
                 thisClassVirtualTable.items.add(new VirtualTableItem(thisClassName, descriptor));
 
-                System.out.printf(" - Add method %s to Vtable of %s, className = %s, index = %d\n", descriptor, thisClassName, thisClassName, index);
+                classfileLogger.logf(" - Add method %s to Vtable of %s, className = %s, index = %d\n", descriptor, thisClassName, thisClassName, index);
 
                 globalVirtualTableIndexCache.put(thisClassName + "." + descriptor, index);
             }
@@ -435,15 +436,15 @@ public class DPUClassFileManager {
                     String description = getMethodDescriptor(jc, classBytes, i);
                     String className = description.split("\\.")[0];
                     String descriptor = description.split("\\.")[1];
-                    System.out.println(" - #" + i + " is MethodRef, description = " + className + "." + descriptor);
+                    classfileLogger.logln(" - #" + i + " is MethodRef, description = " + className + "." + descriptor);
                     if(isClassLoaded(className)){
-                        System.out.println(className + " is loaded");
+                        classfileLogger.logln(className + " is loaded");
                         int index = globalVirtualTableIndexCache.get(className + "." + descriptor);
-                        System.out.println(" - get method index = " + index);
+                        classfileLogger.logln(" - get method index = " + index);
                         jc.entryItems[i] &= 0xFFFFFFFF00000000L;
                         jc.entryItems[i] |= index;
                     }else{
-                        System.out.println(className + " is not loaded, skip");
+                        classfileLogger.logln(className + " is not loaded, skip");
                     }
                 }
             }
@@ -505,11 +506,11 @@ public class DPUClassFileManager {
                     String description = getMethodDescriptor(jc, classBytes, i);
                     String className = description.split("\\.")[0];
                     String descriptor = description.split("\\.")[1];
-                    System.out.println(" - #" + i + " is MethodRef, description = " + className + "." + descriptor);
+                    classfileLogger.logln(" - #" + i + " is MethodRef, description = " + className + "." + descriptor);
                     while(!"".equals(className)){
                        if(globalVirtualTableIndexCache.get(className + "." + descriptor) != null){
                            Integer index = globalVirtualTableIndexCache.get(className + "." + descriptor);
-                           System.out.println("set #" + i + " " + className + "." + descriptor + " index " + index);
+                           classfileLogger.logln("set #" + i + " " + className + "." + descriptor + " index " + index);
                            jc.entryItems[i] &= 0xFFFFFFFF00000000L;
                            jc.entryItems[i] |= index;
                            break;
@@ -529,11 +530,11 @@ public class DPUClassFileManager {
             for(int j = 0; j < jc.virtualTable.items.size(); j++){
                 String vClassName = jc.virtualTable.items.get(j).className;
                 String vDescriptor = jc.virtualTable.items.get(j).descriptor;
-                System.out.println("vtable #" + j + " " + vClassName + "." + vDescriptor);
+                classfileLogger.logln("vtable #" + j + " " + vClassName + "." + vDescriptor);
             }
 
 
-            System.out.println();
+            classfileLogger.logln("");
             ClassFileAnalyzer.printEntryTable(jc);
         }
 
@@ -619,7 +620,7 @@ public class DPUClassFileManager {
         pos += 4;
 
         BytesUtils.writeU4LittleEndian(bs, ds.stringINTConstantPoolLength, pos);
-        System.out.printf("print 0x%x to %x\n", ds.stringINTConstantPoolLength, pos);
+        classfileLogger.logf("print 0x%x to %x\n", ds.stringINTConstantPoolLength, pos);
         pos += 4;
         constantAreaPointerPos = pos;
         pos += 4;
@@ -631,7 +632,7 @@ public class DPUClassFileManager {
 
         entryTablePointer = classAddr + pos;
         BytesUtils.writeU4LittleEndian(bs, entryTablePointer, entryTablePointerPos);
-        System.out.printf("print %x in %x\n", entryTablePointer, entryTablePointerPos);
+        classfileLogger.logf("print %x in %x\n", entryTablePointer, entryTablePointerPos);
         for(int i = 0; i < ds.cpItemCount; i++){
             long v = ds.entryItems[i];
             BytesUtils.writeU4LittleEndian(bs, (int) (((long)v >> 32) & 0xFFFFFFFF),pos);
@@ -649,10 +650,10 @@ public class DPUClassFileManager {
         //method
         methodPointer = classAddr + pos;
         BytesUtils.writeU4LittleEndian(bs, methodPointer, methodPointerPos);
-        System.out.printf("print 0x%x to %x\n", methodPointer, methodPointerPos);
+        classfileLogger.logf("print 0x%x to %x\n", methodPointer, methodPointerPos);
 
         for(int i = 0; i < ds.methodCount; i++){
-            System.out.printf("method %d from 0x%x === 0x%x\n", i, pos, ds.methodOffset[i]);
+            classfileLogger.logf("method %d from 0x%x === 0x%x\n", i, pos, ds.methodOffset[i]);
             DPUJMethod dm = ds.methodTable[i];
 
             BytesUtils.writeU4LittleEndian(bs, dm.size, pos);
@@ -706,7 +707,7 @@ public class DPUClassFileManager {
         pos = (pos + 0b111) & (~0b111);
 
 
-        System.out.printf("=============== !Alert pos = %d === total-size = %d ================\n", pos, ds.totalSize);
+        Logger.logf("pim:classfile","=============== !Alert pos = %d === total-size = %d ================\n", pos, ds.totalSize);
         if(pos != ds.totalSize) throw new RuntimeException();
         return bs;
     }

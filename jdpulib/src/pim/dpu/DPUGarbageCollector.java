@@ -2,6 +2,7 @@ package pim.dpu;
 
 import com.upmem.dpu.Dpu;
 import com.upmem.dpu.DpuException;
+import pim.logger.Logger;
 import pim.utils.BytesUtils;
 
 public class DPUGarbageCollector {
@@ -16,6 +17,7 @@ public class DPUGarbageCollector {
     public final static int heapSpaceSize = 16 * 1024 * 1024;
     public final static int metaSpaceSize = 16 * 1024 * 1024;
 
+    Logger gcLogger = Logger.getLogger("pim:gc");
 
     public DPUGarbageCollector(int dpuID, Dpu dpu) throws DpuException {
         this.dpuID = dpuID;
@@ -39,10 +41,10 @@ public class DPUGarbageCollector {
         int size = params.length * 4;
         byte[] data = new byte[size];
         int addr = allocate(DPUJVMMemSpaceKind.DPU_PARAMETER_BUFFER, size);
-        System.out.println(" - allocate " + size + " byte in parameter buffer");
-        System.out.println(" - push ");
+        gcLogger.log(" - allocate " + size + " byte in parameter buffer");
+        gcLogger.log(" - push ");
         for(int i = 0; i < params.length; i++){
-            System.out.println(" -- " + params[i]);
+            gcLogger.log(" -- " + params[i]);
             BytesUtils.writeU4LittleEndian(data, params[i], i * 4);
         }
 
@@ -54,7 +56,7 @@ public class DPUGarbageCollector {
         try {
             dpu.copy(bs, "mram_heap_pt");
             heapSpacePt = BytesUtils.readU4LittleEndian(bs, 0);
-            System.out.println("read back heap pt "  + heapSpacePt);
+            gcLogger.log("read back heap pt "  + heapSpacePt);
         } catch (DpuException e) {
             throw new RuntimeException(e);
         }
@@ -84,7 +86,7 @@ public class DPUGarbageCollector {
         }
 
         if(!"".equals(spaceVarName) && beginAddr != -1){
-            System.out.printf("copy %d bytes to MRAM, pt = 0x%x" + " [%s]", data.length, pt, spaceVarName);
+            gcLogger.logf("copy %d bytes to MRAM, pt = 0x%x" + " [%s]", data.length, pt, spaceVarName);
             dpu.copy(spaceVarName, data, pt - beginAddr);
         }
     }
@@ -127,7 +129,7 @@ public class DPUGarbageCollector {
         metaSpacePt = sourceMemoryPointers[0];
         heapSpacePt = sourceMemoryPointers[1];
 
-        System.out.printf("New %s = 0x%x\n", pointerVarName, addr + size);
+        gcLogger.logf("new %s = 0x%x\n", pointerVarName, addr + size);
 
 
         // write new pointer value to DPU

@@ -2,10 +2,17 @@ package pim.algorithm;
 
 import pim.UPMEM;
 import pim.dpu.DPUJClass;
+import pim.logger.Logger;
 
 public class CPUTreeNode extends TreeNode {
     final int CriticalHeight = 10;
     int height;
+
+    static Logger cpuTreeNodeLogger = Logger.getLogger("tree:cpu-node");
+    static
+    {
+        cpuTreeNodeLogger.setEnable(false);
+    }
 
     public CPUTreeNode(int k, int v) {
         this(k, v, 1);
@@ -20,10 +27,10 @@ public class CPUTreeNode extends TreeNode {
     @Override
     public TreeNode createNode(int k, int v) {
         if (height >= this.CriticalHeight) {
-            System.out.println("create node at DPU from CPU.");
+            cpuTreeNodeLogger.logln("create node at DPU from CPU.");
             return (TreeNode) UPMEM.getInstance().createObject(allocateDPU(), DPUTreeNode.class, k, v);
         } else {
-            System.out.println("create node at CPU. new height = " + (this.height + 1));
+            cpuTreeNodeLogger.logln("create node at CPU. new height = " + (this.height + 1));
             return new CPUTreeNode(k, v, this.height + 1);
         }
     }

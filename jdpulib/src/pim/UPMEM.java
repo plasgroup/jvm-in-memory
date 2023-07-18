@@ -2,6 +2,7 @@ package pim;
 
 import com.upmem.dpu.DpuException;
 import pim.dpu.*;
+import pim.logger.Logger;
 import sun.misc.Unsafe;
 
 import java.io.IOException;
@@ -71,7 +72,7 @@ public class UPMEM {
             throw new RuntimeException(e);
         }
 
-        System.out.println("----> create proxy object of Type = " + objectClass + "ProxyAutoGen <----");
+        Logger.log(0,"pim:object", "----> create proxy object of Class = " + objectClass + "ProxyAutoGen <----");
 
         try {
             Class pClass = Class.forName( objectClass.getName() + "ProxyAutoGen");

@@ -1,6 +1,7 @@
 package pim.dpu;
 
 import com.upmem.dpu.Dpu;
+import pim.logger.Logger;
 
 import java.util.ArrayList;
 import java.util.Dictionary;
@@ -11,6 +12,11 @@ public class DPUCacheManager {
     int dpuID;
     Dpu dpu;
 
+    DPUClassCache dpuClassCache;
+    DPUMethodCache methodCache;
+    DPUFieldCache fieldCache;
+
+    Logger pimCacheLogger = Logger.getLogger("pim:cache");
     static class DPUClassCache {
         public Dictionary<String, DPUClassFileCacheItem> cache = new Hashtable<>();
         public List<DPUClassFileCacheItem> dpuClassFileCacheItemList = new ArrayList<>();
@@ -24,10 +30,6 @@ public class DPUCacheManager {
         public Dictionary<String, Dictionary<String, DPUFieldCacheItem>> cache = new Hashtable<>();
     }
 
-    DPUClassCache dpuClassCache;
-    DPUMethodCache methodCache;
-    DPUFieldCache fieldCache;
-
 
     public DPUCacheManager(int dpuID, Dpu dpu){
         this.dpuID = dpuID;
@@ -38,7 +40,7 @@ public class DPUCacheManager {
     }
 
     public DPUFieldCacheItem getFieldCacheItem(String className, String fieldName){
-        System.out.println("get DPUID = " + dpuID + " field =  " + fieldName + ", of class " + className + " from cache");
+        pimCacheLogger.log("get DPUID = " + dpuID + " field =  " + fieldName + ", of class " + className + " from cache");
         if(fieldCache.cache.get(className) == null) return null;
         return fieldCache.cache.get(className).get(fieldName);
     }
@@ -54,13 +56,13 @@ public class DPUCacheManager {
         fieldCacheItem.indexInInstance = indexInInstance;
         this.fieldCache.cache.get(className).put(fieldName, fieldCacheItem);
 
-        System.out.printf("set field: " + fieldName + " of class " + className + " to " + dpu + " v(index) = %x\n", indexInInstance);
+        pimCacheLogger.logf("set field: " + fieldName + " of class " + className + " to " + dpu + " v(index) = %x\n", indexInInstance);
     }
 
 
 
     public DPUMethodCacheItem getMethodCacheItem(String classDesc, String methodDesc){
-        System.out.println("get DPUID = " + dpuID + " method =  " + methodDesc + " of class " + classDesc + " from cache");
+        pimCacheLogger.log("get DPUID = " + dpuID + " method =  " + methodDesc + " of class " + classDesc + " from cache");
         if(methodCache.cache.get(classDesc) == null) return null;
         return methodCache.cache.get(classDesc).get(methodDesc);
     }
@@ -75,11 +77,11 @@ public class DPUCacheManager {
         dpuMethodCacheItem.dpujMethod = dpujMethod;
         this.methodCache.cache.get(classDesc).put(methodDesc, dpuMethodCacheItem);
 
-        System.out.printf("set method: " + methodDesc + " of class " + classDesc + " to " + dpu + " v = %x\n", marmAddr);
+        pimCacheLogger.logf("set method: " + methodDesc + " of class " + classDesc + " to " + dpu + " v = %x\n", marmAddr);
     }
 
     public DPUClassFileCacheItem getClassStrutCacheLine(String desc) {
-        System.out.println("get DPUID = " + dpuID + " class =  " + desc + " from cache");
+        pimCacheLogger.logf("get DPUID = " + dpuID + " class =  " + desc + " from cache");
         return dpuClassCache.cache.get(desc);
     }
 
@@ -105,6 +107,6 @@ public class DPUCacheManager {
 
         dpuClassCache.cache.get(desc).dpuClassStrut = dpuClassStrut;
         dpuClassCache.cache.get(desc).marmAddr = marmAddr;
-        System.out.printf("set " + dpuClassStrut + " to " + dpu + ", key=" + desc + ", val = %x"  + " class name = " + DPUClassFileManager.getUTF8(dpuClassStrut, dpuClassStrut.thisClassNameIndex) + "\n", marmAddr);
+        pimCacheLogger.logf("set " + dpuClassStrut + " to " + dpu + ", key=" + desc + ", val = %x"  + " class name = " + DPUClassFileManager.getUTF8(dpuClassStrut, dpuClassStrut.thisClassNameIndex) + "\n", marmAddr);
     }
 }

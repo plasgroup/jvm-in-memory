@@ -3,6 +3,7 @@ import com.upmem.dpu.Dpu;
 
 import com.upmem.dpu.DpuException;
 import pim.UPMEM;
+import pim.logger.Logger;
 import pim.utils.BytesUtils;
 import pim.IDPUProxyObject;
 
@@ -20,6 +21,11 @@ public class DPUManager {
 
     public Dpu dpu;
 
+
+    static Logger dpuManagerLogger = Logger.getLogger("pim:dpu-manager");
+    static {
+        dpuManagerLogger.setEnable(false);
+    }
 
     public void setClassPt(int classPt) throws DpuException {
         byte[] data = new byte[4];
@@ -89,7 +95,7 @@ public class DPUManager {
             dpuClassFileManager.loadClassForDPU(c);
         }
         classAddr = classCacheManager.getClassStrutCacheLine(c.getName().replace(".","/")).marmAddr;
-        System.out.println(" * Get Class Addr = " + classAddr);
+        dpuManagerLogger.logln(" * Get Class Addr = " + classAddr);
         String initMethodDesc = genInitDesc(c, params);
 
         initMethodAddr = classCacheManager
@@ -100,11 +106,11 @@ public class DPUManager {
         int objAddr = garbageCollector.allocate(DPU_HEAPSPACE, instanceSize);
         garbageCollector.transfer(DPU_HEAPSPACE, objectDataStream, objAddr);
         DPUObjectHandler handler = garbageCollector.dpuAddress2ObjHandler(objAddr, dpuID);
-        System.out.println("---> Object Create Finish, handler = " + " (addr: " + handler.address + "," + "dpu: " + handler.dpuID + ") <---");
+        dpuManagerLogger.logln("---> Object Create Finish, handler = " + " (addr: " + handler.address + "," + "dpu: " + handler.dpuID + ") <---");
 
 
         VirtualTable virtualTable = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getClassStrut("pim/algorithm/DPUTreeNode").virtualTable;
-        System.out.println(virtualTable);
+        dpuManagerLogger.logln("" + virtualTable);
         // call the init func
         callNonstaticMethod(classAddr, initMethodAddr, handler.address, params);
 

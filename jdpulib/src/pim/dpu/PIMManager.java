@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import com.upmem.dpu.Dpu;
 import com.upmem.dpu.DpuException;
 import com.upmem.dpu.DpuSystem;
+import pim.logger.Logger;
 
 
 public class PIMManager {
@@ -13,11 +14,16 @@ public class PIMManager {
     public DPUManager getDPUManager(int dpuID){
         return dpuManagers.get(dpuID);
     }
+
+    static Logger pimManagerLogger = Logger.getLogger("pim:pim-manager");
+    static{
+        pimManagerLogger.setEnable(false);
+    }
     public static PIMManager init(int dpuInUse) throws DpuException {
         if (instance == null){
             synchronized (dpuManagers){
                 instance = new PIMManager();
-                System.out.println("DPUSystem load " + dpuInUse + " DPUs");
+                pimManagerLogger.logln("DPUSystem load " + dpuInUse + " DPUs");
                 // Init DpuSystem. Allocate dpuInUses' DPUs
                 system = DpuSystem.allocate(dpuInUse, "");
 
