@@ -26,7 +26,14 @@ public class Main {
                 .setThreadPerDPU(UPMEM.perDPUThreadsInUse));
 
         Logger.disableAllBeginWith("pim");
-        BSTTester.evaluateCPU(2000000, 1000);
+
+        int totalNodeCount = 2000;
+        int queryCount = 1000;
+        if(args.length >= 2){
+            totalNodeCount = Integer.parseInt(args[0]);
+            queryCount = Integer.parseInt(args[1]);
+        }
+        BSTTester.evaluateCPU(totalNodeCount, queryCount);
         //BSTTester.testLargeBST();
     }
 
