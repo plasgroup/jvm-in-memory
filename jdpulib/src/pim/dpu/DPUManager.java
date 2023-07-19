@@ -27,6 +27,7 @@ public class DPUManager {
         dpuManagerLogger.setEnable(false);
     }
 
+
     public void setClassPt(int classPt) throws DpuException {
         byte[] data = new byte[4];
         BytesUtils.writeU4LittleEndian(data, classPt, 0);

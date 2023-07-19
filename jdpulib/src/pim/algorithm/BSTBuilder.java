@@ -4,7 +4,6 @@ import pim.logger.Logger;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Random;
 
 public class BSTBuilder {
     public static class Pair<K, V> {
@@ -53,9 +52,17 @@ public class BSTBuilder {
 
 
 
+    public static TreeNode buildCPUTree(ArrayList<Pair<Integer, Integer>> pairs){
+        if(pairs.size() == 0) return null;
+        TreeNode root = new CPUTreeNode(pairs.get(0).key, pairs.get(0).val);
+        for (int i = 1; i < pairs.size(); i++) {
+            root.insertNewCPUNode(pairs.get(i).key, pairs.get(i).val);
+        }
+        return root;
+    }
 
 
-    public static TreeNode build(ArrayList<Pair<Integer, Integer>> pairs) {
+    public static TreeNode buildPIMTree(ArrayList<Pair<Integer, Integer>> pairs) {
         if (pairs.size() == 0) return null;
         TreeNode root = new CPUTreeNode(pairs.get(0).key, pairs.get(0).val);
         Logger.logf("bst:building","(TreeBuilder) ===> insert %d 'th node, key = %d, val = %d\n", 1, pairs.get(0).key, pairs.get(0).val);
