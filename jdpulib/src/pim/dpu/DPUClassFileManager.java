@@ -515,7 +515,11 @@ public class DPUClassFileManager {
                            jc.entryItems[i] |= index;
                            break;
                        }else{
+                           if(UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getClassStrutCacheLine(className) == null){
+                               System.out.println();
+                           }
                            DPUJClass methodReferenceJc = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getClassStrutCacheLine(className).dpuClassStrut;
+
                            if(methodReferenceJc.superClassNameIndex != 0){
                                className = getUTF8(methodReferenceJc, methodReferenceJc.superClassNameIndex);
                            }else{

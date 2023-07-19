@@ -28,10 +28,12 @@ public class DPUManager {
     }
 
 
+
     public void setClassPt(int classPt) throws DpuException {
         byte[] data = new byte[4];
         BytesUtils.writeU4LittleEndian(data, classPt, 0);
         dpu.copy("exec_class_pt", data);
+
     }
     public void setMethodPt(int methodPt) throws DpuException {
         byte[] data = new byte[4];
@@ -112,6 +114,7 @@ public class DPUManager {
 
         VirtualTable virtualTable = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getClassStrut("pim/algorithm/DPUTreeNode").virtualTable;
         dpuManagerLogger.logln("" + virtualTable);
+
         // call the init func
         callNonstaticMethod(classAddr, initMethodAddr, handler.address, params);
 

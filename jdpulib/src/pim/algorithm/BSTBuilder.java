@@ -1,9 +1,15 @@
 package pim.algorithm;
 
+import com.upmem.dpu.DpuException;
+import pim.UPMEM;
+import pim.dpu.DPUCacheManager;
 import pim.logger.Logger;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
+
+import static pim.algorithm.TreeWriter.convertCPUTreeToPIMTree;
 
 public class BSTBuilder {
     public static class Pair<K, V> {
@@ -56,10 +62,30 @@ public class BSTBuilder {
         if(pairs.size() == 0) return null;
         TreeNode root = new CPUTreeNode(pairs.get(0).key, pairs.get(0).val);
         for (int i = 1; i < pairs.size(); i++) {
-            root.insertNewCPUNode(pairs.get(i).key, pairs.get(i).val);
+            ((CPUTreeNode)root).insertNewCPUNode(pairs.get(i).key, pairs.get(i).val);
         }
         return root;
     }
+
+    public static TreeNode buildLargePIMTree(){
+        try {
+            UPMEM.getInstance().getDPUManager(0).createObject(DPUTreeNode.class, new Object[]{0, 0});
+        } catch (DpuException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        DPUCacheManager classCacheManager = UPMEM.getInstance().getDPUManager(0).classCacheManager;
+        int dpuClassAddress = classCacheManager.getClassStrutCacheLine("pim/algorithm/DPUTreeNode").marmAddr;
+
+        ArrayList<BSTBuilder.Pair<Integer, Integer>> pairs = new IntIntValuePairGenerator(100000)
+                .genPairs(2000);
+        TreeNode root = BSTBuilder.buildCPUTree(pairs);
+        convertCPUTreeToPIMTree(root, 2000, 10, dpuClassAddress);
+        return root;
+    }
+
 
 
     public static TreeNode buildPIMTree(ArrayList<Pair<Integer, Integer>> pairs) {
