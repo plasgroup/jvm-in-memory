@@ -3,10 +3,10 @@ package pim.algorithm;
 import pim.UPMEM;
 
 public abstract class TreeNode{
-    private int key;
-    private int val;
-    private TreeNode left;
-    private TreeNode right;
+    public int key;
+    public int val;
+    public TreeNode left;
+    public TreeNode right;
 
     public TreeNode(int k, int v) {
         this.key = k;

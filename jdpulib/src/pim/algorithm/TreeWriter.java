@@ -1,6 +1,7 @@
 package pim.algorithm;
 
 import pim.dpu.DPUGarbageCollector;
+import pim.dpu.DPUObjectHandler;
 import pim.utils.BytesUtils;
 
 import java.util.ArrayDeque;
@@ -38,19 +39,19 @@ public class TreeWriter {
             //System.out.print("#" + i);
             TreeNode node = queue.remove();
             if(node instanceof CPUTreeNode){
-                if(deque.remove() != node.getKey()){
+                if(deque.remove() != node.key){
                     throw new RuntimeException();
                 }
             }else{
-                int addr = node.getKey();
+                int addr = node.key;
                 //System.out.println("addr = " + addr);
                 int k = BytesUtils.readU4LittleEndian(heapMemory, addr + 8 );
                 if(deque.remove() != k){
                     throw new RuntimeException();
                 }
             }
-            if(node.getLeft() != null) queue.add(node.getLeft());
-            if(node.getRight() != null) queue.add(node.getRight());
+            if(node.left != null) queue.add(node.left);
+            if(node.right != null) queue.add(node.right);
             i++;
         }
 
@@ -88,10 +89,10 @@ public class TreeWriter {
             TreeNode[] record = queue.remove();
             TreeNode thisNode = record[1];
             TreeNode parent = record[0];
-            if(thisNode.getLeft() != null) queue.add(new TreeNode[]{thisNode, thisNode.getLeft()});
-            if(thisNode.getRight() != null) queue.add(new TreeNode[]{thisNode, thisNode.getRight()});
+            if(thisNode.left != null) queue.add(new TreeNode[]{thisNode, thisNode.left});
+            if(thisNode.right != null) queue.add(new TreeNode[]{thisNode, thisNode.right});
 
-            deque.add(thisNode.getKey());
+            deque.add(thisNode.key);
 
             // whether convert this node to DPUTreeNode or not
             if(nodeInCPU < nodeAmountInCPU){
@@ -99,44 +100,45 @@ public class TreeWriter {
                 continue;
             }
 
-            DPUTreeNode dpuNodeConverted = new DPUTreeNode(thisNode.getKey(), thisNode.getVal());
-            dpuNodeConverted.setLeft(thisNode.getLeft());
-            dpuNodeConverted.setRight(thisNode.getRight());
-            dpuNodeConverted.setKey(heapPoint); // set dpu MRAM pt in key field
 
-            writeKey(thisNode.getKey(), heapMemory, heapPoint); // write key
-            writeValue(thisNode.getVal(), heapMemory, heapPoint); // write value
+            DPUTreeNode dpuNodeConverted =  new DPUTreeNodeProxyAutoGen(thisNode.key, thisNode.val);
+            ((DPUTreeNodeProxyAutoGen)dpuNodeConverted).objectHandler = new DPUObjectHandler(0, heapPoint);
+
+            dpuNodeConverted.left = thisNode.left;
+            dpuNodeConverted.right = thisNode.right;
+            dpuNodeConverted.key = heapPoint; // set dpu MRAM pt in key field
+
+
+            writeKey(thisNode.key, heapMemory, heapPoint); // write key
+            writeValue(thisNode.val, heapMemory, heapPoint); // write value
             writeClassReference(classAddress, heapMemory, heapPoint);
 
             // mark as forward
-            thisNode.setKey(-1);
-            thisNode.setVal(-1);
-            thisNode.setLeft(dpuNodeConverted);
+            thisNode.key = -1;
+            thisNode.val = -1;
+            thisNode.left = dpuNodeConverted;
 
             if(parent == null) continue;
 
             // already be forward
-            if(parent.getKey() == -1 && parent.getVal() == -1){
-                DPUTreeNode treeNode = (DPUTreeNode) parent.getLeft();
-                int parentAddress = treeNode.getKey();
-                if(treeNode.getLeft() == thisNode){
-                    treeNode.setLeft(dpuNodeConverted);
+            if(parent.key == -1 && parent.val == -1){
+                DPUTreeNode treeNode = (DPUTreeNode) parent.left;
+                int parentAddress = treeNode.key;
+                if(treeNode.left == thisNode){
+                    treeNode.left = dpuNodeConverted;
                  //   System.out.println("write left = " + heapPoint + "to instance " + parentAddress);
                     writeLeft(heapPoint, heapMemory, parentAddress);
                 }
 
-                if(treeNode.getRight() == thisNode){
-                    treeNode.setRight(dpuNodeConverted);
+                if(treeNode.right == thisNode){
+                    treeNode.right = dpuNodeConverted;
                     //System.out.println("write right = " + heapPoint + "to instance " + parentAddress);
                    writeRight(heapPoint, heapMemory, parentAddress);
                 }
             }else {
                 // parent node not been forward
-                if(parent.getVal() == -1){
-                    System.out.println(parent.getKey());
-                }
-                if(parent.getLeft() == thisNode) parent.setLeft(dpuNodeConverted);
-                if(parent.getRight() == thisNode) parent.setRight(dpuNodeConverted);
+                if(parent.left == thisNode) parent.left = dpuNodeConverted;
+                if(parent.right == thisNode) parent.right = dpuNodeConverted;
             }
             heapPoint += 24;
             nodeInDPU++;
@@ -152,14 +154,16 @@ public class TreeWriter {
             TreeNode[] record = queue.remove();
             TreeNode node = record[1];
             TreeNode parent = record[0];
-            if(node.getVal() == -1){
-                TreeNode realNode = node.getLeft();
-                if(parent.getLeft() == node) parent.setLeft(realNode);
-                if(parent.getRight() == node) parent.setRight(realNode);
+            if(node.val == -1){
+                TreeNode realNode = node.left;
+                if(parent.left == node) parent.left = realNode;
+                if(parent.right == node) parent.right = realNode;
             }
-            if(node.getLeft() != null) queue.add(new TreeNode[]{node, node.getLeft()});
-            if(node.getRight() != null) queue.add(new TreeNode[]{node, node.getRight()});
+            if(node.left != null) queue.add(new TreeNode[]{node, node.left});
+            if(node.right != null) queue.add(new TreeNode[]{node, node.right});
         }
+
+
     }
 
 

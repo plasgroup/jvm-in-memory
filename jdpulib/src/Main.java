@@ -102,17 +102,33 @@ public class Main {
 
     static Random random = new Random();
 
-
         public static void main(String[] args) {
         UPMEM.initialize(new UPMEMConfigurator()
                 .setDpuInUseCount(UPMEM.TOTAL_DPU_COUNT)
                 .setThreadPerDPU(UPMEM.perDPUThreadsInUse));
 
         Logger.disableAllBeginWith("pim");
-        //evaluateDPU();
-        //evaluateCPU();
-           TreeNode root = buildLargePIMTree();
-           verifyLargePIMTree(root);
+
+
+            ArrayList<BSTBuilder.Pair<Integer, Integer>> pairs = new IntIntValuePairGenerator(100000)
+                    .genPairs(2000);
+            TreeNode root = buildLargePIMTree(pairs);
+            int correct = 0;
+
+            for(int i = 0; i < pairs.size(); i++){
+                int key = pairs.get(i).getKey();
+                int val = pairs.get(i).getVal();
+                int retrievedValue = root.search(key);
+                Logger.logf("bst:testing", "==> (Test) search key = %d. correct value = %d, retrieved value = %d\n", key, val, retrievedValue);
+
+                if(val != retrievedValue){
+                    Logger.logf("bst:testing" ,"test case fail at index " + i + "\n");
+                }else{
+                    correct++;
+                }
+            }
+
+            System.out.printf(" == Test finished. Correct %d/%d == \n", correct, pairs.size());
     }
     /*
     * java -XX:+PreserveFramePointer -Djava.library.path=/home/huang/Desktop/upmem-2023.1.0-Linux-x86_64/lib -Dfile.encoding=UTF-8 -classpath "/media/huang/Local Disk2/jvm-in-memory-dev/jvm-in-memory/jdpulib/out/production/jdpulib":"/media/huang/Local Disk2/jvm-in-memory-dev/jvm-in-memory/lib/dpu.jar" Main

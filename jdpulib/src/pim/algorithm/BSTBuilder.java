@@ -3,13 +3,14 @@ package pim.algorithm;
 import com.upmem.dpu.DpuException;
 import pim.UPMEM;
 import pim.dpu.DPUCacheManager;
+import pim.dpu.DPUJVMMemSpaceKind;
 import pim.logger.Logger;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import static pim.algorithm.TreeWriter.convertCPUTreeToPIMTree;
+import static pim.algorithm.TreeWriter.*;
 
 public class BSTBuilder {
     public static class Pair<K, V> {
@@ -67,7 +68,7 @@ public class BSTBuilder {
         return root;
     }
 
-    public static TreeNode buildLargePIMTree(){
+    public static TreeNode buildLargePIMTree(ArrayList<Pair<Integer, Integer>> pairs){
         try {
             UPMEM.getInstance().getDPUManager(0).createObject(DPUTreeNode.class, new Object[]{0, 0});
         } catch (DpuException e) {
@@ -79,10 +80,16 @@ public class BSTBuilder {
         DPUCacheManager classCacheManager = UPMEM.getInstance().getDPUManager(0).classCacheManager;
         int dpuClassAddress = classCacheManager.getClassStrutCacheLine("pim/algorithm/DPUTreeNode").marmAddr;
 
-        ArrayList<BSTBuilder.Pair<Integer, Integer>> pairs = new IntIntValuePairGenerator(100000)
-                .genPairs(2000);
         TreeNode root = BSTBuilder.buildCPUTree(pairs);
         convertCPUTreeToPIMTree(root, 2000, 10, dpuClassAddress);
+        verifyLargePIMTree(root);
+        try {
+            UPMEM.getInstance().getDPUManager(0).dpu.copy("m_heapspace", heapMemory, 0);
+            UPMEM.getInstance().getDPUManager(0).garbageCollector.updateHeapPointerToDPU();
+        } catch (DpuException e) {
+            throw new RuntimeException(e);
+        }
+
         return root;
     }
 

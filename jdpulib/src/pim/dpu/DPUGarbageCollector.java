@@ -37,6 +37,13 @@ public class DPUGarbageCollector {
 
     }
 
+
+    public void updateHeapPointerToDPU() throws DpuException {
+        byte[] ptBytes = new byte[4];
+        BytesUtils.writeU4LittleEndian(ptBytes, this.heapSpacePt, 0);
+        dpu.copy("mram_heap_pt", ptBytes, 0);
+    }
+
     public int pushParameters(int[] params) throws DpuException {
         int size = params.length * 4;
         byte[] data = new byte[size];
