@@ -10,6 +10,12 @@
     *((ADDR)+2) =  (NUM >> 16) & (0b11111111); \
     *((ADDR)+3) =  (NUM >> 24) & (0b11111111); \
 
+#define WRITE_INT32_BIT_BY_BIT(ADDR, NUM) \
+	*(ADDR) =  NUM & (0b11111111); \
+    *((ADDR)+1) =  (NUM >> 8) & (0b11111111); \
+    *((ADDR)+2) =  (NUM >> 16) & (0b11111111); \
+    *((ADDR)+3) =  (NUM >> 24) & (0b11111111); \
+
 #define ARRAY_ACCESS_DEBUG_PRINT_WRITE_BACK(CACHE_LINE_ID) \
    DEBUG_PRINT("* write back array in cache_%d, to mram %p\n", CACHE_LINE_ID, \
                     (void*) (inline_array_buffer_cache.cache_lines[CACHE_LINE_ID].array + \

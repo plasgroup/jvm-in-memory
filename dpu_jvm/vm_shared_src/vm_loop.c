@@ -211,9 +211,8 @@ void interp(struct function_thunk func_thunk) {
             DEBUG_PRINT(" - instance addr(m) = %p, field index = %d, addr(m) = %p\n",
                 op3, op2, op3 + 8 + 4 * op2);
 
-
             // read field
-            READ_INT32_BIT_BY_BIT((uint8_t __mram_ptr*)(op3 + 8 + 4 * op2), op4);
+            op4 = *(uint32_t __mram_ptr*)(op3 + 8 + 4 * op2);
             DEBUG_PRINT("field val = 0x%x\n", op4);
             PUSH_EVAL_STACK(op4);
             
@@ -229,7 +228,7 @@ void interp(struct function_thunk func_thunk) {
             POP_EVAL_STACK(op3); // val
             POP_EVAL_STACK(op4); // instance addr
             DEBUG_PRINT("set val = %d (hex:0x%08x), at addr(m):0x%08x, instance addr: 0x%08x\n", op3, op3, op4 + 8 + op1 * 4, op4);
-            WRITE_INT32_BIT_BY_BIT((uint8_t __mram_ptr*)(op4 + 8 + op1 * 4), op3);
+            *(uint32_t __mram_ptr*)(op4 + 8 + op1 * 4) = op3;
             break;
 
         case INVOKEVIRTUAL: // function call
@@ -248,7 +247,7 @@ void interp(struct function_thunk func_thunk) {
           
             DEBUG_PRINT(" - instance-address = %p, %p\n", *(uint32_t*)op4, op4);
             op3 = *(uint32_t*)op4 + 4;
-            READ_INT32_BIT_BY_BIT((uint8_t __mram_ptr*)(op3), op1);
+            op1 = *(uint32_t __mram_ptr*)(op3);
             DEBUG_PRINT(" - instance-class-address = %p\n", op1); 
             
             
@@ -258,7 +257,6 @@ void interp(struct function_thunk func_thunk) {
             callee.func = ((struct j_class __mram_ptr*)(op1))->virtual_table[op2].methodref;
             callee.params = current_sp;
            
-            //op2 = (func_thunk.jc->items[op1].info >> 16) & 0xFFFF; // class ref index
 
             current_sp -= 4 * callee.func->params_count;
             DEBUG_PRINT(" - pop %d elements from operand stack\n", callee.func->params_count);
@@ -304,7 +302,7 @@ void interp(struct function_thunk func_thunk) {
             for(op4 = 0; op4 < 8 + op3 * 4; op4++){
                 *(uint8_t __mram_ptr*)(mram_heap_pt + op4) = 0;
             }
-            WRITE_INT32_BIT_BY_BIT((uint8_t __mram_ptr*)(mram_heap_pt + 4), op1);
+            *(uint32_t __mram_ptr*)(mram_heap_pt + 4) = op1;
             mram_heap_pt += 8 + op3 * 4;
 
             break;

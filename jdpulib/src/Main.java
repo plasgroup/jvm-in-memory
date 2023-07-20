@@ -13,7 +13,6 @@ public class Main {
                 .setDpuInUseCount(UPMEM.TOTAL_DPU_COUNT)
                 .setThreadPerDPU(UPMEM.perDPUThreadsInUse));
 
-
         int totalNodeCount = 2000;
         int queryCount = 1000;
         String experimentType = "CPU";
