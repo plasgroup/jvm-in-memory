@@ -20,15 +20,14 @@ public class Main {
             experimentType = args[0];
             totalNodeCount = Integer.parseInt(args[1]);
             queryCount = Integer.parseInt(args[2]);
+        }else{
+            BSTTester.evaluateLargeBST(totalNodeCount, queryCount);
         }
         if("CPU".equals(experimentType)){
             BSTTester.evaluateCPU(totalNodeCount, queryCount);
         }else if("PIM".equals(experimentType)){
             BSTTester.evaluateLargeBST(totalNodeCount, queryCount);
         }
-
-        BSTTester.evaluateLargeBST(totalNodeCount, queryCount);
-
     }
 
 

@@ -59,7 +59,7 @@ public class DPUManager {
             i++;
         }
         garbageCollector.pushParameters(paramsConverted);
-        dpuExecute(System.out);
+        dpuExecute(null);
     }
 
     int calcFieldCount(Class c){
