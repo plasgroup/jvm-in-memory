@@ -24,10 +24,10 @@ public class PIMManager {
             synchronized (dpuManagers){
                 instance = new PIMManager();
                 pimManagerLogger.logln("DPUSystem load " + dpuInUse + " DPUs");
-                // Init DpuSystem. Allocate dpuInUses' DPUs
+                // init DpuSystem. Allocate dpuInUses' DPUs
                 system = DpuSystem.allocate(dpuInUse, "");
 
-                // Init dpuInUses' DPU Managers
+                // init dpuInUses' DPU Managers
                 for(int i = 0; i < dpuInUse; i++){
                     Dpu dpu = system.dpus().get(i);
                     dpu.load("dpuslave");

@@ -94,20 +94,19 @@ public class TreeWriter {
 
             deque.add(thisNode.key);
 
-            // whether convert this node to DPUTreeNode or not
+            // if currently nodes in DPU not reach the limitation
             if(nodeInCPU < nodeAmountInCPU){
                 nodeInCPU++;
                 continue;
             }
 
-
+            // convert to DPUTreeNodeProxy
             DPUTreeNode dpuNodeConverted =  new DPUTreeNodeProxyAutoGen(thisNode.key, thisNode.val);
             ((DPUTreeNodeProxyAutoGen)dpuNodeConverted).objectHandler = new DPUObjectHandler(0, heapPoint);
 
             dpuNodeConverted.left = thisNode.left;
             dpuNodeConverted.right = thisNode.right;
             dpuNodeConverted.key = heapPoint; // set dpu MRAM pt in key field
-
 
             writeKey(thisNode.key, heapMemory, heapPoint); // write key
             writeValue(thisNode.val, heapMemory, heapPoint); // write value
@@ -116,27 +115,27 @@ public class TreeWriter {
             // mark as forward
             thisNode.key = -1;
             thisNode.val = -1;
+            // store forward reference in left field
             thisNode.left = dpuNodeConverted;
 
             if(parent == null) continue;
 
-            // already be forward
+            // if the parent node already be forward
             if(parent.key == -1 && parent.val == -1){
-                DPUTreeNode treeNode = (DPUTreeNode) parent.left;
-                int parentAddress = treeNode.key;
-                if(treeNode.left == thisNode){
-                    treeNode.left = dpuNodeConverted;
-                 //   System.out.println("write left = " + heapPoint + "to instance " + parentAddress);
+                // write this node to the current real parent node's left/right field
+                DPUTreeNode realNode = (DPUTreeNode) parent.left;
+                int parentAddress = realNode.key;
+                if(realNode.left == thisNode){
+                    realNode.left = dpuNodeConverted;
                     writeLeft(heapPoint, heapMemory, parentAddress);
                 }
 
-                if(treeNode.right == thisNode){
-                    treeNode.right = dpuNodeConverted;
-                    //System.out.println("write right = " + heapPoint + "to instance " + parentAddress);
+                if(realNode.right == thisNode){
+                    realNode.right = dpuNodeConverted;
                    writeRight(heapPoint, heapMemory, parentAddress);
                 }
             }else {
-                // parent node not been forward
+                // parent node not been forward, simply set to the parent's left/right field
                 if(parent.left == thisNode) parent.left = dpuNodeConverted;
                 if(parent.right == thisNode) parent.right = dpuNodeConverted;
             }
