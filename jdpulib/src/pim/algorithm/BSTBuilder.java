@@ -5,6 +5,7 @@ import pim.UPMEM;
 import pim.dpu.DPUCacheManager;
 import pim.dpu.DPUJVMMemSpaceKind;
 import pim.logger.Logger;
+import pim.logger.PIMLoggers;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.HashSet;
 import static pim.algorithm.TreeWriter.*;
 
 public class BSTBuilder {
+    static Logger bstBuildingLogger = PIMLoggers.bstBuildingLogger;
     public static class Pair<K, V> {
         K key;
         V val;
@@ -42,7 +44,6 @@ public class BSTBuilder {
 
     static abstract class BaseKeyValuePairGenerator<K, V> {
         protected abstract Pair<K, V> genPair();
-
         public ArrayList<Pair<K, V>> genPairs(int pairCount) {
             HashSet<K> keys = new HashSet<>();
             ArrayList<Pair<K, V>> result = new ArrayList<>();
@@ -56,8 +57,6 @@ public class BSTBuilder {
             return result;
         }
     }
-
-
 
     public static TreeNode buildCPUTree(ArrayList<Pair<Integer, Integer>> pairs){
         if(pairs.size() == 0) return null;
@@ -96,10 +95,10 @@ public class BSTBuilder {
     public static TreeNode buildPIMTree(ArrayList<Pair<Integer, Integer>> pairs) {
         if (pairs.size() == 0) return null;
         TreeNode root = new CPUTreeNode(pairs.get(0).key, pairs.get(0).val);
-        Logger.logf("bst:building","(TreeBuilder) ===> insert %d 'th node, key = %d, val = %d\n", 1, pairs.get(0).key, pairs.get(0).val);
+        bstBuildingLogger.logf("(TreeBuilder) ===> insert %d 'th node, key = %d, val = %d\n", 1, pairs.get(0).key, pairs.get(0).val);
 
         for (int i = 1; i < pairs.size(); i++) {
-            Logger.logf("bst:building", "(TreeBuilder) ===> insert %d 'th node, key = %d, val = %d\n", i + 1, pairs.get(i).key, pairs.get(i).val);
+            bstBuildingLogger.logf( "(TreeBuilder) ===> insert %d 'th node, key = %d, val = %d\n", i + 1, pairs.get(i).key, pairs.get(i).val);
             root.insert(pairs.get(i).key, pairs.get(i).val);
         }
         return root;

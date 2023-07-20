@@ -3,16 +3,12 @@ package pim.algorithm;
 import pim.UPMEM;
 import pim.dpu.DPUJClass;
 import pim.logger.Logger;
+import pim.logger.PIMLoggers;
 
 public class CPUTreeNode extends TreeNode {
     final int CriticalHeight = 10;
     int height;
-
-    static Logger cpuTreeNodeLogger = Logger.getLogger("tree:cpu-node");
-    static
-    {
-        cpuTreeNodeLogger.setEnable(false);
-    }
+    static Logger cpuTreeNodeLogger = PIMLoggers.cpuTreeNodeLogger;
 
     public CPUTreeNode(int k, int v) {
         this(k, v, 1);

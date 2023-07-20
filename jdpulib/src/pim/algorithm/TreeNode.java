@@ -44,8 +44,6 @@ public abstract class TreeNode{
         return val;
     }
 
-
-    // Algorithm
     public void insert(int k, int v){
         if(k < getKey()){
             if (getLeft() == null)

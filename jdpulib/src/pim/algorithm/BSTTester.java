@@ -1,6 +1,7 @@
 package pim.algorithm;
 
 import pim.logger.Logger;
+import pim.logger.PIMLoggers;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -10,11 +11,11 @@ import static pim.algorithm.BSTBuilder.buildLargePIMTree;
 public class BSTTester {
     static Random random = new Random();
 
+    static Logger bstTestLogger = PIMLoggers.bstTestLogger;
     public static void testBSTCPU(int totalNodeCount){
         ArrayList<BSTBuilder.Pair<Integer, Integer>> pairs =
                 new IntIntValuePairGenerator(Integer.MAX_VALUE).genPairs(totalNodeCount);
 
-        Logger bstTestLogger = Logger.getLogger("bst:testing");
         TreeNode root = BSTBuilder.buildCPUTree(pairs);
         int correct = 0;
 
@@ -22,7 +23,7 @@ public class BSTTester {
             int key = pairs.get(i).getKey();
             int val = pairs.get(i).getVal();
             int retrievedValue = root.search(key);
-            Logger.logf("bst:testing", "==> (Test) search key = %d. correct value = %d, retrieved value = %d\n", key, val, retrievedValue);
+            bstTestLogger.logf( "==> (Test) search key = %d. correct value = %d, retrieved value = %d\n", key, val, retrievedValue);
             if(val != retrievedValue){
                 bstTestLogger.log("test case fail at index " + i + "\n");
             }else{
@@ -74,10 +75,11 @@ public class BSTTester {
             int key = pairs.get(i).getKey();
             int val = pairs.get(i).getVal();
             int retrievedValue = root.search(key);
-            Logger.logf("bst:testing", "==> (Test#"+ i + ") search key = %d. correct value = %d, retrieved value = %d\n", key, val, retrievedValue);
+
+            bstTestLogger.logf("==> (Test#"+ i + ") search key = %d. correct value = %d, retrieved value = %d\n", key, val, retrievedValue);
 
             if(val != retrievedValue){
-                Logger.logf("bst:testing" ,"test case fail at index " + i + "\n");
+                bstTestLogger.logln("test case fail at index " + i + "\n");
             }else{
                 correct++;
             }

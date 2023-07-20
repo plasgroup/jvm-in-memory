@@ -14,7 +14,6 @@ import static pim.dpu.ProxyHelper.*;
 
 public class DPUTreeNodeProxyAutoGen extends DPUTreeNode implements IDPUProxyObject {
     public DPUObjectHandler objectHandler = null;
-    static UPMEM upmem = UPMEM.getInstance();
     static Logger pimProxy = PIMLoggers.pimProxy;
 
     @Override

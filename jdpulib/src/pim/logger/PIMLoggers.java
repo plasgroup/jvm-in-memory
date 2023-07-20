@@ -2,8 +2,12 @@ package pim.logger;
 
 public class PIMLoggers {
     public static Logger pimProxy = AppendLogger("pim:proxy");
+    public static Logger cpuTreeNodeLogger = AppendLogger("tree:cpu-node");
+    public static Logger bstTestLogger = AppendLogger("bst:testing");
+    public static Logger bstBuildingLogger = AppendLogger("bst:building");
     static{
-        disableLoggers("pim:proxy");
+        disableLoggers( "tree:cpu-node", "bst:testing", "bst:building");
+        Logger.disableAllBeginWith("pim");
     }
 
     private static Logger AppendLogger(String loggerName){
