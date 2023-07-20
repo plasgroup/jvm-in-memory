@@ -10,5 +10,6 @@ make
 cp perf /usr/bin
 4. sudo apt install openjdk-17-jdk
    export JAVA_HOME=/usr/lib/jvm/...
-5. 
+5. sh profiling-cpu.sh
+6. sh profiling-pim.sh
 
