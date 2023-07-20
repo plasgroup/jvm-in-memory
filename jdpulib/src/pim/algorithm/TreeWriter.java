@@ -9,18 +9,23 @@ import java.util.Deque;
 import java.util.Queue;
 
 public class TreeWriter {
+    final static int INSTANCE_SIZE = 24;
+    final static int KEY_POS = 0;
+    final static int VALUE_POS = 1;
+    final static int LEFT_POS = 2;
+    final static int RIGHT_POS = 3;
 
     static void writeKey(int key, byte[] heap, int instanceAddress){
-        BytesUtils.writeU4LittleEndian(heap, key, instanceAddress + 8 + 4 * 0);
+        BytesUtils.writeU4LittleEndian(heap, key, instanceAddress + 8 + 4 * KEY_POS);
     }
     static void writeValue(int val, byte[] heap, int instanceAddress){
-        BytesUtils.writeU4LittleEndian(heap, val, instanceAddress + 8 + 4 * 1);
+        BytesUtils.writeU4LittleEndian(heap, val, instanceAddress + 8 + 4 * VALUE_POS);
     }
     static void writeLeft(int left, byte[] heap, int instanceAddress){
-        BytesUtils.writeU4LittleEndian(heap, left, instanceAddress + 8 + 4 * 2);
+        BytesUtils.writeU4LittleEndian(heap, left, instanceAddress + 8 + 4 * LEFT_POS);
     }
     static void writeRight(int right, byte[] heap, int instanceAddress){
-        BytesUtils.writeU4LittleEndian(heap, right, instanceAddress + 8 + 4 * 3);
+        BytesUtils.writeU4LittleEndian(heap, right, instanceAddress + 8 + 4 * RIGHT_POS);
     }
 
     static void writeClassReference(int classReference, byte[] heap, int instanceAddress){
@@ -34,9 +39,7 @@ public class TreeWriter {
     public static void verifyLargePIMTree(TreeNode root){
         Queue<TreeNode> queue = new ArrayDeque<>();
         queue.add(root);
-        int i = 1;
         while(queue.size() > 0){
-            //System.out.print("#" + i);
             TreeNode node = queue.remove();
             if(node instanceof CPUTreeNode){
                 if(deque.remove() != node.key){
@@ -44,7 +47,6 @@ public class TreeWriter {
                 }
             }else{
                 int addr = node.key;
-                //System.out.println("addr = " + addr);
                 int k = BytesUtils.readU4LittleEndian(heapMemory, addr + 8 );
                 if(deque.remove() != k){
                     throw new RuntimeException();
@@ -52,25 +54,25 @@ public class TreeWriter {
             }
             if(node.left != null) queue.add(node.left);
             if(node.right != null) queue.add(node.right);
-            i++;
+
         }
 
+        // verify tree nodes in heap memory are built correctly
         Queue<Integer> dpuTreeNodeAddressQueue = new ArrayDeque<>();
         dpuTreeNodeAddressQueue.add(8);
         while(dpuTreeNodeAddressQueue.size() > 0){
             int addr = dpuTreeNodeAddressQueue.remove();
-            //System.out.println(addr);
-            int left = BytesUtils.readU4LittleEndian(heapMemory, addr + 8 + 4 * 2);
-            int right = BytesUtils.readU4LittleEndian(heapMemory, addr + 8 + 4 * 3);
-            int key = BytesUtils.readU4LittleEndian(heapMemory, addr + 8 + 4 * 0);
+            int left = BytesUtils.readU4LittleEndian(heapMemory, addr + 8 + 4 * LEFT_POS);
+            int right = BytesUtils.readU4LittleEndian(heapMemory, addr + 8 + 4 * RIGHT_POS);
+            int key = BytesUtils.readU4LittleEndian(heapMemory, addr + 8 + 4 * KEY_POS);
             if(left != 0) dpuTreeNodeAddressQueue.add(left);
             if(right != 0) dpuTreeNodeAddressQueue.add(right);
             if(left != 0){
-                int leftKey = BytesUtils.readU4LittleEndian(heapMemory, left + 8 + 4 * 0);
+                int leftKey = BytesUtils.readU4LittleEndian(heapMemory, left + 8 + 4 * KEY_POS);
                 if(leftKey > key) throw new RuntimeException("exist a left node's key greater than current node");
             }
             if(right != 0){
-                int rightKey = BytesUtils.readU4LittleEndian(heapMemory, right + 8 + 4 * 0);
+                int rightKey = BytesUtils.readU4LittleEndian(heapMemory, right + 8 + 4 * KEY_POS);
                 if(rightKey < key) throw new RuntimeException("exist a left node's key smaller than current node");
             }
         }
@@ -80,7 +82,7 @@ public class TreeWriter {
         int nodeInCPU = 0;
         int heapPoint = DPUGarbageCollector.heapSpaceBeginAddr + 8;
 
-        heapMemory = new byte[(totalTreeNodeCount - nodeAmountInCPU) * 24 + 8];
+        heapMemory = new byte[(totalTreeNodeCount - nodeAmountInCPU) * INSTANCE_SIZE + 8];
         TreeNode point = root;
         Queue<TreeNode[]> queue = new ArrayDeque<>();
         queue.add(new TreeNode[]{null, point});
@@ -139,7 +141,7 @@ public class TreeWriter {
                 if(parent.left == thisNode) parent.left = dpuNodeConverted;
                 if(parent.right == thisNode) parent.right = dpuNodeConverted;
             }
-            heapPoint += 24;
+            heapPoint += INSTANCE_SIZE;
             nodeInDPU++;
         }
 
