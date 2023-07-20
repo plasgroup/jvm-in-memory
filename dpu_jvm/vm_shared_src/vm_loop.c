@@ -34,13 +34,13 @@ void interp(struct function_thunk func_thunk) {
     pc = 0;
     times = 0;
     #ifdef INMEMORY
-    printf(RED);
+    DEBUG_PRINT(RED);
     #endif
 
 
 
     current_fp = create_new_vmframe(func_thunk, NULL);
-    printf("code_buffer = %p\n", code_buffer);
+    DEBUG_PRINT("code_buffer = %p\n", code_buffer);
 
 #define DEBUG
     DEBUG_PRINT("create frame finished\n");
@@ -58,7 +58,7 @@ void interp(struct function_thunk func_thunk) {
     dpu->load("dpuslave");
 #endif
 
-    printf("FP = (%p)\n", current_fp);
+    DEBUG_PRINT("FP = (%p)\n", current_fp);
     while (1) {
       //  if((func2 == 0x1000c88) && times > 45) return;
         switch (code_buffer[pc++])
@@ -70,13 +70,13 @@ void interp(struct function_thunk func_thunk) {
         case ILOAD_1:
             DEBUG_OUT_INSN_PARSED("ILOAD_1")
             op1 = FRAME_GET_LOCALS(current_fp, func->max_locals, 1);
-            printf(" - Load INT %d to stack\n", op1);
+            DEBUG_PRINT(" - Load INT %d to stack\n", op1);
             PUSH_EVAL_STACK(op1)
             break;
         case ILOAD_2:
             DEBUG_OUT_INSN_PARSED("ILOAD_2")
             op1 = FRAME_GET_LOCALS(current_fp, func->max_locals, 2);
-            printf(" - Load INT %d to stack\n", op1);
+            DEBUG_PRINT(" - Load INT %d to stack\n", op1);
             PUSH_EVAL_STACK(op1)
             break;
        
@@ -85,13 +85,13 @@ void interp(struct function_thunk func_thunk) {
         case ALOAD_0:
             DEBUG_OUT_INSN_PARSED("ALOAD_0")
             op1 = FRAME_GET_LOCALS(current_fp, func->params_count, 0);
-            printf(" - Load ref %p to stack\n", op1);
+            DEBUG_PRINT(" - Load ref %p to stack\n", op1);
             PUSH_EVAL_STACK(op1)
             break;
         case ALOAD_1:
             DEBUG_OUT_INSN_PARSED("ALOAD_1")
             op1 = FRAME_GET_LOCALS(current_fp, func->params_count, 1);
-            printf(" - Load ref %p to stack\n", op1);
+            DEBUG_PRINT(" - Load ref %p to stack\n", op1);
             PUSH_EVAL_STACK(op1)
             break;
      
@@ -100,17 +100,17 @@ void interp(struct function_thunk func_thunk) {
        
         case ICONST_0:
             DEBUG_OUT_INSN_PARSED("ICONST_0")
-            printf(" - push const 0 to stack\n");
+            DEBUG_PRINT(" - push const 0 to stack\n");
             PUSH_EVAL_STACK(0);
             break;
         case ICONST_1:
             DEBUG_OUT_INSN_PARSED("ICONST_1")
-            printf(" - push const 1 to stack\n");;
+            DEBUG_PRINT(" - push const 1 to stack\n");;
             PUSH_EVAL_STACK(1);
             break;
         case ICONST_M1:
             DEBUG_OUT_INSN_PARSED("ICONST_M1")
-            printf(" - push const -1 to stack\n");;
+            DEBUG_PRINT(" - push const -1 to stack\n");;
             PUSH_EVAL_STACK(-1);
             break;
         case IFGE:
@@ -118,11 +118,11 @@ void interp(struct function_thunk func_thunk) {
             op1 = (uint8_t)code_buffer[pc] << 8 | code_buffer[pc + 1];
             POP_EVAL_STACK(op2)
             op1 = pc + (short)op1 - 1;
-            printf(" - branch addr = %p\n - cmp value = %d\n", op1, op2);
+            DEBUG_PRINT(" - branch addr = %p\n - cmp value = %d\n", op1, op2);
             pc += 2;
             if(op2 >= 0){
                 pc = op1;
-                printf(" - branch to pc = %p\n", op1);
+                DEBUG_PRINT(" - branch to pc = %p\n", op1);
             }
             break;
         case IF_ICMPNE:
@@ -131,14 +131,14 @@ void interp(struct function_thunk func_thunk) {
            
             POP_EVAL_STACK(op2);
             POP_EVAL_STACK(op3);
-            printf(" - value 2 = %d\n", op2);
-            printf(" - value 1 = %d\n", op3);
+            DEBUG_PRINT(" - value 2 = %d\n", op2);
+            DEBUG_PRINT(" - value 1 = %d\n", op3);
             op1 = pc + (short)op1 - 1;
-            printf(" - branch-target-offset = 0x%02x\n", op1);
+            DEBUG_PRINT(" - branch-target-offset = 0x%02x\n", op1);
             pc += 2;
             if(op3 != op2){
                 pc = op1;
-                printf(" - branch to pc = %p\n", op1);
+                DEBUG_PRINT(" - branch to pc = %p\n", op1);
             }
             break;
         case IF_ICMPGE:
@@ -146,14 +146,14 @@ void interp(struct function_thunk func_thunk) {
             op1 = (uint8_t)code_buffer[pc] << 8 | code_buffer[pc + 1];
             POP_EVAL_STACK(op2);
             POP_EVAL_STACK(op3);
-            printf(" - value 2 = %d\n", op2);
-            printf(" - value 1 = %d\n", op3);
+            DEBUG_PRINT(" - value 2 = %d\n", op2);
+            DEBUG_PRINT(" - value 1 = %d\n", op3);
             op1 = pc + (short)op1 - 1;
-            printf(" - branch-target = 0x%02x\n", op1);
+            DEBUG_PRINT(" - branch-target = 0x%02x\n", op1);
             pc += 2;
             if(op3 >= op2){
                 pc = op1;
-                printf(" - branch to pc = %p\n", op1);
+                DEBUG_PRINT(" - branch to pc = %p\n", op1);
             }
             break;
         case IF_ICMPLT:
@@ -161,40 +161,40 @@ void interp(struct function_thunk func_thunk) {
             op1 = (uint8_t)code_buffer[pc] << 8 | code_buffer[pc + 1];
             POP_EVAL_STACK(op2);
             POP_EVAL_STACK(op3);
-            printf(" - value 2 = %d\n", op2);
-            printf(" - value 1 = %d\n", op3);
+            DEBUG_PRINT(" - value 2 = %d\n", op2);
+            DEBUG_PRINT(" - value 1 = %d\n", op3);
             op1 = pc + (short)op1 - 1;
-            printf(" - branch-target = 0x%02x\n", op1);
+            DEBUG_PRINT(" - branch-target = 0x%02x\n", op1);
             pc += 2;
             if(op3 < op2){
                 pc = op1;
-                printf(" - branch to pc = %p\n", op1);
+                DEBUG_PRINT(" - branch to pc = %p\n", op1);
             }
             break;
         case IFNONNULL:
             DEBUG_OUT_INSN_PARSED("IFNONNULL")
             op1 = (uint8_t)code_buffer[pc] << 8 | code_buffer[pc + 1];
             POP_EVAL_STACK(op2); //ref
-            printf(" - value 1 = %d\n", op2);
+            DEBUG_PRINT(" - value 1 = %d\n", op2);
             op1 = pc + (short)op1 - 1;
-            printf(" - branch-target = 0x%02x\n", op1);
+            DEBUG_PRINT(" - branch-target = 0x%02x\n", op1);
             pc += 2;
             if(op2 != 0){
                 pc = op1;
-                printf(" - branch to pc = %p\n", op1);
+                DEBUG_PRINT(" - branch to pc = %p\n", op1);
             }
             break;
         case IFNULL:
             DEBUG_OUT_INSN_PARSED("IFNULL")
             op1 = (uint8_t)code_buffer[pc] << 8 | code_buffer[pc + 1];
             POP_EVAL_STACK(op2); //ref
-            printf(" - value 1 = %d\n", op2);
+            DEBUG_PRINT(" - value 1 = %d\n", op2);
             op1 = pc + (short)op1 - 1;
-            printf(" - branch-target = 0x%02x\n", op1);
+            DEBUG_PRINT(" - branch-target = 0x%02x\n", op1);
             pc += 2;
             if(op2 == 0){
                 pc = op1;
-                printf(" - branch to pc = %p\n", op1);
+                DEBUG_PRINT(" - branch to pc = %p\n", op1);
             }
             break;
         case GETFIELD:
@@ -203,32 +203,32 @@ void interp(struct function_thunk func_thunk) {
             // op1 <- constant table index
             op1 = (code_buffer[pc] << 8) | code_buffer[pc + 1];
             pc += 2;
-            printf(" - fieldref in cp index = %d\n", op1);
-            printf(" - cp val = 0x%08x | 0x%08x\n", func_thunk.jc->items[op1].info, func_thunk.jc->items[op1].direct_value);
+            DEBUG_PRINT(" - fieldref in cp index = %d\n", op1);
+            DEBUG_PRINT(" - cp val = 0x%08x | 0x%08x\n", func_thunk.jc->items[op1].info, func_thunk.jc->items[op1].direct_value);
             op2 = func_thunk.jc->items[op1].direct_value & 0xFFFF;
-            printf(" - field index in instance = %d\n", op2);
+            DEBUG_PRINT(" - field index in instance = %d\n", op2);
             POP_EVAL_STACK(op3)
-            printf(" - instance addr(m) = %p, field index = %d, addr(m) = %p\n",
+            DEBUG_PRINT(" - instance addr(m) = %p, field index = %d, addr(m) = %p\n",
                 op3, op2, op3 + 8 + 4 * op2);
 
 
             // read field
             READ_INT32_BIT_BY_BIT((uint8_t __mram_ptr*)(op3 + 8 + 4 * op2), op4);
-            printf("field val = 0x%x\n", op4);
+            DEBUG_PRINT("field val = 0x%x\n", op4);
             PUSH_EVAL_STACK(op4);
             
             break;
         case PUTFIELD:
             DEBUG_OUT_INSN_PARSED("PUTFIELD")
             op1 = (code_buffer[pc] << 8) | code_buffer[pc + 1]; // constant table index
-            printf(" - constant table index = %d\n", op1);
+            DEBUG_PRINT(" - constant table index = %d\n", op1);
             pc += 2;
             op2 = (jc->items[op1].direct_value >> 16 & 0xFFFF);
-            printf(" - field index in instance = %d\n", (jc->items[op1].direct_value & 0xFFFF));
+            DEBUG_PRINT(" - field index in instance = %d\n", (jc->items[op1].direct_value & 0xFFFF));
             op1 = jc->items[op1].direct_value & 0xFFFF; // index in instance fields
             POP_EVAL_STACK(op3); // val
             POP_EVAL_STACK(op4); // instance addr
-            printf("set val = %d (hex:0x%08x), at addr(m):0x%08x, instance addr: 0x%08x\n", op3, op3, op4 + 8 + op1 * 4, op4);
+            DEBUG_PRINT("set val = %d (hex:0x%08x), at addr(m):0x%08x, instance addr: 0x%08x\n", op3, op3, op4 + 8 + op1 * 4, op4);
             WRITE_INT32_BIT_BY_BIT((uint8_t __mram_ptr*)(op4 + 8 + op1 * 4), op3);
             break;
 
@@ -238,22 +238,22 @@ void interp(struct function_thunk func_thunk) {
         
             op1 = (uint8_t)(code_buffer[pc] << 8) | code_buffer[pc + 1]; // constant table index to methoderef
 
-            printf(" - current-class-ref = %p\n", func_thunk.jc);
-            printf(" - method-ref-cp-index = %d\n", op1);
+            DEBUG_PRINT(" - current-class-ref = %p\n", func_thunk.jc);
+            DEBUG_PRINT(" - method-ref-cp-index = %d\n", op1);
             
             op2 = func_thunk.jc->items[op1].direct_value;
-            printf(" - v-index = %p\n", op2);
+            DEBUG_PRINT(" - v-index = %p\n", op2);
             callee.func = func_thunk.jc->virtual_table[op2].methodref;
             op4 = (uint8_t*)(current_sp - 4 * (callee.func->params_count - 1));
           
-            printf(" - instance-address = %p, %p\n", *(uint32_t*)op4, op4);
+            DEBUG_PRINT(" - instance-address = %p, %p\n", *(uint32_t*)op4, op4);
             op3 = *(uint32_t*)op4 + 4;
             READ_INT32_BIT_BY_BIT((uint8_t __mram_ptr*)(op3), op1);
-            printf(" - instance-class-address = %p\n", op1); 
+            DEBUG_PRINT(" - instance-class-address = %p\n", op1); 
             
             
-            printf(" - jclass-ref = %p\n", ((struct j_class __mram_ptr*)(op1))->virtual_table[op2].classref);
-            printf(" - jmethod-ref = %p\n", ((struct j_class __mram_ptr*)(op1))->virtual_table[op2].methodref);
+            DEBUG_PRINT(" - jclass-ref = %p\n", ((struct j_class __mram_ptr*)(op1))->virtual_table[op2].classref);
+            DEBUG_PRINT(" - jmethod-ref = %p\n", ((struct j_class __mram_ptr*)(op1))->virtual_table[op2].methodref);
             callee.jc = ((struct j_class __mram_ptr*)(op1))->virtual_table[op2].classref;
             callee.func = ((struct j_class __mram_ptr*)(op1))->virtual_table[op2].methodref;
             callee.params = current_sp;
@@ -261,10 +261,10 @@ void interp(struct function_thunk func_thunk) {
             //op2 = (func_thunk.jc->items[op1].info >> 16) & 0xFFFF; // class ref index
 
             current_sp -= 4 * callee.func->params_count;
-            printf(" - pop %d elements from operand stack\n", callee.func->params_count);
-            printf(" -- new sp = %p\n", current_sp);
-            printf(" -- params-pt = %p\n", callee.params);
-            printf(" -- return pc = %d\n", pc + 2);
+            DEBUG_PRINT(" - pop %d elements from operand stack\n", callee.func->params_count);
+            DEBUG_PRINT(" -- new sp = %p\n", current_sp);
+            DEBUG_PRINT(" -- params-pt = %p\n", callee.params);
+            DEBUG_PRINT(" -- return pc = %d\n", pc + 2);
 
 
             current_fp = create_new_vmframe(callee,  pc + 2);
@@ -284,22 +284,22 @@ void interp(struct function_thunk func_thunk) {
             op2 = (func_thunk.jc->items[op1].direct_value);
             op1 = op2;
             op3 = 0;
-            printf(" - count field count\n");
+            DEBUG_PRINT(" - count field count\n");
             
 
             // |4 bytes ()| 4 byte (class ref) |   fields (4 * field_count bytes) |
             while(op2 != NULL){
-                printf(" - + %d\n",  ((struct j_class __mram_ptr*)op2)->fields_count);
+                DEBUG_PRINT(" - + %d\n",  ((struct j_class __mram_ptr*)op2)->fields_count);
                 op3 += ((struct j_class __mram_ptr*)op2)->fields_count;
-                printf(" -- super class index = %d\n", (int)((struct j_class __mram_ptr*)op2)->super_class);
+                DEBUG_PRINT(" -- super class index = %d\n", (int)((struct j_class __mram_ptr*)op2)->super_class);
                 op4 = (int)((struct j_class __mram_ptr*)op2)->super_class;
-                printf(" -- super class addr = %p\n", ((struct j_class __mram_ptr*)op2)->items[op4].direct_value);
+                DEBUG_PRINT(" -- super class addr = %p\n", ((struct j_class __mram_ptr*)op2)->items[op4].direct_value);
                 op2 = ((struct j_class __mram_ptr*)op2)->items[op4].direct_value;
             }
-            printf(" - field count = %d, instance size = %d\n", op3, 8 + op3 * 4);
-            printf(" - allocate instance in mram %p\n", mram_heap_pt);
+            DEBUG_PRINT(" - field count = %d, instance size = %d\n", op3, 8 + op3 * 4);
+            DEBUG_PRINT(" - allocate instance in mram %p\n", mram_heap_pt);
             PUSH_EVAL_STACK(mram_heap_pt);
-            printf(" - write class addr: %p\n", op1);
+            DEBUG_PRINT(" - write class addr: %p\n", op1);
           
             for(op4 = 0; op4 < 8 + op3 * 4; op4++){
                 *(uint8_t __mram_ptr*)(mram_heap_pt + op4) = 0;
@@ -311,19 +311,19 @@ void interp(struct function_thunk func_thunk) {
         case DUP:
             DEBUG_OUT_INSN_PARSED("DUP")
             op1 = EVAL_STACK_TOPSLOT_VALUE;
-            printf(" - dup %d(hex: %x)\n", op1, op1);
+            DEBUG_PRINT(" - dup %d(hex: %x)\n", op1, op1);
             PUSH_EVAL_STACK(op1);
             break;
         case RETURN:
             DEBUG_OUT_INSN_PARSED("RETURN")
-            printf(" - last-sp = %p\n", FRAME_GET_OLDSP(current_fp));
-            printf(" - last-fp = %p\n", FRAME_GET_OLDFP(current_fp));
-            printf(" - return-pc = %p\n", FRAME_GET_RETPC(current_fp));
+            DEBUG_PRINT(" - last-sp = %p\n", FRAME_GET_OLDSP(current_fp));
+            DEBUG_PRINT(" - last-fp = %p\n", FRAME_GET_OLDFP(current_fp));
+            DEBUG_PRINT(" - return-pc = %p\n", FRAME_GET_RETPC(current_fp));
             op2 = FRAME_GET_OLDSP(current_fp);
             op3 = FRAME_GET_OLDFP(current_fp);
             op4 = FRAME_GET_RETPC(current_fp);
             if(op3 == NULL){
-                printf(" - >> final frame\n");
+                DEBUG_PRINT(" - >> final frame\n");
                 return_val = op1;
                 current_fp = 0;
                 current_sp = wram_data_space - 4;
@@ -331,16 +331,16 @@ void interp(struct function_thunk func_thunk) {
                 return;
             }
             current_sp = op2;
-            printf(" - change sp to %p\n", op2);
-            printf(" - reset pc to 0x%02x\n", op4);
+            DEBUG_PRINT(" - change sp to %p\n", op2);
+            DEBUG_PRINT(" - reset pc to 0x%02x\n", op4);
 
             func = FRAME_GET_METHOD(op3);
-            printf(" - reset func pt to 0x%08x\n", func);
+            DEBUG_PRINT(" - reset func pt to 0x%08x\n", func);
             current_fp = op3;
             code_buffer = func->bytecodes;
             jc = FRAME_GET_CLASS(op3);
             pc = op4;
-            printf(" - bytecodes addr: %08x\n", func->bytecodes);
+            DEBUG_PRINT(" - bytecodes addr: %08x\n", func->bytecodes);
             func_thunk.func = func;
             func_thunk.jc = jc;
 
@@ -349,16 +349,16 @@ void interp(struct function_thunk func_thunk) {
             DEBUG_OUT_INSN_PARSED("ARETURN")
             if(FRAME_GET_OPERAND_STACK_SIZE(current_fp, current_sp) >= 0){
                 POP_EVAL_STACK(op1);
-                printf(" - ret val = %d\n", op1);
+                DEBUG_PRINT(" - ret val = %d\n", op1);
             }
-            printf(" - last-sp = %p\n", FRAME_GET_OLDSP(current_fp));
-            printf(" - last-fp = %p\n", FRAME_GET_OLDFP(current_fp));
-            printf(" - return-pc = %p\n", FRAME_GET_RETPC(current_fp));
+            DEBUG_PRINT(" - last-sp = %p\n", FRAME_GET_OLDSP(current_fp));
+            DEBUG_PRINT(" - last-fp = %p\n", FRAME_GET_OLDFP(current_fp));
+            DEBUG_PRINT(" - return-pc = %p\n", FRAME_GET_RETPC(current_fp));
             op2 = FRAME_GET_OLDSP(current_fp);
             op3 = FRAME_GET_OLDFP(current_fp);
             op4 =  FRAME_GET_RETPC(current_fp);
             if(op3 == NULL){
-                printf(" - >> final frame\n");
+                DEBUG_PRINT(" - >> final frame\n");
                 return_val = op1;
                 current_fp = 0;
                 current_sp = wram_data_space - 4;
@@ -366,19 +366,19 @@ void interp(struct function_thunk func_thunk) {
                 return;
             }
             current_sp = op2;
-            printf(" - change sp to %p\n", op2);
-            printf(" - push ret val %d\n", op1);
+            DEBUG_PRINT(" - change sp to %p\n", op2);
+            DEBUG_PRINT(" - push ret val %d\n", op1);
             PUSH_EVAL_STACK(op1)
-            printf(" - reset pc to 0x%02x\n", op4);
+            DEBUG_PRINT(" - reset pc to 0x%02x\n", op4);
             
             
             func = FRAME_GET_METHOD(op3);
-            printf(" - reset func pt to 0x%08x\n", func);
+            DEBUG_PRINT(" - reset func pt to 0x%08x\n", func);
             current_fp = op3;
             code_buffer = func->bytecodes;
             jc = FRAME_GET_CLASS(op3);
             pc = op4;
-            printf(" - bytecodes addr: %08x\n", func->bytecodes);
+            DEBUG_PRINT(" - bytecodes addr: %08x\n", func->bytecodes);
             func_thunk.func = func;
             func_thunk.jc = jc;
             break;
@@ -386,16 +386,16 @@ void interp(struct function_thunk func_thunk) {
             DEBUG_OUT_INSN_PARSED("IRETURN")
             if(FRAME_GET_OPERAND_STACK_SIZE(current_fp, current_sp) >= 0){
                 POP_EVAL_STACK(op1);
-                printf(" - ret val = %d\n", op1);
+                DEBUG_PRINT(" - ret val = %d\n", op1);
             }
-            printf(" - last-sp = %p\n", FRAME_GET_OLDSP(current_fp));
-            printf(" - last-fp = %p\n", FRAME_GET_OLDFP(current_fp));
-            printf(" - return-pc = %p\n", FRAME_GET_RETPC(current_fp));
+            DEBUG_PRINT(" - last-sp = %p\n", FRAME_GET_OLDSP(current_fp));
+            DEBUG_PRINT(" - last-fp = %p\n", FRAME_GET_OLDFP(current_fp));
+            DEBUG_PRINT(" - return-pc = %p\n", FRAME_GET_RETPC(current_fp));
             op2 = FRAME_GET_OLDSP(current_fp);
             op3 = FRAME_GET_OLDFP(current_fp);
             op4 =  FRAME_GET_RETPC(current_fp);
             if(op3 == NULL){
-                printf(" - >> final frame\n");
+                DEBUG_PRINT(" - >> final frame\n");
                 return_val = op1;
                 
                 current_fp = 0;
@@ -404,19 +404,19 @@ void interp(struct function_thunk func_thunk) {
                 return;
             }
             current_sp = op2;
-            printf(" - change sp to %p\n", op2);
-            printf(" - push ret val %d\n", op1);
+            DEBUG_PRINT(" - change sp to %p\n", op2);
+            DEBUG_PRINT(" - push ret val %d\n", op1);
             PUSH_EVAL_STACK(op1)
-            printf(" - reset pc to 0x%02x\n", op4);
+            DEBUG_PRINT(" - reset pc to 0x%02x\n", op4);
             
             
             func = FRAME_GET_METHOD(op3);
-            printf(" - reset func pt to 0x%08x\n", func);
+            DEBUG_PRINT(" - reset func pt to 0x%08x\n", func);
             current_fp = op3;
             code_buffer = func->bytecodes;
             jc = FRAME_GET_CLASS(op3);
             pc = op4;
-            printf(" - bytecodes addr: %08x\n", func->bytecodes);
+            DEBUG_PRINT(" - bytecodes addr: %08x\n", func->bytecodes);
             func_thunk.func = func;
             func_thunk.jc = jc;
             break;
@@ -425,9 +425,9 @@ void interp(struct function_thunk func_thunk) {
             DEBUG_OUT_INSN_PARSED("ISUB")
             POP_EVAL_STACK(op1);
             POP_EVAL_STACK(op2);
-            printf(" - value 2 = %d\n", op1);
-            printf(" - value 1 = %d\n", op2);
-            printf(" - sub result = %d\n", op2 - op1);
+            DEBUG_PRINT(" - value 2 = %d\n", op1);
+            DEBUG_PRINT(" - value 1 = %d\n", op2);
+            DEBUG_PRINT(" - sub result = %d\n", op2 - op1);
             PUSH_EVAL_STACK(op2 - op1);
             break;
 
@@ -435,9 +435,9 @@ void interp(struct function_thunk func_thunk) {
             DEBUG_OUT_INSN_PARSED("IMUL")
             POP_EVAL_STACK(op1);
             POP_EVAL_STACK(op2);
-            printf(" - value 2 = %d\n", op1);
-            printf(" - value 1 = %d\n", op2);
-            printf(" - mul result = %d\n", op2 * op1);
+            DEBUG_PRINT(" - value 2 = %d\n", op1);
+            DEBUG_PRINT(" - value 1 = %d\n", op2);
+            DEBUG_PRINT(" - mul result = %d\n", op2 * op1);
             PUSH_EVAL_STACK(op2 * op1);
             break;
         
@@ -445,22 +445,22 @@ void interp(struct function_thunk func_thunk) {
             DEBUG_OUT_INSN_PARSED("INVOKESPECIAL")
             
             op1 = (code_buffer[pc] << 8) | code_buffer[pc + 1]; // constant table index to methoderef
-            printf(" - method-ref-cp-index = %d\n", op1);
-            printf(" - jmethod-v-index = %p\n", func_thunk.jc->items[op1].direct_value);
+            DEBUG_PRINT(" - method-ref-cp-index = %d\n", op1);
+            DEBUG_PRINT(" - jmethod-v-index = %p\n", func_thunk.jc->items[op1].direct_value);
             op4 = func_thunk.jc->items[op1].direct_value;
-            printf(" - jmethod-ref = %p\n", func_thunk.jc->virtual_table[op4].methodref);
+            DEBUG_PRINT(" - jmethod-ref = %p\n", func_thunk.jc->virtual_table[op4].methodref);
             
             callee.func = func_thunk.jc->virtual_table[op4].methodref;
             op2 = (func_thunk.jc->items[op1].info >> 16) & 0xFFFF;
-            printf(" - class-ref-cp-index = %d\n", op2);
-            printf(" - jclass-ref = %p\n", func_thunk.jc->items[op2].direct_value);
+            DEBUG_PRINT(" - class-ref-cp-index = %d\n", op2);
+            DEBUG_PRINT(" - jclass-ref = %p\n", func_thunk.jc->items[op2].direct_value);
             callee.jc = func_thunk.jc->items[op2].direct_value;
             callee.params = current_sp;
             current_sp -= 4 * callee.func->params_count;
-            printf(" - pop %d elements from operand stack\n", callee.func->params_count);
-            printf(" -- new sp = %p\n", current_sp);
-            printf(" -- params-pt = %p\n", callee.params);
-            printf(" -- return pc = %d\n", pc + 2);
+            DEBUG_PRINT(" - pop %d elements from operand stack\n", callee.func->params_count);
+            DEBUG_PRINT(" -- new sp = %p\n", current_sp);
+            DEBUG_PRINT(" -- params-pt = %p\n", callee.params);
+            DEBUG_PRINT(" -- return pc = %d\n", pc + 2);
            
             current_fp = create_new_vmframe(callee,  pc + 2);
 
@@ -478,12 +478,12 @@ void interp(struct function_thunk func_thunk) {
             op1 = (uint8_t)(code_buffer[pc] << 8) | code_buffer[pc + 1];
             op1 = pc + (short)op1 - 1;
             pc += 2;
-            printf(" - goto %d\n", op1);
+            DEBUG_PRINT(" - goto %d\n", op1);
             pc = op1;
             break;
         default:
             DEBUG_OUT_INSN_PARSED("UNKNOW")
-            printf(code_buffer[pc]);
+            DEBUG_PRINT(code_buffer[pc]);
             break;
 
 

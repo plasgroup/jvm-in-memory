@@ -82,7 +82,7 @@ public class DPUTreeNodeProxyAutoGen extends DPUTreeNode implements IDPUProxyObj
 
     @Override
     public void insert(int k, int v) {
-        pimProxy.log("pim:proxy", "insert dispatch");
+        pimProxy.log( "insert dispatch");
         DPUCacheManager classCacheManager1 = UPMEM.getInstance().getDPUManager(getDpuID()).classCacheManager;
         invokeMethod(objectHandler,"pim/algorithm/TreeNode", "insert:(II)V", new Object[]{k, v});
     }

@@ -18,7 +18,7 @@ void populate_mram(struct dpu_set_t set) {
     buffer[byte_index] = (uint8_t)byte_index;
   }
   char* symbol = "m_metaspace";
-  printf("symbol = %s\n", symbol);
+  DEBUG_PRINT("symbol = %s\n", symbol);
   DPU_ASSERT(dpu_broadcast_to(set, symbol, 0, buffer, BUFFER_SIZE, DPU_XFER_DEFAULT));
 }
 
@@ -33,7 +33,7 @@ int main() {
   DPU_ASSERT(dpu_launch(set, DPU_SYNCHRONOUS));
   DPU_FOREACH(set, dpu) {
     DPU_ASSERT(dpu_copy_from(dpu, "checksum", 0, (uint8_t *)&checksum, sizeof(checksum)));
-    printf("Computed checksum = 0x%08x\n", checksum);
+    DEBUG_PRINT("Computed checksum = 0x%08x\n", checksum);
   }
   DPU_ASSERT(dpu_free(set));
   return 0;
@@ -41,7 +41,7 @@ int main() {
 
 // int main(int argc, char *args[]) {
 // 	if (argc == 1) {
-// 		printf("Please pass at least 1 .class file to open");
+// 		DEBUG_PRINT("Please pass at least 1 .class file to open");
 // 		exit(EXIT_FAILURE);
 // 	}
 
@@ -51,13 +51,13 @@ int main() {
 // 		FILE *file = fopen(file_name, "r");
 
 // 		if (!file) {
-// 			printf("Could not open '%s': %s\n", file_name, strerror(errno));
+// 			DEBUG_PRINT("Could not open '%s': %s\n", file_name, strerror(errno));
 // 			continue;
 // 		}
 
 // 		// Check the file header for .class nature
 // 		if (!is_class(file)) {
-// 			printf("Skipping '%s': not a valid class file\n", file_name);
+// 			DEBUG_PRINT("Skipping '%s': not a valid class file\n", file_name);
 // 			continue;
 // 		}
 
@@ -68,7 +68,7 @@ int main() {
 
 // 		Class *class = read_class(class_file);
 // 		if (class == NULL) {
-// 			fprintf(stderr, "Parsing aborted; invalid class file contents: %s\n", class_file.file_name);
+// 			fDEBUG_PRINT(stderr, "Parsing aborted; invalid class file contents: %s\n", class_file.file_name);
 // 		} else {
 // 			// yay, valid!
 // 			print_class(stdout, class);

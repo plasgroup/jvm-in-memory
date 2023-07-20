@@ -707,7 +707,7 @@ public class DPUClassFileManager {
         pos = (pos + 0b111) & (~0b111);
 
 
-        Logger.logf("pim:classfile","=============== !Alert pos = %d === total-size = %d ================\n", pos, ds.totalSize);
+        classfileLogger.logf("=============== !Alert pos = %d === total-size = %d ================\n", pos, ds.totalSize);
         if(pos != ds.totalSize) throw new RuntimeException();
         return bs;
     }

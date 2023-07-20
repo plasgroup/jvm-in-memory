@@ -36,7 +36,7 @@ public class DPUManager {
     }
 
     public void dpuExecute(PrintStream printStream) throws DpuException {
-        dpu.exec(System.out);
+        dpu.exec(printStream);
         garbageCollector.readBackHeapSpacePt();
         garbageCollector.readBackMetaSpacePt();
         garbageCollector.parameterBufferPt = DPUGarbageCollector.parameterBufferBeginAddr;
@@ -59,7 +59,7 @@ public class DPUManager {
             i++;
         }
         garbageCollector.pushParameters(paramsConverted);
-        dpuExecute(System.out);
+        dpuExecute(null);
     }
 
     int calcFieldCount(Class c){

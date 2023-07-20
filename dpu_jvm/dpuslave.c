@@ -75,7 +75,7 @@ struct j_class{
 void print_virtual_table(struct j_class __mram_ptr* jc){
     int len = jc->virtual_table_length;
     for(int i = 0; i < len; i++){
-        printf("Vtable #%d, classref = %p, method ref = %p\n", i, 
+        DEBUG_PRINT("Vtable #%d, classref = %p, method ref = %p\n", i, 
         jc->virtual_table[i].classref,
         jc->virtual_table[i].methodref);
     }
@@ -84,33 +84,33 @@ void print_virtual_table(struct j_class __mram_ptr* jc){
 void print_method(struct j_method __mram_ptr* jm){
     uint8_t __mram_ptr* loc = (uint8_t __mram_ptr*) jm;
     int i = 0;
-    printf("-------------------------------------------------------------------\n");
-    printf("-- JMethod Addr = %p\n", jm);
-    printf("-- (%p) total_size = %d\n", loc,*(u4 __mram_ptr*)loc);
+    DEBUG_PRINT("-------------------------------------------------------------------\n");
+    DEBUG_PRINT("-- JMethod Addr = %p\n", jm);
+    DEBUG_PRINT("-- (%p) total_size = %d\n", loc,*(u4 __mram_ptr*)loc);
     loc += 4;
-    printf("-- (%p) access_flags = 0x%04x\n", loc, *(u2 __mram_ptr*)loc);
+    DEBUG_PRINT("-- (%p) access_flags = 0x%04x\n", loc, *(u2 __mram_ptr*)loc);
     loc += 2;
-    printf("-- (%p) params_count = %d\n", loc, *(u2 __mram_ptr*)loc);
+    DEBUG_PRINT("-- (%p) params_count = %d\n", loc, *(u2 __mram_ptr*)loc);
     loc += 2;
-    printf("-- (%p) name_index = %d\n", loc, *(u2 __mram_ptr*)loc);
+    DEBUG_PRINT("-- (%p) name_index = %d\n", loc, *(u2 __mram_ptr*)loc);
     loc += 2;
-    printf("-- (%p) max_stack = %d\n", loc, *(u2 __mram_ptr*)loc);
+    DEBUG_PRINT("-- (%p) max_stack = %d\n", loc, *(u2 __mram_ptr*)loc);
     loc += 2;
-    printf("-- (%p) max_locals = %d\n", loc, *(u2 __mram_ptr*)loc);
+    DEBUG_PRINT("-- (%p) max_locals = %d\n", loc, *(u2 __mram_ptr*)loc);
     loc += 2;
     loc += 2;
-    printf("-- (%p) code_length = %d\n", loc, *(u4 __mram_ptr*)loc);
+    DEBUG_PRINT("-- (%p) code_length = %d\n", loc, *(u4 __mram_ptr*)loc);
     loc += 4;
-    // printf("-- (%p) return_type_ref = %p\n", loc, *(uint32_t __mram_ptr*)loc);
+    // DEBUG_PRINT("-- (%p) return_type_ref = %p\n", loc, *(uint32_t __mram_ptr*)loc);
     // loc += 4;
-    // printf("-- (%p) params_type_list_ref = %p %p\n", loc, *(uint32_t __mram_ptr*)loc, jm->params);
+    // DEBUG_PRINT("-- (%p) params_type_list_ref = %p %p\n", loc, *(uint32_t __mram_ptr*)loc, jm->params);
     // loc += 4;
-    printf("-- (%p) bytecodes_list_ref = %p === %p\n", loc, *(uint32_t __mram_ptr*)loc, jm->bytecodes);
+    DEBUG_PRINT("-- (%p) bytecodes_list_ref = %p === %p\n", loc, *(uint32_t __mram_ptr*)loc, jm->bytecodes);
     loc += 4;
     
     // params
     // for(i = 0; i < jm->params_count; i++){ 
-    //     printf("---- (%p) params_type[%d] = %p\n", loc, i, 
+    //     DEBUG_PRINT("---- (%p) params_type[%d] = %p\n", loc, i, 
     //             *(uint8_t __mram_ptr**)loc);
     //     loc += sizeof(uint8_t*);
     // }
@@ -118,11 +118,11 @@ void print_method(struct j_method __mram_ptr* jm){
     //loc += 4;
     // bytecodes
     for(i = 0; i < jm->code_length; i++){
-        printf("---- (%p) bytecode[%d] = 0x%02x\n", loc, i,
+        DEBUG_PRINT("---- (%p) bytecode[%d] = 0x%02x\n", loc, i,
                 *(uint8_t __mram_ptr*)loc);
         loc++;
     }
-    printf("-------------------------------------------------------------------\n");
+    DEBUG_PRINT("-------------------------------------------------------------------\n");
 }
 
 
@@ -140,10 +140,10 @@ void exec_task_from_host() {
         init_memory();
         inited = 1;
     }
-    printf(RED " --------------------- (IN DPU) -----------------------------\n" RESET);
+    DEBUG_PRINT(RED " --------------------- (IN DPU) -----------------------------\n" RESET);
 
     /* ================================ Object Instance ================================ */
-    printf("meta_space_pt = 0x%x, heap_space_pt = 0x%x, param_pt = 0x%x\n"
+    DEBUG_PRINT("meta_space_pt = 0x%x, heap_space_pt = 0x%x, param_pt = 0x%x\n"
                 , meta_space_pt, mram_heap_pt, params_buffer_pt);
     /* ================================ Write Params ================================ */
 #define PUSH_PARAM(X) \ 
@@ -153,7 +153,7 @@ void exec_task_from_host() {
     fc.func = jm;
     fc.jc = jc;
     fc.params = params_buffer_pt;
-    printf("params_buffer_pt = 0x%x\n", params_buffer_pt);
+    DEBUG_PRINT("params_buffer_pt = 0x%x\n", params_buffer_pt);
     
     print_class(jc);
     print_method(jm);
@@ -163,16 +163,16 @@ void exec_task_from_host() {
     
     interp(fc);
     release_global_memory();
-    printf(RED " --------------------- (END DPU) -----------------------------\n" RESET);
+    DEBUG_PRINT(RED " --------------------- (END DPU) -----------------------------\n" RESET);
 }
 
 
 int main() {
-    printf("%x\n", params_buffer_pt);
-    //printf("class_pt = %p, method_pt = %p\n", exec_class_pt, exec_method_pt);
+    DEBUG_PRINT("%x\n", params_buffer_pt);
+    //DEBUG_PRINT("class_pt = %p, method_pt = %p\n", exec_class_pt, exec_method_pt);
     exec_task_from_host();
     //test_dpu_side();
     // struct j_class __mram_ptr* jc = (struct j_class __mram_ptr*) 0;
-    // printf("total_size = %d\n", m_metaspace[0]);
+    // DEBUG_PRINT("total_size = %d\n", m_metaspace[0]);
     return 0;
 }

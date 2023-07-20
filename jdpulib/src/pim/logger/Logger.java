@@ -33,21 +33,21 @@ public class Logger {
         }
     }
     public void log(String message){
-        log(name, message + "\n");
+        logStatic(name, message + "\n");
     }
 
     public void logf(String format, Object... params){
-        logf(name, format, params);
+        logfStatic(name, format, params);
     }
 
     public void log(int level, String message){
-        log(level, name, message);
+        logStatic(level, name, message);
     }
 
     public void logf(int level, String format, Object... params){
-        logf(level, name, format, params);
+        logfStatic(level, name, format, params);
     }
-    public static void log(int level, String loggerName, String message){
+    public static void logStatic(int level, String loggerName, String message){
         Logger logger = loggerDictionary.get(loggerName);
         if(logger == null){
             logger = getLogger(loggerName);
@@ -58,7 +58,7 @@ public class Logger {
             System.out.println(message);
         }
     }
-    public static void log(int level, String loggerName, Object message){
+    public static void logStatic(int level, String loggerName, Object message){
         Logger logger = loggerDictionary.get(loggerName);
         if(logger == null){
             logger = getLogger(loggerName);
@@ -69,15 +69,15 @@ public class Logger {
             System.out.println(message);
         }
     }
-    public static void logf(int level, String loggerName, String format, Object... params){
-        log(level, loggerName, String.format(format, params));
+    public static void logfStatic(int level, String loggerName, String format, Object... params){
+        logStatic(level, loggerName, String.format(format, params));
     }
 
-    public static void log(String loggerName, String message){
-        log(0, loggerName, message);
+    public static void logStatic(String loggerName, String message){
+        logStatic(0, loggerName, message);
     }
-    public static void logf(String loggerName, String format, Object... params){
-        logf(0, loggerName, format, params);
+    public static void logfStatic(String loggerName, String format, Object... params){
+        logfStatic(0, loggerName, format, params);
     }
 
     public static Logger getLogger(String loggerName){
