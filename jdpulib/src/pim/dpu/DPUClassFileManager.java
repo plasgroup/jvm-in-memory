@@ -2,22 +2,21 @@ package pim.dpu;
 
 import com.upmem.dpu.Dpu;
 import com.upmem.dpu.DpuException;
-import pim.algorithm.DPUTreeNode;
 import pim.logger.Logger;
+import pim.logger.PIMLoggers;
 import pim.utils.BytesUtils;
 import pim.utils.StringUtils;
 import pim.UPMEM;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.CacheRequest;
 import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
 
 public class DPUClassFileManager {
-    static Logger classfileLogger = Logger.getLogger("pim:classfile");
+    static Logger classfileLogger = PIMLoggers.classfileLogger;
     static final int block = 1024;
     int dpuID;
     Dpu dpu;
@@ -48,14 +47,14 @@ public class DPUClassFileManager {
     private DPUJClass loadClassIfNotLoaded(String className) throws ClassNotFoundException, DpuException, IOException {
         className = className.replace(".", "/");
         DPUClassFileCacheItem item = upmem.getDPUManager(dpuID).classCacheManager.getClassStrutCacheLine(className);
-        if(item != null) return item.dpuClassStrut;
+        if(item != null) return item.dpuClassStructure;
         return loadClassForDPU(Class.forName(className));
     }
     private DPUJClass loadClassIfNotLoaded(Class c) throws DpuException, IOException {
         if("".equals(c.getName())) return null;
         String className = c.getName().replace(".", "/");
         DPUClassFileCacheItem item = upmem.getDPUManager(dpuID).classCacheManager.getClassStrutCacheLine(className);
-        if(item != null) return item.dpuClassStrut;
+        if(item != null) return item.dpuClassStructure;
         return loadClassForDPU(c);
     }
 
@@ -77,7 +76,7 @@ public class DPUClassFileManager {
         DPUClassFileCacheItem cl = getLoadedClassRecord(className);
         if(cl != null){
             classfileLogger.logln("- Class " + className + " already loaded in DPU#" + dpuID);
-            return cl.dpuClassStrut;
+            return cl.dpuClassStructure;
         }
 
         // get bytes of class file
@@ -451,7 +450,7 @@ public class DPUClassFileManager {
         }else{
             // get super jc;
             String superClassName = getUTF8(jc, jc.superClassNameIndex);
-            DPUJClass superClassJc = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getClassStrutCacheLine(superClassName).dpuClassStrut;
+            DPUJClass superClassJc = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getClassStrutCacheLine(superClassName).dpuClassStructure;
             if(superClassJc == null) throw new RuntimeException("super class not loaded");
 
             /* copy all methods from super */
@@ -515,10 +514,7 @@ public class DPUClassFileManager {
                            jc.entryItems[i] |= index;
                            break;
                        }else{
-                           if(UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getClassStrutCacheLine(className) == null){
-                               System.out.println();
-                           }
-                           DPUJClass methodReferenceJc = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getClassStrutCacheLine(className).dpuClassStrut;
+                           DPUJClass methodReferenceJc = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getClassStrutCacheLine(className).dpuClassStructure;
 
                            if(methodReferenceJc.superClassNameIndex != 0){
                                className = getUTF8(methodReferenceJc, methodReferenceJc.superClassNameIndex);

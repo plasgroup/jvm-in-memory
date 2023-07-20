@@ -1,7 +1,10 @@
+import com.upmem.dpu.DpuException;
 import pim.UPMEMConfigurator;
 import pim.algorithm.*;
 import pim.UPMEM;
 import pim.logger.Logger;
+
+import java.io.IOException;
 
 
 public class Main {
@@ -24,7 +27,9 @@ public class Main {
         }else if("PIM".equals(experimentType)){
             BSTTester.evaluateLargeBST(totalNodeCount, queryCount);
         }
+
         BSTTester.evaluateLargeBST(totalNodeCount, queryCount);
+
     }
 
 

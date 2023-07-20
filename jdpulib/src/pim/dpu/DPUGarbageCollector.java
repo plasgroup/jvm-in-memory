@@ -3,6 +3,7 @@ package pim.dpu;
 import com.upmem.dpu.Dpu;
 import com.upmem.dpu.DpuException;
 import pim.logger.Logger;
+import pim.logger.PIMLoggers;
 import pim.utils.BytesUtils;
 
 public class DPUGarbageCollector {
@@ -13,11 +14,11 @@ public class DPUGarbageCollector {
     int parameterBufferPt;
     public final static int heapSpaceBeginAddr = 0x000000;
     public final static int metaSpaceBeginAddr = 48 * 1024 * 1024;
-    public final static int parameterBufferBeginAddr = 0x42f8;
+    public final static int parameterBufferBeginAddr = 0x35f8;
     public final static int heapSpaceSize = 48 * 1024 * 1024;
     public final static int metaSpaceSize = 16 * 1024 * 1024;
 
-    Logger gcLogger = Logger.getLogger("pim:gc");
+    static Logger gcLogger = PIMLoggers.gcLogger;
 
     public DPUGarbageCollector(int dpuID, Dpu dpu) throws DpuException {
         this.dpuID = dpuID;

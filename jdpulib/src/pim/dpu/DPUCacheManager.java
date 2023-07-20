@@ -2,6 +2,7 @@ package pim.dpu;
 
 import com.upmem.dpu.Dpu;
 import pim.logger.Logger;
+import pim.logger.PIMLoggers;
 
 import java.util.ArrayList;
 import java.util.Dictionary;
@@ -16,7 +17,7 @@ public class DPUCacheManager {
     DPUMethodCache methodCache;
     DPUFieldCache fieldCache;
 
-    Logger pimCacheLogger = Logger.getLogger("pim:cache");
+    Logger pimCacheLogger = PIMLoggers.pimCacheLogger;
     static class DPUClassCache {
         public Dictionary<String, DPUClassFileCacheItem> cache = new Hashtable<>();
         public List<DPUClassFileCacheItem> dpuClassFileCacheItemList = new ArrayList<>();
@@ -58,9 +59,6 @@ public class DPUCacheManager {
 
         pimCacheLogger.logf("set field: " + fieldName + " of class " + className + " to " + dpu + " v(index) = %x\n", indexInInstance);
     }
-
-
-
     public DPUMethodCacheItem getMethodCacheItem(String classDesc, String methodDesc){
         pimCacheLogger.log("get DPUID = " + dpuID + " method =  " + methodDesc + " of class " + classDesc + " from cache");
         if(methodCache.cache.get(classDesc) == null) return null;
@@ -76,7 +74,6 @@ public class DPUCacheManager {
         dpuMethodCacheItem.mramAddr = marmAddr;
         dpuMethodCacheItem.dpujMethod = dpujMethod;
         this.methodCache.cache.get(classDesc).put(methodDesc, dpuMethodCacheItem);
-
         pimCacheLogger.logf("set method: " + methodDesc + " of class " + classDesc + " to " + dpu + " v = %x\n", marmAddr);
     }
 
@@ -85,27 +82,24 @@ public class DPUCacheManager {
         return dpuClassCache.cache.get(desc);
     }
 
-
-
     public DPUJClass getClassStrut(String desc) {
         DPUClassFileCacheItem classFileCacheLine = getClassStrutCacheLine(desc);
         if(classFileCacheLine == null) return null;
-        return classFileCacheLine.dpuClassStrut;
+        return classFileCacheLine.dpuClassStructure;
     }
 
     public void setClassStrut(String desc, DPUJClass dpuClassStrut, int marmAddr) {
-
         DPUClassFileCacheItem classFileCacheLine = getClassStrutCacheLine(desc);
         if(classFileCacheLine == null) {
             DPUClassFileCacheItem dpuClassFileCacheItem = new DPUClassFileCacheItem();
             dpuClassFileCacheItem.classId = dpuClassCache.cache.size();
             dpuClassFileCacheItem.marmAddr = marmAddr;
-            dpuClassFileCacheItem.dpuClassStrut = dpuClassStrut;
+            dpuClassFileCacheItem.dpuClassStructure = dpuClassStrut;
             dpuClassCache.cache.put(desc, dpuClassFileCacheItem);
             dpuClassCache.dpuClassFileCacheItemList.add(dpuClassFileCacheItem);
         }
 
-        dpuClassCache.cache.get(desc).dpuClassStrut = dpuClassStrut;
+        dpuClassCache.cache.get(desc).dpuClassStructure = dpuClassStrut;
         dpuClassCache.cache.get(desc).marmAddr = marmAddr;
         pimCacheLogger.logf("set " + dpuClassStrut + " to " + dpu + ", key=" + desc + ", val = %x"  + " class name = " + DPUClassFileManager.getUTF8(dpuClassStrut, dpuClassStrut.thisClassNameIndex) + "\n", marmAddr);
     }

@@ -57,7 +57,7 @@ void init_memory() {
     mem.meta_space = m_metaspace;
 
 #ifdef INMEMORY && ARRAY_CACHE
-    printf("%x\n", ARRAY_CACHE_ITEM_COUNT * ARRAY_CACHE_LINE_SIZE);
+    DEBUG_PRINT("%x\n", ARRAY_CACHE_ITEM_COUNT * ARRAY_CACHE_LINE_SIZE);
     for (i = 0; i < ARRAY_CACHE_ITEM_COUNT; i++) {
         inline_array_buffer_cache.cache_lines[i].array = (uint8_t*)0xFFFFFFFF;
     }

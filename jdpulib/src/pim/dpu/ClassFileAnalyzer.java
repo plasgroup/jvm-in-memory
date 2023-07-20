@@ -1,6 +1,7 @@
 package pim.dpu;
 
 import pim.logger.Logger;
+import pim.logger.PIMLoggers;
 import pim.utils.BytesUtils;
 import pim.utils.StringUtils;
 import pim.utils.Tester;
@@ -10,10 +11,8 @@ import java.util.Arrays;
 
 public class ClassFileAnalyzer {
     private DPUJClass jc;
-    static Logger classfileAnalyzerLogger = Logger.getLogger("pim:class-file-analyzer");
-    static {
-        classfileAnalyzerLogger.setEnable(false);
-    }
+    static Logger classfileAnalyzerLogger = PIMLoggers.classfileAnalyzerLogger;
+
     private int constantAreaSize = 0;
     private int filledFields = 0;
     int mOffset = 0;

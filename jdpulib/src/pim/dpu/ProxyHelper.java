@@ -10,7 +10,7 @@ import pim.logger.PIMLoggers;
 public class ProxyHelper {
     static Logger pimProxy = PIMLoggers.pimProxy;
     static UPMEM upmem = UPMEM.getInstance();
-    public static int getIReturnVal(int dpuID){
+    public static int getIReturnValue(int dpuID){
         try {
             int returnVal = upmem.getDPUManager(dpuID).garbageCollector.getReturnVal();
             pimProxy.logf( "pim:proxy","return int = %d\n", returnVal);
@@ -20,7 +20,7 @@ public class ProxyHelper {
         }
     }
 
-    public static IDPUProxyObject getAReturnVal(int dpuID){
+    public static IDPUProxyObject getAReturnValue(int dpuID){
         try {
             int returnVal = upmem.getDPUManager(dpuID).garbageCollector.getReturnVal();
             pimProxy.logf("pim:proxy","return pointer = 0x%x\n", returnVal);

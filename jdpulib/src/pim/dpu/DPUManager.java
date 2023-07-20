@@ -4,6 +4,7 @@ import com.upmem.dpu.Dpu;
 import com.upmem.dpu.DpuException;
 import pim.UPMEM;
 import pim.logger.Logger;
+import pim.logger.PIMLoggers;
 import pim.utils.BytesUtils;
 import pim.IDPUProxyObject;
 
@@ -21,14 +22,7 @@ public class DPUManager {
 
     public Dpu dpu;
 
-
-    static Logger dpuManagerLogger = Logger.getLogger("pim:dpu-manager");
-    static {
-        dpuManagerLogger.setEnable(false);
-    }
-
-
-
+    static Logger dpuManagerLogger = PIMLoggers.dpuManagerLogger;
     public void setClassPt(int classPt) throws DpuException {
         byte[] data = new byte[4];
         BytesUtils.writeU4LittleEndian(data, classPt, 0);
@@ -41,8 +35,8 @@ public class DPUManager {
         dpu.copy("exec_method_pt", data);
     }
 
-    public void dpuExec(PrintStream printStream) throws DpuException {
-        dpu.exec();
+    public void dpuExecute(PrintStream printStream) throws DpuException {
+        dpu.exec(System.out);
         garbageCollector.readBackHeapSpacePt();
         garbageCollector.readBackMetaSpacePt();
         garbageCollector.parameterBufferPt = DPUGarbageCollector.parameterBufferBeginAddr;
@@ -65,7 +59,7 @@ public class DPUManager {
             i++;
         }
         garbageCollector.pushParameters(paramsConverted);
-        dpuExec(System.out);
+        dpuExecute(System.out);
     }
 
     int calcFieldCount(Class c){
@@ -75,7 +69,7 @@ public class DPUManager {
         return calcFieldCount(c.getSuperclass()) + c.getDeclaredFields().length;
     }
 
-    String genInitDesc(Class c, Object[] params){
+    String generateInitializationDescriptor(Class c, Object[] params){
         String desc = "<init>:(";
         for(Object obj : params){
             if(obj instanceof Integer){
@@ -99,7 +93,7 @@ public class DPUManager {
         }
         classAddr = classCacheManager.getClassStrutCacheLine(c.getName().replace(".","/")).marmAddr;
         dpuManagerLogger.logln(" * Get Class Addr = " + classAddr);
-        String initMethodDesc = genInitDesc(c, params);
+        String initMethodDesc = generateInitializationDescriptor(c, params);
 
         initMethodAddr = classCacheManager
                 .getMethodCacheItem(c.getName().replace(".", "/"), initMethodDesc).mramAddr;

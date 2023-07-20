@@ -1,16 +1,26 @@
 package pim.logger;
 
 public class PIMLoggers {
-    public static Logger pimProxy = AppendLogger("pim:proxy");
-    public static Logger cpuTreeNodeLogger = AppendLogger("tree:cpu-node");
-    public static Logger bstTestLogger = AppendLogger("bst:testing");
-    public static Logger bstBuildingLogger = AppendLogger("bst:building");
+    public static Logger pimProxy = appendLogger("pim:proxy");
+    public static Logger cpuTreeNodeLogger = appendLogger("tree:cpu-node");
+    public static Logger bstTestLogger = appendLogger("bst:testing");
+    public static Logger bstBuildingLogger = appendLogger("bst:building");
+    public static Logger classfileAnalyzerLogger = appendLogger("pim:class-file-analyzer");
+    public static Logger pimCacheLogger = appendLogger("pim:cache");
+    public static Logger pimManagerLogger = appendLogger("pim:pim-manager");
+    public static Logger dpuManagerLogger = appendLogger("pim:dpu-manager");
+    public static Logger gcLogger = appendLogger("pim:gc");
+
+    public static Logger classfileLogger = appendLogger("pim:classfile");
     static{
-        disableLoggers( "tree:cpu-node", "bst:testing", "bst:building");
+        disableLoggers( "tree:cpu-node", "bst:testing", "bst:building",
+                "pim:class-file-analyzer",   "pim:cache", "pim:pim-manager", "pim:dpu-manager",
+                "pim:gc", "pim:classfile"
+                );
         Logger.disableAllBeginWith("pim");
     }
 
-    private static Logger AppendLogger(String loggerName){
+    private static Logger appendLogger(String loggerName){
         Logger logger = Logger.getLogger(loggerName);
         return logger;
     }

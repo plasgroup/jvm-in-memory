@@ -34,10 +34,16 @@
 
 #pragma region Eval_Stack
 
+#if DEBUG_PRINT_ENABLE==1
+#define DEBUG_PRINT(format, ...) printf(format, ##__VA_ARGS__);
+#else
+#define DEBUG_PRINT(format, ...) ;
+#endif
+
 #ifdef DEBUG_STACK
 extern int debug_eval;
-#define LOG_STACK_PUSH(X) printf(RED "\t[Push %d]\n" RESET, X);
-#define LOG_STACK_POP(X) printf(RED "\t[Pop %d]\n" RESET, X);
+#define LOG_STACK_PUSH(X) DEBUG_PRINT(RED "\t[Push %d]\n" RESET, X);
+#define LOG_STACK_POP(X) DEBUG_PRINT(RED "\t[Pop %d]\n" RESET, X);
 #endif
 
 #define INC_EVAL_STACK current_sp += SLOTSIZE;
@@ -64,7 +70,7 @@ extern int debug_eval;
 #define PUSH_EVAL_STACK(X) \
       REF_EVAL_STACK_CURRENT_SLOT = X; \
       INC_EVAL_STACK \
-      printf(">> new sp = %p\n", current_sp);
+      DEBUG_PRINT(">> new sp = %p\n", current_sp);
 #endif
 
 
@@ -81,7 +87,7 @@ extern int debug_eval;
 #define POP_EVAL_STACK(X) \
     X = EVAL_STACK_TOPSLOT_VALUE; \
     DESC_EVAL_STACK \
-    printf(">> new sp = %p\n", current_sp);
+    DEBUG_PRINT(">> new sp = %p\n", current_sp);
     
 #endif
 

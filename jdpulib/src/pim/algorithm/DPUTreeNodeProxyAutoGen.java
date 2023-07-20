@@ -1,12 +1,9 @@
 package pim.algorithm;
 
-import com.upmem.dpu.DpuException;
 import pim.IDPUProxyObject;
 import pim.UPMEM;
 import pim.dpu.DPUCacheManager;
-import pim.dpu.DPUJClass;
 import pim.dpu.DPUObjectHandler;
-import pim.dpu.ProxyHelper;
 import pim.logger.Logger;
 import pim.logger.PIMLoggers;
 
@@ -34,13 +31,13 @@ public class DPUTreeNodeProxyAutoGen extends DPUTreeNode implements IDPUProxyObj
     @Override
     public TreeNode getLeft() {
         invokeMethod(objectHandler,"pim/algorithm/TreeNode", "getLeft:()Lpim/algorithm/TreeNode;", new Object[]{});
-        return (TreeNode) getAReturnVal(getDpuID());
+        return (TreeNode) getAReturnValue(getDpuID());
     }
 
     @Override
     public TreeNode getRight() {
         invokeMethod(objectHandler, "pim/algorithm/TreeNode", "getRight:()Lpim/algorithm/TreeNode;", new Object[]{});
-        return (TreeNode) getAReturnVal(getDpuID());
+        return (TreeNode) getAReturnValue(getDpuID());
     }
 
     @Override
@@ -66,20 +63,20 @@ public class DPUTreeNodeProxyAutoGen extends DPUTreeNode implements IDPUProxyObj
     @Override
     public int getVal() {
         invokeMethod(objectHandler,"pim/algorithm/TreeNode", "getVal:()I", new Object[]{});
-        return getIReturnVal(getDpuID());
+        return getIReturnValue(getDpuID());
     }
 
     @Override
     public TreeNode createNode(int k, int v){
 
         invokeMethod(objectHandler,"pim/algorithm/DPUTreeNode", "createNode:(II)Lpim/algorithm/TreeNode;", new Object[]{k, v});
-        return (TreeNode) getAReturnVal(getDpuID());
+        return (TreeNode) getAReturnValue(getDpuID());
     }
 
     @Override
     public int getKey() {
         invokeMethod(objectHandler,"pim/algorithm/TreeNode", "getKey:()I", new Object[]{});
-        int retVal = getIReturnVal(getDpuID());
+        int retVal = getIReturnValue(getDpuID());
         return retVal;
     }
 
@@ -94,7 +91,7 @@ public class DPUTreeNodeProxyAutoGen extends DPUTreeNode implements IDPUProxyObj
     @Override
     public int search(int k) {
         invokeMethod(objectHandler, "pim/algorithm/TreeNode", "search:(I)I", new Object[]{k});
-        int retVal = getIReturnVal(getDpuID());
+        int retVal = getIReturnValue(getDpuID());
         return retVal;
     }
 }

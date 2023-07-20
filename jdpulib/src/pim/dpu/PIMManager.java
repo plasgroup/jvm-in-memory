@@ -5,6 +5,7 @@ import com.upmem.dpu.Dpu;
 import com.upmem.dpu.DpuException;
 import com.upmem.dpu.DpuSystem;
 import pim.logger.Logger;
+import pim.logger.PIMLoggers;
 
 
 public class PIMManager {
@@ -14,11 +15,8 @@ public class PIMManager {
     public DPUManager getDPUManager(int dpuID){
         return dpuManagers.get(dpuID);
     }
+    static Logger pimManagerLogger = PIMLoggers.pimManagerLogger;
 
-    static Logger pimManagerLogger = Logger.getLogger("pim:pim-manager");
-    static{
-        pimManagerLogger.setEnable(false);
-    }
     public static PIMManager init(int dpuInUse) throws DpuException {
         if (instance == null){
             synchronized (dpuManagers){
