@@ -95,10 +95,10 @@ struct memory {
 };
 
 #define WRAM_SIZE (8 * 1024)
-#define MRAM_HEAP_SIZE (16 * 1024 * 1024)
+#define MRAM_HEAP_SIZE (48 * 1024 * 1024)
 #define PARAMS_BUFFER_SIZE (4 * 1024)
 #define WRAM_DATA_SPACE_SIZE (4 * 1024)
-#define META_SPACE_SIZE (16 * 1024 * 1024)
+#define META_SPACE_SIZE (8 * 1024 * 1024)
 
 
 extern struct memory mem;

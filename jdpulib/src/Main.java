@@ -40,7 +40,7 @@ public class Main {
         }else if("PIM".equals(experimentType)){
             BSTTester.evaluateLargeBST(totalNodeCount, queryCount);
         }
-        BSTTester.evaluateLargeBST(2000000, queryCount);
+
     }
 
 

@@ -71,9 +71,6 @@ void init_memory() {
     stack_top = (uint8_t*)mem.wram;
     //params_buffer_pt = params_buffer;
 
-
-
-    
 }
 
 
