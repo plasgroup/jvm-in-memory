@@ -143,10 +143,10 @@ public class TreeWriter {
             heapPoint += 24;
             nodeInDPU++;
         }
+
         if(nodeInCPU + nodeInDPU != totalTreeNodeCount){
             throw new RuntimeException();
         }
-
 
         // repair
         queue.add(new TreeNode[]{null, root});

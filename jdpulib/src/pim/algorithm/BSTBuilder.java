@@ -68,7 +68,7 @@ public class BSTBuilder {
         return root;
     }
 
-    public static TreeNode buildLargePIMTree(ArrayList<Pair<Integer, Integer>> pairs){
+    public static TreeNode buildLargePIMTree(ArrayList<Pair<Integer, Integer>> pairs, int totalNodeCount, int nodeCountInCPU){
         try {
             UPMEM.getInstance().getDPUManager(0).createObject(DPUTreeNode.class, new Object[]{0, 0});
         } catch (DpuException e) {
@@ -81,7 +81,7 @@ public class BSTBuilder {
         int dpuClassAddress = classCacheManager.getClassStrutCacheLine("pim/algorithm/DPUTreeNode").marmAddr;
 
         TreeNode root = BSTBuilder.buildCPUTree(pairs);
-        convertCPUTreeToPIMTree(root, 2000, 10, dpuClassAddress);
+        convertCPUTreeToPIMTree(root, totalNodeCount, nodeCountInCPU, dpuClassAddress);
         verifyLargePIMTree(root);
         try {
             UPMEM.getInstance().getDPUManager(0).dpu.copy("m_heapspace", heapMemory, 0);

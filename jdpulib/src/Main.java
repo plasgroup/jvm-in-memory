@@ -38,8 +38,9 @@ public class Main {
         if("CPU".equals(experimentType)){
             BSTTester.evaluateCPU(totalNodeCount, queryCount);
         }else if("PIM".equals(experimentType)){
-            BSTTester.testLargeBST(totalNodeCount, queryCount);
+            BSTTester.evaluateLargeBST(totalNodeCount, queryCount);
         }
+        BSTTester.evaluateLargeBST(2000000, queryCount);
     }
 
 
