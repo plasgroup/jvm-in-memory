@@ -34,7 +34,7 @@ public class Main {
             queryCount = Integer.parseInt(args[1]);
         }
         BSTTester.evaluateCPU(totalNodeCount, queryCount);
-        //BSTTester.testLargeBST();
+        BSTTester.testLargeBST(totalNodeCount, queryCount);
     }
 
 

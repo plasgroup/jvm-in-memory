@@ -69,9 +69,26 @@ public class BSTTester {
         }
         return s;
     }
-    public static void testLargeBST(){
-        ArrayList<BSTBuilder.Pair<Integer, Integer>> pairs = new IntIntValuePairGenerator(100000)
-                .genPairs(2000);
+
+
+
+    public static void evaluateLargeBST(int totalNodeCount, int queryCount){
+        ArrayList<BSTBuilder.Pair<Integer, Integer>> pairs = new IntIntValuePairGenerator(Integer.MAX_VALUE)
+                .genPairs(totalNodeCount);
+        TreeNode root = buildLargePIMTree(pairs);
+        int i = 0;
+        int s = 0;
+        while(i < queryCount){
+            int query = random.nextInt(totalNodeCount);
+            int qk = pairs.get(query).getKey();
+            int v = root.search(qk);
+            s += v;
+            i++;
+        }
+    }
+    public static void testLargeBST(int totalNodeCount, int queryCount){
+        ArrayList<BSTBuilder.Pair<Integer, Integer>> pairs = new IntIntValuePairGenerator(totalNodeCount)
+                .genPairs(queryCount);
         TreeNode root = buildLargePIMTree(pairs);
         int correct = 0;
 
@@ -90,22 +107,7 @@ public class BSTTester {
 
         System.out.printf(" == Test finished. Correct %d/%d == \n", correct, pairs.size());
     }
-    public static int evaluateDPU(){
-        ArrayList<BSTBuilder.Pair<Integer, Integer>> pairs =
-                new IntIntValuePairGenerator(100000).genPairs(20000);
-        TreeNode root = BSTBuilder.buildPIMTree(pairs);
 
-        int i = 0;
-        int s = 0;
-        while(i < 1000){
-            int query = random.nextInt(20000);
-            int qk = pairs.get(query).getKey();
-            int v = root.search(qk);
-            s += v;
-            i++;
-        }
-        return 0;
-    }
 
 
 
