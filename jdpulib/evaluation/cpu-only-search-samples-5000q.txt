@@ -1,0 +1,8 @@
+            java  4246   417.262596:       1072                  bus-cycles:      7fe628f541c4 tsearch+0x134 (/usr/lib/x86_64-linux-gnu/libc-2.28.so)
+ C1 CompilerThre  4265   417.379085:      32386                      cycles:      7fe6283807ca CodeHeap::search_freelist+0x7a (/home/upmem0054/hwanhong/jdk-17.0.1/lib/server/libjvm.so)
+ C1 CompilerThre  4259   417.435631:      39124                      cycles:      7fe628380758 CodeHeap::search_freelist+0x8 (/home/upmem0054/hwanhong/jdk-17.0.1/lib/server/libjvm.so)
+ C2 CompilerThre  4280   418.232408:        667            cache-references:      7fe6283ba289 IfNode::search_identical+0x39 (/home/upmem0054/hwanhong/jdk-17.0.1/lib/server/libjvm.so)
+ C2 CompilerThre  4279   418.233241:        922            cache-references:      7fe6283807ca CodeHeap::search_freelist+0x7a (/home/upmem0054/hwanhong/jdk-17.0.1/lib/server/libjvm.so)
+ C2 CompilerThre  4279   418.233242:      41442                      cycles:      7fe6283807ca CodeHeap::search_freelist+0x7a (/home/upmem0054/hwanhong/jdk-17.0.1/lib/server/libjvm.so)
+ C2 CompilerThre  4278   418.235988:       1127                  bus-cycles:      7fe6283ba289 IfNode::search_identical+0x39 (/home/upmem0054/hwanhong/jdk-17.0.1/lib/server/libjvm.so)
+            java  4246   421.637357:     100003     mem_load_retired.l2_hit:      7fe609f76fb2 int pim.algorithm.TreeNode.search(int)+0x532 (/tmp/perf-4245.map)
