@@ -1,0 +1,18 @@
+
+ Performance counter stats for 'system wide':
+
+         10,140.12 MiB  uncore_imc_0/cas_count_read/                                   
+          1,493.84 MiB  uncore_imc_1/cas_count_read/                                   
+              0.00 MiB  uncore_imc_2/cas_count_read/                                   
+              0.00 MiB  uncore_imc_3/cas_count_read/                                   
+              0.00 MiB  uncore_imc_4/cas_count_read/                                   
+              0.00 MiB  uncore_imc_5/cas_count_read/                                   
+          8,288.31 MiB  uncore_imc_0/cas_count_write/                                   
+            586.67 MiB  uncore_imc_1/cas_count_write/                                   
+              0.00 MiB  uncore_imc_2/cas_count_write/                                   
+              0.00 MiB  uncore_imc_3/cas_count_write/                                   
+              0.00 MiB  uncore_imc_4/cas_count_write/                                   
+              0.00 MiB  uncore_imc_5/cas_count_write/                                   
+
+      12.993076239 seconds time elapsed
+
