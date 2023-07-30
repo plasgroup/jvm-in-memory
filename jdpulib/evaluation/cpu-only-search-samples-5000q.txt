@@ -1,0 +1,5 @@
+ C1 CompilerThre 15157  3141.522374:       9059                                                        L1-dcache-stores:      7f89d4c39750 CodeHeap::search_freelist+0x0 (/home/upmem0054/hwanhong/jdk-17.0.1/lib/server/libjvm.so)
+ C2 CompilerThre 15203  3142.766182:       6513                                                        L1-dcache-stores:      7f89d4c73293 IfNode::search_identical+0x43 (/home/upmem0054/hwanhong/jdk-17.0.1/lib/server/libjvm.so)
+ C2 CompilerThre 15206  3143.250529:          1                                                        LLC-store-misses:      7f89d4c397ca CodeHeap::search_freelist+0x7a (/home/upmem0054/hwanhong/jdk-17.0.1/lib/server/libjvm.so)
+ C2 CompilerThre 15206  3143.250633:          1                                                        LLC-store-misses:      7f89d4c39887 CodeHeap::search_freelist+0x137 (/home/upmem0054/hwanhong/jdk-17.0.1/lib/server/libjvm.so)
+ C2 CompilerThre 15206  3143.257437:       9425                                                              mem-stores:      7f89d4c73286 IfNode::search_identical+0x36 (/home/upmem0054/hwanhong/jdk-17.0.1/lib/server/libjvm.so)
