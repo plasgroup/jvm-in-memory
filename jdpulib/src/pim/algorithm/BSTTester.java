@@ -14,10 +14,10 @@ import java.util.Random;
 import static pim.algorithm.BSTBuilder.buildLargePIMTree;
 
 public class BSTTester {
-    static Random random = new Random();
 
     static List<Integer> keys = readArrayList();
 
+    public static boolean noSearch = false;
     public static ArrayList<Integer> readArrayList(){
         ArrayList<Integer> resultList = new ArrayList<>();
         try {
@@ -79,6 +79,7 @@ public class BSTTester {
     private static int queryInTree(int queryCount, TreeNode root) {
         int i = 0;
         int s = 0;
+        if(noSearch) return -1;
         while(i < queryCount){
             int qk = keys.get(i);
             int v = root.search(qk);

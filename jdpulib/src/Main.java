@@ -85,6 +85,9 @@ public class Main {
             experimentType = args[0];
             totalNodeCount = Integer.parseInt(args[1]);
             queryCount = Integer.parseInt(args[2]);
+            if(args.length >= 4 && "NO_SEARCH".equals(args[3])){
+                BSTTester.noSearch = true;
+            }
         }else{
             BSTTester.evaluateLargeBST(totalNodeCount, queryCount);
         }
