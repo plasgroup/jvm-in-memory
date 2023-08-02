@@ -61,28 +61,22 @@ public class BSTTester {
 
     public static int evaluateCPU(int totalNodeCount, int queriesCount){
         ArrayList<BSTBuilder.Pair<Integer, Integer>> pairs =
-                IntIntValuePairGenerator.generateFromFile("key_values-" + totalNodeCount + ".txt");
-
+                IntIntValuePairGenerator.fromFile("key_values-" + totalNodeCount + ".txt");
         TreeNode root = BSTBuilder.buildCPUTree(pairs);
-        int i = 0;
-        int s = 0;
-        while(i < queriesCount){
-            int qk = keys.get(i);
-            int v = root.search(qk);
-            s += v;
-            i++;
-        }
-        return s;
+
+        return queryInTree(queriesCount, root);
     }
 
-    public static int dispatchCount = 0;
 
-    public static void evaluateLargeBST(int totalNodeCount, int queryCount){
+    public static int evaluateLargeBST(int totalNodeCount, int queryCount){
         ArrayList<BSTBuilder.Pair<Integer, Integer>> pairs =
-                IntIntValuePairGenerator.generateFromFile("key_values-" + totalNodeCount + ".txt");
-
+                IntIntValuePairGenerator.fromFile("key_values-" + totalNodeCount + ".txt");
         TreeNode root = buildLargePIMTree(pairs);
 
+        return queryInTree(queryCount, root);
+    }
+
+    private static int queryInTree(int queryCount, TreeNode root) {
         int i = 0;
         int s = 0;
         while(i < queryCount){
@@ -91,7 +85,9 @@ public class BSTTester {
             s += v;
             i++;
         }
+        return s;
     }
+
     public static void testLargeBST(int totalNodeCount, int queryCount){
         ArrayList<BSTBuilder.Pair<Integer, Integer>> pairs = new IntIntValuePairGenerator(0, totalNodeCount)
                 .generatePairs(queryCount);

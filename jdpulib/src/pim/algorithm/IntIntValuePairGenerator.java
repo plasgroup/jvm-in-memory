@@ -2,9 +2,7 @@ package pim.algorithm;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 public class IntIntValuePairGenerator extends BSTBuilder.BaseKeyValuePairGenerator<Integer, Integer> {
     static Random random = new Random();
@@ -17,7 +15,7 @@ public class IntIntValuePairGenerator extends BSTBuilder.BaseKeyValuePairGenerat
     }
 
 
-    public static ArrayList<BSTBuilder.Pair<Integer, Integer>> generateFromFile(String filePath) {
+    public static ArrayList<BSTBuilder.Pair<Integer, Integer>> fromFile(String filePath) {
         try {
             BufferedReader br = new BufferedReader(new FileReader(filePath));
             ArrayList<BSTBuilder.Pair<Integer, Integer>> pairs = new ArrayList<BSTBuilder.Pair<Integer, Integer>>();
