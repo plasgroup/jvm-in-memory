@@ -19,6 +19,7 @@ public class TreeWriter {
     final static int VALUE_POS = 1;
     final static int LEFT_POS = 2;
     final static int RIGHT_POS = 3;
+    final static int DPU_MAX_NODES_COUNT = 2000000;
 
     static void writeKey(int key, byte[] heap, int instanceAddress){
         BytesUtils.writeU4LittleEndian(heap, key, instanceAddress + 8 + 4 * KEY_POS);
@@ -88,16 +89,13 @@ public class TreeWriter {
         queue.add(new TreeNode[]{null, point});
 
         int currentLayer = 0;
-
         int cpuNode = 0;
-
 
         while(currentLayer < cpuLayerCount){
             int size = queue.size();
             for(int i = 0; i < size; i++){
                 TreeNode[] record = queue.remove();
                 TreeNode thisNode = record[1];
-                TreeNode parent = record[0];
                 if(thisNode.left != null) queue.add(new TreeNode[]{thisNode, thisNode.left});
                 if(thisNode.right != null) queue.add(new TreeNode[]{thisNode, thisNode.right});
 
@@ -108,7 +106,7 @@ public class TreeWriter {
         System.out.println(cpuNode + " nodes in CPU");
 
         //now the nodes in queue are all 18 layers'
-        heapMemory = new byte[2000000 * INSTANCE_SIZE + 8];
+        heapMemory = new byte[DPU_MAX_NODES_COUNT * INSTANCE_SIZE + 8];
         int currentChildrenCount = 0;
         int dpuID = 0;
         int currentHeapAddr = DPUGarbageCollector.heapSpaceBeginAddr + 8;
@@ -117,7 +115,7 @@ public class TreeWriter {
             TreeNode thisNode = record[1];
             TreeNode parent = record[0];
             int c = getChildrenCount(thisNode);
-            while(c > 2000000) {
+            while(c > DPU_MAX_NODES_COUNT) {
                 if(thisNode.left != null){
                     parent = thisNode;
                     thisNode = thisNode.left;
@@ -129,7 +127,7 @@ public class TreeWriter {
             }
             int classAddress = UPMEM.getInstance().getDPUManager(dpuID)
                     .classCacheManager.getClassStrutCacheLine("pim/algorithm/DPUTreeNode").marmAddr;
-            if(currentChildrenCount + c < 2000000){
+            if(currentChildrenCount + c < DPU_MAX_NODES_COUNT){
                 currentChildrenCount += c;
                 DPUTreeNodeProxyAutoGen dpuTreeNodeProxyAutoGen =
                         new DPUTreeNodeProxyAutoGen(thisNode.key, thisNode.val);
@@ -148,26 +146,8 @@ public class TreeWriter {
                     parent.right = dpuTreeNodeProxyAutoGen;
                 }
             }else{
-//                File outputFile = new File("image-dpu" + dpuID +".img");
-//               try (FileOutputStream outputStream = new FileOutputStream(outputFile)) {
-//                    outputStream.write(heapMemory);
-//                } catch (FileNotFoundException e) {
-//                    throw new RuntimeException(e);
-//                } catch (IOException e) {
-//                    throw new RuntimeException(e);
-//                }
-//
-//                try (FileInputStream inputStream = new FileInputStream(outputFile)) {
                 System.out.println("write image to DPU " + dpuID + " children count = " + currentChildrenCount + " heap_pt_current = " + currentHeapAddr);
-
                 writeHeapImageToDPU(dpuID);
-//                } catch (FileNotFoundException e) {
-//                    throw new RuntimeException(e);
-//                } catch (IOException e) {
-//                    throw new RuntimeException(e);
-//                } catch (DpuException e) {
-//                    throw new RuntimeException(e);
-//                }
                 dpuID++;
                 currentHeapAddr = DPUGarbageCollector.heapSpaceBeginAddr + 8;
                 Arrays.fill(heapMemory, (byte) 0);
@@ -178,17 +158,7 @@ public class TreeWriter {
         }
         if(currentHeapAddr != 8){
             System.out.println("write image to DPU " + dpuID + " children count = " + currentChildrenCount + " heap_pt_current = " + currentHeapAddr);
-
-//            File outputFile = new File("image-dpu" + dpuID +".img");
             writeHeapImageToDPU(dpuID);
-//            } catch (FileNotFoundException e) {
-//                throw new RuntimeException(e);
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            } catch (DpuException e) {
-//                throw new RuntimeException(e);
-//            }
-
         }
     }
 
@@ -203,27 +173,6 @@ public class TreeWriter {
         }
     }
 
-    static void serializeCPUTree(OutputStreamWriter oos, TreeNode node) throws IOException {
-        if (node == null) {
-            oos.write("#");
-            return;
-        }
-        // property
-        // (t, k, v, l, r)
-        String v = "";
-        if(node instanceof CPUTreeNode){
-            v += '0';
-        }else{
-            v += '1';
-        }
-        v += "," + node.key + "," + node.val + ");";
-        oos.write(v);
-        serializeCPUTree(oos, node.left);
-        oos.write(";");
-        serializeCPUTree(oos, node.right);
-
-
-    }
     private static int[] writeSubTreeBytes(int currentHeapAddr, TreeNode thisNode, byte[] heapMemory, int classAddress) {
         if(thisNode == null) return new int[]{currentHeapAddr, 0, 0};
         // write this Node;
