@@ -17,7 +17,7 @@ import java.lang.reflect.Field;
  * **/
 public class UPMEM {
     /* Configurations Fields */
-    public static final int TOTAL_DPU_COUNT = 64;
+    public static final int TOTAL_DPU_COUNT = 256;
     public static final int TOTAL_HARDWARE_THREADS_COUNT = 24;
     public static int dpuInUse = TOTAL_DPU_COUNT;
     public static int perDPUThreadsInUse = TOTAL_HARDWARE_THREADS_COUNT;

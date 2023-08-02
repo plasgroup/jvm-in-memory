@@ -13,7 +13,7 @@ public class ProxyHelper {
     public static int getIReturnValue(int dpuID){
         try {
             int returnVal = upmem.getDPUManager(dpuID).garbageCollector.getReturnVal();
-            pimProxy.logf( "pim:proxy","return int = %d\n", returnVal);
+            // pimProxy.logf( "pim:proxy","return int = %d\n", returnVal);
             return returnVal;
         } catch (DpuException e) {
             throw new RuntimeException(e);
@@ -31,13 +31,13 @@ public class ProxyHelper {
         }
     }
 
-    public static void invokeMethod(DPUObjectHandler objectHandler, String className, String methodDescriptor, Object[] params){
-        pimProxy.logf("--------- Invoke proxy %s handler = " + objectHandler + " ------------\n", methodDescriptor.split(":")[0]);
-        pimProxy.logf(" - DPUID = " + objectHandler.dpuID);
+    public static void invokeMethod(DPUObjectHandler objectHandler, String className, String methodDescriptor, Object... params){
+        // pimProxy.logf("--------- Invoke proxy %s handler = " + objectHandler + " ------------\n", methodDescriptor.split(":")[0]);
+        // pimProxy.logf(" - DPUID = " + objectHandler.dpuID);
         DPUCacheManager cm = upmem.getDPUManager(objectHandler.dpuID).classCacheManager;
         int methodMRAMAddr = cm.getMethodCacheItem(className, methodDescriptor).mramAddr;
         int classMRAMAddr = cm.getClassStrutCacheLine(className).marmAddr;
-        pimProxy.logf("pim:proxy","class mram addr = 0x%x, method mram addr = 0x%x, instance addr = 0x%x\n", classMRAMAddr, methodMRAMAddr, objectHandler.address);
+        // pimProxy.logf("pim:proxy: class mram addr = 0x%x, method mram addr = 0x%x, instance addr = 0x%x\n", classMRAMAddr, methodMRAMAddr, objectHandler.address);
         try {
             upmem.getDPUManager(objectHandler.dpuID).callNonstaticMethod(classMRAMAddr, methodMRAMAddr, objectHandler.address, params);
         } catch (DpuException e) {

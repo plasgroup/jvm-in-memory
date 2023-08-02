@@ -1,9 +1,12 @@
 package pim.algorithm;
 
+import com.upmem.dpu.DpuException;
+import pim.UPMEM;
 import pim.dpu.DPUGarbageCollector;
-import pim.dpu.DPUObjectHandler;
+import pim.dpu.DPUJVMMemSpaceKind;
 import pim.utils.BytesUtils;
 
+import java.io.*;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Queue;
@@ -77,94 +80,193 @@ public class TreeWriter {
             }
         }
     }
-    static void convertCPUTreeToPIMTree(TreeNode root, int totalTreeNodeCount, int nodeAmountInCPU, int classAddress){
-        int nodeInDPU = 0;
-        int nodeInCPU = 0;
-        int heapPoint = DPUGarbageCollector.heapSpaceBeginAddr + 8;
-
-        heapMemory = new byte[(totalTreeNodeCount - nodeAmountInCPU) * INSTANCE_SIZE + 8];
+    static void convertCPUTreeToPIMTree(TreeNode root, int cpuLayerCount){
         TreeNode point = root;
         Queue<TreeNode[]> queue = new ArrayDeque<>();
         queue.add(new TreeNode[]{null, point});
 
+        int currentLayer = 0;
+
+        int cpuNode = 0;
+        // first 17 layers are all CPU node builds.
+        while(currentLayer < cpuLayerCount){
+            int size = queue.size();
+            for(int i = 0; i < size; i++){
+                TreeNode[] record = queue.remove();
+                TreeNode thisNode = record[1];
+                TreeNode parent = record[0];
+                if(thisNode.left != null) queue.add(new TreeNode[]{thisNode, thisNode.left});
+                if(thisNode.right != null) queue.add(new TreeNode[]{thisNode, thisNode.right});
+
+                cpuNode ++;
+            }
+            currentLayer ++;
+        }
+        System.out.println(cpuNode + " nodes in CPU");
+
+        //now the nodes in queue are all 18 layers'
+        heapMemory = new byte[2000000 * INSTANCE_SIZE + 8];
+        int currentChildrenCount = 0;
+        int dpuID = 0;
+        int currentHeapAddr = DPUGarbageCollector.heapSpaceBeginAddr + 8;
         while(queue.size() > 0){
             TreeNode[] record = queue.remove();
             TreeNode thisNode = record[1];
             TreeNode parent = record[0];
-            if(thisNode.left != null) queue.add(new TreeNode[]{thisNode, thisNode.left});
-            if(thisNode.right != null) queue.add(new TreeNode[]{thisNode, thisNode.right});
-
-            deque.add(thisNode.key);
-
-            // if currently nodes in DPU not reach the limitation
-            if(nodeInCPU < nodeAmountInCPU){
-                nodeInCPU++;
-                continue;
-            }
-
-            // convert to DPUTreeNodeProxy
-            DPUTreeNode dpuNodeConverted =  new DPUTreeNodeProxyAutoGen(thisNode.key, thisNode.val);
-            ((DPUTreeNodeProxyAutoGen)dpuNodeConverted).objectHandler = new DPUObjectHandler(0, heapPoint);
-
-            dpuNodeConverted.left = thisNode.left;
-            dpuNodeConverted.right = thisNode.right;
-            dpuNodeConverted.key = heapPoint; // set dpu MRAM pt in key field
-
-            writeKey(thisNode.key, heapMemory, heapPoint); // write key
-            writeValue(thisNode.val, heapMemory, heapPoint); // write value
-            writeClassReference(classAddress, heapMemory, heapPoint);
-
-            // mark as forward
-            thisNode.key = -1;
-            thisNode.val = -1;
-            // store forward reference in left field
-            thisNode.left = dpuNodeConverted;
-
-            if(parent == null) continue;
-
-            // if the parent node already be forward
-            if(parent.key == -1 && parent.val == -1){
-                // write this node to the current real parent node's left/right field
-                DPUTreeNode realNode = (DPUTreeNode) parent.left;
-                int parentAddress = realNode.key;
-                if(realNode.left == thisNode){
-                    realNode.left = dpuNodeConverted;
-                    writeLeft(heapPoint, heapMemory, parentAddress);
+            int c = getChildrenCount(thisNode);
+            while(c > 2000000) {
+                if(thisNode.left != null){
+                    parent = thisNode;
+                    thisNode = thisNode.left;
+                }else{
+                    parent = thisNode;
+                    thisNode = thisNode.right;
                 }
+                c = getChildrenCount(thisNode);
+            }
+            int classAddress = UPMEM.getInstance().getDPUManager(dpuID)
+                    .classCacheManager.getClassStrutCacheLine("pim/algorithm/DPUTreeNode").marmAddr;
+            if(currentChildrenCount + c < 2000000){
+                currentChildrenCount += c;
+                DPUTreeNodeProxyAutoGen dpuTreeNodeProxyAutoGen =
+                        new DPUTreeNodeProxyAutoGen(thisNode.key, thisNode.val);
 
-                if(realNode.right == thisNode){
-                    realNode.right = dpuNodeConverted;
-                   writeRight(heapPoint, heapMemory, parentAddress);
+                dpuTreeNodeProxyAutoGen.objectHandler.dpuID = dpuID;
+                dpuTreeNodeProxyAutoGen.objectHandler.address = currentHeapAddr;
+
+                // write heap
+                int[] res = writeSubTreeBytes(currentHeapAddr, thisNode, heapMemory, classAddress);
+                currentHeapAddr = res[0];
+
+
+                if(parent.left == thisNode){
+                    parent.left = dpuTreeNodeProxyAutoGen;
+                }else{
+                    parent.right = dpuTreeNodeProxyAutoGen;
                 }
-            }else {
-                // parent node not been forward, simply set to the parent's left/right field
-                if(parent.left == thisNode) parent.left = dpuNodeConverted;
-                if(parent.right == thisNode) parent.right = dpuNodeConverted;
+            }else{
+//                File outputFile = new File("image-dpu" + dpuID +".img");
+//               try (FileOutputStream outputStream = new FileOutputStream(outputFile)) {
+//                    outputStream.write(heapMemory);
+//                } catch (FileNotFoundException e) {
+//                    throw new RuntimeException(e);
+//                } catch (IOException e) {
+//                    throw new RuntimeException(e);
+//                }
+//
+//                try (FileInputStream inputStream = new FileInputStream(outputFile)) {
+                System.out.println("write image to DPU " + dpuID + " children count = " + currentChildrenCount + " heap_pt_current = " + currentHeapAddr);
+
+                try {
+                    UPMEM.getInstance().getDPUManager(dpuID).garbageCollector.allocate(DPUJVMMemSpaceKind.DPU_HEAPSPACE,2000000 * INSTANCE_SIZE);
+                    UPMEM.getInstance().getDPUManager(dpuID).garbageCollector.transfer(DPUJVMMemSpaceKind.DPU_HEAPSPACE, heapMemory, 0);
+                    UPMEM.getInstance().getDPUManager(dpuID).garbageCollector.updateHeapPointerToDPU();
+                } catch (DpuException e) {
+                    throw new RuntimeException(e);
+                }
+//                } catch (FileNotFoundException e) {
+//                    throw new RuntimeException(e);
+//                } catch (IOException e) {
+//                    throw new RuntimeException(e);
+//                } catch (DpuException e) {
+//                    throw new RuntimeException(e);
+//                }
+                dpuID++;
+                currentHeapAddr = DPUGarbageCollector.heapSpaceBeginAddr + 8;
+                heapMemory = new byte[2000000 * INSTANCE_SIZE + 8];
+                currentChildrenCount = c;
+                currentHeapAddr = writeSubTreeBytes(currentHeapAddr, thisNode, heapMemory, classAddress)[0];
+
             }
-            heapPoint += INSTANCE_SIZE;
-            nodeInDPU++;
         }
+        if(currentHeapAddr != 8){
+//            File outputFile = new File("image-dpu" + dpuID +".img");
+              System.out.println("write image to DPU " + dpuID + " children count = " + currentChildrenCount + " heap_pt_current = " + currentHeapAddr);
+//            try (FileOutputStream outputStream = new FileOutputStream(outputFile)) {
+//                outputStream.write(heapMemory);
+//            } catch (FileNotFoundException e) {
+//                throw new RuntimeException(e);
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
 
-        if(nodeInCPU + nodeInDPU != totalTreeNodeCount){
-            throw new RuntimeException();
-        }
-
-        // repair
-        queue.add(new TreeNode[]{null, root});
-        while(queue.size() > 0){
-            TreeNode[] record = queue.remove();
-            TreeNode node = record[1];
-            TreeNode parent = record[0];
-            if(node.val == -1){
-                TreeNode realNode = node.left;
-                if(parent.left == node) parent.left = realNode;
-                if(parent.right == node) parent.right = realNode;
+//            try (FileInputStream inputStream = new FileInputStream(outputFile)) {
+//                //  inputStream.readNBytes(heapMemory, 0, 2000000 * INSTANCE_SIZE + 8);
+            try {
+                UPMEM.getInstance().getDPUManager(dpuID).garbageCollector.allocate(DPUJVMMemSpaceKind.DPU_HEAPSPACE,2000000 * INSTANCE_SIZE);
+                UPMEM.getInstance().getDPUManager(dpuID).garbageCollector.transfer(DPUJVMMemSpaceKind.DPU_HEAPSPACE, heapMemory, 0);
+                UPMEM.getInstance().getDPUManager(dpuID).garbageCollector.updateHeapPointerToDPU();
+            } catch (DpuException e) {
+                throw new RuntimeException(e);
             }
-            if(node.left != null) queue.add(new TreeNode[]{node, node.left});
-            if(node.right != null) queue.add(new TreeNode[]{node, node.right});
+//            } catch (FileNotFoundException e) {
+//                throw new RuntimeException(e);
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            } catch (DpuException e) {
+//                throw new RuntimeException(e);
+//            }
+
+        }
+    }
+
+    static void serializeCPUTree(OutputStreamWriter oos, TreeNode node) throws IOException {
+        if (node == null) {
+            oos.write("#");
+            return;
+        }
+        // property
+        // (t, k, v, l, r)
+        String v = "";
+        if(node instanceof CPUTreeNode){
+            v += '0';
+        }else{
+            v += '1';
+        }
+        v += "," + node.key + "," + node.val + ");";
+        oos.write(v);
+        serializeCPUTree(oos, node.left);
+        oos.write(";");
+        serializeCPUTree(oos, node.right);
+
+
+    }
+    private static int[] writeSubTreeBytes(int currentHeapAddr, TreeNode thisNode, byte[] heapMemory, int classAddress) {
+        if(thisNode == null) return new int[]{currentHeapAddr, 0, 0};
+        // write this Node;
+        int thisNodeAddr = currentHeapAddr;
+        writeKey(thisNode.key, heapMemory, thisNodeAddr);
+        writeValue(thisNode.val, heapMemory, thisNodeAddr);
+        writeClassReference(classAddress, heapMemory, thisNodeAddr);
+        currentHeapAddr += INSTANCE_SIZE;
+        int[] res;
+        int l = 0;
+        int r = 0;
+        if(thisNode.left != null){
+            // recursive left
+            l = currentHeapAddr;
+            writeLeft(currentHeapAddr, heapMemory, thisNodeAddr);
+            res =  writeSubTreeBytes(currentHeapAddr, thisNode.left, heapMemory, classAddress);
+            currentHeapAddr = res[0];
+        }else{
+            writeLeft(0, heapMemory, thisNodeAddr);
         }
 
+        if(thisNode.right != null){
+            // recursive right
+            r = currentHeapAddr;
+            writeRight(currentHeapAddr, heapMemory, thisNodeAddr);
+            res = writeSubTreeBytes(currentHeapAddr, thisNode.right, heapMemory, classAddress);
+            currentHeapAddr = res[0];
+        }else{
+            writeRight(0, heapMemory, thisNodeAddr);
+        }
+        return new int[]{currentHeapAddr, l, r};
+    }
 
+    private static int getChildrenCount(TreeNode thisNode) {
+        if(thisNode == null) return 0;
+        return 1 + getChildrenCount(thisNode.left) + getChildrenCount(thisNode.right);
     }
 
 
