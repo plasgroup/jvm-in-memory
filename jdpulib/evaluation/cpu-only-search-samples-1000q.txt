@@ -1,3 +1,0 @@
- C2 CompilerThre 32616 15819.063845:        112                                                        LLC-store-misses:      7f062446e7ca CodeHeap::search_freelist+0x7a (/home/upmem0054/hwanhong/jdk-17.0.1/lib/server/libjvm.so)
- C2 CompilerThre 32648 15820.304106:         45                                                         LLC-load-misses:      7f062446e810 CodeHeap::search_freelist+0xc0 (/home/upmem0054/hwanhong/jdk-17.0.1/lib/server/libjvm.so)
-    GC Thread#16 32632 15938.810896:         17                                                         LLC-load-misses:  ffffffff811ec187 __anon_vma_interval_tree_subtree_search.part.7+0x17 ([kernel.kallsyms])

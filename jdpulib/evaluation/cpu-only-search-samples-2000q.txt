@@ -1,2 +1,0 @@
- C2 CompilerThre  1213 16088.677659:        299                                                         LLC-load-misses:      7f19ae2787ca CodeHeap::search_freelist+0x7a (/home/upmem0054/hwanhong/jdk-17.0.1/lib/server/libjvm.so)
-  Sweeper thread  1160 16332.126098:        519                                                               LLC-loads:  ffffffff811ec1b7 __anon_vma_interval_tree_subtree_search.part.7+0x47 ([kernel.kallsyms])
