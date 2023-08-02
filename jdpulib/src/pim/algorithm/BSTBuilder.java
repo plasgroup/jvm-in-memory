@@ -7,7 +7,7 @@ import pim.dpu.DPUJVMMemSpaceKind;
 import pim.logger.Logger;
 import pim.logger.PIMLoggers;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -41,14 +41,13 @@ public class BSTBuilder {
         }
     }
 
-
     static abstract class BaseKeyValuePairGenerator<K, V> {
-        protected abstract Pair<K, V> genPair();
-        public ArrayList<Pair<K, V>> genPairs(int pairCount) {
+        protected abstract Pair<K, V> generatePair();
+        public ArrayList<Pair<K, V>> generatePairs(int pairCount) {
             HashSet<K> keys = new HashSet<>();
             ArrayList<Pair<K, V>> result = new ArrayList<>();
             while(result.size() < pairCount){
-                Pair<K, V> kvPair = genPair();
+                Pair<K, V> kvPair = generatePair();
                 if(keys.contains(kvPair.key))
                     continue;
                 keys.add(kvPair.key);
@@ -67,30 +66,25 @@ public class BSTBuilder {
         return root;
     }
 
-    public static TreeNode buildLargePIMTree(ArrayList<Pair<Integer, Integer>> pairs, int totalNodeCount, int nodeCountInCPU){
+
+
+    public static TreeNode buildLargePIMTree(ArrayList<Pair<Integer, Integer>> pairs){
         try {
-            UPMEM.getInstance().getDPUManager(0).createObject(DPUTreeNode.class, new Object[]{0, 0});
+            for(int i = 0; i < 128; i++){
+                UPMEM.getInstance().getDPUManager(i).createObject(DPUTreeNode.class, new Object[]{0, 0});
+            }
         } catch (DpuException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        DPUCacheManager classCacheManager = UPMEM.getInstance().getDPUManager(0).classCacheManager;
-        int dpuClassAddress = classCacheManager.getClassStrutCacheLine("pim/algorithm/DPUTreeNode").marmAddr;
-
         TreeNode root = BSTBuilder.buildCPUTree(pairs);
-        convertCPUTreeToPIMTree(root, totalNodeCount, nodeCountInCPU, dpuClassAddress);
-        verifyLargePIMTree(root);
-        try {
-            UPMEM.getInstance().getDPUManager(0).dpu.copy("m_heapspace", heapMemory, 0);
-            UPMEM.getInstance().getDPUManager(0).garbageCollector.updateHeapPointerToDPU();
-        } catch (DpuException e) {
-            throw new RuntimeException(e);
-        }
+        convertCPUTreeToPIMTree(root, 24);
 
         return root;
     }
+
 
     public static TreeNode buildPIMTree(ArrayList<Pair<Integer, Integer>> pairs) {
         if (pairs.size() == 0) return null;

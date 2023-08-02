@@ -24,58 +24,73 @@ public class DPUTreeNodeProxyAutoGen extends DPUTreeNode implements IDPUProxyObj
     }
 
     public DPUTreeNodeProxyAutoGen(int k, int v) {
-        super(k, v);
+        super(k, v);objectHandler =new DPUObjectHandler(0,0);
     }
 
-
+    public static int getLeftDispatchCount = 0;
+    public static int getRightDispatchCount = 0;
+    public static int setRightDispatchCount = 0;
+    public static int setLeftDispatchCount = 0;
+    public static int setKeyDispatchCount = 0;
+    public static int setValDispatchCount = 0;
+    public static int getValDispatchCount = 0;
+    public static int searchDispatchCount = 0;
+    public static int getKeyDispatchCount = 0;
     @Override
     public TreeNode getLeft() {
-        invokeMethod(objectHandler,"pim/algorithm/TreeNode", "getLeft:()Lpim/algorithm/TreeNode;", new Object[]{});
+        getLeftDispatchCount++;
+        invokeMethod(objectHandler,"pim/algorithm/TreeNode", "getLeft:()Lpim/algorithm/TreeNode;");
         return (TreeNode) getAReturnValue(getDpuID());
     }
 
     @Override
     public TreeNode getRight() {
-        invokeMethod(objectHandler, "pim/algorithm/TreeNode", "getRight:()Lpim/algorithm/TreeNode;", new Object[]{});
+        getRightDispatchCount++;
+        invokeMethod(objectHandler, "pim/algorithm/TreeNode", "getRight:()Lpim/algorithm/TreeNode;");
         return (TreeNode) getAReturnValue(getDpuID());
     }
 
     @Override
     public void setRight(TreeNode right) {
-        invokeMethod(objectHandler, "pim/algorithm/TreeNode", "setRight:(Lpim/algorithm/TreeNode;)V", new Object[]{right});
+        setRightDispatchCount++;
+        invokeMethod(objectHandler, "pim/algorithm/TreeNode", "setRight:(Lpim/algorithm/TreeNode;)V", right);
     }
 
     @Override
     public void setLeft(TreeNode left) {
-        invokeMethod(objectHandler,"pim/algorithm/TreeNode", "setLeft:(Lpim/algorithm/TreeNode;)V", new Object[]{left});
+        setLeftDispatchCount++;
+        invokeMethod(objectHandler,"pim/algorithm/TreeNode", "setLeft:(Lpim/algorithm/TreeNode;)V", left);
     }
 
     @Override
     public void setKey(int key) {
-        invokeMethod(objectHandler,"pim/algorithm/TreeNode", "setKey:(I)V", new Object[]{key});
+        setKeyDispatchCount++;
+        invokeMethod(objectHandler,"pim/algorithm/TreeNode", "setKey:(I)V", key);
     }
 
     @Override
     public void setVal(int key) {
-        invokeMethod(objectHandler, "pim/algorithm/TreeNode", "setVal:(I)V", new Object[]{key});
+        setValDispatchCount++;
+        invokeMethod(objectHandler, "pim/algorithm/TreeNode", "setVal:(I)V", key);
     }
 
     @Override
     public int getVal() {
-        invokeMethod(objectHandler,"pim/algorithm/TreeNode", "getVal:()I", new Object[]{});
+        getValDispatchCount++;
+        invokeMethod(objectHandler,"pim/algorithm/TreeNode", "getVal:()I");
         return getIReturnValue(getDpuID());
     }
 
     @Override
     public TreeNode createNode(int k, int v){
-
-        invokeMethod(objectHandler,"pim/algorithm/DPUTreeNode", "createNode:(II)Lpim/algorithm/TreeNode;", new Object[]{k, v});
+        invokeMethod(objectHandler,"pim/algorithm/DPUTreeNode", "createNode:(II)Lpim/algorithm/TreeNode;", k, v);
         return (TreeNode) getAReturnValue(getDpuID());
     }
 
     @Override
     public int getKey() {
-        invokeMethod(objectHandler,"pim/algorithm/TreeNode", "getKey:()I", new Object[]{});
+        getKeyDispatchCount++;
+        invokeMethod(objectHandler,"pim/algorithm/TreeNode", "getKey:()I");
         int retVal = getIReturnValue(getDpuID());
         return retVal;
     }
@@ -84,13 +99,13 @@ public class DPUTreeNodeProxyAutoGen extends DPUTreeNode implements IDPUProxyObj
     public void insert(int k, int v) {
         pimProxy.log( "insert dispatch");
         DPUCacheManager classCacheManager1 = UPMEM.getInstance().getDPUManager(getDpuID()).classCacheManager;
-        invokeMethod(objectHandler,"pim/algorithm/TreeNode", "insert:(II)V", new Object[]{k, v});
+        invokeMethod(objectHandler,"pim/algorithm/TreeNode", "insert:(II)V", k, v);
     }
-
 
     @Override
     public int search(int k) {
-        invokeMethod(objectHandler, "pim/algorithm/TreeNode", "search:(I)I", new Object[]{k});
+        searchDispatchCount++;
+        invokeMethod(objectHandler, "pim/algorithm/TreeNode", "search:(I)I", k);
         int retVal = getIReturnValue(getDpuID());
         return retVal;
     }
