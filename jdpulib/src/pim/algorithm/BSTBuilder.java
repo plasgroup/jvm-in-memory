@@ -68,7 +68,7 @@ public class BSTBuilder {
 
 
 
-    public static TreeNode buildLargePIMTree(ArrayList<Pair<Integer, Integer>> pairs, int totalNodeCount, int nodeCountInCPU){
+    public static TreeNode buildLargePIMTree(ArrayList<Pair<Integer, Integer>> pairs){
         try {
             for(int i = 0; i < 128; i++){
                 UPMEM.getInstance().getDPUManager(i).createObject(DPUTreeNode.class, new Object[]{0, 0});

@@ -81,7 +81,7 @@ public class BSTTester {
         ArrayList<BSTBuilder.Pair<Integer, Integer>> pairs =
                 IntIntValuePairGenerator.generateFromFile("key_values-" + totalNodeCount + ".txt");
 
-        TreeNode root = buildLargePIMTree(pairs, totalNodeCount, 256000);
+        TreeNode root = buildLargePIMTree(pairs);
 
         int i = 0;
         int s = 0;
@@ -95,7 +95,7 @@ public class BSTTester {
     public static void testLargeBST(int totalNodeCount, int queryCount){
         ArrayList<BSTBuilder.Pair<Integer, Integer>> pairs = new IntIntValuePairGenerator(0, totalNodeCount)
                 .generatePairs(queryCount);
-        TreeNode root = buildLargePIMTree(pairs, totalNodeCount, 10);
+        TreeNode root = buildLargePIMTree(pairs);
         int correct = 0;
 
         for(int i = 0; i < pairs.size(); i++){
