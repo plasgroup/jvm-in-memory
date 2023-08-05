@@ -103,9 +103,7 @@ public class TreeWriter {
             }
             currentLayer ++;
         }
-        System.out.println(cpuNode + " nodes in CPU");
 
-        //now the nodes in queue are all 18 layers'
         heapMemory = new byte[DPU_MAX_NODES_COUNT * INSTANCE_SIZE + 8];
         int currentChildrenCount = 0;
         int dpuID = 0;
@@ -118,13 +116,20 @@ public class TreeWriter {
             while(c > DPU_MAX_NODES_COUNT) {
                 if(thisNode.left != null){
                     parent = thisNode;
+                    if(thisNode.right != null)
+                        queue.add(new TreeNode[]{thisNode, thisNode.right});
                     thisNode = thisNode.left;
+
                 }else{
                     parent = thisNode;
+                    if(thisNode.left != null)
+                        queue.add(new TreeNode[]{thisNode, thisNode.left});
                     thisNode = thisNode.right;
                 }
                 c = getChildrenCount(thisNode);
+                cpuNode+=1;
             }
+
             int classAddress = UPMEM.getInstance().getDPUManager(dpuID)
                     .classCacheManager.getClassStrutCacheLine("pim/algorithm/DPUTreeNode").marmAddr;
             if(currentChildrenCount + c < DPU_MAX_NODES_COUNT){
@@ -132,8 +137,8 @@ public class TreeWriter {
                 DPUTreeNodeProxyAutoGen dpuTreeNodeProxyAutoGen =
                         new DPUTreeNodeProxyAutoGen(thisNode.key, thisNode.val);
 
-                dpuTreeNodeProxyAutoGen.objectHandler.dpuID = dpuID;
-                dpuTreeNodeProxyAutoGen.objectHandler.address = currentHeapAddr;
+                dpuTreeNodeProxyAutoGen.dpuID = dpuID;
+                dpuTreeNodeProxyAutoGen.address = currentHeapAddr;
 
                 // write heap
                 int[] res = writeSubTreeBytes(currentHeapAddr, thisNode, heapMemory, classAddress);
@@ -160,6 +165,8 @@ public class TreeWriter {
             System.out.println("write image to DPU " + dpuID + " children count = " + currentChildrenCount + " heap_pt_current = " + currentHeapAddr);
             writeHeapImageToDPU(dpuID);
         }
+        System.out.println(cpuNode + " nodes in CPU");
+        
     }
 
     private static void writeHeapImageToDPU(int dpuID) {

@@ -2,8 +2,6 @@ package pim.algorithm;
 
 import com.upmem.dpu.DpuException;
 import pim.UPMEM;
-import pim.dpu.DPUCacheManager;
-import pim.dpu.DPUJVMMemSpaceKind;
 import pim.logger.Logger;
 import pim.logger.PIMLoggers;
 
@@ -15,6 +13,9 @@ import static pim.algorithm.TreeWriter.*;
 
 public class BSTBuilder {
     static Logger bstBuildingLogger = PIMLoggers.bstBuildingLogger;
+
+
+
     public static class Pair<K, V> {
         K key;
         V val;
@@ -63,14 +64,59 @@ public class BSTBuilder {
         for (int i = 1; i < pairs.size(); i++) {
             ((CPUTreeNode)root).insertNewCPUNode(pairs.get(i).key, pairs.get(i).val);
         }
+        System.out.println("build cpu tree finished");
+        return root;
+    }
+    public static TreeNode buildCPUTree(String filePath) {
+        TreeNode root = null;
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(filePath));
+            ArrayList<BSTBuilder.Pair<Integer, Integer>> pairs = new ArrayList<BSTBuilder.Pair<Integer, Integer>>();
+            String s = br.readLine();
+            while(s != null){
+
+                int k = Integer.parseInt(s.split(" ")[0]);
+                int v = Integer.parseInt(s.split(" ")[1]);
+                if(root == null) {
+                    root = new CPUTreeNode(k, v);
+                }
+                else{
+                    ((CPUTreeNode)root).insertNewCPUNode(k, v);
+
+                }
+                pairs.add(new BSTBuilder.Pair<>(k, v));
+                s = br.readLine();
+            }
+            System.out.println("build cpu tree finished");
+            br.close();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         return root;
     }
 
+    public static TreeNode buildLargePIMTree(String filePath, int cpuLayerCount){
+        try {
+            for(int i = 0; i < UPMEM.dpuInUse; i++){
+                UPMEM.getInstance().getDPUManager(i).createObject(DPUTreeNode.class, new Object[]{0, 0});
+            }
+        } catch (DpuException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
+        TreeNode root = BSTBuilder.buildCPUTree(filePath);
+        convertCPUTreeToPIMTree(root, cpuLayerCount);
+
+        return root;
+    }
 
     public static TreeNode buildLargePIMTree(ArrayList<Pair<Integer, Integer>> pairs){
         try {
-            for(int i = 0; i < 128; i++){
+            for(int i = 0; i < 1024; i++){
                 UPMEM.getInstance().getDPUManager(i).createObject(DPUTreeNode.class, new Object[]{0, 0});
             }
         } catch (DpuException e) {
@@ -80,7 +126,7 @@ public class BSTBuilder {
         }
 
         TreeNode root = BSTBuilder.buildCPUTree(pairs);
-        convertCPUTreeToPIMTree(root, 24);
+        convertCPUTreeToPIMTree(root, 18);
 
         return root;
     }

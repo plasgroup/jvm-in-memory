@@ -70,17 +70,14 @@ public class Main {
         }
     }
 
+    static int totalNodeCount = 10000000;
+    static int queryCount = 100000;
+    static int dpuInUse = 64;
+    static int cpuLayerCount = 18;
+    static String experimentType = "CPU";
+    static UPMEMConfigurator upmemConfigurator = new UPMEMConfigurator();
 
-
-
-    public static void main(String[] args) {
-        UPMEM.initialize(new UPMEMConfigurator()
-                .setDpuInUseCount(UPMEM.TOTAL_DPU_COUNT)
-                .setThreadPerDPU(UPMEM.perDPUThreadsInUse));
-
-        int totalNodeCount = 100000000;
-        int queryCount = 100000;
-        String experimentType = "CPU";
+    public static void parseParameters(String[] args){
         if(args.length >= 3){
             experimentType = args[0];
             totalNodeCount = Integer.parseInt(args[1]);
@@ -88,14 +85,39 @@ public class Main {
             if(args.length >= 4 && "NO_SEARCH".equals(args[3])){
                 BSTTester.noSearch = true;
             }
-        }else{
-            BSTTester.evaluateLargeBST(totalNodeCount, queryCount);
+            if(args.length >= 5){
+                dpuInUse =  Integer.parseInt(args[4]);
+            }
+            if(args.length >= 6){
+                cpuLayerCount = Integer.parseInt(args[5]);
+            }
         }
+    }
+
+    public static void main(String[] args) {
+        if(args.length < 3){
+            BSTTester.evaluateLargeBST(totalNodeCount, queryCount, cpuLayerCount);
+            return;
+        }
+
+        parseParameters(args);
+        upmemConfigurator.setDpuInUseCount(dpuInUse);
+
+        System.out.println("dpu in use = " + dpuInUse);
+        System.out.println(experimentType + " mode, nodes count = " + totalNodeCount + " query count = " + queryCount);
+        System.out.println("cpu tree layer count = " + cpuLayerCount);
+        if(BSTTester.noSearch) System.out.println("No search mode");
+
+        UPMEM.initialize(upmemConfigurator);
+
+        upmemConfigurator
+                .setDpuInUseCount(dpuInUse)
+                .setThreadPerDPU(UPMEM.perDPUThreadsInUse);
 
         if("CPU".equals(experimentType)){
             BSTTester.evaluateCPU(totalNodeCount, queryCount);
         }else if("PIM".equals(experimentType)){
-            BSTTester.evaluateLargeBST(totalNodeCount, queryCount);
+            BSTTester.evaluateLargeBST(totalNodeCount, queryCount, cpuLayerCount);
         }
     }
 

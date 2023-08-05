@@ -31,15 +31,15 @@ public class ProxyHelper {
         }
     }
 
-    public static void invokeMethod(DPUObjectHandler objectHandler, String className, String methodDescriptor, Object... params){
+    public static void invokeMethod(int dpuID, int address, String className, String methodDescriptor, Object... params){
         // pimProxy.logf("--------- Invoke proxy %s handler = " + objectHandler + " ------------\n", methodDescriptor.split(":")[0]);
         // pimProxy.logf(" - DPUID = " + objectHandler.dpuID);
-        DPUCacheManager cm = upmem.getDPUManager(objectHandler.dpuID).classCacheManager;
+        DPUCacheManager cm = upmem.getDPUManager(dpuID).classCacheManager;
         int methodMRAMAddr = cm.getMethodCacheItem(className, methodDescriptor).mramAddr;
         int classMRAMAddr = cm.getClassStrutCacheLine(className).marmAddr;
         // pimProxy.logf("pim:proxy: class mram addr = 0x%x, method mram addr = 0x%x, instance addr = 0x%x\n", classMRAMAddr, methodMRAMAddr, objectHandler.address);
         try {
-            upmem.getDPUManager(objectHandler.dpuID).callNonstaticMethod(classMRAMAddr, methodMRAMAddr, objectHandler.address, params);
+            upmem.getDPUManager(dpuID).callNonstaticMethod(classMRAMAddr, methodMRAMAddr, address, params);
         } catch (DpuException e) {
             throw new RuntimeException(e);
         }

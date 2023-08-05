@@ -9,7 +9,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import static pim.algorithm.BSTBuilder.buildLargePIMTree;
 
@@ -60,18 +59,13 @@ public class BSTTester {
     }
 
     public static int evaluateCPU(int totalNodeCount, int queriesCount){
-        ArrayList<BSTBuilder.Pair<Integer, Integer>> pairs =
-                IntIntValuePairGenerator.fromFile("key_values-" + totalNodeCount + ".txt");
-        TreeNode root = BSTBuilder.buildCPUTree(pairs);
-
+        TreeNode root = BSTBuilder.buildCPUTree("key_values-" + totalNodeCount + ".txt");
         return queryInTree(queriesCount, root);
     }
 
 
-    public static int evaluateLargeBST(int totalNodeCount, int queryCount){
-        ArrayList<BSTBuilder.Pair<Integer, Integer>> pairs =
-                IntIntValuePairGenerator.fromFile("key_values-" + totalNodeCount + ".txt");
-        TreeNode root = buildLargePIMTree(pairs);
+    public static int evaluateLargeBST(int totalNodeCount, int queryCount, int cpuLayerCount){
+        TreeNode root = buildLargePIMTree("key_values-" + totalNodeCount + ".txt", cpuLayerCount);
 
         return queryInTree(queryCount, root);
     }
