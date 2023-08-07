@@ -6,8 +6,6 @@ import pim.dpu.DPUGarbageCollector;
 import pim.dpu.DPUJVMMemSpaceKind;
 import pim.utils.BytesUtils;
 
-import java.io.*;
-import java.nio.ByteBuffer;
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Deque;
@@ -83,6 +81,8 @@ public class TreeWriter {
             }
         }
     }
+
+
     static void convertCPUTreeToPIMTree(TreeNode root, int cpuLayerCount){
         TreeNode point = root;
         Queue<TreeNode[]> queue = new ArrayDeque<>();
@@ -90,7 +90,7 @@ public class TreeWriter {
 
         int currentLayer = 0;
         int cpuNode = 0;
-
+        int cpuProxyNode = 0;
         while(currentLayer < cpuLayerCount){
             int size = queue.size();
             for(int i = 0; i < size; i++){
@@ -98,75 +98,102 @@ public class TreeWriter {
                 TreeNode thisNode = record[1];
                 if(thisNode.left != null) queue.add(new TreeNode[]{thisNode, thisNode.left});
                 if(thisNode.right != null) queue.add(new TreeNode[]{thisNode, thisNode.right});
-
                 cpuNode ++;
             }
             currentLayer ++;
         }
+        System.out.println("cpu nodes (top k layers) " + cpuNode);
 
         heapMemory = new byte[DPU_MAX_NODES_COUNT * INSTANCE_SIZE + 8];
         int currentChildrenCount = 0;
         int dpuID = 0;
         int currentHeapAddr = DPUGarbageCollector.heapSpaceBeginAddr + 8;
+
         while(queue.size() > 0){
             TreeNode[] record = queue.remove();
             TreeNode thisNode = record[1];
             TreeNode parent = record[0];
-            int c = getChildrenCount(thisNode);
+            int c = getTreeSize(thisNode);
+            // find a children node that has size smaller than 2000000
             while(c > DPU_MAX_NODES_COUNT) {
                 if(thisNode.left != null){
                     parent = thisNode;
                     if(thisNode.right != null)
                         queue.add(new TreeNode[]{thisNode, thisNode.right});
                     thisNode = thisNode.left;
-
                 }else{
                     parent = thisNode;
                     if(thisNode.left != null)
                         queue.add(new TreeNode[]{thisNode, thisNode.left});
                     thisNode = thisNode.right;
                 }
-                c = getChildrenCount(thisNode);
-                cpuNode+=1;
+                c = getTreeSize(thisNode);
+                cpuNode++; // we access this node, and not push it in to queue. It should be counted into the total cpu node count.
             }
+
+            // There, the c and thisNode should be corrected, or the sum of CPU part nodes and PIM parts nodes cannot be the total nodes
 
             int classAddress = UPMEM.getInstance().getDPUManager(dpuID)
                     .classCacheManager.getClassStrutCacheLine("pim/algorithm/DPUTreeNode").marmAddr;
-            if(currentChildrenCount + c < DPU_MAX_NODES_COUNT){
+
+            if(currentChildrenCount + c <= DPU_MAX_NODES_COUNT){
                 currentChildrenCount += c;
+
+                // p: gen proxy
                 DPUTreeNodeProxyAutoGen dpuTreeNodeProxyAutoGen =
                         new DPUTreeNodeProxyAutoGen(thisNode.key, thisNode.val);
-
+                cpuProxyNode++;
                 dpuTreeNodeProxyAutoGen.dpuID = dpuID;
                 dpuTreeNodeProxyAutoGen.address = currentHeapAddr;
+                dpuTreeNodeProxyAutoGen.left = null;
+                dpuTreeNodeProxyAutoGen.right = null;
 
                 // write heap
                 int[] res = writeSubTreeBytes(currentHeapAddr, thisNode, heapMemory, classAddress);
                 currentHeapAddr = res[0];
 
-
                 if(parent.left == thisNode){
                     parent.left = dpuTreeNodeProxyAutoGen;
-                }else{
+                }else if(parent.right == thisNode){
                     parent.right = dpuTreeNodeProxyAutoGen;
                 }
             }else{
                 System.out.println("write image to DPU " + dpuID + " children count = " + currentChildrenCount + " heap_pt_current = " + currentHeapAddr);
+                // flush
                 writeHeapImageToDPU(dpuID);
                 dpuID++;
+
+                // reset
                 currentHeapAddr = DPUGarbageCollector.heapSpaceBeginAddr + 8;
                 Arrays.fill(heapMemory, (byte) 0);
-                currentChildrenCount = c;
-                currentHeapAddr = writeSubTreeBytes(currentHeapAddr, thisNode, heapMemory, classAddress)[0];
 
+                // add new node
+                currentChildrenCount = c;
+
+                DPUTreeNodeProxyAutoGen dpuTreeNodeProxyAutoGen =
+                        new DPUTreeNodeProxyAutoGen(thisNode.key, thisNode.val);
+
+                cpuProxyNode++;
+                dpuTreeNodeProxyAutoGen.dpuID = dpuID;
+                dpuTreeNodeProxyAutoGen.address = currentHeapAddr;
+                dpuTreeNodeProxyAutoGen.left = null;
+                dpuTreeNodeProxyAutoGen.right = null;
+
+                currentHeapAddr = writeSubTreeBytes(currentHeapAddr, thisNode, heapMemory, classAddress)[0];
+                if(parent.left == thisNode){
+                    parent.left = dpuTreeNodeProxyAutoGen;
+                }else if(parent.right == thisNode){
+                    parent.right = dpuTreeNodeProxyAutoGen;
+                }
             }
         }
         if(currentHeapAddr != 8){
             System.out.println("write image to DPU " + dpuID + " children count = " + currentChildrenCount + " heap_pt_current = " + currentHeapAddr);
             writeHeapImageToDPU(dpuID);
         }
-        System.out.println(cpuNode + " nodes in CPU");
-        
+        System.out.println(cpuNode + " cpu nodes (final) and " + cpuProxyNode + " proxy in CPU");
+        int size = getTreeSize(root);
+        System.out.println("cpu part size = " + size);
     }
 
     private static void writeHeapImageToDPU(int dpuID) {
@@ -213,9 +240,9 @@ public class TreeWriter {
         return new int[]{currentHeapAddr, l, r};
     }
 
-    private static int getChildrenCount(TreeNode thisNode) {
+    public static int getTreeSize(TreeNode thisNode) {
         if(thisNode == null) return 0;
-        return 1 + getChildrenCount(thisNode.left) + getChildrenCount(thisNode.right);
+        return 1 + getTreeSize(thisNode.left) + getTreeSize(thisNode.right);
     }
 
 

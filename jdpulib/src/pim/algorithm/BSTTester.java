@@ -1,22 +1,22 @@
 package pim.algorithm;
 
+import com.sun.source.tree.Tree;
+import pim.ExperimentConfigurator;
 import pim.logger.Logger;
 import pim.logger.PIMLoggers;
 
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static pim.algorithm.BSTBuilder.buildLargePIMTree;
+import static pim.ExperimentConfigurator.noSearch;
+import static pim.algorithm.BSTBuilder.*;
+import static pim.algorithm.TreeWriter.getTreeSize;
 
 public class BSTTester {
 
     static List<Integer> keys = readArrayList();
 
-    public static boolean noSearch = false;
     public static ArrayList<Integer> readArrayList(){
         ArrayList<Integer> resultList = new ArrayList<>();
         try {
@@ -59,15 +59,49 @@ public class BSTTester {
     }
 
     public static int evaluateCPU(int totalNodeCount, int queriesCount){
-        TreeNode root = BSTBuilder.buildCPUTree("key_values-" + totalNodeCount + ".txt");
+        TreeNode root;
+        if(ExperimentConfigurator.buildFromSerializedData){
+            try{
+                root = cpuPartTreeFromFile("CPU_TREE_" + totalNodeCount + ".txt");
+                int size = getTreeSize(root);
+                System.out.println("cpu part nodes = " + size);
+            }catch (IOException e){
+                 throw new RuntimeException();
+            }
+        } else {
+            root = BSTBuilder.buildCPUTree("key_values-" + totalNodeCount + ".txt");
+        }
+
+
+        if(ExperimentConfigurator.serializeToFile)
+            serializeTreeToFile(root, "CPU_TREE_" + totalNodeCount + ".txt");
         return queryInTree(queriesCount, root);
     }
 
+    public static int evaluatePIMBST(int totalNodeCount, int queryCount, int cpuLayerCount){
+        TreeNode root;
 
-    public static int evaluateLargeBST(int totalNodeCount, int queryCount, int cpuLayerCount){
-        TreeNode root = buildLargePIMTree("key_values-" + totalNodeCount + ".txt", cpuLayerCount);
+        root = buildLargePIMTree("key_values-" + totalNodeCount + ".txt", cpuLayerCount);
+        if(ExperimentConfigurator.serializeToFile)
+            serializeTreeToFile(root, "PIM_TREE_" + totalNodeCount + ".txt");
 
-        return queryInTree(queryCount, root);
+        int size = getTreeSize(root);
+        System.out.println("cpu part nodes = " + size);
+
+        if(ExperimentConfigurator.buildFromSerializedData){
+            try{
+                root = cpuPartTreeFromFile("PIM_TREE_" + totalNodeCount + ".txt");
+                size = getTreeSize(root);
+                System.out.println("cpu part nodes = " + size + " proxy size = " + proxy);
+            }catch (IOException e){
+                throw new RuntimeException();
+            }
+        }else{
+            root = buildLargePIMTree("key_values-" + totalNodeCount + ".txt", cpuLayerCount);
+        }
+        int t = queryInTree(queryCount, root);
+        System.out.println("proxy search count = " + DPUTreeNodeProxyAutoGen.searchDispatchCount);
+        return t;
     }
 
     private static int queryInTree(int queryCount, TreeNode root) {

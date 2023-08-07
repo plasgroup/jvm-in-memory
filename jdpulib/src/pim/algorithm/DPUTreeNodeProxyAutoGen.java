@@ -41,14 +41,14 @@ public class DPUTreeNodeProxyAutoGen extends DPUTreeNode implements IDPUProxyObj
     public TreeNode getLeft() {
         getLeftDispatchCount++;
         invokeMethod(dpuID, address,"pim/algorithm/TreeNode", "getLeft:()Lpim/algorithm/TreeNode;");
-        return (TreeNode) getAReturnValue(getDpuID());
+        return (TreeNode) getAReturnValue(dpuID);
     }
 
     @Override
     public TreeNode getRight() {
         getRightDispatchCount++;
         invokeMethod(dpuID, address, "pim/algorithm/TreeNode", "getRight:()Lpim/algorithm/TreeNode;");
-        return (TreeNode) getAReturnValue(getDpuID());
+        return (TreeNode) getAReturnValue(dpuID);
     }
 
     @Override
@@ -62,7 +62,6 @@ public class DPUTreeNodeProxyAutoGen extends DPUTreeNode implements IDPUProxyObj
         setLeftDispatchCount++;
         invokeMethod(dpuID, address,"pim/algorithm/TreeNode", "setLeft:(Lpim/algorithm/TreeNode;)V", left);
     }
-
     @Override
     public void setKey(int key) {
         setKeyDispatchCount++;
@@ -79,27 +78,27 @@ public class DPUTreeNodeProxyAutoGen extends DPUTreeNode implements IDPUProxyObj
     public int getVal() {
         getValDispatchCount++;
         invokeMethod(dpuID, address,"pim/algorithm/TreeNode", "getVal:()I");
-        return getIReturnValue(getDpuID());
+        return getIReturnValue(dpuID);
     }
 
     @Override
     public TreeNode createNode(int k, int v){
         invokeMethod(dpuID, address,"pim/algorithm/DPUTreeNode", "createNode:(II)Lpim/algorithm/TreeNode;", k, v);
-        return (TreeNode) getAReturnValue(getDpuID());
+        return (TreeNode) getAReturnValue(dpuID);
     }
 
     @Override
     public int getKey() {
         getKeyDispatchCount++;
         invokeMethod(dpuID, address,"pim/algorithm/TreeNode", "getKey:()I");
-        int retVal = getIReturnValue(getDpuID());
+        int retVal = getIReturnValue(dpuID);
         return retVal;
     }
 
     @Override
     public void insert(int k, int v) {
         pimProxy.log( "insert dispatch");
-        DPUCacheManager classCacheManager1 = UPMEM.getInstance().getDPUManager(getDpuID()).classCacheManager;
+        DPUCacheManager classCacheManager1 = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager;
         invokeMethod(dpuID, address,"pim/algorithm/TreeNode", "insert:(II)V", k, v);
     }
 
@@ -107,7 +106,7 @@ public class DPUTreeNodeProxyAutoGen extends DPUTreeNode implements IDPUProxyObj
     public int search(int k) {
         searchDispatchCount++;
         invokeMethod(dpuID, address, "pim/algorithm/TreeNode", "search:(I)I", k);
-        int retVal = getIReturnValue(getDpuID());
+        int retVal = getIReturnValue(dpuID);
         return retVal;
     }
 }

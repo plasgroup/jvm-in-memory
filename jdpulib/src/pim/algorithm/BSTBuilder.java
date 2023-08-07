@@ -9,12 +9,11 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import static pim.ExperimentConfigurator.totalNodeCount;
 import static pim.algorithm.TreeWriter.*;
 
 public class BSTBuilder {
     static Logger bstBuildingLogger = PIMLoggers.bstBuildingLogger;
-
-
 
     public static class Pair<K, V> {
         K key;
@@ -57,7 +56,97 @@ public class BSTBuilder {
             return result;
         }
     }
+    public static void serializeTreeToFile(TreeNode root, String filePath){
+       StringBuilder sb = new StringBuilder();
+       serialize(root, sb);
 
+       try {
+           FileWriter fw = new FileWriter(filePath);
+           BufferedWriter bw = new BufferedWriter(fw);
+           bw.write(sb.toString());
+           bw.close();
+       } catch (IOException e) {
+           throw new RuntimeException(e);
+       }
+   }
+    public static TreeNode cpuPartTreeFromFile(String filePath) throws IOException {
+        FileReader fr = null;
+        StringBuilder sb = new StringBuilder();
+        try {
+            fr = new FileReader(filePath);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        BufferedReader br = new BufferedReader(fr);
+        String line;
+        while((line = br.readLine()) != null){
+            sb.append(line);
+            sb.append("\r\n");
+        }
+        TreeNode root = (TreeNode) deserialize(sb.toString(), 0)[0];
+
+        return root;
+    }
+    static int proxy = 0;
+    public static Object[] deserialize(String serializedTree, int pos) {
+        while(serializedTree.charAt(pos) == '\r' || serializedTree.charAt(pos) == '\n'){
+            pos++;
+        }
+        if(serializedTree.charAt(pos) == '#'){
+            return new Object[]{null, pos + 1};
+        }
+
+        // process data
+        char type = serializedTree.charAt(pos++);
+        StringBuilder keyString = new StringBuilder();
+        StringBuilder valueString = new StringBuilder();
+        pos++; // ,
+
+        while(serializedTree.charAt(pos) != ','){
+            keyString.append(serializedTree.charAt(pos));
+            pos++;
+        }
+        pos++;
+        while(serializedTree.charAt(pos) != ' '){
+            valueString.append(serializedTree.charAt(pos));
+            pos++;
+        }
+        int key = Integer.parseInt(keyString.toString());
+        int value = Integer.parseInt(valueString.toString());
+        TreeNode newNode = (type == '-' ? new CPUTreeNode(key, value) : new DPUTreeNodeProxyAutoGen(key, value) );
+        if(type != '-'){
+            proxy ++;
+        }
+        Object[] left;
+        Object[] right;
+
+        pos++;
+        left = deserialize(serializedTree, pos);
+        pos = (Integer) left[1];
+        newNode.left = (TreeNode) left[0];
+        pos ++;
+        right = deserialize(serializedTree, pos);
+        pos = (Integer) right[1];
+        newNode.right = (TreeNode) right[0];
+
+        return new Object[]{newNode, pos};
+    }
+    public static void serialize(TreeNode root, StringBuilder sb){
+
+        if (root == null) {
+            sb.append("#");
+            return;
+        }
+
+        String data =  ((root instanceof DPUTreeNodeProxyAutoGen) ? "p" : "-") + "," + root.key + ","
+                + root.val ;
+        sb.append(data);
+        sb.append(" ");
+        serialize(root.left, sb);
+
+        sb.append(" ");
+        serialize(root.right, sb);
+    }
     public static TreeNode buildCPUTree(ArrayList<Pair<Integer, Integer>> pairs){
         if(pairs.size() == 0) return null;
         TreeNode root = new CPUTreeNode(pairs.get(0).key, pairs.get(0).val);

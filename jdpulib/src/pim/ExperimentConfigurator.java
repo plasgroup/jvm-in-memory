@@ -1,0 +1,12 @@
+package pim;
+
+public class ExperimentConfigurator {
+    public static int totalNodeCount = 10000000;
+    public static int queryCount = 100000;
+    public static int dpuInUse = 64;
+    public static int cpuLayerCount = 18;
+    public static String experimentType = "CPU";
+    public static boolean serializeToFile = true;
+    public static boolean buildFromSerializedData = true;
+    public static boolean noSearch = true;
+}

@@ -1,47 +1,14 @@
-import com.upmem.dpu.DpuException;
+import pim.ExperimentConfigurator;
 import pim.UPMEMConfigurator;
 import pim.algorithm.*;
 import pim.UPMEM;
-import pim.logger.Logger;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+
+import static pim.ExperimentConfigurator.*;
 
 public class Main {
-
-
-    // 明天要做的实验 -
-    //   - 2 oku jiedian xia CPU DPU version comparasion
-
-
-
-//    public static void writeKV(int count){
-//        try {
-//            int B = 20;
-//            int target = 200000000;
-//            int batch = target / B;
-//            FileOutputStream fos = new FileOutputStream("key_values-200M.txt");
-//            BufferedOutputStream bos = new BufferedOutputStream(fos);
-//            OutputStreamWriter osw = new OutputStreamWriter(bos);
-//            for(int i = 0; i < target; i += batch){
-//                ArrayList<BSTBuilder.Pair<Integer, Integer>> pairs =
-//                        new IntIntValuePairGenerator(i, i + batch).generatePairs(batch);
-//                for(BSTBuilder.Pair<Integer, Integer> pair : pairs){
-//                    osw.write(pair.getKey() + " " + pair.getVal() + "\n");
-//                }
-//            }
-//
-//            osw.close();
-//            bos.close();
-//            fos.close();
-//        } catch (FileNotFoundException e) {
-//            throw new RuntimeException(e);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
     public static void writeKV(int count){
         try {
             int B = 20;
@@ -70,43 +37,48 @@ public class Main {
         }
     }
 
-    static int totalNodeCount = 10000000;
-    static int queryCount = 100000;
-    static int dpuInUse = 64;
-    static int cpuLayerCount = 18;
-    static String experimentType = "CPU";
-    static UPMEMConfigurator upmemConfigurator = new UPMEMConfigurator();
+
+    public static UPMEMConfigurator upmemConfigurator = new UPMEMConfigurator();
 
     public static void parseParameters(String[] args){
         if(args.length >= 3){
             experimentType = args[0];
             totalNodeCount = Integer.parseInt(args[1]);
-            queryCount = Integer.parseInt(args[2]);
+            ExperimentConfigurator.queryCount = Integer.parseInt(args[2]);
             if(args.length >= 4 && "NO_SEARCH".equals(args[3])){
-                BSTTester.noSearch = true;
+                noSearch = true;
             }
             if(args.length >= 5){
                 dpuInUse =  Integer.parseInt(args[4]);
             }
             if(args.length >= 6){
-                cpuLayerCount = Integer.parseInt(args[5]);
+                ExperimentConfigurator.cpuLayerCount = Integer.parseInt(args[5]);
+            }
+            if(args.length >= 7){
+                String[] options = args[6].split(",");
+                HashSet<String> hashSet = new HashSet<>();
+                for(String s : options) hashSet.add(s);
+                if(hashSet.contains("IMG")){
+                    ExperimentConfigurator.buildFromSerializedData = true;
+                }
+                if(hashSet.contains("SERIALIZE")){
+                    ExperimentConfigurator.serializeToFile = true;
+                }
+                if(hashSet.contains("NO_SEARCH")){
+                    noSearch = true;
+                }
             }
         }
     }
 
     public static void main(String[] args) {
-        if(args.length < 3){
-            BSTTester.evaluateLargeBST(totalNodeCount, queryCount, cpuLayerCount);
-            return;
-        }
-
         parseParameters(args);
         upmemConfigurator.setDpuInUseCount(dpuInUse);
 
         System.out.println("dpu in use = " + dpuInUse);
         System.out.println(experimentType + " mode, nodes count = " + totalNodeCount + " query count = " + queryCount);
         System.out.println("cpu tree layer count = " + cpuLayerCount);
-        if(BSTTester.noSearch) System.out.println("No search mode");
+        if(noSearch) System.out.println("No search mode");
 
         UPMEM.initialize(upmemConfigurator);
 
@@ -114,12 +86,16 @@ public class Main {
                 .setDpuInUseCount(dpuInUse)
                 .setThreadPerDPU(UPMEM.perDPUThreadsInUse);
 
+        if(args.length < 3){
+            BSTTester.evaluatePIMBST(totalNodeCount,  ExperimentConfigurator.queryCount,  ExperimentConfigurator.cpuLayerCount);
+            //BSTTester.evaluateCPU(totalNodeCount, queryCount);
+            return;
+        }
+
         if("CPU".equals(experimentType)){
             BSTTester.evaluateCPU(totalNodeCount, queryCount);
         }else if("PIM".equals(experimentType)){
-            BSTTester.evaluateLargeBST(totalNodeCount, queryCount, cpuLayerCount);
+            BSTTester.evaluatePIMBST(totalNodeCount, queryCount, cpuLayerCount);
         }
     }
-
-
 }
