@@ -1,11 +1,13 @@
 package pim.algorithm;
 
 import com.upmem.dpu.DpuException;
+import pim.ExperimentConfigurator;
 import pim.UPMEM;
 import pim.dpu.DPUGarbageCollector;
 import pim.dpu.DPUJVMMemSpaceKind;
 import pim.utils.BytesUtils;
 
+import java.io.FileOutputStream;
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Deque;
@@ -83,6 +85,15 @@ public class TreeWriter {
     }
 
 
+    static void outputImage(int dpuID){
+        if(ExperimentConfigurator.serializeToFile){
+            try (FileOutputStream outputStream = new FileOutputStream("[" + ExperimentConfigurator.totalNodeCount + "]" + "DPU#" + dpuID + ".img")) {
+                outputStream.write(heapMemory);
+            }catch (Exception e){
+                throw new RuntimeException(e);
+            }
+        }
+    }
     static void convertCPUTreeToPIMTree(TreeNode root, int cpuLayerCount){
         TreeNode point = root;
         Queue<TreeNode[]> queue = new ArrayDeque<>();
@@ -114,7 +125,6 @@ public class TreeWriter {
             TreeNode thisNode = record[1];
             TreeNode parent = record[0];
             int c = getTreeSize(thisNode);
-            // find a children node that has size smaller than 2000000
             while(c > DPU_MAX_NODES_COUNT) {
                 if(thisNode.left != null){
                     parent = thisNode;
@@ -128,10 +138,8 @@ public class TreeWriter {
                     thisNode = thisNode.right;
                 }
                 c = getTreeSize(thisNode);
-                cpuNode++; // we access this node, and not push it in to queue. It should be counted into the total cpu node count.
+                cpuNode++;
             }
-
-            // There, the c and thisNode should be corrected, or the sum of CPU part nodes and PIM parts nodes cannot be the total nodes
 
             int classAddress = UPMEM.getInstance().getDPUManager(dpuID)
                     .classCacheManager.getClassStrutCacheLine("pim/algorithm/DPUTreeNode").marmAddr;
@@ -139,7 +147,6 @@ public class TreeWriter {
             if(currentChildrenCount + c <= DPU_MAX_NODES_COUNT){
                 currentChildrenCount += c;
 
-                // p: gen proxy
                 DPUTreeNodeProxyAutoGen dpuTreeNodeProxyAutoGen =
                         new DPUTreeNodeProxyAutoGen(thisNode.key, thisNode.val);
                 cpuProxyNode++;
@@ -159,8 +166,10 @@ public class TreeWriter {
                 }
             }else{
                 System.out.println("write image to DPU " + dpuID + " children count = " + currentChildrenCount + " heap_pt_current = " + currentHeapAddr);
+
                 // flush
                 writeHeapImageToDPU(dpuID);
+                outputImage(dpuID);
                 dpuID++;
 
                 // reset
@@ -190,6 +199,7 @@ public class TreeWriter {
         if(currentHeapAddr != 8){
             System.out.println("write image to DPU " + dpuID + " children count = " + currentChildrenCount + " heap_pt_current = " + currentHeapAddr);
             writeHeapImageToDPU(dpuID);
+            outputImage(dpuID);
         }
         System.out.println(cpuNode + " cpu nodes (final) and " + cpuProxyNode + " proxy in CPU");
         int size = getTreeSize(root);
@@ -197,7 +207,6 @@ public class TreeWriter {
     }
 
     private static void writeHeapImageToDPU(int dpuID) {
-
         try {
             UPMEM.getInstance().getDPUManager(dpuID).garbageCollector.allocate(DPUJVMMemSpaceKind.DPU_HEAPSPACE,2000000 * INSTANCE_SIZE);
             UPMEM.getInstance().getDPUManager(dpuID).garbageCollector.transfer(DPUJVMMemSpaceKind.DPU_HEAPSPACE, heapMemory, 0);

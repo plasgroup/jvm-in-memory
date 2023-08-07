@@ -1,7 +1,10 @@
 package pim.algorithm;
 
 import com.sun.source.tree.Tree;
+import com.upmem.dpu.DpuException;
 import pim.ExperimentConfigurator;
+import pim.UPMEM;
+import pim.dpu.DPUJVMMemSpaceKind;
 import pim.logger.Logger;
 import pim.logger.PIMLoggers;
 
@@ -11,6 +14,7 @@ import java.util.List;
 
 import static pim.ExperimentConfigurator.noSearch;
 import static pim.algorithm.BSTBuilder.*;
+import static pim.algorithm.TreeWriter.INSTANCE_SIZE;
 import static pim.algorithm.TreeWriter.getTreeSize;
 
 public class BSTTester {
@@ -63,10 +67,8 @@ public class BSTTester {
         if(ExperimentConfigurator.buildFromSerializedData){
             try{
                 root = cpuPartTreeFromFile("CPU_TREE_" + totalNodeCount + ".txt");
-                int size = getTreeSize(root);
-                System.out.println("cpu part nodes = " + size);
             }catch (IOException e){
-                 throw new RuntimeException();
+                 throw new RuntimeException(e);
             }
         } else {
             root = BSTBuilder.buildCPUTree("key_values-" + totalNodeCount + ".txt");
@@ -80,28 +82,45 @@ public class BSTTester {
 
     public static int evaluatePIMBST(int totalNodeCount, int queryCount, int cpuLayerCount){
         TreeNode root;
-
-        root = buildLargePIMTree("key_values-" + totalNodeCount + ".txt", cpuLayerCount);
-        if(ExperimentConfigurator.serializeToFile)
-            serializeTreeToFile(root, "PIM_TREE_" + totalNodeCount + ".txt");
-
-        int size = getTreeSize(root);
-        System.out.println("cpu part nodes = " + size);
-
         if(ExperimentConfigurator.buildFromSerializedData){
-            try{
+            try {
                 root = cpuPartTreeFromFile("PIM_TREE_" + totalNodeCount + ".txt");
-                size = getTreeSize(root);
-                System.out.println("cpu part nodes = " + size + " proxy size = " + proxy);
-            }catch (IOException e){
-                throw new RuntimeException();
+                for(int i = 0; i < UPMEM.dpuInUse; i++){
+                    UPMEM.getInstance().getDPUManager(i).createObject(DPUTreeNode.class, new Object[]{0, 0});
+                }
+                writeDPUImages(totalNodeCount, "./");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } catch (DpuException e) {
+                throw new RuntimeException(e);
             }
         }else{
             root = buildLargePIMTree("key_values-" + totalNodeCount + ".txt", cpuLayerCount);
         }
+
+        if(ExperimentConfigurator.serializeToFile)
+            serializeTreeToFile(root, "PIM_TREE_" + totalNodeCount + ".txt");
+
         int t = queryInTree(queryCount, root);
         System.out.println("proxy search count = " + DPUTreeNodeProxyAutoGen.searchDispatchCount);
         return t;
+    }
+
+    private static void writeDPUImages(int totalNodeCount, String imagesPath) {
+        int i = 0;
+        while(true){
+            File imgI = new File(imagesPath + "[" + totalNodeCount + "]DPU#" + i + ".img");
+            if(!imgI.exists()) return;
+            System.out.println("load image for DPU#" + i);
+            try (FileInputStream inputStream = new FileInputStream("[" + ExperimentConfigurator.totalNodeCount + "]" + "DPU#" + i + ".img")) {
+                inputStream.readAllBytes();
+                UPMEM.getInstance().getDPUManager(i).garbageCollector.allocate(DPUJVMMemSpaceKind.DPU_HEAPSPACE,2000000 * INSTANCE_SIZE);
+                UPMEM.getInstance().getDPUManager(i).garbageCollector.transfer(DPUJVMMemSpaceKind.DPU_HEAPSPACE,  inputStream.readAllBytes(), 0);
+                UPMEM.getInstance().getDPUManager(i).garbageCollector.updateHeapPointerToDPU();
+            }catch (Exception e){
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     private static int queryInTree(int queryCount, TreeNode root) {

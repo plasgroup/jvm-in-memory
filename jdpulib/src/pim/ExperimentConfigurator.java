@@ -6,7 +6,7 @@ public class ExperimentConfigurator {
     public static int dpuInUse = 64;
     public static int cpuLayerCount = 18;
     public static String experimentType = "CPU";
-    public static boolean serializeToFile = true;
+    public static boolean serializeToFile = false;
     public static boolean buildFromSerializedData = true;
     public static boolean noSearch = true;
 }

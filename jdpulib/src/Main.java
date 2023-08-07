@@ -37,36 +37,30 @@ public class Main {
         }
     }
 
-
     public static UPMEMConfigurator upmemConfigurator = new UPMEMConfigurator();
 
     public static void parseParameters(String[] args){
-        if(args.length >= 3){
-            experimentType = args[0];
-            totalNodeCount = Integer.parseInt(args[1]);
-            ExperimentConfigurator.queryCount = Integer.parseInt(args[2]);
-            if(args.length >= 4 && "NO_SEARCH".equals(args[3])){
+        Dictionary<String, Object> params = new Hashtable<>();
+
+
+        for(int i = 0; i < args.length; i++){
+            String arg = args[i];
+            if(arg.startsWith("NO_SEARCH")){
                 noSearch = true;
-            }
-            if(args.length >= 5){
-                dpuInUse =  Integer.parseInt(args[4]);
-            }
-            if(args.length >= 6){
-                ExperimentConfigurator.cpuLayerCount = Integer.parseInt(args[5]);
-            }
-            if(args.length >= 7){
-                String[] options = args[6].split(",");
-                HashSet<String> hashSet = new HashSet<>();
-                for(String s : options) hashSet.add(s);
-                if(hashSet.contains("IMG")){
-                    ExperimentConfigurator.buildFromSerializedData = true;
-                }
-                if(hashSet.contains("SERIALIZE")){
-                    ExperimentConfigurator.serializeToFile = true;
-                }
-                if(hashSet.contains("NO_SEARCH")){
-                    noSearch = true;
-                }
+            }else if(arg.startsWith("IMG")){
+                buildFromSerializedData = true;
+            }else if(arg.startsWith("SERIALIZE_TREE")){
+                serializeToFile = true;
+            }else if(arg.startsWith("TYPE")){
+                experimentType = arg.split("=")[1];
+            }else if(arg.startsWith("QUERIES")){
+                queryCount = Integer.parseInt(arg.split("=")[1]);
+            }else if(arg.startsWith("CPU_LAYER_COUNT")){
+                cpuLayerCount = Integer.parseInt(arg.split("=")[1]);
+            }else if(arg.startsWith("DPU_COUNT")){
+                dpuInUse = Integer.parseInt(arg.split("=")[1]);
+            }else if(arg.startsWith("NODES")){
+                totalNodeCount = Integer.parseInt(arg.split("=")[1]);
             }
         }
     }
@@ -87,8 +81,7 @@ public class Main {
                 .setThreadPerDPU(UPMEM.perDPUThreadsInUse);
 
         if(args.length < 3){
-            BSTTester.evaluatePIMBST(totalNodeCount,  ExperimentConfigurator.queryCount,  ExperimentConfigurator.cpuLayerCount);
-            //BSTTester.evaluateCPU(totalNodeCount, queryCount);
+            BSTTester.evaluatePIMBST(totalNodeCount, ExperimentConfigurator.queryCount,  ExperimentConfigurator.cpuLayerCount);
             return;
         }
 

@@ -9,8 +9,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import static pim.ExperimentConfigurator.totalNodeCount;
-import static pim.algorithm.TreeWriter.*;
+import static pim.algorithm.TreeWriter.convertCPUTreeToPIMTree;
 
 public class BSTBuilder {
     static Logger bstBuildingLogger = PIMLoggers.bstBuildingLogger;
