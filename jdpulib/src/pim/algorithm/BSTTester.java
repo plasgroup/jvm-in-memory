@@ -83,8 +83,10 @@ public class BSTTester {
     public static int evaluatePIMBST(int totalNodeCount, int queryCount, int cpuLayerCount){
         TreeNode root;
         if(ExperimentConfigurator.buildFromSerializedData){
+            System.out.println("Build Tree From Images");
             try {
                 root = cpuPartTreeFromFile("PIM_TREE_" + totalNodeCount + ".txt");
+                System.out.println("load CPU part tree");
                 for(int i = 0; i < UPMEM.dpuInUse; i++){
                     UPMEM.getInstance().getDPUManager(i).createObject(DPUTreeNode.class, new Object[]{0, 0});
                 }
@@ -111,15 +113,16 @@ public class BSTTester {
         while(true){
             File imgI = new File(imagesPath + "[" + totalNodeCount + "]DPU#" + i + ".img");
             if(!imgI.exists()) return;
-            System.out.println("load image for DPU#" + i);
+            System.out.println("load image to DPU#" + i);
             try (FileInputStream inputStream = new FileInputStream("[" + ExperimentConfigurator.totalNodeCount + "]" + "DPU#" + i + ".img")) {
-                inputStream.readAllBytes();
+                byte[] bs = inputStream.readAllBytes();
                 UPMEM.getInstance().getDPUManager(i).garbageCollector.allocate(DPUJVMMemSpaceKind.DPU_HEAPSPACE,2000000 * INSTANCE_SIZE);
-                UPMEM.getInstance().getDPUManager(i).garbageCollector.transfer(DPUJVMMemSpaceKind.DPU_HEAPSPACE,  inputStream.readAllBytes(), 0);
+                UPMEM.getInstance().getDPUManager(i).garbageCollector.transfer(DPUJVMMemSpaceKind.DPU_HEAPSPACE,  bs, 0);
                 UPMEM.getInstance().getDPUManager(i).garbageCollector.updateHeapPointerToDPU();
             }catch (Exception e){
                 throw new RuntimeException(e);
             }
+            i++;
         }
     }
 
