@@ -14,13 +14,13 @@ import java.util.List;
 
 import static pim.ExperimentConfigurator.noSearch;
 import static pim.algorithm.BSTBuilder.*;
-import static pim.algorithm.TreeWriter.INSTANCE_SIZE;
-import static pim.algorithm.TreeWriter.getTreeSize;
+import static pim.algorithm.TreeWriter.*;
 
 public class BSTTester {
 
-    static List<Integer> keys = readArrayList();
+    static List<Integer> keys = readIntergerArrayList("keys_random.txt");
 
+    static Logger bstTestLogger = PIMLoggers.bstTestLogger;
     public static void writeKV(int count, String path){
         try {
             int B = 20;
@@ -29,7 +29,7 @@ public class BSTTester {
             BufferedOutputStream bos = new BufferedOutputStream(fos);
             OutputStreamWriter osw = new OutputStreamWriter(bos);
             int upper = batch;
-            int avg = count / 20;
+            int avg = count / B;
             for(int i = 0; i < B; i ++){
                 ArrayList<BSTBuilder.Pair<Integer, Integer>> pairs =
                         new IntIntValuePairGenerator(upper - batch, upper).generatePairs(avg);
@@ -49,10 +49,10 @@ public class BSTTester {
         }
     }
 
-    public static ArrayList<Integer> readArrayList(){
+    public static ArrayList<Integer> readIntergerArrayList(String path){
         ArrayList<Integer> resultList = new ArrayList<>();
         try {
-            FileInputStream fis = new FileInputStream("keys_random.txt");
+            FileInputStream fis = new FileInputStream(path);
             BufferedInputStream bis = new BufferedInputStream(fis);
             String[] str = new String(bis.readAllBytes()).split("\n");
             for(int i = 0; i < str.length; i++){
@@ -68,8 +68,7 @@ public class BSTTester {
         }
     }
 
-    static Logger bstTestLogger = PIMLoggers.bstTestLogger;
-    public static void testBSTCPU(int totalNodeCount){
+    public static void testPIMBST(int totalNodeCount){
         ArrayList<BSTBuilder.Pair<Integer, Integer>> pairs =
                 new IntIntValuePairGenerator(0, Integer.MAX_VALUE).generatePairs(totalNodeCount);
 
@@ -138,25 +137,6 @@ public class BSTTester {
         return t;
     }
 
-    private static void writeDPUImages(int totalNodeCount, String imagesPath) {
-        int i = 0;
-        while(true){
-            String filePath = imagesPath + "[" + totalNodeCount + "]DPU#" + i + ".img";
-            File imgI = new File(filePath);
-            if(!imgI.exists()) return;
-            System.out.println("load image to DPU#" + i + " from file " + filePath);
-            try (FileInputStream inputStream = new FileInputStream(imagesPath + "[" + totalNodeCount + "]DPU#" + i + ".img")) {
-                byte[] bs = inputStream.readAllBytes();
-                UPMEM.getInstance().getDPUManager(i).garbageCollector.allocate(DPUJVMMemSpaceKind.DPU_HEAPSPACE,2000000 * INSTANCE_SIZE);
-                UPMEM.getInstance().getDPUManager(i).garbageCollector.transfer(DPUJVMMemSpaceKind.DPU_HEAPSPACE,  bs, 0);
-                UPMEM.getInstance().getDPUManager(i).garbageCollector.updateHeapPointerToDPU();
-            }catch (Exception e){
-                throw new RuntimeException(e);
-            }
-            i++;
-        }
-    }
-
     private static int queryInTree(int queryCount, TreeNode root) {
         int i = 0;
         int s = 0;
@@ -170,7 +150,7 @@ public class BSTTester {
         return s;
     }
 
-    public static void testLargeBST(int totalNodeCount, int queryCount){
+    public static void testPIMBST(int totalNodeCount, int queryCount){
         ArrayList<BSTBuilder.Pair<Integer, Integer>> pairs = new IntIntValuePairGenerator(0, totalNodeCount)
                 .generatePairs(queryCount);
         TreeNode root = buildLargePIMTree(pairs);

@@ -7,6 +7,8 @@ import pim.dpu.DPUGarbageCollector;
 import pim.dpu.DPUJVMMemSpaceKind;
 import pim.utils.BytesUtils;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayDeque;
 import java.util.Arrays;
@@ -36,6 +38,25 @@ public class TreeWriter {
 
     static void writeClassReference(int classReference, byte[] heap, int instanceAddress){
         BytesUtils.writeU4LittleEndian(heap, classReference, instanceAddress + 4);
+    }
+
+    public static void writeDPUImages(int totalNodeCount, String imagesPath) {
+        int i = 0;
+        while(true){
+            String filePath = imagesPath + "[" + totalNodeCount + "]DPU#" + i + ".img";
+            File imgI = new File(filePath);
+            if(!imgI.exists()) return;
+            System.out.println("load image to DPU#" + i + " from file " + filePath);
+            try (FileInputStream inputStream = new FileInputStream(imagesPath + "[" + totalNodeCount + "]DPU#" + i + ".img")) {
+                byte[] bs = inputStream.readAllBytes();
+                UPMEM.getInstance().getDPUManager(i).garbageCollector.allocate(DPUJVMMemSpaceKind.DPU_HEAPSPACE,2000000 * INSTANCE_SIZE);
+                UPMEM.getInstance().getDPUManager(i).garbageCollector.transfer(DPUJVMMemSpaceKind.DPU_HEAPSPACE,  bs, 0);
+                UPMEM.getInstance().getDPUManager(i).garbageCollector.updateHeapPointerToDPU();
+            }catch (Exception e){
+                throw new RuntimeException(e);
+            }
+            i++;
+        }
     }
 
     static Deque<Integer> deque = new ArrayDeque<>();
