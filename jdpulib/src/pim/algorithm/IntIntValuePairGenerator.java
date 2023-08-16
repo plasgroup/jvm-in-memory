@@ -14,7 +14,6 @@ public class IntIntValuePairGenerator extends BSTBuilder.BaseKeyValuePairGenerat
         this.rangeUpper = rangeUpper;
     }
 
-
     public static ArrayList<BSTBuilder.Pair<Integer, Integer>> fromFile(String filePath) {
         try {
             BufferedReader br = new BufferedReader(new FileReader(filePath));
@@ -39,7 +38,6 @@ public class IntIntValuePairGenerator extends BSTBuilder.BaseKeyValuePairGenerat
     protected BSTBuilder.Pair<Integer, Integer> generatePair() {
         int keyRandom = random.ints(rangeLower, rangeUpper).findFirst().getAsInt();
         int valRandom = random.ints(rangeLower, rangeUpper).findFirst().getAsInt();
-
 
         return new BSTBuilder.Pair<>(keyRandom, valRandom);
     }

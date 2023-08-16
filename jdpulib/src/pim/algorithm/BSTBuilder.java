@@ -14,7 +14,7 @@ import static pim.algorithm.TreeWriter.convertCPUTreeToPIMTree;
 
 public class BSTBuilder {
     static Logger bstBuildingLogger = PIMLoggers.bstBuildingLogger;
-
+    static int proxy = 0;
     public static class Pair<K, V> {
         K key;
         V val;
@@ -57,9 +57,6 @@ public class BSTBuilder {
         }
     }
     public static void serializeTreeToFile(TreeNode root, String filePath){
-       StringBuilder sb = new StringBuilder();
-
-
        try {
            FileWriter fw = new FileWriter(filePath);
            BufferedWriter bw = new BufferedWriter(fw);
@@ -71,7 +68,7 @@ public class BSTBuilder {
     }
 
     public static TreeNode buildCpuPartTreeFromFile(String filePath) throws IOException {
-        FileReader fr = null;
+        FileReader fr;
         try {
             fr = new FileReader(filePath);
         } catch (FileNotFoundException e) {
@@ -82,7 +79,6 @@ public class BSTBuilder {
 
         return root;
     }
-    static int proxy = 0;
     public static TreeNode deserialize(BufferedReader br) throws IOException {
         // TODO, BUG
         char ch = (char) br.read();
@@ -158,12 +154,13 @@ public class BSTBuilder {
 
         return newNode;
     }
+
     public static void serialize(TreeNode root, BufferedWriter bw) throws IOException {
+        String data;
         if (root == null) {
             bw.write("#");
             return;
         }
-        String data = "";
         if(root instanceof  DPUTreeNodeProxyAutoGen){
             data = "p" + "," + root.key + ","  + root.val + "," +
                     ((DPUTreeNodeProxyAutoGen) root).dpuID + "," + ((DPUTreeNodeProxyAutoGen) root).address;
@@ -178,6 +175,8 @@ public class BSTBuilder {
 
         serialize(root.right, bw);
     }
+
+    /* build cpu tree from key-value pairs */
     public static TreeNode buildCPUTree(ArrayList<Pair<Integer, Integer>> pairs){
         if(pairs.size() == 0) return null;
         TreeNode root = new CPUTreeNode(pairs.get(0).key, pairs.get(0).val);
@@ -187,6 +186,8 @@ public class BSTBuilder {
         System.out.println("build cpu tree finished");
         return root;
     }
+
+    /* build cpu tree from file */
     public static TreeNode buildCPUTree(String filePath) {
         TreeNode root = null;
         try {
@@ -217,7 +218,8 @@ public class BSTBuilder {
         return root;
     }
 
-    public static TreeNode buildLargePIMTree(String filePath, int cpuLayerCount){
+
+    public static TreeNode buildPIMTree(String filePath, int cpuLayerCount){
         try {
             for(int i = 0; i < UPMEM.dpuInUse; i++){
                 UPMEM.getInstance().getDPUManager(i).createObject(DPUTreeNode.class, new Object[]{0, 0});
@@ -239,9 +241,9 @@ public class BSTBuilder {
         return root;
     }
 
-    public static TreeNode buildLargePIMTree(ArrayList<Pair<Integer, Integer>> pairs){
+    public static TreeNode buildPIMTree(ArrayList<Pair<Integer, Integer>> pairs){
         try {
-            for(int i = 0; i < 1024; i++){
+            for(int i = 0; i < ExperimentConfigurator.dpuInUse; i++){
                 UPMEM.getInstance().getDPUManager(i).createObject(DPUTreeNode.class, new Object[]{0, 0});
             }
         } catch (DpuException e) {
@@ -251,13 +253,13 @@ public class BSTBuilder {
         }
 
         TreeNode root = BSTBuilder.buildCPUTree(pairs);
-        convertCPUTreeToPIMTree(root, 18);
+        convertCPUTreeToPIMTree(root, ExperimentConfigurator.cpuLayerCount);
 
         return root;
     }
 
 
-    public static TreeNode buildPIMTree(ArrayList<Pair<Integer, Integer>> pairs) {
+    public static TreeNode buildPIMTreeByInsert(ArrayList<Pair<Integer, Integer>> pairs) {
         if (pairs.size() == 0) return null;
         TreeNode root = new CPUTreeNode(pairs.get(0).key, pairs.get(0).val);
         bstBuildingLogger.logf("(TreeBuilder) ===> insert %d 'th node, key = %d, val = %d\n", 1, pairs.get(0).key, pairs.get(0).val);

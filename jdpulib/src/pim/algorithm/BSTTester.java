@@ -124,7 +124,7 @@ public class BSTTester {
                 throw new RuntimeException(e);
             }
         }else{
-            root = buildLargePIMTree("key_values-" + totalNodeCount + ".txt", cpuLayerCount);
+            root = BSTBuilder.buildPIMTree("key_values-" + totalNodeCount + ".txt", cpuLayerCount);
         }
 
         if(ExperimentConfigurator.serializeToFile)
@@ -151,7 +151,7 @@ public class BSTTester {
     public static void testPIMBST(int totalNodeCount, int queryCount){
         ArrayList<BSTBuilder.Pair<Integer, Integer>> pairs = new IntIntValuePairGenerator(0, totalNodeCount)
                 .generatePairs(queryCount);
-        TreeNode root = buildLargePIMTree(pairs);
+        TreeNode root = BSTBuilder.buildPIMTree(pairs);
         int correct = 0;
 
         for(int i = 0; i < pairs.size(); i++){

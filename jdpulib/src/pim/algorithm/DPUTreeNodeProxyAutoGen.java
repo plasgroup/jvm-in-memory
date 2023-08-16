@@ -10,8 +10,20 @@ import pim.logger.PIMLoggers;
 import static pim.dpu.ProxyHelper.*;
 
 public class DPUTreeNodeProxyAutoGen extends DPUTreeNode implements IDPUProxyObject {
+    public static int getLeftDispatchCount = 0;
+    public static int getRightDispatchCount = 0;
+    public static int setRightDispatchCount = 0;
+    public static int setLeftDispatchCount = 0;
+    public static int setKeyDispatchCount = 0;
+    public static int setValDispatchCount = 0;
+    public static int getValDispatchCount = 0;
+    public static int searchDispatchCount = 0;
+    public static int getKeyDispatchCount = 0;
+    public static int insertDispatchCount = 0;
+    public static int createNodeDispatchCount = 0;
     int dpuID;
     int address;
+
     static Logger pimProxy = PIMLoggers.pimProxy;
 
     @Override
@@ -32,15 +44,6 @@ public class DPUTreeNodeProxyAutoGen extends DPUTreeNode implements IDPUProxyObj
         this.dpuID = dpuID;
         this.address = mramAddress;
     }
-    public static int getLeftDispatchCount = 0;
-    public static int getRightDispatchCount = 0;
-    public static int setRightDispatchCount = 0;
-    public static int setLeftDispatchCount = 0;
-    public static int setKeyDispatchCount = 0;
-    public static int setValDispatchCount = 0;
-    public static int getValDispatchCount = 0;
-    public static int searchDispatchCount = 0;
-    public static int getKeyDispatchCount = 0;
     @Override
     public TreeNode getLeft() {
         getLeftDispatchCount++;
@@ -87,6 +90,7 @@ public class DPUTreeNodeProxyAutoGen extends DPUTreeNode implements IDPUProxyObj
 
     @Override
     public TreeNode createNode(int k, int v){
+        createNodeDispatchCount++;
         invokeMethod(dpuID, address,"pim/algorithm/DPUTreeNode", "createNode:(II)Lpim/algorithm/TreeNode;", k, v);
         return (TreeNode) getAReturnValue(dpuID);
     }
@@ -101,7 +105,7 @@ public class DPUTreeNodeProxyAutoGen extends DPUTreeNode implements IDPUProxyObj
 
     @Override
     public void insert(int k, int v) {
-        pimProxy.log( "insert dispatch");
+        insertDispatchCount++;
         DPUCacheManager classCacheManager1 = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager;
         invokeMethod(dpuID, address,"pim/algorithm/TreeNode", "insert:(II)V", k, v);
     }

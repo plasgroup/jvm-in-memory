@@ -19,9 +19,7 @@ public class TreeWriter {
     final static int LEFT_POS = 2;
     final static int RIGHT_POS = 3;
     final static int DPU_MAX_NODES_COUNT = 2000000;
-
     static Deque<Integer> deque = new ArrayDeque<>();
-
     static byte[] heapMemory;
 
 
@@ -61,8 +59,7 @@ public class TreeWriter {
         }
     }
 
-
-    public static void verifyLargePIMTree(TreeNode root, byte[][] heapMemory){
+    public static void verifyPIMTree(TreeNode root, byte[][] heapMemory){
         Queue<TreeNode> queue = new ArrayDeque<>();
         queue.add(root);
         Dictionary<Integer, List<Integer>> rootList = new Hashtable<>();
@@ -250,37 +247,38 @@ public class TreeWriter {
         }
     }
 
-    private static int[] writeSubTreeBytes(int currentHeapAddr, TreeNode thisNode, byte[] heapMemory, int classAddress) {
-        if(thisNode == null) return new int[]{currentHeapAddr, 0, 0};
-        // write this Node;
-        int thisNodeAddr = currentHeapAddr;
-        writeKey(thisNode.key, heapMemory, thisNodeAddr);
-        writeValue(thisNode.val, heapMemory, thisNodeAddr);
-        writeClassReference(classAddress, heapMemory, thisNodeAddr);
-        currentHeapAddr += INSTANCE_SIZE;
+    private static int[] writeSubTreeBytes(int currentHeapAddress, TreeNode thisNode, byte[] heapMemory, int classAddress) {
+        if(thisNode == null) return new int[]{currentHeapAddress, 0, 0};
+        // write this node to heap
+        int thisNodeAddress = currentHeapAddress;
+        writeKey(thisNode.key, heapMemory, thisNodeAddress);
+        writeValue(thisNode.val, heapMemory, thisNodeAddress);
+        writeClassReference(classAddress, heapMemory, thisNodeAddress);
+        currentHeapAddress += INSTANCE_SIZE;
+
         int[] res;
         int l = 0;
         int r = 0;
         if(thisNode.left != null){
             // recursive left
-            l = currentHeapAddr;
-            writeLeft(currentHeapAddr, heapMemory, thisNodeAddr);
-            res =  writeSubTreeBytes(currentHeapAddr, thisNode.left, heapMemory, classAddress);
-            currentHeapAddr = res[0];
+            l = currentHeapAddress;
+            writeLeft(currentHeapAddress, heapMemory, thisNodeAddress);
+            res =  writeSubTreeBytes(currentHeapAddress, thisNode.left, heapMemory, classAddress);
+            currentHeapAddress = res[0];
         }else{
-            writeLeft(0, heapMemory, thisNodeAddr);
+            writeLeft(0, heapMemory, thisNodeAddress);
         }
 
         if(thisNode.right != null){
             // recursive right
-            r = currentHeapAddr;
-            writeRight(currentHeapAddr, heapMemory, thisNodeAddr);
-            res = writeSubTreeBytes(currentHeapAddr, thisNode.right, heapMemory, classAddress);
-            currentHeapAddr = res[0];
+            r = currentHeapAddress;
+            writeRight(currentHeapAddress, heapMemory, thisNodeAddress);
+            res = writeSubTreeBytes(currentHeapAddress, thisNode.right, heapMemory, classAddress);
+            currentHeapAddress = res[0];
         }else{
-            writeRight(0, heapMemory, thisNodeAddr);
+            writeRight(0, heapMemory, thisNodeAddress);
         }
-        return new int[]{currentHeapAddr, l, r};
+        return new int[]{currentHeapAddress, l, r};
     }
 
     public static int getTreeSize(TreeNode thisNode) {
