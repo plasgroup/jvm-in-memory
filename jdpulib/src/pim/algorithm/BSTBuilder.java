@@ -304,7 +304,6 @@ public class BSTBuilder {
         return root;
     }
 
-
     public static TreeNode buildPIMTreeByInsert(ArrayList<Pair<Integer, Integer>> pairs) {
         if (pairs.size() == 0) return null;
         TreeNode root = new CPUTreeNode(pairs.get(0).key, pairs.get(0).val);
