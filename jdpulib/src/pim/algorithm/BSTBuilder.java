@@ -1,6 +1,5 @@
 package pim.algorithm;
 
-import com.sun.source.tree.Tree;
 import com.upmem.dpu.DpuException;
 import pim.ExperimentConfigurator;
 import pim.UPMEM;
@@ -71,7 +70,7 @@ public class BSTBuilder {
        }
     }
 
-    public static TreeNode cpuPartTreeFromFile(String filePath) throws IOException {
+    public static TreeNode buildCpuPartTreeFromFile(String filePath) throws IOException {
         FileReader fr = null;
         try {
             fr = new FileReader(filePath);
@@ -85,6 +84,7 @@ public class BSTBuilder {
     }
     static int proxy = 0;
     public static TreeNode deserialize(BufferedReader br) throws IOException {
+        // TODO, BUG
         char ch = (char) br.read();
         if(ch == -1) return null;
         while(ch == '\r' || ch == '\n'){
@@ -107,7 +107,8 @@ public class BSTBuilder {
         StringBuilder dpuIDString = new StringBuilder();
         StringBuilder mramAddressString = new StringBuilder();
 
-        br.read(); //,
+        br.read();
+
         while((ch = (char) br.read()) != ','){
             keyString.append(ch);
         }
@@ -116,7 +117,6 @@ public class BSTBuilder {
             while((ch = (char) br.read())  != ','){
                 valueString.append(ch);
             }
-
             while((ch = (char) br.read())  != ','){
                 dpuIDString.append(ch);
             }

@@ -1,10 +1,8 @@
 package pim.algorithm;
 
-import com.sun.source.tree.Tree;
 import com.upmem.dpu.DpuException;
 import pim.ExperimentConfigurator;
 import pim.UPMEM;
-import pim.dpu.DPUJVMMemSpaceKind;
 import pim.logger.Logger;
 import pim.logger.PIMLoggers;
 
@@ -93,7 +91,7 @@ public class BSTTester {
         TreeNode root;
         if(ExperimentConfigurator.buildFromSerializedData){
             try{
-                root = cpuPartTreeFromFile("CPU_TREE_" + totalNodeCount + ".txt");
+                root = buildCpuPartTreeFromFile("CPU_TREE_" + totalNodeCount + ".txt");
             }catch (IOException e){
                  throw new RuntimeException(e);
             }
@@ -119,7 +117,7 @@ public class BSTTester {
                 writeDPUImages(totalNodeCount, ExperimentConfigurator.imagesPath);
 
                 System.out.println("load CPU part tree");
-                root = cpuPartTreeFromFile("PIM_TREE_" + totalNodeCount + ".txt");
+                root = buildCpuPartTreeFromFile("PIM_TREE_" + totalNodeCount + ".txt");
             } catch (IOException e) {
                 throw new RuntimeException(e);
             } catch (DpuException e) {

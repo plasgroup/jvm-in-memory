@@ -10,10 +10,7 @@ import pim.utils.BytesUtils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.util.ArrayDeque;
-import java.util.Arrays;
-import java.util.Deque;
-import java.util.Queue;
+import java.util.*;
 
 public class TreeWriter {
     final static int INSTANCE_SIZE = 24;
@@ -22,6 +19,11 @@ public class TreeWriter {
     final static int LEFT_POS = 2;
     final static int RIGHT_POS = 3;
     final static int DPU_MAX_NODES_COUNT = 2000000;
+
+    static Deque<Integer> deque = new ArrayDeque<>();
+
+    static byte[] heapMemory;
+
 
     static void writeKey(int key, byte[] heap, int instanceAddress){
         BytesUtils.writeU4LittleEndian(heap, key, instanceAddress + 8 + 4 * KEY_POS);
@@ -59,13 +61,11 @@ public class TreeWriter {
         }
     }
 
-    static Deque<Integer> deque = new ArrayDeque<>();
 
-    static byte[] heapMemory;
-
-    public static void verifyLargePIMTree(TreeNode root){
+    public static void verifyLargePIMTree(TreeNode root, byte[][] heapMemory){
         Queue<TreeNode> queue = new ArrayDeque<>();
         queue.add(root);
+        Dictionary<Integer, List<Integer>> rootList = new Hashtable<>();
         while(queue.size() > 0){
             TreeNode node = queue.remove();
             if(node instanceof CPUTreeNode){
@@ -74,35 +74,48 @@ public class TreeWriter {
                 }
             }else{
                 int addr = node.key;
-                int k = BytesUtils.readU4LittleEndian(heapMemory, addr + 8 );
+                int dpuID = ((DPUTreeNodeProxyAutoGen) node).dpuID;
+                if(rootList.get(dpuID) == null) rootList.put(dpuID, new ArrayList<>());
+                rootList.get(dpuID).add(addr);
+                int k = BytesUtils.readU4LittleEndian(heapMemory[dpuID], addr + 8);
+                // See whether the key in the DPU heap is equal to the DPUTreeNodeProxy's key
                 if(deque.remove() != k){
                     throw new RuntimeException();
                 }
             }
-            if(node.left != null) queue.add(node.left);
-            if(node.right != null) queue.add(node.right);
-
+            if(node.left != null)
+                queue.add(node.left);
+            if(node.right != null)
+                queue.add(node.right);
         }
 
-        // verify tree nodes in heap memory are built correctly
-        Queue<Integer> dpuTreeNodeAddressQueue = new ArrayDeque<>();
-        dpuTreeNodeAddressQueue.add(8);
-        while(dpuTreeNodeAddressQueue.size() > 0){
-            int addr = dpuTreeNodeAddressQueue.remove();
-            int left = BytesUtils.readU4LittleEndian(heapMemory, addr + 8 + 4 * LEFT_POS);
-            int right = BytesUtils.readU4LittleEndian(heapMemory, addr + 8 + 4 * RIGHT_POS);
-            int key = BytesUtils.readU4LittleEndian(heapMemory, addr + 8 + 4 * KEY_POS);
-            if(left != 0) dpuTreeNodeAddressQueue.add(left);
-            if(right != 0) dpuTreeNodeAddressQueue.add(right);
-            if(left != 0){
-                int leftKey = BytesUtils.readU4LittleEndian(heapMemory, left + 8 + 4 * KEY_POS);
-                if(leftKey > key) throw new RuntimeException("exist a left node's key greater than current node");
+        // Verify tree nodes in heap memory are built correctly
+        for(int dpuID = 0; dpuID < heapMemory.length; dpuID++){
+
+            Queue<Integer> dpuTreeNodeAddressQueue = new ArrayDeque<>();
+            List<Integer> roots = rootList.get(dpuID);
+            for(Integer rootAddress : roots){
+                dpuTreeNodeAddressQueue.add(rootAddress);
             }
-            if(right != 0){
-                int rightKey = BytesUtils.readU4LittleEndian(heapMemory, right + 8 + 4 * KEY_POS);
-                if(rightKey < key) throw new RuntimeException("exist a left node's key smaller than current node");
+
+            while(dpuTreeNodeAddressQueue.size() > 0){
+                int addr = dpuTreeNodeAddressQueue.remove();
+                int left = BytesUtils.readU4LittleEndian(heapMemory[dpuID], addr + 8 + 4 * LEFT_POS);
+                int right = BytesUtils.readU4LittleEndian(heapMemory[dpuID], addr + 8 + 4 * RIGHT_POS);
+                int key = BytesUtils.readU4LittleEndian(heapMemory[dpuID], addr + 8 + 4 * KEY_POS);
+                if(left != 0) dpuTreeNodeAddressQueue.add(left);
+                if(right != 0) dpuTreeNodeAddressQueue.add(right);
+                if(left != 0){
+                    int leftKey = BytesUtils.readU4LittleEndian(heapMemory[dpuID], left + 8 + 4 * KEY_POS);
+                    if(leftKey > key) throw new RuntimeException("exist a left node's key greater than current node");
+                }
+                if(right != 0){
+                    int rightKey = BytesUtils.readU4LittleEndian(heapMemory[dpuID], right + 8 + 4 * KEY_POS);
+                    if(rightKey < key) throw new RuntimeException("exist a left node's key smaller than current node");
+                }
             }
         }
+
     }
 
 
