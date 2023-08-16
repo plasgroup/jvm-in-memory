@@ -1,11 +1,12 @@
 package pim.dpu.cache;
 
 import com.upmem.dpu.Dpu;
-import pim.dpu.DPUClassFileManager;
+import pim.dpu.classloader.DPUClassFileManager;
 import pim.dpu.java_strut.DPUJClass;
 import pim.dpu.java_strut.DPUJMethod;
 import pim.logger.Logger;
 import pim.logger.PIMLoggers;
+import pim.utils.ClassLoaderUtils;
 
 import java.util.ArrayList;
 import java.util.Dictionary;
@@ -102,6 +103,6 @@ public class DPUCacheManager {
 
         dpuClassCache.cache.get(desc).dpuClassStructure = dpuClassStrut;
         dpuClassCache.cache.get(desc).marmAddr = marmAddr;
-        pimCacheLogger.logf("set " + dpuClassStrut + " to " + dpu + ", key=" + desc + ", val = %x"  + " class name = " + DPUClassFileManager.getUTF8(dpuClassStrut, dpuClassStrut.thisClassNameIndex) + "\n", marmAddr);
+        pimCacheLogger.logf("set " + dpuClassStrut + " to " + dpu + ", key=" + desc + ", val = %x"  + " class name = " + ClassLoaderUtils.getUTF8(dpuClassStrut, dpuClassStrut.thisClassNameIndex) + "\n", marmAddr);
     }
 }

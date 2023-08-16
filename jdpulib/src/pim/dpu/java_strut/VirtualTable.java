@@ -1,4 +1,6 @@
-package pim.dpu;
+package pim.dpu.java_strut;
+
+import pim.dpu.java_strut.VirtualTableItem;
 
 import java.util.ArrayList;
 import java.util.List;

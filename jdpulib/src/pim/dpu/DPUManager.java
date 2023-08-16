@@ -3,6 +3,8 @@ import com.upmem.dpu.Dpu;
 import com.upmem.dpu.DpuException;
 import pim.UPMEM;
 import pim.dpu.cache.DPUCacheManager;
+import pim.dpu.classloader.DPUClassFileManager;
+import pim.dpu.java_strut.VirtualTable;
 import pim.logger.Logger;
 import pim.logger.PIMLoggers;
 import pim.utils.BytesUtils;

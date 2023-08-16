@@ -1,4 +1,4 @@
-package pim.dpu;
+package pim.dpu.classloader;
 
 public class ClassFileAnalyzerConstants {
     static final byte CT_Class = 7;

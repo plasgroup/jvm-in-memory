@@ -1,7 +1,5 @@
 package pim.dpu.java_strut;
 
-import pim.dpu.VirtualTable;
-
 public class DPUJClass {
     public int totalSize;
     public short thisClassNameIndex;

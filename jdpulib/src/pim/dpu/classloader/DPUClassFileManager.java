@@ -1,4 +1,4 @@
-package pim.dpu;
+package pim.dpu.classloader;
 
 import com.upmem.dpu.Dpu;
 import com.upmem.dpu.DpuException;
@@ -6,6 +6,8 @@ import pim.dpu.cache.DPUCacheManager;
 import pim.dpu.cache.DPUClassFileCacheItem;
 import pim.dpu.cache.DPUFieldCacheItem;
 import pim.dpu.cache.DPUMethodCacheItem;
+import pim.dpu.java_strut.VirtualTable;
+import pim.dpu.java_strut.VirtualTableItem;
 import pim.dpu.java_strut.DPUJClass;
 import pim.dpu.java_strut.DPUJMethod;
 import pim.dpu.java_strut.DPUJVMMemSpaceKind;
@@ -20,6 +22,10 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.Hashtable;
+
+import static pim.dpu.classloader.ClassWriter.cvtDPUClassStrut2Bytes;
+import static pim.dpu.classloader.ClassWriter.pushJClassToDPU;
+import static pim.utils.ClassLoaderUtils.*;
 
 public class DPUClassFileManager {
     static Logger classfileLogger = PIMLoggers.classfileLogger;
@@ -51,9 +57,6 @@ public class DPUClassFileManager {
         upmem.getDPUManager(dpuID).classCacheManager.setClassStructure(className, jc, classMramAddr);
     }
 
-    public String formalClassName(String className){
-        return className.replace(".", "/").split("\\$")[0];
-    }
 
 
     public DPUJClass loadClassForDPU(Class c) throws IOException, DpuException {
@@ -117,7 +120,7 @@ public class DPUClassFileManager {
                     jc.virtualTable.items.get(i).classReferenceAddress = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getClassStrutCacheLine(vClassName).marmAddr;
                 }
             }
-            pushJClassToDPU(jc, classAddr);
+            pushJClassToDPU(jc, classAddr, dpuID);
 
             // TODO, currently skip the resolution of java/lang/Object.
             /** We skip all subsequent analysis of java/lang/Object **/
@@ -360,31 +363,16 @@ public class DPUClassFileManager {
                 .virtualTable = jc.virtualTable;
         DPUCacheManager classCacheManager = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager;
         classfileLogger.logln("" + classCacheManager);
-        pushJClassToDPU(jc, classAddr);
+        pushJClassToDPU(jc, classAddr, dpuID);
 
         return jc;
     }
 
 
-    String getClassNameFromClassRef(DPUJClass jc, byte[] classBytes, int classRefIndex){
+    String getClassNameFromClassReference(DPUJClass jc, byte[] classBytes, int classRefIndex){
         int classNameUTF8Index = BytesUtils.readU2BigEndian(classBytes, jc.itemBytesEntries[classRefIndex] + 1);
         return getUTF8(jc, classNameUTF8Index);
     }
-
-    String getMethodDescriptor(DPUJClass jc, byte[] classBytes, int methodRefIndex){
-        int classIndex = BytesUtils.readU2BigEndian(classBytes, jc.itemBytesEntries[methodRefIndex] + 1);
-        int nameAndTypeIndex =  BytesUtils.readU2BigEndian(classBytes, jc.itemBytesEntries[methodRefIndex] + 3);
-        int classUTF8Index = BytesUtils.readU2BigEndian(classBytes, jc.itemBytesEntries[classIndex] + 1);
-        int nameUTF8Index = BytesUtils.readU2BigEndian(classBytes, jc.itemBytesEntries[nameAndTypeIndex] + 1);
-        int typeUTF8Index = BytesUtils.readU2BigEndian(classBytes, jc.itemBytesEntries[nameAndTypeIndex] + 3);
-
-        String classUTF8 = getUTF8(jc, classUTF8Index);
-        String nameUTF8 = getUTF8(jc, nameUTF8Index);
-        String typeUTF8 = getUTF8(jc, typeUTF8Index);
-        String descriptor = classUTF8 + "." + nameUTF8 + ":" + typeUTF8;
-        return descriptor;
-    }
-
 
 
     Dictionary<String, Integer> globalVirtualTableIndexCache = new Hashtable<>();
@@ -555,153 +543,6 @@ public class DPUClassFileManager {
         }
     }
 
-
-    public void pushJClassToDPU(DPUJClass jc, int addr) throws DpuException {
-
-        byte[] classBytes = cvtDPUClassStrut2Bytes(jc, addr);
-        upmem.getDPUManager(dpuID).garbageCollector.transfer(DPUJVMMemSpaceKind.DPU_METASPACE, classBytes, addr);
-    }
-
-
-    public static byte[] cvtDPUClassStrut2Bytes(DPUJClass ds, int classAddr){
-        byte[] bs = new byte[(ds.totalSize + 0b111) & ~(0b111)];
-        int pos = 0;
-        int entryTablePointer;
-        int fieldPointer;
-        int methodPointer;
-        int constantAreaPointer;
-        int entryTablePointerPos;
-        int fieldPointerPos;
-        int methodPointerPos;
-        int constantAreaPointerPos;
-        BytesUtils.writeU4LittleEndian(bs, ds.totalSize, pos);
-        pos += 4;
-        BytesUtils.writeU2LittleEndian(bs, ds.thisClassNameIndex, pos);
-        pos += 2;
-        BytesUtils.writeU2LittleEndian(bs, ds.superClassNameIndex, pos);
-        pos += 2;
-        BytesUtils.writeU4LittleEndian(bs, ds.superClass, pos);
-        pos += 4;
-        BytesUtils.writeU2LittleEndian(bs, ds.accessFlags, pos);
-        pos += 2;
-        BytesUtils.writeU2LittleEndian(bs, ds.cp2BOffset, pos);
-        pos += 2;
-
-        BytesUtils.writeU4LittleEndian(bs, ds.cpItemCount, pos);
-        pos += 4;
-        // entry table pointer
-        entryTablePointerPos = pos;
-        pos += 4;
-
-        BytesUtils.writeU4LittleEndian(bs, ds.fieldCount, pos);
-        pos += 4;
-        fieldPointerPos = pos;
-        pos += 4;
-
-
-        BytesUtils.writeU4LittleEndian(bs, ds.methodCount, pos);
-        pos += 4;
-
-        methodPointerPos = pos;
-        pos += 4;
-
-        BytesUtils.writeU4LittleEndian(bs, ds.stringINTConstantPoolLength, pos);
-        classfileLogger.logf("print 0x%x to %x\n", ds.stringINTConstantPoolLength, pos);
-        pos += 4;
-        constantAreaPointerPos = pos;
-        pos += 4;
-
-        BytesUtils.writeU4LittleEndian(bs, ds.virtualTable.items.size(), pos);
-        pos += 4;
-        int virtualTablePointerPos = pos;
-        pos += 4;
-
-        entryTablePointer = classAddr + pos;
-        BytesUtils.writeU4LittleEndian(bs, entryTablePointer, entryTablePointerPos);
-        classfileLogger.logf("print %x in %x\n", entryTablePointer, entryTablePointerPos);
-        for(int i = 0; i < ds.cpItemCount; i++){
-            long v = ds.entryItems[i];
-            BytesUtils.writeU4LittleEndian(bs, (int) (((long)v >> 32) & 0xFFFFFFFF),pos);
-            pos += 4;
-            BytesUtils.writeU4LittleEndian(bs, (int) (((long)v) & 0xFFFFFFFF),pos);
-            pos += 4;
-        }
-
-        //fields
-        fieldPointer = classAddr + pos;
-        BytesUtils.writeU4LittleEndian(bs, fieldPointer, fieldPointerPos);
-        // TODO: use field
-        pos += Arrays.stream(ds.fields).map(f -> f.size).reduce((s1, s2) -> s1 + s2).orElseGet( ()->0);
-
-        //method
-        methodPointer = classAddr + pos;
-        BytesUtils.writeU4LittleEndian(bs, methodPointer, methodPointerPos);
-        classfileLogger.logf("print 0x%x to %x\n", methodPointer, methodPointerPos);
-
-        for(int i = 0; i < ds.methodCount; i++){
-            classfileLogger.logf("method %d from 0x%x === 0x%x\n", i, pos, ds.methodOffset[i]);
-            DPUJMethod dm = ds.methodTable[i];
-
-            BytesUtils.writeU4LittleEndian(bs, dm.size, pos);
-            pos += 4;
-            BytesUtils.writeU2LittleEndian(bs, dm.accessFlag, pos);
-            pos += 2;
-            BytesUtils.writeU2LittleEndian(bs, dm.paramCount, pos);
-            pos += 2;
-            BytesUtils.writeU2LittleEndian(bs, dm.nameIndex, pos);
-            pos += 2;
-            BytesUtils.writeU2LittleEndian(bs, dm.methodAttrCode.maxStack, pos);
-            pos += 2;
-            BytesUtils.writeU2LittleEndian(bs, dm.methodAttrCode.maxLocals, pos);
-            pos += 2;
-            pos += 2; //retained
-
-            BytesUtils.writeU4LittleEndian(bs, dm.methodAttrCode.codeLength, pos);
-            pos += 4;
-
-            // bytecode pt
-            BytesUtils.writeU4LittleEndian(bs, classAddr + pos + 4, pos);
-            pos += 4;
-
-            for(int k = 0; k < dm.methodAttrCode.codeLength; k++){
-                bs[pos + k] = dm.methodAttrCode.code[k];
-            }
-
-            pos += (dm.methodAttrCode.codeLength + 0b111) & (~0b111);
-
-        }
-
-        constantAreaPointer = classAddr + pos;
-        BytesUtils.writeU4LittleEndian(bs, constantAreaPointer, constantAreaPointerPos);
-
-        for(int offset = 0; offset < ds.stringINTConstantPoolLength; offset ++){
-            bs[pos + offset] = ds.constantBytes[offset];
-        }
-        pos += (ds.stringINTConstantPoolLength + 0b111) & (~0b111);
-
-        // vtable
-        int virtualTablePointer = classAddr + pos;
-        BytesUtils.writeU4LittleEndian(bs, virtualTablePointer, virtualTablePointerPos);
-
-        // items
-        for(int i = 0; i < ds.virtualTable.items.size(); i++){
-            VirtualTableItem item = ds.virtualTable.items.get(i);
-            BytesUtils.writeU4LittleEndian(bs, item.classReferenceAddress , pos);
-            BytesUtils.writeU4LittleEndian(bs, item.methodReferenceAddress , pos + 4);
-            pos += 8;
-        }
-        pos = (pos + 0b111) & (~0b111);
-
-
-        classfileLogger.logf("=============== !Alert pos = %d === total-size = %d ================\n", pos, ds.totalSize);
-        if(pos != ds.totalSize) throw new RuntimeException();
-        return bs;
-    }
-
-    public static String getUTF8(DPUJClass ds, int utf8Index)
-    {
-        return StringUtils.getStringFromBuffer(ds.constantBytes, (int) (ds.entryItems[utf8Index] & 0xFFFF), (int) (((ds.entryItems[utf8Index]) >> 40) & 0xFFFF));
-    }
 
 }
 

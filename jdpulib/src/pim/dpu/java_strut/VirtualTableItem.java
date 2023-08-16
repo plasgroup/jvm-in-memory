@@ -1,10 +1,10 @@
-package pim.dpu;
+package pim.dpu.java_strut;
 
 public class VirtualTableItem {
-    int methodReferenceAddress;
-    int classReferenceAddress;
-    String className;
-    String descriptor;
+    public int methodReferenceAddress;
+    public int classReferenceAddress;
+    public String className;
+    public String descriptor;
     public VirtualTableItem(String className, String descriptor){
         this.className = className;
         this.descriptor = descriptor;

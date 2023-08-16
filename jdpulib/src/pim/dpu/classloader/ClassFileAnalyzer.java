@@ -1,4 +1,4 @@
-package pim.dpu;
+package pim.dpu.classloader;
 
 import pim.dpu.java_strut.DPUJClass;
 import pim.dpu.java_strut.DPUJField;
@@ -6,6 +6,7 @@ import pim.dpu.java_strut.DPUJMethod;
 import pim.logger.Logger;
 import pim.logger.PIMLoggers;
 import pim.utils.BytesUtils;
+import pim.utils.ClassLoaderUtils;
 import pim.utils.StringUtils;
 import pim.utils.Tester;
 
@@ -28,7 +29,6 @@ public class ClassFileAnalyzer {
         return cfa;
     }
 
-
     /* fill utf-8/long/int/double/.. constant to utf-8*/
     public void fillConstantArea(){
         int filled = 0;
@@ -40,7 +40,6 @@ public class ClassFileAnalyzer {
             switch (tag){
                 case ClassFileAnalyzerConstants.CT_Utf8:
                     long len = (jc.entryItems[i] & 0xFFFF);
-                    
                     classfileAnalyzerLogger.logln(">> Entry #" + i + " is UTF8, len = " + len);
                     bb.put(classFileBytes, pos + 3, (int) len);
                     // write offset in constantArea to low 32 bits. Write len to 40~56 bit
@@ -291,7 +290,7 @@ public class ClassFileAnalyzer {
         dm.attributeCount = attrCount;
         dm.nameIndex = nameIndex;
         dm.descriptorIndex = descIndex;
-        String desc = DPUClassFileManager.getUTF8(jc, descIndex);
+        String desc = ClassLoaderUtils.getUTF8(jc, descIndex);
         classfileAnalyzerLogger.logln("desc = " + desc);
         dm.paramCount = (short) (countTypeCountFromDescriptor(desc.substring(1, desc.indexOf(')'))) + 1);
         // parse attr
