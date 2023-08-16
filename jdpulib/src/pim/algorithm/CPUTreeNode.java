@@ -31,20 +31,6 @@ public class CPUTreeNode extends TreeNode {
         }
     }
 
-    public void insertNewCPUNode(int k, int v){
-        if(k < getKey()){
-            if (getLeft() == null)
-                setLeft(createNodeCPU(k, v));
-            else
-                ((CPUTreeNode)getLeft()).insertNewCPUNode(k, v);
-        }else{
-            if (getRight() == null)
-                setRight(createNodeCPU(k, v));
-            else
-                ((CPUTreeNode)getRight()).insertNewCPUNode(k, v);
-        }
-    }
-
     public TreeNode createNodeCPU(int k, int v){
         return new CPUTreeNode(k, v);
     }

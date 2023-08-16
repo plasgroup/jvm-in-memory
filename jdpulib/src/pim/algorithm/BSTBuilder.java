@@ -81,6 +81,16 @@ public class BSTBuilder {
     }
     public static TreeNode deserialize(BufferedReader br) throws IOException {
         // TODO, BUG
+        char[] buffer = new char[4096];
+        int readByteCount = br.read(buffer);
+        while(readByteCount > 0){
+            int pt = 0;
+            while(pt < readByteCount){
+
+            }
+        }
+
+
         char ch = (char) br.read();
         if(ch == -1) return null;
         while(ch == '\r' || ch == '\n'){
@@ -181,10 +191,27 @@ public class BSTBuilder {
         if(pairs.size() == 0) return null;
         TreeNode root = new CPUTreeNode(pairs.get(0).key, pairs.get(0).val);
         for (int i = 1; i < pairs.size(); i++) {
-            ((CPUTreeNode)root).insertNewCPUNode(pairs.get(i).key, pairs.get(i).val);
+            insertNewCPUNode(root, pairs.get(i).key, pairs.get(i).val);
         }
         System.out.println("build cpu tree finished");
         return root;
+    }
+
+
+
+
+    public static void insertNewCPUNode(TreeNode node, int k, int v){
+        if(k < node.getKey()){
+            if (node.getLeft() == null)
+                node.setLeft(new CPUTreeNode(k, v));
+            else
+                insertNewCPUNode(node.getLeft(), k, v);
+        }else{
+            if (node.getRight() == null)
+                node.setRight(new CPUTreeNode(k, v));
+            else
+                insertNewCPUNode(node.getRight(), k, v);
+        }
     }
 
     /* build cpu tree from file */
@@ -202,16 +229,13 @@ public class BSTBuilder {
                     root = new CPUTreeNode(k, v);
                 }
                 else{
-                    ((CPUTreeNode)root).insertNewCPUNode(k, v);
-
+                    insertNewCPUNode(root, k, v);
                 }
                 pairs.add(new BSTBuilder.Pair<>(k, v));
                 s = br.readLine();
             }
             System.out.println("build cpu tree finished");
             br.close();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
