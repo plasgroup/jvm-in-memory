@@ -23,7 +23,6 @@ import java.util.Hashtable;
 
 public class DPUClassFileManager {
     static Logger classfileLogger = PIMLoggers.classfileLogger;
-    static final int block = 1024;
     int dpuID;
     Dpu dpu;
     UPMEM upmem = UPMEM.getInstance();
@@ -32,9 +31,6 @@ public class DPUClassFileManager {
         this.dpu = dpu;
     }
 
-    private boolean isClassLoaded(Class c){
-        return isClassLoaded(c.getName());
-    }
     private boolean isClassLoaded(String className){
         className = className.replace(".", "/");
         DPUClassFileCacheItem item = upmem.getDPUManager(dpuID).classCacheManager.getClassStrutCacheLine(className);
@@ -159,13 +155,10 @@ public class DPUClassFileManager {
                     if(cacheLine != null){
                         classfileLogger.logf("class %s loaded, mram addr = 0x%x\n", classNameUTF8, cacheLine.marmAddr);
                     }else{
-                        if(!"java/lang/System".equals(classNameUTF8)){
+                        if(UPMEM.whiteList.contains(classNameUTF8)){
                             try {
-                                // TODO className$1 loading..
                                 loadClassForDPU(Class.forName(classNameUTF8.replace("/", ".")));
-                            } catch (ClassNotFoundException e) {
-                                classfileLogger.logln("cannot find class " + classNameUTF8);
-                            } catch (IOException ioException){
+                            } catch (ClassNotFoundException | IOException e) {
                                 classfileLogger.logln("cannot find class " + classNameUTF8);
                             }
                         }else{
@@ -376,6 +369,7 @@ public class DPUClassFileManager {
         int classNameUTF8Index = BytesUtils.readU2BigEndian(classBytes, jc.itemBytesEntries[classRefIndex] + 1);
         return getUTF8(jc, classNameUTF8Index);
     }
+
     String getMethodDescriptor(DPUJClass jc, byte[] classBytes, int methodRefIndex){
         int classIndex = BytesUtils.readU2BigEndian(classBytes, jc.itemBytesEntries[methodRefIndex] + 1);
         int nameAndTypeIndex =  BytesUtils.readU2BigEndian(classBytes, jc.itemBytesEntries[methodRefIndex] + 3);
@@ -389,6 +383,8 @@ public class DPUClassFileManager {
         String descriptor = classUTF8 + "." + nameUTF8 + ":" + typeUTF8;
         return descriptor;
     }
+
+
 
     Dictionary<String, Integer> globalVirtualTableIndexCache = new Hashtable<>();
     private void createVirtualTable(DPUJClass jc, byte[] classBytes) {

@@ -7,6 +7,9 @@ import sun.misc.Unsafe;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 
 /** UPMEM class
@@ -28,6 +31,14 @@ public class UPMEM {
     /* Singleton */
     private static volatile UPMEM instance = null;
     private static Object locker = new Object();
+
+    public static HashSet<String> whiteList = new HashSet<>();
+    static
+    {
+        whiteList.add("pim/algorithm/DPUTreeNode");
+        whiteList.add("pim/algorithm/TreeNode");
+        whiteList.add("java/lang/Object");
+    };
 
     static Logger upmemLogger = Logger.getLogger("pi:upmem");
     {
