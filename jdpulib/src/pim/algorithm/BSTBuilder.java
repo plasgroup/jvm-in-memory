@@ -15,6 +15,9 @@ import static pim.algorithm.TreeWriter.convertCPUTreeToPIMTree;
 public class BSTBuilder {
     static Logger bstBuildingLogger = PIMLoggers.bstBuildingLogger;
     static int proxy = 0;
+    static final int CONTEXT_POS = 0;
+    static final int CONTEXT_READ_BYTES = 1;
+
     public static class Pair<K, V> {
         K key;
         V val;
@@ -88,10 +91,6 @@ public class BSTBuilder {
     }
 
 
-
-    static final int CONTEXT_POS = 0;
-    static final int CONTEXT_READ_BYTES = 1;
-
     public static void increasePosition(BufferedReader br, char[] buffer, int[] context, int pos) throws IOException {
         if(pos + 1 >= context[CONTEXT_READ_BYTES] ){
             context[CONTEXT_READ_BYTES]  = br.read(buffer);
@@ -156,6 +155,7 @@ public class BSTBuilder {
         }
         return new Object[]{newNode, pos, buffer};
     }
+
 
     public static void serialize(TreeNode root, BufferedWriter bw) throws IOException {
         String data;
@@ -238,7 +238,7 @@ public class BSTBuilder {
     public static TreeNode buildPIMTree(String filePath, int cpuLayerCount){
         try {
             for(int i = 0; i < UPMEM.dpuInUse; i++){
-                UPMEM.getInstance().getDPUManager(i).createObject(DPUTreeNode.class, new Object[]{0, 0});
+                UPMEM.getInstance().getDPUManager(i).dpuClassFileManager.loadClassForDPU(DPUTreeNode.class);
             }
         } catch (DpuException e) {
             throw new RuntimeException(e);

@@ -1,4 +1,4 @@
-package pim.dpu;
+package pim.dpu.java_strut;
 
 public class DPUJMethod {
     public int size;

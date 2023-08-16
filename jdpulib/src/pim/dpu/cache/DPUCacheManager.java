@@ -1,6 +1,9 @@
-package pim.dpu;
+package pim.dpu.cache;
 
 import com.upmem.dpu.Dpu;
+import pim.dpu.DPUClassFileManager;
+import pim.dpu.java_strut.DPUJClass;
+import pim.dpu.java_strut.DPUJMethod;
 import pim.logger.Logger;
 import pim.logger.PIMLoggers;
 
@@ -10,15 +13,13 @@ import java.util.Hashtable;
 import java.util.List;
 
 public class DPUCacheManager {
+    public DPUClassCache dpuClassCache;
+    public DPUMethodCache methodCache;
+    public DPUFieldCache fieldCache;
     int dpuID;
     Dpu dpu;
-
-    DPUClassCache dpuClassCache;
-    DPUMethodCache methodCache;
-    DPUFieldCache fieldCache;
-
     Logger pimCacheLogger = PIMLoggers.pimCacheLogger;
-    static class DPUClassCache {
+    public static class DPUClassCache {
         public Dictionary<String, DPUClassFileCacheItem> cache = new Hashtable<>();
         public List<DPUClassFileCacheItem> dpuClassFileCacheItemList = new ArrayList<>();
     }
@@ -82,13 +83,13 @@ public class DPUCacheManager {
         return dpuClassCache.cache.get(desc);
     }
 
-    public DPUJClass getClassStrut(String desc) {
+    public DPUJClass getClassStructure(String desc) {
         DPUClassFileCacheItem classFileCacheLine = getClassStrutCacheLine(desc);
         if(classFileCacheLine == null) return null;
         return classFileCacheLine.dpuClassStructure;
     }
 
-    public void setClassStrut(String desc, DPUJClass dpuClassStrut, int marmAddr) {
+    public void setClassStructure(String desc, DPUJClass dpuClassStrut, int marmAddr) {
         DPUClassFileCacheItem classFileCacheLine = getClassStrutCacheLine(desc);
         if(classFileCacheLine == null) {
             DPUClassFileCacheItem dpuClassFileCacheItem = new DPUClassFileCacheItem();

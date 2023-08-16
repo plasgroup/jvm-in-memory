@@ -7,7 +7,6 @@ import com.upmem.dpu.DpuSystem;
 import pim.logger.Logger;
 import pim.logger.PIMLoggers;
 
-
 public class PIMManager {
     private static ArrayList<DPUManager> dpuManagers = new ArrayList<>();
     private static PIMManager instance;

@@ -1,7 +1,6 @@
 package pim.algorithm;
 
 import pim.UPMEM;
-import pim.dpu.DPUJClass;
 import pim.logger.Logger;
 import pim.logger.PIMLoggers;
 

@@ -2,8 +2,7 @@ package pim.algorithm;
 
 import pim.IDPUProxyObject;
 import pim.UPMEM;
-import pim.dpu.DPUCacheManager;
-import pim.dpu.DPUObjectHandler;
+import pim.dpu.cache.DPUCacheManager;
 import pim.logger.Logger;
 import pim.logger.PIMLoggers;
 

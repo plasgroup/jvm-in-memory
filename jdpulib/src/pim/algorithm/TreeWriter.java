@@ -4,7 +4,7 @@ import com.upmem.dpu.DpuException;
 import pim.ExperimentConfigurator;
 import pim.UPMEM;
 import pim.dpu.DPUGarbageCollector;
-import pim.dpu.DPUJVMMemSpaceKind;
+import pim.dpu.java_strut.DPUJVMMemSpaceKind;
 import pim.utils.BytesUtils;
 
 import java.io.File;
@@ -23,6 +23,7 @@ public class TreeWriter {
     static byte[] heapMemory;
 
 
+    /** write an instance's field value to the DPU's heap memory **/
     static void writeKey(int key, byte[] heap, int instanceAddress){
         BytesUtils.writeU4LittleEndian(heap, key, instanceAddress + 8 + 4 * KEY_POS);
     }
@@ -116,6 +117,7 @@ public class TreeWriter {
     }
 
 
+    /* Output image to File */
     static void outputImage(int dpuID){
         if(ExperimentConfigurator.serializeToFile){
             try (FileOutputStream outputStream = new FileOutputStream(ExperimentConfigurator.imagesPath + "[" + ExperimentConfigurator.totalNodeCount + "]" + "DPU#" + dpuID + ".img")) {
@@ -125,6 +127,9 @@ public class TreeWriter {
             }
         }
     }
+
+
+    /* Convert a CPU tree to PIM tree, with keeping first cpuLayerCount layers in CPU */
     static void convertCPUTreeToPIMTree(TreeNode root, int cpuLayerCount){
         TreeNode point = root;
         Queue<TreeNode[]> queue = new ArrayDeque<>();
@@ -133,6 +138,8 @@ public class TreeWriter {
         int currentLayer = 0;
         int cpuNode = 0;
         int cpuProxyNode = 0;
+
+        // first cpuLayerCount layers retain on PCU
         while(currentLayer < cpuLayerCount){
             int size = queue.size();
             for(int i = 0; i < size; i++){
@@ -144,6 +151,7 @@ public class TreeWriter {
             }
             currentLayer ++;
         }
+
         System.out.println("cpu nodes (top k layers) " + cpuNode);
 
         heapMemory = new byte[DPU_MAX_NODES_COUNT * INSTANCE_SIZE + 8];
@@ -151,35 +159,35 @@ public class TreeWriter {
         int dpuID = 0;
         int currentHeapAddr = DPUGarbageCollector.heapSpaceBeginAddr + 8;
 
+        // move substree from (cpuLayerCount + 1) layers to a certain DPU
         while(queue.size() > 0){
             TreeNode[] record = queue.remove();
             TreeNode thisNode = record[1];
             TreeNode parent = record[0];
             int c = getTreeSize(thisNode);
-            while(c > DPU_MAX_NODES_COUNT) {
-                if(thisNode.left != null){
-                    parent = thisNode;
-                    if(thisNode.right != null)
-                        queue.add(new TreeNode[]{thisNode, thisNode.right});
-                    thisNode = thisNode.left;
-                }else{
-                    parent = thisNode;
-                    if(thisNode.left != null)
-                        queue.add(new TreeNode[]{thisNode, thisNode.left});
-                    thisNode = thisNode.right;
-                }
-                c = getTreeSize(thisNode);
+
+            /* when a nodes' tree size exceed the DPU capacity limitation, retain
+             this node in CPU, but put its children into workspace
+             */
+            if(c > DPU_MAX_NODES_COUNT){
                 cpuNode++;
+                if(thisNode.right != null)
+                    queue.add(new TreeNode[]{thisNode, thisNode.right});
+                if(thisNode.left != null)
+                    queue.add(new TreeNode[]{thisNode, thisNode.left});
+                continue;
             }
+
 
             int classAddress = UPMEM.getInstance().getDPUManager(dpuID)
                     .classCacheManager.getClassStrutCacheLine("pim/algorithm/DPUTreeNode").marmAddr;
 
-            if(currentChildrenCount + c <= DPU_MAX_NODES_COUNT){
-                currentChildrenCount += c;
 
+            // create and write images to DPUs
+            if(currentChildrenCount + c <= DPU_MAX_NODES_COUNT){
                 DPUTreeNodeProxyAutoGen dpuTreeNodeProxyAutoGen =
                         new DPUTreeNodeProxyAutoGen(thisNode.key, thisNode.val);
+                currentChildrenCount += c;
                 cpuProxyNode++;
                 dpuTreeNodeProxyAutoGen.dpuID = dpuID;
                 dpuTreeNodeProxyAutoGen.address = currentHeapAddr;
@@ -237,6 +245,8 @@ public class TreeWriter {
         System.out.println("cpu part size = " + size);
     }
 
+
+    /* Write the heap memory bytes array to a DPU */
     private static void writeHeapImageToDPU(int dpuID) {
         try {
             UPMEM.getInstance().getDPUManager(dpuID).garbageCollector.allocate(DPUJVMMemSpaceKind.DPU_HEAPSPACE,2000000 * INSTANCE_SIZE);
@@ -247,38 +257,39 @@ public class TreeWriter {
         }
     }
 
-    private static int[] writeSubTreeBytes(int currentHeapAddress, TreeNode thisNode, byte[] heapMemory, int classAddress) {
-        if(thisNode == null) return new int[]{currentHeapAddress, 0, 0};
+    /* Write the tree represented by thisNode to the heap memory, write from 'heapAddress'*/
+    private static int[] writeSubTreeBytes(int heapAddress, TreeNode thisNode, byte[] heapMemory, int classAddress) {
+        if(thisNode == null) return new int[]{heapAddress, 0, 0};
         // write this node to heap
-        int thisNodeAddress = currentHeapAddress;
+        int thisNodeAddress = heapAddress;
         writeKey(thisNode.key, heapMemory, thisNodeAddress);
         writeValue(thisNode.val, heapMemory, thisNodeAddress);
         writeClassReference(classAddress, heapMemory, thisNodeAddress);
-        currentHeapAddress += INSTANCE_SIZE;
+        heapAddress += INSTANCE_SIZE;
 
         int[] res;
         int l = 0;
         int r = 0;
         if(thisNode.left != null){
             // recursive left
-            l = currentHeapAddress;
-            writeLeft(currentHeapAddress, heapMemory, thisNodeAddress);
-            res =  writeSubTreeBytes(currentHeapAddress, thisNode.left, heapMemory, classAddress);
-            currentHeapAddress = res[0];
+            l = heapAddress;
+            writeLeft(heapAddress, heapMemory, thisNodeAddress);
+            res =  writeSubTreeBytes(heapAddress, thisNode.left, heapMemory, classAddress);
+            heapAddress = res[0];
         }else{
             writeLeft(0, heapMemory, thisNodeAddress);
         }
 
         if(thisNode.right != null){
             // recursive right
-            r = currentHeapAddress;
-            writeRight(currentHeapAddress, heapMemory, thisNodeAddress);
-            res = writeSubTreeBytes(currentHeapAddress, thisNode.right, heapMemory, classAddress);
-            currentHeapAddress = res[0];
+            r = heapAddress;
+            writeRight(heapAddress, heapMemory, thisNodeAddress);
+            res = writeSubTreeBytes(heapAddress, thisNode.right, heapMemory, classAddress);
+            heapAddress = res[0];
         }else{
             writeRight(0, heapMemory, thisNodeAddress);
         }
-        return new int[]{currentHeapAddress, l, r};
+        return new int[]{heapAddress, l, r};
     }
 
     public static int getTreeSize(TreeNode thisNode) {

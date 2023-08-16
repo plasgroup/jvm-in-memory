@@ -4,6 +4,7 @@ import com.upmem.dpu.DpuException;
 import pim.IDPUProxyObject;
 import pim.UPMEM;
 import pim.algorithm.DPUTreeNodeProxyAutoGen;
+import pim.dpu.cache.DPUCacheManager;
 import pim.logger.Logger;
 import pim.logger.PIMLoggers;
 
@@ -23,7 +24,7 @@ public class ProxyHelper {
     public static IDPUProxyObject getAReturnValue(int dpuID){
         try {
             int returnVal = upmem.getDPUManager(dpuID).garbageCollector.getReturnVal();
-            pimProxy.logf("pim:proxy","return pointer = 0x%x\n", returnVal);
+            // pimProxy.logf("pim:proxy","return pointer = 0x%x\n", returnVal);
             if(returnVal == 0) return null;
             return UPMEM.generateProxyObjectFromHandler(DPUTreeNodeProxyAutoGen.class, new DPUObjectHandler(dpuID, returnVal));
         } catch (DpuException | NoSuchFieldException | InstantiationException e) {

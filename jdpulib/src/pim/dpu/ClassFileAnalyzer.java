@@ -1,5 +1,8 @@
 package pim.dpu;
 
+import pim.dpu.java_strut.DPUJClass;
+import pim.dpu.java_strut.DPUJField;
+import pim.dpu.java_strut.DPUJMethod;
 import pim.logger.Logger;
 import pim.logger.PIMLoggers;
 import pim.utils.BytesUtils;
@@ -71,7 +74,6 @@ public class ClassFileAnalyzer {
         Tester.alert(filled == jc.constantBytes.length, "In fillConstantArea(), totaled filled bytes != constantArea length");
         classfileAnalyzerLogger.logf("filled %d/%d bytes\n", filled, jc.constantBytes.length);
     }
-
 
 
     /* Read a constant table item from a given offset of class file bytes, and set information to entry table

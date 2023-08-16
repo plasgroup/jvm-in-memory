@@ -2,6 +2,7 @@ package pim.dpu;
 
 import com.upmem.dpu.Dpu;
 import com.upmem.dpu.DpuException;
+import pim.dpu.java_strut.DPUJVMMemSpaceKind;
 import pim.logger.Logger;
 import pim.logger.PIMLoggers;
 import pim.utils.BytesUtils;
@@ -149,7 +150,6 @@ public class DPUGarbageCollector {
 
     public static DPUObjectHandler dpuAddress2ObjHandler(int addr, int dpuID) {
         DPUObjectHandler handler = new DPUObjectHandler(dpuID, addr);
-
         return handler;
     }
 

@@ -1,18 +1,16 @@
 package pim.dpu;
 import com.upmem.dpu.Dpu;
-
 import com.upmem.dpu.DpuException;
 import pim.UPMEM;
+import pim.dpu.cache.DPUCacheManager;
 import pim.logger.Logger;
 import pim.logger.PIMLoggers;
 import pim.utils.BytesUtils;
 import pim.IDPUProxyObject;
-
 import java.io.IOException;
 import java.io.PrintStream;
 
-import static pim.dpu.DPUJVMMemSpaceKind.DPU_HEAPSPACE;
-
+import static pim.dpu.java_strut.DPUJVMMemSpaceKind.DPU_HEAPSPACE;
 
 public class DPUManager {
     public final int dpuID;
@@ -69,7 +67,7 @@ public class DPUManager {
         return calcFieldCount(c.getSuperclass()) + c.getDeclaredFields().length;
     }
 
-    String generateInitializationDescriptor(Class c, Object[] params){
+    String generateInitializationDescriptor(Object[] params){
         String desc = "<init>:(";
         for(Object obj : params){
             if(obj instanceof Integer){
@@ -81,6 +79,7 @@ public class DPUManager {
 
         return desc + ")V";
     }
+
     public <T> DPUObjectHandler createObject(Class c, Object[] params) throws DpuException, IOException {
         int fieldCount = calcFieldCount(c);
         int instanceSize = 8 + fieldCount * 4;
@@ -93,7 +92,7 @@ public class DPUManager {
         }
         classAddr = classCacheManager.getClassStrutCacheLine(c.getName().replace(".","/")).marmAddr;
         dpuManagerLogger.logln(" * Get Class Addr = " + classAddr);
-        String initMethodDesc = generateInitializationDescriptor(c, params);
+        String initMethodDesc = generateInitializationDescriptor(params);
 
         initMethodAddr = classCacheManager
                 .getMethodCacheItem(c.getName().replace(".", "/"), initMethodDesc).mramAddr;
@@ -106,7 +105,7 @@ public class DPUManager {
         dpuManagerLogger.logln("---> Object Create Finish, handler = " + " (addr: " + handler.address + "," + "dpu: " + handler.dpuID + ") <---");
 
 
-        VirtualTable virtualTable = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getClassStrut("pim/algorithm/DPUTreeNode").virtualTable;
+        VirtualTable virtualTable = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getClassStructure("pim/algorithm/DPUTreeNode").virtualTable;
         dpuManagerLogger.logln("" + virtualTable);
 
         // call the init func
