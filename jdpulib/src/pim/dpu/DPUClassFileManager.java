@@ -155,8 +155,9 @@ public class DPUClassFileManager {
                     if(cacheLine != null){
                         classfileLogger.logf("class %s loaded, mram addr = 0x%x\n", classNameUTF8, cacheLine.marmAddr);
                     }else{
-                        if(UPMEM.whiteList.contains(classNameUTF8)){
+                        if(!"java/lang/System".equals(classNameUTF8)){
                             try {
+                                // TODO className$1 loading..
                                 loadClassForDPU(Class.forName(classNameUTF8.replace("/", ".")));
                             } catch (ClassNotFoundException | IOException e) {
                                 classfileLogger.logln("cannot find class " + classNameUTF8);
