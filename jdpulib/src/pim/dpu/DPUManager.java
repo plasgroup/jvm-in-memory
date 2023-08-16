@@ -88,11 +88,7 @@ public class DPUManager {
         int initMethodAddr;
 
         if(classCacheManager.getClassStrutCacheLine(c.getName().replace(".","/")) == null){
-            try {
-                dpuClassFileManager.loadClassForDPU(c);
-            } catch (ClassNotFoundException e) {
-                throw new RuntimeException(e);
-            }
+            dpuClassFileManager.loadClassForDPU(c);
         }
         classAddr = classCacheManager.getClassStrutCacheLine(c.getName().replace(".","/")).marmAddr;
         dpuManagerLogger.logln(" * Get Class Addr = " + classAddr);
