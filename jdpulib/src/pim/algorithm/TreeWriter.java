@@ -87,7 +87,7 @@ public class TreeWriter {
 
     static void outputImage(int dpuID){
         if(ExperimentConfigurator.serializeToFile){
-            try (FileOutputStream outputStream = new FileOutputStream("[" + ExperimentConfigurator.totalNodeCount + "]" + "DPU#" + dpuID + ".img")) {
+            try (FileOutputStream outputStream = new FileOutputStream(ExperimentConfigurator.imagesPath + "[" + ExperimentConfigurator.totalNodeCount + "]" + "DPU#" + dpuID + ".img")) {
                 outputStream.write(heapMemory);
             }catch (Exception e){
                 throw new RuntimeException(e);

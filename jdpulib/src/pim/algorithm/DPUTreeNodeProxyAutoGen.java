@@ -27,7 +27,11 @@ public class DPUTreeNodeProxyAutoGen extends DPUTreeNode implements IDPUProxyObj
     public DPUTreeNodeProxyAutoGen(int k, int v) {
         super(k, v);
     }
-
+    public DPUTreeNodeProxyAutoGen(int k, int v, int dpuID, int mramAddress) {
+        super(k, v);
+        this.dpuID = dpuID;
+        this.address = mramAddress;
+    }
     public static int getLeftDispatchCount = 0;
     public static int getRightDispatchCount = 0;
     public static int setRightDispatchCount = 0;

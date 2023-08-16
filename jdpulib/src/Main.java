@@ -2,65 +2,41 @@ import pim.ExperimentConfigurator;
 import pim.UPMEMConfigurator;
 import pim.algorithm.*;
 import pim.UPMEM;
-
 import java.io.*;
 import java.util.*;
 
 import static pim.ExperimentConfigurator.*;
+import static pim.algorithm.BSTTester.writeKV;
 
 public class Main {
-    public static void writeKV(int count){
-        try {
-            int B = 20;
-            int batch = Integer.MAX_VALUE / B;
-            FileOutputStream fos = new FileOutputStream("key_values-" + count + ".txt");
-            BufferedOutputStream bos = new BufferedOutputStream(fos);
-            OutputStreamWriter osw = new OutputStreamWriter(bos);
-            int upper = batch;
-            int avg = count / 20;
-            for(int i = 0; i < B; i ++){
-                ArrayList<BSTBuilder.Pair<Integer, Integer>> pairs =
-                        new IntIntValuePairGenerator(upper - batch, upper).generatePairs(avg);
-                for(BSTBuilder.Pair<Integer, Integer> pair : pairs){
-                    osw.write(pair.getKey() + " " + pair.getVal() + "\n");
-                }
-                osw.flush();
-                upper += batch;
-            }
-            osw.close();
-            bos.close();
-            fos.close();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public static UPMEMConfigurator upmemConfigurator = new UPMEMConfigurator();
 
     public static void parseParameters(String[] args){
-        Dictionary<String, Object> params = new Hashtable<>();
-
-
         for(int i = 0; i < args.length; i++){
             String arg = args[i];
-            if(arg.startsWith("NO_SEARCH")){
+            String[] items = arg.split("=");
+            String argumentName = items[0];
+            if("NO_SEARCH".equals(argumentName)){
                 noSearch = true;
-            }else if(arg.startsWith("IMG")){
+            }else if("BUILD_FROM_IMG".equals(argumentName)){
                 buildFromSerializedData = true;
-            }else if(arg.startsWith("SERIALIZE_TREE")){
+            }else if("SERIALIZE_TREE".equals(argumentName)){
                 serializeToFile = true;
-            }else if(arg.startsWith("TYPE")){
-                experimentType = arg.split("=")[1];
-            }else if(arg.startsWith("QUERIES")){
-                queryCount = Integer.parseInt(arg.split("=")[1]);
-            }else if(arg.startsWith("CPU_LAYER_COUNT")){
-                cpuLayerCount = Integer.parseInt(arg.split("=")[1]);
-            }else if(arg.startsWith("DPU_COUNT")){
-                dpuInUse = Integer.parseInt(arg.split("=")[1]);
-            }else if(arg.startsWith("NODES")){
-                totalNodeCount = Integer.parseInt(arg.split("=")[1]);
+            }else if("TYPE".equals(argumentName)){
+                experimentType = items[1];
+            }else if("QUERIES".equals(argumentName)){
+                queryCount = Integer.parseInt(items[1]);
+            }else if("CPU_LAYER_COUNT".equals(argumentName)){
+                cpuLayerCount = Integer.parseInt(items[1]);
+            }else if("DPU_COUNT".equals(items[1])){
+                dpuInUse = Integer.parseInt(items[1]);
+            }else if("NODES".equals(items[1])){
+                totalNodeCount = Integer.parseInt(items[1]);
+            }else if("IMG_PATH".equals(items[1])){
+                imagesPath = Arrays.stream(items).skip(1).reduce((s1,s2) -> s1+s2).get().replace("\"", "");
+            }else if("WRITE_KV".equals(argumentName)){
+                writeKeyValue = true;
+                writeKeyValueCount = Integer.parseInt(items[1]);
             }
         }
     }
@@ -73,6 +49,12 @@ public class Main {
         System.out.println(experimentType + " mode, nodes count = " + totalNodeCount + " query count = " + queryCount);
         System.out.println("cpu tree layer count = " + cpuLayerCount);
         if(noSearch) System.out.println("No search mode");
+        if(buildFromSerializedData) System.out.println("build tree from images, path = " + imagesPath);
+        if(serializeToFile) System.out.println("output tree to file. Imgs path = " + imagesPath);
+        if(writeKeyValue){
+            System.out.println("Generate key value paris, and write to file. Count = " + writeKeyValueCount);
+            writeKV(writeKeyValueCount, "key_values-" + writeKeyValueCount + ".txt");
+        }
 
         UPMEM.initialize(upmemConfigurator);
 
@@ -80,7 +62,7 @@ public class Main {
                 .setDpuInUseCount(dpuInUse)
                 .setThreadPerDPU(UPMEM.perDPUThreadsInUse);
 
-        if(args.length < 3){
+        if(args.length == 0){
             BSTTester.evaluatePIMBST(totalNodeCount, ExperimentConfigurator.queryCount,  ExperimentConfigurator.cpuLayerCount);
             return;
         }
@@ -92,3 +74,4 @@ public class Main {
         }
     }
 }
+

@@ -21,6 +21,34 @@ public class BSTTester {
 
     static List<Integer> keys = readArrayList();
 
+    public static void writeKV(int count, String path){
+        try {
+            int B = 20;
+            int batch = Integer.MAX_VALUE / B;
+            FileOutputStream fos = new FileOutputStream(path);
+            BufferedOutputStream bos = new BufferedOutputStream(fos);
+            OutputStreamWriter osw = new OutputStreamWriter(bos);
+            int upper = batch;
+            int avg = count / 20;
+            for(int i = 0; i < B; i ++){
+                ArrayList<BSTBuilder.Pair<Integer, Integer>> pairs =
+                        new IntIntValuePairGenerator(upper - batch, upper).generatePairs(avg);
+                for(BSTBuilder.Pair<Integer, Integer> pair : pairs){
+                    osw.write(pair.getKey() + " " + pair.getVal() + "\n");
+                }
+                osw.flush();
+                upper += batch;
+            }
+            osw.close();
+            bos.close();
+            fos.close();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static ArrayList<Integer> readArrayList(){
         ArrayList<Integer> resultList = new ArrayList<>();
         try {
@@ -85,12 +113,14 @@ public class BSTTester {
         if(ExperimentConfigurator.buildFromSerializedData){
             System.out.println("Build Tree From Images");
             try {
-                root = cpuPartTreeFromFile("PIM_TREE_" + totalNodeCount + ".txt");
-                System.out.println("load CPU part tree");
+
                 for(int i = 0; i < UPMEM.dpuInUse; i++){
                     UPMEM.getInstance().getDPUManager(i).createObject(DPUTreeNode.class, new Object[]{0, 0});
                 }
-                writeDPUImages(totalNodeCount, "./");
+                writeDPUImages(totalNodeCount, ExperimentConfigurator.imagesPath);
+
+                System.out.println("load CPU part tree");
+                root = cpuPartTreeFromFile("PIM_TREE_" + totalNodeCount + ".txt");
             } catch (IOException e) {
                 throw new RuntimeException(e);
             } catch (DpuException e) {
@@ -111,10 +141,11 @@ public class BSTTester {
     private static void writeDPUImages(int totalNodeCount, String imagesPath) {
         int i = 0;
         while(true){
-            File imgI = new File(imagesPath + "[" + totalNodeCount + "]DPU#" + i + ".img");
+            String filePath = imagesPath + "[" + totalNodeCount + "]DPU#" + i + ".img";
+            File imgI = new File(filePath);
             if(!imgI.exists()) return;
-            System.out.println("load image to DPU#" + i);
-            try (FileInputStream inputStream = new FileInputStream("[" + ExperimentConfigurator.totalNodeCount + "]" + "DPU#" + i + ".img")) {
+            System.out.println("load image to DPU#" + i + " from file " + filePath);
+            try (FileInputStream inputStream = new FileInputStream(imagesPath + "[" + totalNodeCount + "]DPU#" + i + ".img")) {
                 byte[] bs = inputStream.readAllBytes();
                 UPMEM.getInstance().getDPUManager(i).garbageCollector.allocate(DPUJVMMemSpaceKind.DPU_HEAPSPACE,2000000 * INSTANCE_SIZE);
                 UPMEM.getInstance().getDPUManager(i).garbageCollector.transfer(DPUJVMMemSpaceKind.DPU_HEAPSPACE,  bs, 0);
