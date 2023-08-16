@@ -68,6 +68,11 @@ public class BSTBuilder {
     }
 
     public static TreeNode buildCpuPartTreeFromFile(String filePath) throws IOException {
+        TreeNode root = deserialize(filePath);
+
+        return root;
+    }
+    public static TreeNode deserialize(String filePath) throws IOException {
         FileReader fr;
         try {
             fr = new FileReader(filePath);
@@ -75,94 +80,111 @@ public class BSTBuilder {
             throw new RuntimeException(e);
         }
         BufferedReader br = new BufferedReader(fr);
-        TreeNode root = deserialize(br);
-
-        return root;
-    }
-    public static TreeNode deserialize(BufferedReader br) throws IOException {
-        // TODO, BUG
         char[] buffer = new char[4096];
+        TreeNode result = (TreeNode) deserialize(br, buffer, 0)[0];
+        br.close();
+        fr.close();
+        return result;
+    }
+
+    public static Object[] deserialize(BufferedReader br, char[] buffer, int pos) throws IOException {
+        // TODO, BUG
         int readByteCount = br.read(buffer);
+        TreeNode newNode = null;
+
         while(readByteCount > 0){
-            int pt = 0;
-            while(pt < readByteCount){
-
+            pos = 0;
+            while(buffer[pos] == '\r' || buffer[pos] == '\n'){
+                if(pos + 1 >= readByteCount){
+                    readByteCount = br.read(buffer);
+                    pos = 0;
+                }else {
+                    pos++;
+                }
             }
-        }
-
-
-        char ch = (char) br.read();
-        if(ch == -1) return null;
-        while(ch == '\r' || ch == '\n'){
-            ch = (char) br.read();
-        }
-        if(ch == '#'){
-            // currently in a space
-            br.read();
-            // to next
-            return null;
-        }
-
-        if(ch == 'p'){
-            System.out.println();
-        }
-        // process data
-        char type = ch;
-        StringBuilder keyString = new StringBuilder();
-        StringBuilder valueString = new StringBuilder();
-        StringBuilder dpuIDString = new StringBuilder();
-        StringBuilder mramAddressString = new StringBuilder();
-
-        br.read();
-
-        while((ch = (char) br.read()) != ','){
-            keyString.append(ch);
-        }
-
-        if(type == 'p'){
-            while((ch = (char) br.read())  != ','){
-                valueString.append(ch);
+            if(buffer[pos] == '#'){
+                if(pos + 1 >= readByteCount){
+                    readByteCount = br.read(buffer);
+                    pos = 0;
+                    return new Object[]{null, pos, buffer};
+                }else {
+                    return new Object[]{null, pos + 1, buffer};
+                }
             }
-            while((ch = (char) br.read())  != ','){
-                dpuIDString.append(ch);
+
+            // process data
+            if(pos + 1 >= readByteCount){
+                readByteCount = br.read(buffer);
+                pos = 0;
+            }else {
+                pos++;
             }
-            while ((ch = (char) br.read())   != ' '){
-                mramAddressString.append(ch);
+            char type = buffer[pos];
+            StringBuilder keyString = new StringBuilder();
+            StringBuilder valueString = new StringBuilder();
+            if(pos + 1 >= readByteCount){
+                readByteCount = br.read(buffer);
+                pos = 0;
+            }else {
+                pos++;
             }
-        }else{
-            while((ch = (char) br.read())  != ' '){
-                valueString.append(ch);
+
+            while(buffer[pos] != ','){
+                keyString.append(buffer[pos]);
+                if(pos + 1 >= readByteCount){
+                    readByteCount = br.read(buffer);
+                    pos = 0;
+                }else {
+                    pos++;
+                }
             }
+
+            if(pos + 1 >= readByteCount){
+                readByteCount = br.read(buffer);
+                pos = 0;
+            }else {
+                pos++;
+            }
+
+            while(buffer[pos] != ' '){
+                valueString.append(buffer[pos]  );
+                if(pos + 1 >= readByteCount){
+                    readByteCount = br.read(buffer);
+                    pos = 0;
+                }else {
+                    pos++;
+                }
+            }
+            int key = Integer.parseInt(keyString.toString());
+            int value = Integer.parseInt(valueString.toString());
+            newNode = (type == '-' ? new CPUTreeNode(key, value) : new DPUTreeNodeProxyAutoGen(key, value));
+            if(type != '-'){
+                proxy ++;
+            }
+            Object[] left;
+            Object[] right;
+
+            if(pos + 1 >= readByteCount){
+                readByteCount = br.read(buffer);
+                pos = 0;
+            }else {
+                pos++;
+            }
+
+            left = deserialize(br, buffer, pos);
+            pos = (Integer) left[1];
+            newNode.left = (TreeNode) left[0];
+            if(pos + 1 >= readByteCount){
+                readByteCount = br.read(buffer);
+                pos = 0;
+            }else {
+                pos++;
+            }
+            right = deserialize(br, buffer, pos);
+            pos = (Integer) right[1];
+            newNode.right = (TreeNode) right[0];
         }
-
-        // currently pt in the front 1 step of space
-        int key = Integer.parseInt(keyString.toString());
-        int value = Integer.parseInt(valueString.toString());
-
-
-        TreeNode newNode;
-        if(type == '-'){
-            newNode = new CPUTreeNode(key, value);
-        }else{
-            newNode = new DPUTreeNodeProxyAutoGen(key, value, Integer.parseInt(dpuIDString.toString()), Integer.parseInt(mramAddressString.toString()));
-
-        }
-
-        if(type != '-'){
-            proxy ++;
-        }
-        TreeNode left;
-        TreeNode right;
-
-        //br.read();
-
-        // in the latter of space
-        left = deserialize(br);
-        newNode.left = left;
-        right = deserialize(br);
-        newNode.right = right;
-
-        return newNode;
+        return new Object[]{newNode, pos, buffer};
     }
 
     public static void serialize(TreeNode root, BufferedWriter bw) throws IOException {
