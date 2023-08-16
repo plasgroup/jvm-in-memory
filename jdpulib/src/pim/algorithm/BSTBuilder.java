@@ -87,73 +87,51 @@ public class BSTBuilder {
         return result;
     }
 
-    public static Object[] deserialize(BufferedReader br, char[] buffer, int pos) throws IOException {
-        // TODO, BUG
-        int readByteCount = br.read(buffer);
-        TreeNode newNode = null;
 
-        while(readByteCount > 0){
+
+    static final int CONTEXT_POS = 0;
+    static final int CONTEXT_READ_BYTES = 1;
+
+    public static void increasePosition(BufferedReader br, char[] buffer, int[] context, int pos) throws IOException {
+        if(pos + 1 >= context[CONTEXT_READ_BYTES] ){
+            context[CONTEXT_READ_BYTES]  = br.read(buffer);
+            context[CONTEXT_POS] = 0;
+        }else {
+            context[CONTEXT_POS] ++;
+        }
+    }
+    public static Object[] deserialize(BufferedReader br, char[] buffer, int pos) throws IOException {
+        int[] context = new int[2];
+        context[CONTEXT_READ_BYTES] = br.read(buffer);
+        TreeNode newNode = null;
+        while(context[CONTEXT_READ_BYTES] > 0){
             pos = 0;
             while(buffer[pos] == '\r' || buffer[pos] == '\n'){
-                if(pos + 1 >= readByteCount){
-                    readByteCount = br.read(buffer);
-                    pos = 0;
-                }else {
-                    pos++;
-                }
+                increasePosition(br, buffer, context, pos);
             }
             if(buffer[pos] == '#'){
-                if(pos + 1 >= readByteCount){
-                    readByteCount = br.read(buffer);
-                    pos = 0;
-                    return new Object[]{null, pos, buffer};
-                }else {
-                    return new Object[]{null, pos + 1, buffer};
-                }
+                increasePosition(br, buffer, context, pos);
+                return new Object[]{null, pos, buffer};
+
             }
 
             // process data
-            if(pos + 1 >= readByteCount){
-                readByteCount = br.read(buffer);
-                pos = 0;
-            }else {
-                pos++;
-            }
+            increasePosition(br, buffer, context, pos);
             char type = buffer[pos];
             StringBuilder keyString = new StringBuilder();
             StringBuilder valueString = new StringBuilder();
-            if(pos + 1 >= readByteCount){
-                readByteCount = br.read(buffer);
-                pos = 0;
-            }else {
-                pos++;
-            }
+            increasePosition(br, buffer, context, pos);
 
             while(buffer[pos] != ','){
                 keyString.append(buffer[pos]);
-                if(pos + 1 >= readByteCount){
-                    readByteCount = br.read(buffer);
-                    pos = 0;
-                }else {
-                    pos++;
-                }
+                increasePosition(br, buffer, context, pos);
             }
 
-            if(pos + 1 >= readByteCount){
-                readByteCount = br.read(buffer);
-                pos = 0;
-            }else {
-                pos++;
-            }
+            increasePosition(br, buffer, context, pos);
 
             while(buffer[pos] != ' '){
-                valueString.append(buffer[pos]  );
-                if(pos + 1 >= readByteCount){
-                    readByteCount = br.read(buffer);
-                    pos = 0;
-                }else {
-                    pos++;
-                }
+                valueString.append(buffer[pos]);
+                increasePosition(br, buffer, context, pos);
             }
             int key = Integer.parseInt(keyString.toString());
             int value = Integer.parseInt(valueString.toString());
@@ -164,22 +142,14 @@ public class BSTBuilder {
             Object[] left;
             Object[] right;
 
-            if(pos + 1 >= readByteCount){
-                readByteCount = br.read(buffer);
-                pos = 0;
-            }else {
-                pos++;
-            }
+            increasePosition(br, buffer, context, pos);
 
             left = deserialize(br, buffer, pos);
             pos = (Integer) left[1];
             newNode.left = (TreeNode) left[0];
-            if(pos + 1 >= readByteCount){
-                readByteCount = br.read(buffer);
-                pos = 0;
-            }else {
-                pos++;
-            }
+
+            increasePosition(br, buffer, context, pos);
+
             right = deserialize(br, buffer, pos);
             pos = (Integer) right[1];
             newNode.right = (TreeNode) right[0];
