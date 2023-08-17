@@ -139,7 +139,7 @@ public class TreeWriter {
         int cpuNode = 0;
         int cpuProxyNode = 0;
 
-        // first cpuLayerCount layers retain on PCU
+        // first cpuLayerCount layers retain on CPU
         while(currentLayer < cpuLayerCount){
             int size = queue.size();
             for(int i = 0; i < size; i++){
@@ -159,7 +159,7 @@ public class TreeWriter {
         int dpuID = 0;
         int currentHeapAddr = DPUGarbageCollector.heapSpaceBeginAddr + 8;
 
-        // move substree from (cpuLayerCount + 1) layers to a certain DPU
+        // move subtree from (cpuLayerCount + 1) layers to a certain DPU
         while(queue.size() > 0){
             TreeNode[] record = queue.remove();
             TreeNode thisNode = record[1];
@@ -244,7 +244,6 @@ public class TreeWriter {
         int size = getTreeSize(root);
         System.out.println("cpu part size = " + size);
     }
-
 
     /* Write the heap memory bytes array to a DPU */
     private static void writeHeapImageToDPU(int dpuID) {

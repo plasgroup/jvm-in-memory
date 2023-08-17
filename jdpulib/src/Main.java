@@ -1,9 +1,9 @@
 import pim.ExperimentConfigurator;
-import pim.UPMEMConfigurator;
-import pim.algorithm.*;
 import pim.UPMEM;
-import java.io.*;
-import java.util.*;
+import pim.UPMEMConfigurator;
+import pim.algorithm.BSTTester;
+
+import java.util.Arrays;
 
 import static pim.ExperimentConfigurator.*;
 import static pim.algorithm.BSTTester.writeKV;
@@ -72,6 +72,7 @@ public class Main {
         }else if("PIM".equals(experimentType)){
             BSTTester.evaluatePIMBST(totalNodeCount, queryCount, cpuLayerCount);
         }
+
     }
 }
 

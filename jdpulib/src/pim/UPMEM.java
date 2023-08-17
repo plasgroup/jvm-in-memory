@@ -1,15 +1,15 @@
 package pim;
 
 import com.upmem.dpu.DpuException;
-import pim.dpu.*;
+import pim.dpu.DPUManager;
+import pim.dpu.DPUObjectHandler;
+import pim.dpu.PIMManager;
 import pim.logger.Logger;
 import sun.misc.Unsafe;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 
 
 /** UPMEM class
@@ -18,6 +18,7 @@ import java.util.List;
  *      - It should call the initialization() method before get and instance
  *      -
  * **/
+
 public class UPMEM {
     /* Configurations Fields */
     public static final int TOTAL_DPU_COUNT = 1024;
@@ -39,6 +40,18 @@ public class UPMEM {
         whiteList.add("pim/algorithm/TreeNode");
         whiteList.add("java/lang/Object");
     };
+
+    public void beginLazyDispatching(){
+
+    }
+
+    public void dispatchAllPendingCalls(){
+
+    }
+
+    public void endLazyDispatching(){
+
+    }
 
     static Logger upmemLogger = Logger.getLogger("pi:upmem");
     {

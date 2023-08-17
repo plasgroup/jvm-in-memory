@@ -306,9 +306,6 @@ public class DPUClassFileManager {
                             if(ch != ';'){
                                 matched += ch;
                             }else{
-                                // TODO, some class are ignored
-                                String[] ignores = new String[]{"java/lang/String"};
-
                                 if(upmem.getDPUManager(dpuID).classCacheManager.getClassStrutCacheLine(matched) == null){
                                     classfileLogger.logln("class " + matched + " unloaded");
                                     if("java/lang/String".equals(matched)){
@@ -334,9 +331,6 @@ public class DPUClassFileManager {
 
                     // find cache
                     jc.entryItems[i] = 0;
-                    if(getUTF8(jc, jc.thisClassNameIndex).equals("pim/algorithm/TreeNode")){
-                        classfileLogger.logln("");
-                    }
                     jc.entryItems[i] |= ((long)BytesUtils.readU2BigEndian(classFileBytes, jc.itemBytesEntries[i] + 1) << 48) & 0xFFFF000000000000L;
                     jc.entryItems[i] |= ((long)BytesUtils.readU2BigEndian(classFileBytes, jc.itemBytesEntries[i] + 3) << 32) & 0x0000FFFF00000000L;
 

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 import static pim.algorithm.TreeWriter.convertCPUTreeToPIMTree;
+import static pim.algorithm.TreeWriter.getTreeSize;
 
 public class BSTBuilder {
     static Logger bstBuildingLogger = PIMLoggers.bstBuildingLogger;
@@ -65,6 +66,7 @@ public class BSTBuilder {
            BufferedWriter bw = new BufferedWriter(fw);
            serialize(root, bw);
            bw.close();
+           fw.close();
        } catch (IOException e) {
            throw new RuntimeException(e);
        }
@@ -72,9 +74,9 @@ public class BSTBuilder {
 
     public static TreeNode buildCpuPartTreeFromFile(String filePath) throws IOException {
         TreeNode root = deserialize(filePath);
-
         return root;
     }
+
     public static TreeNode deserialize(String filePath) throws IOException {
         FileReader fr;
         try {
@@ -84,76 +86,109 @@ public class BSTBuilder {
         }
         BufferedReader br = new BufferedReader(fr);
         char[] buffer = new char[4096];
-        TreeNode result = (TreeNode) deserialize(br, buffer, 0)[0];
+        int[] context = new int[2];
+        TreeNode result = (TreeNode) deserialize(br, buffer, context)[0];
+        System.out.println(BSTBuilder.nodes);
+        System.out.println(getTreeSize(result));
         br.close();
         fr.close();
         return result;
     }
 
-
-    public static void increasePosition(BufferedReader br, char[] buffer, int[] context, int pos) throws IOException {
-        if(pos + 1 >= context[CONTEXT_READ_BYTES] ){
+    public static void increasePosition(BufferedReader br, char[] buffer, int[] context) throws IOException {
+        System.out.println(buffer[context[CONTEXT_POS]]);
+        if(context[CONTEXT_POS] + 1 >= context[CONTEXT_READ_BYTES]){
             context[CONTEXT_READ_BYTES]  = br.read(buffer);
             context[CONTEXT_POS] = 0;
         }else {
             context[CONTEXT_POS] ++;
         }
     }
-    public static Object[] deserialize(BufferedReader br, char[] buffer, int pos) throws IOException {
-        int[] context = new int[2];
-        context[CONTEXT_READ_BYTES] = br.read(buffer);
-        TreeNode newNode = null;
-        while(context[CONTEXT_READ_BYTES] > 0){
-            pos = 0;
-            while(buffer[pos] == '\r' || buffer[pos] == '\n'){
-                increasePosition(br, buffer, context, pos);
-            }
-            if(buffer[pos] == '#'){
-                increasePosition(br, buffer, context, pos);
-                return new Object[]{null, pos, buffer};
 
+    public static int nodes = 0;
+    public static Object[] deserialize(BufferedReader br, char[] buffer, int[] context) throws IOException {
+        TreeNode newNode = null;
+        if(context[CONTEXT_POS] >= context[CONTEXT_READ_BYTES]){
+            context[CONTEXT_READ_BYTES] = br.read(buffer);
+            context[CONTEXT_POS] = 0;
+        }
+
+        if(context[CONTEXT_READ_BYTES] == 0) return null;
+            while(buffer[context[CONTEXT_POS]] == '\r' || buffer[context[CONTEXT_POS]] == '\n'){
+                increasePosition(br, buffer, context);
+            }
+            if(buffer[context[CONTEXT_POS]] == '#'){
+                increasePosition(br, buffer, context);
+                return new Object[]{null, context[CONTEXT_POS], buffer};
             }
 
             // process data
-            increasePosition(br, buffer, context, pos);
-            char type = buffer[pos];
+            char type = buffer[context[CONTEXT_POS]];
+
+            increasePosition(br, buffer, context);
             StringBuilder keyString = new StringBuilder();
             StringBuilder valueString = new StringBuilder();
-            increasePosition(br, buffer, context, pos);
+            StringBuilder dpuIDString = new StringBuilder();
+            StringBuilder mramAddressString = new StringBuilder();
+            increasePosition(br, buffer, context);
 
-            while(buffer[pos] != ','){
-                keyString.append(buffer[pos]);
-                increasePosition(br, buffer, context, pos);
+            while(buffer[context[CONTEXT_POS]] != ','){
+                keyString.append(buffer[context[CONTEXT_POS]]);
+                increasePosition(br, buffer, context);
             }
 
-            increasePosition(br, buffer, context, pos);
+            increasePosition(br, buffer, context);
 
-            while(buffer[pos] != ' '){
-                valueString.append(buffer[pos]);
-                increasePosition(br, buffer, context, pos);
+
+            if(type == 'p'){
+                while(buffer[context[CONTEXT_POS]] != ','){
+                    valueString.append(buffer[context[CONTEXT_POS]]);
+                    increasePosition(br, buffer, context);
+                }
+                increasePosition(br, buffer, context); // ,
+                while(buffer[context[CONTEXT_POS]] != ','){
+                    dpuIDString.append(buffer[context[CONTEXT_POS]]);
+                    increasePosition(br, buffer, context);
+                }
+                increasePosition(br, buffer, context); //,
+                while(buffer[context[CONTEXT_POS]] != ' '){
+                    mramAddressString.append(buffer[context[CONTEXT_POS]]);
+                    increasePosition(br, buffer, context);
+                }
+            }else{
+                while(buffer[context[CONTEXT_POS]] != ' '){
+                    valueString.append(buffer[context[CONTEXT_POS]]);
+                    increasePosition(br, buffer, context);
+                }
             }
+
             int key = Integer.parseInt(keyString.toString());
             int value = Integer.parseInt(valueString.toString());
+
+            System.out.println("parsed key = " + key + " val = " + value);
+            if(key == 9 && value == 43179707){
+                System.out.println();
+            }
             newNode = (type == '-' ? new CPUTreeNode(key, value) : new DPUTreeNodeProxyAutoGen(key, value));
+            nodes++;
             if(type != '-'){
                 proxy ++;
             }
+
             Object[] left;
             Object[] right;
 
-            increasePosition(br, buffer, context, pos);
+            increasePosition(br, buffer, context); // space ' '
 
-            left = deserialize(br, buffer, pos);
-            pos = (Integer) left[1];
+            left = deserialize(br, buffer, context);
             newNode.left = (TreeNode) left[0];
 
-            increasePosition(br, buffer, context, pos);
+            increasePosition(br, buffer, context); // space ' '
 
-            right = deserialize(br, buffer, pos);
-            pos = (Integer) right[1];
+            right = deserialize(br, buffer, context);
             newNode.right = (TreeNode) right[0];
-        }
-        return new Object[]{newNode, pos, buffer};
+
+        return new Object[]{newNode, context[CONTEXT_POS], buffer};
     }
 
 
@@ -163,7 +198,7 @@ public class BSTBuilder {
             bw.write("#");
             return;
         }
-        if(root instanceof  DPUTreeNodeProxyAutoGen){
+        if(root instanceof DPUTreeNodeProxyAutoGen){
             data = "p" + "," + root.key + ","  + root.val + "," +
                     ((DPUTreeNodeProxyAutoGen) root).dpuID + "," + ((DPUTreeNodeProxyAutoGen) root).address;
         }else{
@@ -172,9 +207,7 @@ public class BSTBuilder {
         bw.write(data);
         bw.write(" ");
         serialize(root.left, bw);
-
         bw.write(" ");
-
         serialize(root.right, bw);
     }
 
@@ -211,7 +244,7 @@ public class BSTBuilder {
         TreeNode root = null;
         try {
             BufferedReader br = new BufferedReader(new FileReader(filePath));
-            ArrayList<BSTBuilder.Pair<Integer, Integer>> pairs = new ArrayList<BSTBuilder.Pair<Integer, Integer>>();
+            ArrayList<BSTBuilder.Pair<Integer, Integer>> pairs = new ArrayList<>();
             String s = br.readLine();
             while(s != null){
 
@@ -240,18 +273,12 @@ public class BSTBuilder {
             for(int i = 0; i < UPMEM.dpuInUse; i++){
                 UPMEM.getInstance().getDPUManager(i).dpuClassFileManager.loadClassForDPU(DPUTreeNode.class);
             }
-        } catch (DpuException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
+        } catch (DpuException | IOException e) {
             throw new RuntimeException(e);
         }
 
 
         TreeNode root = BSTBuilder.buildCPUTree(filePath);
-        if(ExperimentConfigurator.serializeToFile){
-            serializeTreeToFile(root, "CPU_TREE_" + ExperimentConfigurator.totalNodeCount);
-            System.out.println("serialize CPU TREE");
-        }
         convertCPUTreeToPIMTree(root, cpuLayerCount);
 
         return root;
@@ -262,9 +289,7 @@ public class BSTBuilder {
             for(int i = 0; i < ExperimentConfigurator.dpuInUse; i++){
                 UPMEM.getInstance().getDPUManager(i).createObject(DPUTreeNode.class, new Object[]{0, 0});
             }
-        } catch (DpuException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
+        } catch (DpuException | IOException e) {
             throw new RuntimeException(e);
         }
 

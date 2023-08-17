@@ -229,8 +229,6 @@ public class ClassFileAnalyzer {
         }
     }
 
-
-
     public static short countTypeCountFromDescriptor(String desc){
         int pt = 0;
         int c = 0;
@@ -254,7 +252,6 @@ public class ClassFileAnalyzer {
         }
         return (short) c;
     }
-
 
     public int analysisMethodItem(int pos, DPUJClass jc, int i){
         int beginPos = pos;

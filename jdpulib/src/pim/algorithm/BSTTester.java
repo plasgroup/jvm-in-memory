@@ -15,9 +15,7 @@ import static pim.algorithm.BSTBuilder.*;
 import static pim.algorithm.TreeWriter.*;
 
 public class BSTTester {
-
     static List<Integer> keys = readIntergerArrayList("keys_random.txt");
-
     static Logger bstTestLogger = PIMLoggers.bstTestLogger;
     public static void writeKV(int count, String path){
         try {
@@ -40,8 +38,6 @@ public class BSTTester {
             osw.close();
             bos.close();
             fos.close();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -59,8 +55,6 @@ public class BSTTester {
                 }
             }
             return resultList;
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -110,7 +104,6 @@ public class BSTTester {
         if(ExperimentConfigurator.buildFromSerializedData){
             System.out.println("Build Tree From Images");
             try {
-
                 for(int i = 0; i < UPMEM.dpuInUse; i++){
                     UPMEM.getInstance().getDPUManager(i).createObject(DPUTreeNode.class, new Object[]{0, 0});
                 }
@@ -125,10 +118,15 @@ public class BSTTester {
             }
         }else{
             root = BSTBuilder.buildPIMTree("key_values-" + totalNodeCount + ".txt", cpuLayerCount);
+            int count = getTreeSize(root);
+            System.out.println("cpu size count = " + count);
         }
 
-        if(ExperimentConfigurator.serializeToFile)
+        if(ExperimentConfigurator.serializeToFile){
+            System.out.println("Serialize Tree");
             serializeTreeToFile(root, "PIM_TREE_" + totalNodeCount + ".txt");
+            System.out.println("Serialize Tree Finish");
+        }
 
         int t = queryInTree(queryCount, root);
         System.out.println("proxy search count = " + DPUTreeNodeProxyAutoGen.searchDispatchCount);
