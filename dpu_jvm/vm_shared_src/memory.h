@@ -119,10 +119,8 @@ extern __host uint8_t __mram_ptr* mram_heap_pt;
 extern __host uint8_t __mram_ptr* func_pt;
 extern __host uint8_t __mram_ptr* meta_space_pt;
 
-extern __host uint8_t __mram_ptr* exec_method_pt;
-extern __host uint8_t __mram_ptr* exec_class_pt;
-
-
+extern __host uint8_t __mram_ptr* exec_method_pt[24];
+extern __host uint8_t __mram_ptr* exec_class_pt[24];
 
 extern __dma_aligned __mram_noinit uint8_t m_heapspace[MRAM_HEAP_SIZE];
 extern __dma_aligned __mram_noinit uint8_t m_metaspace[META_SPACE_SIZE];

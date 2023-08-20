@@ -7,6 +7,7 @@
 #include <malloc.h>
 #else
 
+#include <defs.h>
 #include <alloc.h>
 #include <mram.h>
 #endif // INMEMORY
@@ -101,19 +102,9 @@ void print_method(struct j_method __mram_ptr* jm){
     loc += 2;
     DEBUG_PRINT("-- (%p) code_length = %d\n", loc, *(u4 __mram_ptr*)loc);
     loc += 4;
-    // DEBUG_PRINT("-- (%p) return_type_ref = %p\n", loc, *(uint32_t __mram_ptr*)loc);
-    // loc += 4;
-    // DEBUG_PRINT("-- (%p) params_type_list_ref = %p %p\n", loc, *(uint32_t __mram_ptr*)loc, jm->params);
-    // loc += 4;
     DEBUG_PRINT("-- (%p) bytecodes_list_ref = %p === %p\n", loc, *(uint32_t __mram_ptr*)loc, jm->bytecodes);
     loc += 4;
     
-    // params
-    // for(i = 0; i < jm->params_count; i++){ 
-    //     DEBUG_PRINT("---- (%p) params_type[%d] = %p\n", loc, i, 
-    //             *(uint8_t __mram_ptr**)loc);
-    //     loc += sizeof(uint8_t*);
-    // }
     
     //loc += 4;
     // bytecodes
@@ -133,9 +124,11 @@ void exec_task_from_host() {
     int i;
     uint8_t __mram_ptr* cpt = m_heapspace;
     int num = 0;
-    struct j_method __mram_ptr *jm = exec_method_pt;
-    struct j_class __mram_ptr *jc = exec_class_pt;
-    
+    int tasklet_id = me();
+    struct j_method __mram_ptr *jm = exec_method_pt[tasklet_id];
+    struct j_class __mram_ptr *jc = exec_class_pt[tasklet_id];
+    int this_tasklet_params_buffer_len = (PARAMS_BUFFER_SIZE / 24);
+    int buffer_begin = tasklet_id * this_tasklet_params_buffer_len;
     if (inited == 0) {
         init_memory();
         inited = 1;
@@ -154,13 +147,9 @@ void exec_task_from_host() {
     fc.jc = jc;
     fc.params = params_buffer_pt;
     DEBUG_PRINT("params_buffer_pt = 0x%x\n", params_buffer_pt);
-    
     print_class(jc);
     print_method(jm);
-
     print_virtual_table(jc);
-
-    
     interp(fc);
     release_global_memory();
     DEBUG_PRINT(RED " --------------------- (END DPU) -----------------------------\n" RESET);
@@ -169,10 +158,6 @@ void exec_task_from_host() {
 
 int main() {
     DEBUG_PRINT("%x\n", params_buffer_pt);
-    //DEBUG_PRINT("class_pt = %p, method_pt = %p\n", exec_class_pt, exec_method_pt);
     exec_task_from_host();
-    //test_dpu_side();
-    // struct j_class __mram_ptr* jc = (struct j_class __mram_ptr*) 0;
-    // DEBUG_PRINT("total_size = %d\n", m_metaspace[0]);
     return 0;
 }

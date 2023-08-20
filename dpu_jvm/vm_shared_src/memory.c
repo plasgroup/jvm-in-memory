@@ -5,8 +5,8 @@ uint8_t* current_sp = wram_data_space - 4;
 uint8_t* current_fp = 0;
 uint8_t* current_fbegin = 0;
 uint8_t* stack_top;
-__host uint8_t __mram_ptr* exec_method_pt;
-__host uint8_t __mram_ptr* exec_class_pt;
+__host uint8_t __mram_ptr* exec_method_pt[24];
+__host uint8_t __mram_ptr* exec_class_pt[24];
 
 __host uint8_t __mram_ptr *mram_heap_pt = 0;
 __host uint8_t __mram_ptr* func_pt;
@@ -34,7 +34,6 @@ __dma_aligned __mram_noinit uint8_t m_metaspace[META_SPACE_SIZE];
 __host uint8_t params_buffer[PARAMS_BUFFER_SIZE];
 uint8_t wram_data_space[WRAM_DATA_SPACE_SIZE];
 uint8_t wram_frames_space[WRAM_SIZE];
-
 
 uint8_t* wram_data_space_pt = wram_data_space;
 
