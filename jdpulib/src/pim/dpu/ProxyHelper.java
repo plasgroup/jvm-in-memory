@@ -26,15 +26,13 @@ public class ProxyHelper {
             int returnVal = upmem.getDPUManager(dpuID).garbageCollector.getReturnVal();
             // pimProxy.logf("pim:proxy","return pointer = 0x%x\n", returnVal);
             if(returnVal == 0) return null;
-            return UPMEM.generateProxyObjectFromHandler(DPUTreeNodeProxyAutoGen.class, new DPUObjectHandler(dpuID, returnVal));
+            return UPMEM.generateProxyObject(DPUTreeNodeProxyAutoGen.class, dpuID, returnVal);
         } catch (DpuException | NoSuchFieldException | InstantiationException e) {
             throw new RuntimeException(e);
         }
     }
 
     public static void invokeMethod(int dpuID, int address, String className, String methodDescriptor, Object... params){
-        // pimProxy.logf("--------- Invoke proxy %s handler = " + objectHandler + " ------------\n", methodDescriptor.split(":")[0]);
-        // pimProxy.logf(" - DPUID = " + objectHandler.dpuID);
         DPUCacheManager cm = upmem.getDPUManager(dpuID).classCacheManager;
         int methodMRAMAddr = cm.getMethodCacheItem(className, methodDescriptor).mramAddr;
         int classMRAMAddr = cm.getClassStrutCacheLine(className).marmAddr;

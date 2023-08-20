@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 import static pim.algorithm.TreeWriter.convertCPUTreeToPIMTree;
-import static pim.algorithm.TreeWriter.getTreeSize;
 
 public class BSTBuilder {
     static Logger bstBuildingLogger = PIMLoggers.bstBuildingLogger;
@@ -88,15 +87,12 @@ public class BSTBuilder {
         char[] buffer = new char[4096];
         int[] context = new int[2];
         TreeNode result = (TreeNode) deserialize(br, buffer, context)[0];
-        System.out.println(BSTBuilder.nodes);
-        System.out.println(getTreeSize(result));
         br.close();
         fr.close();
         return result;
     }
 
     public static void increasePosition(BufferedReader br, char[] buffer, int[] context) throws IOException {
-        System.out.println(buffer[context[CONTEXT_POS]]);
         if(context[CONTEXT_POS] + 1 >= context[CONTEXT_READ_BYTES]){
             context[CONTEXT_READ_BYTES]  = br.read(buffer);
             context[CONTEXT_POS] = 0;
@@ -107,7 +103,7 @@ public class BSTBuilder {
 
     public static int nodes = 0;
     public static Object[] deserialize(BufferedReader br, char[] buffer, int[] context) throws IOException {
-        TreeNode newNode = null;
+        TreeNode newNode;
         if(context[CONTEXT_POS] >= context[CONTEXT_READ_BYTES]){
             context[CONTEXT_READ_BYTES] = br.read(buffer);
             context[CONTEXT_POS] = 0;
@@ -165,7 +161,6 @@ public class BSTBuilder {
             int key = Integer.parseInt(keyString.toString());
             int value = Integer.parseInt(valueString.toString());
 
-            System.out.println("parsed key = " + key + " val = " + value);
             if(key == 9 && value == 43179707){
                 System.out.println();
             }

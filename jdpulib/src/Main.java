@@ -2,6 +2,8 @@ import pim.ExperimentConfigurator;
 import pim.UPMEM;
 import pim.UPMEMConfigurator;
 import pim.algorithm.BSTTester;
+import pim.algorithm.DPUTreeNode;
+import pim.algorithm.TreeNode;
 
 import java.util.Arrays;
 
@@ -62,6 +64,9 @@ public class Main {
                 .setDpuInUseCount(dpuInUse)
                 .setThreadPerDPU(UPMEM.perDPUThreadsInUse);
 
+        TreeNode tn = (TreeNode) UPMEM.getInstance().createObject(0, DPUTreeNode.class, 10,100);
+
+        if(true) return;
         if(args.length == 0){
             BSTTester.evaluatePIMBST(totalNodeCount, ExperimentConfigurator.queryCount,  ExperimentConfigurator.cpuLayerCount);
             return;

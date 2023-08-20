@@ -16,6 +16,7 @@ public class DPUGarbageCollector {
     public final static int heapSpaceBeginAddr = 0x000000;
     public final static int metaSpaceBeginAddr = 48 * 1024 * 1024;
     public final static int parameterBufferBeginAddr = 0x35f8;
+    public final static int parameterBufferSize = 4 * 1024;
     public final static int heapSpaceSize = 48 * 1024 * 1024;
     public final static int metaSpaceSize = 16 * 1024 * 1024;
 
@@ -47,9 +48,13 @@ public class DPUGarbageCollector {
     }
 
     public int pushParameters(int[] params) throws DpuException {
+        return pushParameters(params,0);
+    }
+    public int pushParameters(int[] params, int tasklet) throws DpuException {
         int size = params.length * 4;
         byte[] data = new byte[size];
-        int addr = allocate(DPUJVMMemSpaceKind.DPU_PARAMETER_BUFFER, size);
+
+        int addr = parameterBufferBeginAddr + (parameterBufferSize / 24) * tasklet;
         gcLogger.log(" - allocate " + size + " byte in parameter buffer");
         gcLogger.log(" - push ");
         for(int i = 0; i < params.length; i++){

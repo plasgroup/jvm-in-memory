@@ -4,7 +4,6 @@ import com.upmem.dpu.DpuException;
 import pim.UPMEM;
 import pim.dpu.cache.DPUCacheManager;
 import pim.dpu.classloader.DPUClassFileManager;
-import pim.dpu.java_strut.VirtualTable;
 import pim.logger.Logger;
 import pim.logger.PIMLoggers;
 import pim.utils.BytesUtils;
@@ -23,16 +22,22 @@ public class DPUManager {
     public Dpu dpu;
 
     static Logger dpuManagerLogger = PIMLoggers.dpuManagerLogger;
-    public void setClassPt(int classPt) throws DpuException {
+    int currentTasklet = 0;
+    int[] taskletSemaphore = new int[UPMEM.TOTAL_HARDWARE_THREADS_COUNT];
+    public void setClassPt(int classPt, int tasklet) throws DpuException {
         byte[] data = new byte[4];
         BytesUtils.writeU4LittleEndian(data, classPt, 0);
-        dpu.copy("exec_class_pt", data);
+
+        dpu.copy("exec_class_pt", data, 4 * tasklet);
 
     }
-    public void setMethodPt(int methodPt) throws DpuException {
+    public void setMethodPt(int methodPt, int tasklet) throws DpuException {
         byte[] data = new byte[4];
         BytesUtils.writeU4LittleEndian(data, methodPt, 0);
-        dpu.copy("exec_method_pt", data);
+
+        dpu.copy("exec_method_pt", data, 4 * tasklet);
+
+
     }
 
     public void dpuExecute(PrintStream printStream) throws DpuException {
@@ -42,8 +47,25 @@ public class DPUManager {
         garbageCollector.parameterBufferPt = DPUGarbageCollector.parameterBufferBeginAddr;
     }
     public void callNonstaticMethod(int classPt, int methodPt, int instanceAddr, Object[] params) throws DpuException {
-        setClassPt(classPt);
-        setMethodPt(methodPt);
+
+        // choose a tasklet
+        int tasklet = currentTasklet;
+        while(true){
+            if(taskletSemaphore[tasklet] == 0){
+                synchronized (taskletSemaphore){
+                    if(taskletSemaphore[tasklet] == 0){
+                        taskletSemaphore[tasklet] = 1;
+                        break;
+                    }
+                }
+            }else{
+                tasklet++;
+            }
+        }
+        System.out.println("select tasklet = " + tasklet);
+
+        setClassPt(classPt,tasklet);
+        setMethodPt(methodPt,tasklet);
         int[] paramsConverted = new int[params.length + 1];
         paramsConverted[0] = instanceAddr;
         int i = 1;
@@ -58,8 +80,8 @@ public class DPUManager {
             }
             i++;
         }
-        garbageCollector.pushParameters(paramsConverted);
-        dpuExecute(null);
+        garbageCollector.pushParameters(paramsConverted, tasklet);
+        dpuExecute(System.out);
     }
 
     int calcFieldCount(Class c){
@@ -88,7 +110,6 @@ public class DPUManager {
         byte[] objectDataStream = new byte[(instanceSize + 7) & ~7];
         int classAddr;
         int initMethodAddr;
-
         if(classCacheManager.getClassStrutCacheLine(c.getName().replace(".","/")) == null){
             dpuClassFileManager.loadClassForDPU(c);
         }
@@ -107,8 +128,8 @@ public class DPUManager {
         dpuManagerLogger.logln("---> Object Create Finish, handler = " + " (addr: " + handler.address + "," + "dpu: " + handler.dpuID + ") <---");
 
 
-        VirtualTable virtualTable = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getClassStructure("pim/algorithm/DPUTreeNode").virtualTable;
-        dpuManagerLogger.logln("" + virtualTable);
+       // VirtualTable virtualTable = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getClassStructure("pim/algorithm/DPUTreeNode").virtualTable;
+       // dpuManagerLogger.logln("" + virtualTable);
 
         // call the init func
         callNonstaticMethod(classAddr, initMethodAddr, handler.address, params);
