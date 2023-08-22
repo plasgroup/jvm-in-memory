@@ -16,6 +16,10 @@ public class PIMManager {
     }
     static Logger pimManagerLogger = PIMLoggers.pimManagerLogger;
 
+    public static DpuSystem getSystem() {
+        return system;
+    }
+
     public static PIMManager init(int dpuInUse) throws DpuException {
         if (instance == null){
             synchronized (dpuManagers){
@@ -31,6 +35,7 @@ public class PIMManager {
                     DPUManager dm = new DPUManager(dpu, i);
                     dpuManagers.add(dm);
                 }
+
             }
         }
         return instance;

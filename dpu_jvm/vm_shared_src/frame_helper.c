@@ -11,8 +11,6 @@ void print_frame(uint8_t* fp, uint8_t* sp) {
 
 
 #define PRINT_FIELD_ADDR(field_name) DEBUG_PRINT("\t| [addr:" RED "%p" CYAN "] (" RED field_name CYAN ") => \n", fp);
-
-
     uint8_t* loc = fp;
     int i;
     struct j_method __mram_ptr *func_pt;
@@ -80,7 +78,6 @@ uint8_t* create_new_vmframe(struct function_thunk func_thunk
 {
 #define INC_SP(S) current_sp += S;
 #define DEC_SP(S) current_sp -= S;
-
      
      struct function __mram_ptr *func = func_thunk.func;
 
@@ -90,14 +87,9 @@ uint8_t* create_new_vmframe(struct function_thunk func_thunk
      int locals_count = func_thunk.func->max_locals;
      int params_count = func_thunk.func->params_count;
 
-     
-
      DEBUG_PRINT("\n--------------------------------- Create Frame ---------------------------------\n");
      DEBUG_PRINT("--------- Frame from (%p) ------------\n", current_sp);
      
-     
-
-
      if(func_thunk.params == current_sp + 4 * params_count){
        DEBUG_PRINT(" >> create frame from an existed function call\n");
        INC_SP(sizeof(uint8_t*))
@@ -168,15 +160,7 @@ uint8_t* create_new_vmframe(struct function_thunk func_thunk
      current_sp -= 4;
      DEBUG_PRINT("-------> new current_sp = %p\n", current_sp);
 
-
-
-     
      DEBUG_PRINT("------------------------------ End Create Frame ------------------------------\n");
-
-
      
      return fp;
-
-
-
 }

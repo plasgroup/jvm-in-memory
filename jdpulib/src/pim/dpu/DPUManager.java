@@ -1,6 +1,7 @@
 package pim.dpu;
 import com.upmem.dpu.Dpu;
 import com.upmem.dpu.DpuException;
+import pim.BatchDispatcher;
 import pim.UPMEM;
 import pim.dpu.cache.DPUCacheManager;
 import pim.dpu.classloader.DPUClassFileManager;
@@ -47,7 +48,48 @@ public class DPUManager {
         garbageCollector.readBackHeapSpacePt();
         garbageCollector.readBackMetaSpacePt();
     }
+
+
     public void callNonstaticMethod(int classPt, int methodPt, int instanceAddr, Object[] params) throws DpuException {
+        if(UPMEM.batchDispatchingRecording) {
+            System.out.println("record batch dispatching");
+            int t = UPMEM.batchDispatcher.taskletPosition[dpuID];
+            int t2 = (t + 1) % 24;
+            int size = (1 + 2 + 1 + params.length) * 4;
+            BatchDispatcher bd = UPMEM.batchDispatcher;
+            while(t2 != t){
+                if(bd.paramsBufferPointer[dpuID][t2] + size < DPUGarbageCollector.perDPUBufferSize){
+                    break;
+                }
+                t2 = (t2 + 1) % 24;
+                if(t2 == t) throw new RuntimeException("TODO: need dispatch all calls");
+            }
+            bd.taskletPosition[dpuID] = t2;
+            int from = bd.paramsBufferPointer[dpuID][t2] + DPUGarbageCollector.perDPUBufferSize * t2;
+            BytesUtils.writeU4LittleEndian(UPMEM.batchDispatcher.paramsBuffer[dpuID], bd.recordedCount++, from);
+            BytesUtils.writeU4LittleEndian(UPMEM.batchDispatcher.paramsBuffer[dpuID], classPt, from + 4);
+            BytesUtils.writeU4LittleEndian(UPMEM.batchDispatcher.paramsBuffer[dpuID], classPt, from + 8);
+            int offset = 12;
+            for(Object obj : params){
+                int v;
+                if(obj instanceof Integer){
+                    v = (int) obj;
+                }else if(obj instanceof IDPUProxyObject){
+                    v = ((IDPUProxyObject)obj).getAddr();
+                    if(((IDPUProxyObject)obj).getDpuID() != dpuID){
+                        throw new RuntimeException("all objects in the argument list should be at the same place");
+                    }
+                }
+                BytesUtils.writeU4LittleEndian(UPMEM.batchDispatcher.paramsBuffer[dpuID], classPt, from + offset);
+                offset += 4;
+            }
+
+            System.out.println("write to dpu " + dpuID + " tasklet " + t2 + " buffer from " + UPMEM.batchDispatcher.paramsBufferPointer[dpuID][t2]);
+            bd.paramsBufferPointer[dpuID][t2] += size;
+            bd.dpusInUse.add(dpuID);
+            return;
+        }
+
 
         // choose a tasklet
         int tasklet = currentTasklet;
@@ -68,8 +110,12 @@ public class DPUManager {
 
         setClassPt(classPt,tasklet);
         setMethodPt(methodPt,tasklet);
-        int[] paramsConverted = new int[params.length + 1];
-        paramsConverted[0] = instanceAddr;
+        int[] paramsConverted = new int[params.length + 1 + 2 + 1];
+        paramsConverted[0] = 0;
+        paramsConverted[1] = classPt;
+        paramsConverted[2] = methodPt;
+        paramsConverted[3] = instanceAddr;
+
         int i = 1;
         for(Object obj : params){
             if(obj instanceof Integer){
@@ -82,6 +128,7 @@ public class DPUManager {
             }
             i++;
         }
+
         garbageCollector.pushParameters(paramsConverted, tasklet);
         dpuExecute(null);
 

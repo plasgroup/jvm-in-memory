@@ -1,3 +1,5 @@
+import com.upmem.dpu.DpuException;
+import pim.BatchDispatcher;
 import pim.ExperimentConfigurator;
 import pim.UPMEM;
 import pim.UPMEMConfigurator;
@@ -64,11 +66,19 @@ public class Main {
                 .setDpuInUseCount(dpuInUse)
                 .setThreadPerDPU(UPMEM.perDPUThreadsInUse);
 
-        TreeNode tn = (TreeNode) UPMEM.getInstance().createObject(0, DPUTreeNode.class, 10, 23100);
-        //  TreeNode tn2 = (TreeNode) UPMEM.getInstance().createObject(0, DPUTreeNode.class, 20,100);
-        for(int i = 0; i < 1000; i++){
-            System.out.println("search result = " + tn.search(10));
+
+        TreeNode tn = (TreeNode) UPMEM.getInstance().createObject(0, DPUTreeNode.class, 10,22231);
+        UPMEM.beginRecordBatchDispatching(new BatchDispatcher());
+        for(int i = 0; i < 100; i++){
+            tn.search(10);
         }
+        UPMEM.endRecordBatchDispatching();
+        try {
+            UPMEM.batchDispatcher.dispatchAll();
+        } catch (DpuException e) {
+            throw new RuntimeException(e);
+        }
+
 
         if(true) return;
         if(args.length == 0){

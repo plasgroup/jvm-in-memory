@@ -43,20 +43,20 @@ public class UPMEM {
         whiteList.add("pim/algorithm/TreeNode");
         whiteList.add("java/lang/Object");
     };
-    private boolean recordDispatchTask;
 
     private Queue<DPUTask>[] pendingTasks = new ArrayDeque[TOTAL_DPU_COUNT];
-    public void beginLazyDispatching(){
-        recordDispatchTask = true;
+
+    public static void endRecordBatchDispatching() {
+        batchDispatchingRecording = false;
     }
 
-    public void dispatchAllPendingCalls(){
-
+    public static boolean batchDispatchingRecording = false;
+    public static BatchDispatcher batchDispatcher;
+    public static void beginRecordBatchDispatching(BatchDispatcher batchDispatcher) {
+        UPMEM.batchDispatcher = batchDispatcher;
+        batchDispatchingRecording = true;
     }
 
-    public void endLazyDispatching(){
-        recordDispatchTask = false;
-    }
 
     static Logger upmemLogger = Logger.getLogger("pi:upmem");
     {
