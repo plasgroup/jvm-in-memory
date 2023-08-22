@@ -30,7 +30,7 @@ public class BatchDispatcher {
                 int pbp = paramsBufferPointer[dpuID][i];
                 if(pbp == 0) continue;
                 System.out.println("parameters buffer pointer = " + pbp);
-                BytesUtils.writeU4LittleEndian(ptBytes, parameterBufferBeginAddr + pbp,0);
+                BytesUtils.writeU4LittleEndian(ptBytes, parameterBufferBeginAddr + i * perDPUBufferSize + pbp,0);
                 UPMEM.getInstance().getDPUManager(dpuID).dpu.copy("params_buffer_pt", ptBytes , 4 * i);
             }
             UPMEM.getInstance().getDPUManager(dpuID).garbageCollector.transfer(DPUJVMMemSpaceKind.DPU_PARAMETER_BUFFER,paramsBuffer[dpuID], parameterBufferBeginAddr );
