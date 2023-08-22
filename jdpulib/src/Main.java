@@ -66,7 +66,10 @@ public class Main {
 
         TreeNode tn = (TreeNode) UPMEM.getInstance().createObject(0, DPUTreeNode.class, 10, 23100);
         //  TreeNode tn2 = (TreeNode) UPMEM.getInstance().createObject(0, DPUTreeNode.class, 20,100);
-        System.out.println("search result = " + tn.search(10));
+        for(int i = 0; i < 1000; i++){
+            System.out.println("search result = " + tn.search(10));
+        }
+
         if(true) return;
         if(args.length == 0){
             BSTTester.evaluatePIMBST(totalNodeCount, ExperimentConfigurator.queryCount,  ExperimentConfigurator.cpuLayerCount);

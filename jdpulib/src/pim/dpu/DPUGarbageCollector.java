@@ -16,7 +16,7 @@ public class DPUGarbageCollector {
     int metaSpacePt;
     public final static int heapSpaceBeginAddr = 0x000000;
     public final static int metaSpaceBeginAddr = 48 * 1024 * 1024;
-    public final static int parameterBufferBeginAddr = 0x4358;
+    public final static int parameterBufferBeginAddr = 0x4290;
     public final static int parameterBufferSize = 6 * 1024;
     public final static int perDPUBufferSize = 6 * 1024 / 24;
     public final static int heapSpaceSize = 48 * 1024 * 1024;
@@ -59,7 +59,6 @@ public class DPUGarbageCollector {
         int size = params.length * 4;
         byte[] data = new byte[size];
         int addr = parameterBufferBeginAddr + (parameterBufferSize / 24) * tasklet;
-        System.out.printf("write params from 0x%x\n", addr);
         gcLogger.log(" - allocate " + size + " byte in parameter buffer");
         gcLogger.log(" - push ");
         for(int i = 0; i < params.length; i++){

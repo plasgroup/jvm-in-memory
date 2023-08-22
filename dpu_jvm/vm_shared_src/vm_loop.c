@@ -40,26 +40,16 @@ void interp(struct function_thunk func_thunk) {
     #endif
 
 
-
     current_fp = create_new_vmframe(func_thunk, NULL);
     DEBUG_PRINT("code_buffer = %p\n", code_buffer);
+
+   
 
 #define DEBUG
     DEBUG_PRINT("create frame finished\n");
 
-#ifdef HOST
-    array_type = MRAM_METASPACE_ALLOC_STRUT(struct MethodTable);
-    array_type->metadata_token = 0x1;
-
-    auto system = DpuSet::allocate(1);
-    auto dpu = system.dpus()[0];
-    dpu->load("dpuslave");
-#endif
-
     DEBUG_PRINT("FP = (%p)\n", current_fp);
     while (1) {
-        
-        //if((func2 == 0x3000c50) && times > 5) return;
         switch (code_buffer[pc++])
         {
         case NOP:
@@ -93,10 +83,7 @@ void interp(struct function_thunk func_thunk) {
             DEBUG_PRINT(" - Load ref %p to stack\n", op1);
             PUSH_EVAL_STACK(op1)
             break;
-     
-        
-   
-       
+
         case ICONST_0:
             DEBUG_OUT_INSN_PARSED("ICONST_0")
             DEBUG_PRINT(" - push const 0 to stack\n");

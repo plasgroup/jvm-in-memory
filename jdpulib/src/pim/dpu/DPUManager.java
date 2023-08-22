@@ -61,7 +61,7 @@ public class DPUManager {
                     }
                 }
             }else{
-                tasklet++;
+                tasklet = (tasklet + 1) % 24;
             }
         }
         System.out.println("select tasklet = " + tasklet);
@@ -84,6 +84,9 @@ public class DPUManager {
         }
         garbageCollector.pushParameters(paramsConverted, tasklet);
         dpuExecute(null);
+
+        taskletSemaphore[tasklet] = 0;
+        currentTasklet = (currentTasklet + 1) % 24;
     }
 
     int calcFieldCount(Class c){

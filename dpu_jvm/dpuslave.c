@@ -129,17 +129,20 @@ void exec_task_from_host() {
     struct j_class __mram_ptr *jc = exec_class_pt[tasklet_id];
     int this_tasklet_params_buffer_len = (PARAMS_BUFFER_SIZE / 24);
     int buffer_begin = params_buffer + tasklet_id * this_tasklet_params_buffer_len;
+
     if (inited == 0) {
         init_memory();
         inited = 1;
     }
+
+
     
     printf("me = %d, buffer_begin = %p, buffer_pt = %p\n", me(), buffer_begin, params_buffer_pt[tasklet_id]);
+    
     if(buffer_begin == params_buffer_pt[tasklet_id]){
         printf("me = %d, return\n", me());
         return;
     }
-    
     
 
     DEBUG_PRINT(RED " --------------------- (IN DPU) -----------------------------\n" RESET);
@@ -161,6 +164,7 @@ void exec_task_from_host() {
     print_class(jc);
     print_method(jm);
     print_virtual_table(jc);
+
     interp(fc);
     release_global_memory();
 

@@ -46,38 +46,20 @@ __host uint8_t* return_val;
 void init_memory() {
     int i;
     int this_tasklet_params_buffer_len = (PARAMS_BUFFER_SIZE / 24);
-#ifdef INMEMORY
-    buddy_init(1024 * 4);
-#else
-#endif // INMEMORY
-
+    
     mem.mram_heap = (uint8_t __mram_ptr*)(m_heapspace);
     mem.wram = wram_frames_space;
     mem.meta_space = m_metaspace;
 
-#ifdef INMEMORY && ARRAY_CACHE
-    DEBUG_PRINT("%x\n", ARRAY_CACHE_ITEM_COUNT * ARRAY_CACHE_LINE_SIZE);
-    for (i = 0; i < ARRAY_CACHE_ITEM_COUNT; i++) {
-        inline_array_buffer_cache.cache_lines[i].array = (uint8_t*)0xFFFFFFFF;
-    }
-#endif
-    
     printf("param_buffer(wram)=%p, sim_wram(wram)=%p, mram = %p\n", params_buffer, mem.wram, 
         (uint8_t __mram_ptr*)((uint8_t __mram_ptr*)mem.mram_heap + (SLOTVAL) mram_heap_pt));
 
-
     stack_top = (uint8_t*)mem.wram;
-
-   
 }
 
 
 
 
 void release_global_memory() {
-#ifdef INMEMORY
-    buddy_free(params_buffer);
-    buddy_free(mem.wram);
-#else
-#endif
+
 }
