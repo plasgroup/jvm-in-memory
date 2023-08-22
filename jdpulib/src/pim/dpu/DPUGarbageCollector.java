@@ -7,16 +7,18 @@ import pim.logger.Logger;
 import pim.logger.PIMLoggers;
 import pim.utils.BytesUtils;
 
+import java.io.BufferedWriter;
+
 public class DPUGarbageCollector {
     int dpuID;
     Dpu dpu;
     int heapSpacePt;
     int metaSpacePt;
-    int parameterBufferPt;
     public final static int heapSpaceBeginAddr = 0x000000;
     public final static int metaSpaceBeginAddr = 48 * 1024 * 1024;
-    public final static int parameterBufferBeginAddr = 0x35f8;
-    public final static int parameterBufferSize = 4 * 1024;
+    public final static int parameterBufferBeginAddr = 0x4358;
+    public final static int parameterBufferSize = 6 * 1024;
+    public final static int perDPUBufferSize = 6 * 1024 / 24;
     public final static int heapSpaceSize = 48 * 1024 * 1024;
     public final static int metaSpaceSize = 16 * 1024 * 1024;
 
@@ -27,7 +29,6 @@ public class DPUGarbageCollector {
         this.dpu = dpu;
         this.heapSpacePt = 0x00000008;
         this.metaSpacePt = metaSpaceBeginAddr;
-        this.parameterBufferPt = parameterBufferBeginAddr;
         byte[] ptBytes = new byte[4];
 
         // set up space beginning pointer for meta space and heap space
@@ -35,8 +36,11 @@ public class DPUGarbageCollector {
         dpu.copy("meta_space_pt", ptBytes, 0);
         BytesUtils.writeU4LittleEndian(ptBytes, this.heapSpacePt, 0);
         dpu.copy("mram_heap_pt", ptBytes, 0);
-        BytesUtils.writeU4LittleEndian(ptBytes, this.parameterBufferPt, 0);
-        dpu.copy("params_buffer_pt", ptBytes, 0);
+        byte[] bufferPointers = new byte[24 * 4];
+        for(int i = 0; i < 24; i++){
+            BytesUtils.writeU4LittleEndian(bufferPointers, parameterBufferBeginAddr + i * perDPUBufferSize, i * 4);
+        }
+        dpu.copy("params_buffer_pt", bufferPointers, 0);
 
     }
 
@@ -50,11 +54,12 @@ public class DPUGarbageCollector {
     public int pushParameters(int[] params) throws DpuException {
         return pushParameters(params,0);
     }
+
     public int pushParameters(int[] params, int tasklet) throws DpuException {
         int size = params.length * 4;
         byte[] data = new byte[size];
-
         int addr = parameterBufferBeginAddr + (parameterBufferSize / 24) * tasklet;
+        System.out.printf("write params from 0x%x\n", addr);
         gcLogger.log(" - allocate " + size + " byte in parameter buffer");
         gcLogger.log(" - push ");
         for(int i = 0; i < params.length; i++){
@@ -63,6 +68,9 @@ public class DPUGarbageCollector {
         }
 
         transfer(DPUJVMMemSpaceKind.DPU_PARAMETER_BUFFER, data, addr);
+        byte[] ptBytes = new byte[4];
+        BytesUtils.writeU4LittleEndian(ptBytes, parameterBufferBeginAddr + tasklet * perDPUBufferSize + size, 0);
+        dpu.copy("params_buffer_pt", ptBytes , 4 * tasklet);
         return addr;
     }
     public void readBackHeapSpacePt(){
@@ -126,7 +134,7 @@ public class DPUGarbageCollector {
         size = (size + alignmentMask) & ~alignmentMask;
 
         // list contains values for selection, according to the spaceKind
-        int[] sourceMemoryPointers = new int[]{metaSpacePt, heapSpacePt, parameterBufferPt};
+        int[] sourceMemoryPointers = new int[]{metaSpacePt, heapSpacePt};
         String[] pointerVarNames = new String[]{"meta_space_pt",  "mram_heap_pt", "params_buffer_pt"};
         String pointerVarName = pointerVarNames[spaceKind.ordinal()];
         int addr;

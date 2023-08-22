@@ -12,7 +12,6 @@ import static pim.algorithm.BSTTester.writeKV;
 
 public class Main {
     public static UPMEMConfigurator upmemConfigurator = new UPMEMConfigurator();
-
     public static void parseParameters(String[] args){
         for(int i = 0; i < args.length; i++){
             String arg = args[i];
@@ -43,6 +42,7 @@ public class Main {
         }
     }
 
+
     public static void main(String[] args) {
         parseParameters(args);
         upmemConfigurator.setDpuInUseCount(dpuInUse);
@@ -64,8 +64,9 @@ public class Main {
                 .setDpuInUseCount(dpuInUse)
                 .setThreadPerDPU(UPMEM.perDPUThreadsInUse);
 
-        TreeNode tn = (TreeNode) UPMEM.getInstance().createObject(0, DPUTreeNode.class, 10,100);
-
+        TreeNode tn = (TreeNode) UPMEM.getInstance().createObject(0, DPUTreeNode.class, 10, 23100);
+        //  TreeNode tn2 = (TreeNode) UPMEM.getInstance().createObject(0, DPUTreeNode.class, 20,100);
+        System.out.println("search result = " + tn.search(10));
         if(true) return;
         if(args.length == 0){
             BSTTester.evaluatePIMBST(totalNodeCount, ExperimentConfigurator.queryCount,  ExperimentConfigurator.cpuLayerCount);

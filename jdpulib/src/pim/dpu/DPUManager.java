@@ -21,6 +21,8 @@ public class DPUManager {
 
     public Dpu dpu;
 
+    public byte[] dispatchingBuffer = new byte[1024];
+
     static Logger dpuManagerLogger = PIMLoggers.dpuManagerLogger;
     int currentTasklet = 0;
     int[] taskletSemaphore = new int[UPMEM.TOTAL_HARDWARE_THREADS_COUNT];
@@ -44,7 +46,6 @@ public class DPUManager {
         dpu.exec(printStream);
         garbageCollector.readBackHeapSpacePt();
         garbageCollector.readBackMetaSpacePt();
-        garbageCollector.parameterBufferPt = DPUGarbageCollector.parameterBufferBeginAddr;
     }
     public void callNonstaticMethod(int classPt, int methodPt, int instanceAddr, Object[] params) throws DpuException {
 
@@ -55,6 +56,7 @@ public class DPUManager {
                 synchronized (taskletSemaphore){
                     if(taskletSemaphore[tasklet] == 0){
                         taskletSemaphore[tasklet] = 1;
+                        currentTasklet = tasklet;
                         break;
                     }
                 }
@@ -81,7 +83,7 @@ public class DPUManager {
             i++;
         }
         garbageCollector.pushParameters(paramsConverted, tasklet);
-        dpuExecute(System.out);
+        dpuExecute(null);
     }
 
     int calcFieldCount(Class c){
@@ -128,8 +130,8 @@ public class DPUManager {
         dpuManagerLogger.logln("---> Object Create Finish, handler = " + " (addr: " + handler.address + "," + "dpu: " + handler.dpuID + ") <---");
 
 
-       // VirtualTable virtualTable = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getClassStructure("pim/algorithm/DPUTreeNode").virtualTable;
-       // dpuManagerLogger.logln("" + virtualTable);
+        // VirtualTable virtualTable = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getClassStructure("pim/algorithm/DPUTreeNode").virtualTable;
+        // dpuManagerLogger.logln("" + virtualTable);
 
         // call the init func
         callNonstaticMethod(classAddr, initMethodAddr, handler.address, params);

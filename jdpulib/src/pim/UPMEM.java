@@ -86,7 +86,6 @@ public class UPMEM {
         proxyObject = (IDPUProxyObject) unsafe.allocateInstance(proxyClass);
         long dpuIDOffset = unsafe.objectFieldOffset(proxyClass.getField("dpuID"));
         unsafe.getAndSetObject(proxyObject, dpuIDOffset, dpuID);
-
         long addressOffset = unsafe.objectFieldOffset(proxyClass.getField("address"));
         unsafe.getAndSetObject(proxyObject, addressOffset, address);
 
@@ -113,7 +112,7 @@ public class UPMEM {
 
         try {
             Class pClass = Class.forName( objectClass.getName() + "ProxyAutoGen");
-            proxyObject = generateProxyObject(pClass, 0, 100);
+            proxyObject = generateProxyObject(pClass, handler.dpuID, handler.address);
         } catch (ClassNotFoundException | InstantiationException | NoSuchFieldException e) {
             throw new RuntimeException(e);
         }

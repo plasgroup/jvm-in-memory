@@ -1,9 +1,6 @@
 #ifndef VM_VM_LOOP_H
 #define VM_VM_LOOP_H
-
-#ifdef HOST
-#include "../host_vm/object.h"
-#endif
+#include <defs.h>
 
 //return value register
 extern __host SLOTVAL ret_val;

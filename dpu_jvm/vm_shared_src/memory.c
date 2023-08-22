@@ -13,7 +13,7 @@ __host uint8_t __mram_ptr* func_pt;
 
 __host uint8_t __mram_ptr* meta_space_pt;
 
-__host uint8_t* params_buffer_pt;
+__host uint8_t* params_buffer_pt[24];
 
 uint8_t* evaluation_stack_pt;
 
@@ -45,7 +45,7 @@ __host uint8_t* return_val;
 
 void init_memory() {
     int i;
-
+    int this_tasklet_params_buffer_len = (PARAMS_BUFFER_SIZE / 24);
 #ifdef INMEMORY
     buddy_init(1024 * 4);
 #else
@@ -65,11 +65,10 @@ void init_memory() {
     printf("param_buffer(wram)=%p, sim_wram(wram)=%p, mram = %p\n", params_buffer, mem.wram, 
         (uint8_t __mram_ptr*)((uint8_t __mram_ptr*)mem.mram_heap + (SLOTVAL) mram_heap_pt));
 
-    //mram_heap_pt = (uint8_t __mram_ptr *)(mem.mram_heap) + (SLOTVAL) (mram_heap_pt);
-    //meta_space_pt = m_metaspace;
-    stack_top = (uint8_t*)mem.wram;
-    //params_buffer_pt = params_buffer;
 
+    stack_top = (uint8_t*)mem.wram;
+
+   
 }
 
 

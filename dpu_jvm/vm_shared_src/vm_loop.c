@@ -25,6 +25,8 @@ struct MethodTable* array_type;
 
 
 void interp(struct function_thunk func_thunk) {
+    int tasklet_id = me();
+    int buffer_begin = params_buffer + tasklet_id * (PARAMS_BUFFER_SIZE / 24);
 #include "vmloop_parts/registers.def"
     func = func_thunk.func;
     func2 = func;
@@ -45,10 +47,6 @@ void interp(struct function_thunk func_thunk) {
 #define DEBUG
     DEBUG_PRINT("create frame finished\n");
 
-
-
-
-
 #ifdef HOST
     array_type = MRAM_METASPACE_ALLOC_STRUT(struct MethodTable);
     array_type->metadata_token = 0x1;
@@ -60,7 +58,8 @@ void interp(struct function_thunk func_thunk) {
 
     DEBUG_PRINT("FP = (%p)\n", current_fp);
     while (1) {
-      //  if((func2 == 0x1000c88) && times > 45) return;
+        
+        //if((func2 == 0x3000c50) && times > 5) return;
         switch (code_buffer[pc++])
         {
         case NOP:
@@ -325,7 +324,7 @@ void interp(struct function_thunk func_thunk) {
                 return_val = op1;
                 current_fp = 0;
                 current_sp = wram_data_space - 4;
-                params_buffer_pt = params_buffer;
+                params_buffer_pt[tasklet_id] = buffer_begin;
                 return;
             }
             current_sp = op2;
@@ -360,7 +359,7 @@ void interp(struct function_thunk func_thunk) {
                 return_val = op1;
                 current_fp = 0;
                 current_sp = wram_data_space - 4;
-                params_buffer_pt = params_buffer;
+                params_buffer_pt[tasklet_id] = buffer_begin;
                 return;
             }
             current_sp = op2;
@@ -398,7 +397,7 @@ void interp(struct function_thunk func_thunk) {
                 
                 current_fp = 0;
                 current_sp = wram_data_space - 4;
-                params_buffer_pt = params_buffer;
+                params_buffer_pt[tasklet_id] = buffer_begin;
                 return;
             }
             current_sp = op2;

@@ -102,7 +102,7 @@ struct memory {
 
 #define WRAM_SIZE (8 * 1024)
 #define MRAM_HEAP_SIZE (48 * 1024 * 1024)
-#define PARAMS_BUFFER_SIZE (4 * 1024)
+#define PARAMS_BUFFER_SIZE (6 * 1024)
 #define WRAM_DATA_SPACE_SIZE (4 * 1024)
 #define META_SPACE_SIZE (8 * 1024 * 1024)
 
@@ -130,7 +130,7 @@ extern __host uint8_t params_buffer[PARAMS_BUFFER_SIZE];
 extern __host uint8_t wram_data_space[WRAM_DATA_SPACE_SIZE];
 extern __host uint8_t wram_frames_space[WRAM_SIZE];
 extern __host uint8_t* return_val;
-extern __host uint8_t* params_buffer_pt;
+extern __host uint8_t* params_buffer_pt[24];
 
 extern struct static_fields_table __mram_ptr* sfields_table;
 extern struct static_field_line __mram_ptr* static_var_m;
