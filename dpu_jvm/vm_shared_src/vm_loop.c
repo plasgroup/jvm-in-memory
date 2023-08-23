@@ -35,20 +35,18 @@ void interp(struct function_thunk func_thunk) {
     DEBUG_PRINT(RED);
     #endif
 
-
     current_fp[tasklet_id] = create_new_vmframe(func_thunk, NULL);
-
-    return;
+  
     DEBUG_PRINT("code_buffer = %p\n", code_buffer);
 
+  
    
-
 #define DEBUG
     DEBUG_PRINT("create frame finished\n");
-
     DEBUG_PRINT("FP = (%p)\n", current_fp[tasklet_id]);
     while (1) {
-        if(1) return;
+    
+ //   if(func2 == 0x3000c50 && times > 1) return;
         switch (code_buffer[pc++])
         {
         case NOP:
@@ -72,8 +70,10 @@ void interp(struct function_thunk func_thunk) {
         
         case ALOAD_0:
             DEBUG_OUT_INSN_PARSED("ALOAD_0")
+            
             op1 = FRAME_GET_LOCALS(current_fp[tasklet_id], func->params_count, 0);
             DEBUG_PRINT(" - Load ref %p to stack\n", op1);
+            
             PUSH_EVAL_STACK(op1)
             break;
         case ALOAD_1:
@@ -299,9 +299,11 @@ void interp(struct function_thunk func_thunk) {
             break;
         case RETURN:
             DEBUG_OUT_INSN_PARSED("RETURN")
+            printf("return");
             DEBUG_PRINT(" - last-sp = %p\n", FRAME_GET_OLDSP(current_fp[tasklet_id]));
             DEBUG_PRINT(" - last-fp = %p\n", FRAME_GET_OLDFP(current_fp[tasklet_id]));
             DEBUG_PRINT(" - return-pc = %p\n", FRAME_GET_RETPC(current_fp[tasklet_id]));
+            
             op2 = FRAME_GET_OLDSP(current_fp[tasklet_id]);
             op3 = FRAME_GET_OLDFP(current_fp[tasklet_id]);
             op4 = FRAME_GET_RETPC(current_fp[tasklet_id]);
@@ -431,7 +433,7 @@ void interp(struct function_thunk func_thunk) {
             DEBUG_PRINT(" - jmethod-v-index = %p\n", func_thunk.jc->items[op1].direct_value);
             op4 = func_thunk.jc->items[op1].direct_value;
             DEBUG_PRINT(" - jmethod-ref = %p\n", func_thunk.jc->virtual_table[op4].methodref);
-            
+       
             callee.func = func_thunk.jc->virtual_table[op4].methodref;
             op2 = (func_thunk.jc->items[op1].info >> 16) & 0xFFFF;
             DEBUG_PRINT(" - class-ref-cp-index = %d\n", op2);
@@ -443,7 +445,7 @@ void interp(struct function_thunk func_thunk) {
             DEBUG_PRINT(" -- new sp = %p\n", current_sp[tasklet_id]);
             DEBUG_PRINT(" -- params-pt = %p\n", callee.params);
             DEBUG_PRINT(" -- return pc = %d\n", pc + 2);
-           
+               
             current_fp[tasklet_id] = create_new_vmframe(callee,  pc + 2);
 
             pc = 0;

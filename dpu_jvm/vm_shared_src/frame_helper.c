@@ -85,7 +85,7 @@ uint8_t* create_new_vmframe(struct function_thunk func_thunk
 
      DEBUG_PRINT("\n--------------------------------- Create Frame ---------------------------------\n");
      DEBUG_PRINT("--------- Frame from (%p) ------------\n", current_sp[me()]);
-     //return NULL;
+   
      if(func_thunk.params == current_sp[me()] + 4 * params_count){
        DEBUG_PRINT(" >> create frame from an existed function call\n");
        INC_SP(sizeof(uint8_t*))
@@ -112,7 +112,7 @@ uint8_t* create_new_vmframe(struct function_thunk func_thunk
               func_thunk.params += sizeof(uint8_t*);
               INC_SP(sizeof(uint8_t*))
        }
-     }
+     } 
      
      //old fp
      *(uint32_t*)current_sp[me()] = current_fp[me()];

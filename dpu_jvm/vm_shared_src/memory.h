@@ -71,12 +71,12 @@ extern int debug_eval;
 #define PUSH_EVAL_STACK(X) \
       REF_EVAL_STACK_CURRENT_SLOT = X; \
       INC_EVAL_STACK \
-      DEBUG_PRINT(">> new sp = %p\n", current_sp);
+      DEBUG_PRINT(">> new sp = %p\n", current_sp[tasklet_id]);
 #endif
 
 
 
-#define EVAL_STACK_TOPSLOT_VALUE *SLOTPT (current_sp)
+#define EVAL_STACK_TOPSLOT_VALUE *SLOTPT (current_sp[me()])
 
 extern __host int return_values[512];
 
@@ -90,7 +90,7 @@ extern __host int return_values[512];
 #define POP_EVAL_STACK(X) \
     X = EVAL_STACK_TOPSLOT_VALUE; \
     DESC_EVAL_STACK \
-    DEBUG_PRINT(">> new sp = %p\n", current_sp);
+    DEBUG_PRINT(">> new sp = %p\n", current_sp[tasklet_id]);
     
 #endif
 

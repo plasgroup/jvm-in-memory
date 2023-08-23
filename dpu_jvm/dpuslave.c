@@ -152,7 +152,7 @@ void exec_task_from_host() {
                     *(uint32_t*)params_buffer_pt = X; \
                     params_buffer_pt[me()] += 4;    
     
-    int task_count = 0;
+    int current_dpu_task_num = 0;
     while(buffer_begin < tasklet_buffer_pt){
        
         DEBUG_PRINT("tasklet_buffer_begin = 0x%x, me = %d\n", buffer_begin, tasklet_id);
@@ -170,9 +170,9 @@ void exec_task_from_host() {
         //print_virtual_table(fc.jc);
         
         interp(fc);
-
-        return_values[task_count * 2] = task_id;
-        return_values[task_count * 2 + 1] = return_val;
+        return_values[current_dpu_task_num * 2] = task_id;
+        return_values[current_dpu_task_num * 2 + 1] = return_val;
+        current_dpu_task_num++;
     }
     release_global_memory();
     params_buffer_pt[tasklet_id] = params_buffer + tasklet_id * this_tasklet_params_buffer_len;
@@ -182,6 +182,7 @@ void exec_task_from_host() {
 }
 
 int main() {
+
     exec_task_from_host();
     return 0;
 }

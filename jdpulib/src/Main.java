@@ -73,6 +73,7 @@ public class Main {
             tn.search(10);
         }
         UPMEM.endRecordBatchDispatching();
+
         try {
             UPMEM.batchDispatcher.dispatchAll();
         } catch (DpuException e) {

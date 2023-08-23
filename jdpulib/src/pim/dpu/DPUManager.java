@@ -70,7 +70,9 @@ public class DPUManager {
             BytesUtils.writeU4LittleEndian(UPMEM.batchDispatcher.paramsBuffer[dpuID], bd.recordedCount[dpuID]++, from);
             BytesUtils.writeU4LittleEndian(UPMEM.batchDispatcher.paramsBuffer[dpuID], classPt, from + 4);
             BytesUtils.writeU4LittleEndian(UPMEM.batchDispatcher.paramsBuffer[dpuID], methodPt, from + 8);
-            int offset = 12;
+
+            BytesUtils.writeU4LittleEndian(UPMEM.batchDispatcher.paramsBuffer[dpuID], instanceAddr, from + 12);
+            int offset = 16;
             for(Object obj : params){
                 int v;
                 if(obj instanceof Integer){
@@ -80,8 +82,10 @@ public class DPUManager {
                     if(((IDPUProxyObject)obj).getDpuID() != dpuID){
                         throw new RuntimeException("all objects in the argument list should be at the same place");
                     }
+                }else{
+                    throw new RuntimeException("can not send CPU object to DPU");
                 }
-                BytesUtils.writeU4LittleEndian(UPMEM.batchDispatcher.paramsBuffer[dpuID], classPt, from + offset);
+                BytesUtils.writeU4LittleEndian(UPMEM.batchDispatcher.paramsBuffer[dpuID], v, from + offset);
                 offset += 4;
             }
 
