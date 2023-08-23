@@ -116,7 +116,7 @@ void print_method(struct j_method __mram_ptr* jm){
 }
 
 void exec_task_from_host() {
-    if(me() > 1) return;
+  //  if(me() > 1) return;
     struct function_thunk fc;
     int i;
     uint8_t __mram_ptr* cpt = m_heapspace;
@@ -152,7 +152,6 @@ void exec_task_from_host() {
                     *(uint32_t*)params_buffer_pt = X; \
                     params_buffer_pt[me()] += 4;    
     
-    int current_dpu_task_num = 0;
     while(buffer_begin < tasklet_buffer_pt){
        
         DEBUG_PRINT("tasklet_buffer_begin = 0x%x, me = %d\n", buffer_begin, tasklet_id);
@@ -170,9 +169,9 @@ void exec_task_from_host() {
         //print_virtual_table(fc.jc);
         
         interp(fc);
-        return_values[current_dpu_task_num * 2] = task_id;
-        return_values[current_dpu_task_num * 2 + 1] = return_val;
-        current_dpu_task_num++;
+        printf("write to %d\n", task_id * 2);
+        return_values[task_id * 2] = task_id;
+        return_values[task_id * 2 + 1] = return_val;
     }
     release_global_memory();
     params_buffer_pt[tasklet_id] = params_buffer + tasklet_id * this_tasklet_params_buffer_len;

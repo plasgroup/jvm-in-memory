@@ -69,7 +69,7 @@ public class Main {
 
         TreeNode tn = (TreeNode) UPMEM.getInstance().createObject(0, DPUTreeNode.class, 10,22231);
         UPMEM.beginRecordBatchDispatching(new BatchDispatcher());
-        for(int i = 0; i < 10; i++){
+        for(int i = 0; i < 100; i++){
             tn.search(10);
         }
         UPMEM.endRecordBatchDispatching();

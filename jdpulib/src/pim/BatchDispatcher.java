@@ -49,14 +49,13 @@ public class BatchDispatcher {
 
         // O(N)
         for(int dpuID : dpusInUse){
-            UPMEM.getInstance().getDPUManager(dpuID).dpuExecute(System.out);
+            UPMEM.getInstance().getDPUManager(dpuID).dpuExecute(null);
             UPMEM.getInstance().getDPUManager(dpuID).dpu.copy(resultBytes, "return_values");
             for(int i = 0; i < recordedCount[dpuID]; i++){
                 int taskID = BytesUtils.readU4LittleEndian(resultBytes, (i * 2) * 4);
                 int res = BytesUtils.readU4LittleEndian(resultBytes, (i * 2 + 1) * 4);
                 result[taskID] = res;
                 System.out.println(res);
-
             }
         }
 
