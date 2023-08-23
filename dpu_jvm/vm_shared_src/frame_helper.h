@@ -5,7 +5,6 @@
 #include "method.h"
 #include "jclass.h"
 
-
 // For colorful printing
 #define CYAN    "\033[36m"      /* Cyan */
 #define RESET   "\033[0m"
@@ -21,7 +20,6 @@
 #define SLOTPT (uint64_t*)
 #define MSLOTP (uint64_t __mram_ptr *)
 #endif
-
 
 #pragma region Frame
 
@@ -42,10 +40,7 @@
 #define FRAME_OFFSET_BYTECODE_PT FRAME_OFFSET_CONSTANTPOOL_PT + SLOTSIZE
 #define FRAME_OFFSET_OPERAND_STACK_ELEM_PT(OPRAND_INDEX) FRAME_OFFSET_BYTECODE_PT + OPRAND_INDEX * SLOTSIZE
 
-
 #pragma endregion
-
-
 
 #pragma region FRAME_GETTER
 //// Getter

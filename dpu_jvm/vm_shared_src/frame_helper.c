@@ -3,10 +3,6 @@
 #include <stdio.h>
 
 
-
-
-
-
 void print_frame(uint8_t* fp, uint8_t* sp) {
 
 
@@ -76,89 +72,90 @@ void print_frame(uint8_t* fp, uint8_t* sp) {
 uint8_t* create_new_vmframe(struct function_thunk func_thunk
 , uint8_t* return_pc)
 {
-#define INC_SP(S) current_sp += S;
-#define DEC_SP(S) current_sp -= S;
+#define INC_SP(S) current_sp[me()] += S;
+#define DEC_SP(S) current_sp[me()] -= S;
      
      struct function __mram_ptr *func = func_thunk.func;
 
-     uint8_t* fp = current_fp;
-     uint8_t* sp = current_sp;
+     uint8_t* fp = current_fp[me()];
+     uint8_t* sp = current_sp[me()];
      int i = 0;
      int locals_count = func_thunk.func->max_locals;
      int params_count = func_thunk.func->params_count;
 
      DEBUG_PRINT("\n--------------------------------- Create Frame ---------------------------------\n");
-     DEBUG_PRINT("--------- Frame from (%p) ------------\n", current_sp);
-     
-     if(func_thunk.params == current_sp + 4 * params_count){
+     DEBUG_PRINT("--------- Frame from (%p) ------------\n", current_sp[me()]);
+     //return NULL;
+     if(func_thunk.params == current_sp[me()] + 4 * params_count){
        DEBUG_PRINT(" >> create frame from an existed function call\n");
        INC_SP(sizeof(uint8_t*))
        for(i = 0; i < locals_count; i++){
-              DEBUG_PRINT("(%p) ", current_sp);
+              DEBUG_PRINT("(%p) ", current_sp[me()]);
               if(i < params_count){
                   DEBUG_PRINT("(param) ");
               }
-              DEBUG_PRINT("local %d = %d\n", i, *(u4*)current_sp);
+              DEBUG_PRINT("local %d = %d\n", i, *(u4*)current_sp[me()]);
               func_thunk.params += sizeof(uint8_t*);
               
               INC_SP(sizeof(uint8_t*))
        }
      }else{
        func_thunk.params -= 4 * params_count;
+       printf("%p params_count = %d\n", func_thunk.params, params_count);
        for(i = 0; i < locals_count; i++){
-              DEBUG_PRINT("(%p) ", current_sp);
+              DEBUG_PRINT("(%p) ", current_sp[me()]);
               if(i < params_count){
                      DEBUG_PRINT("(param) ");
               }
               DEBUG_PRINT("local %d = %d (addr(w): 0x%08x)\n", i, *(u4*)func_thunk.params, func_thunk.params);
-              *(uint8_t**)current_sp = *(uint8_t **)func_thunk.params;
+              *(uint8_t**)current_sp[me()] = *(uint8_t **)func_thunk.params;
               func_thunk.params += sizeof(uint8_t*);
               INC_SP(sizeof(uint8_t*))
        }
      }
      
      //old fp
-     *(uint32_t*)current_sp = current_fp;
-     current_fp = current_sp;
-     DEBUG_PRINT("(%p) --> FP = (%p) -> old-frame-fp = %p \n", current_sp, current_sp, fp);
-     fp = current_sp;
+     *(uint32_t*)current_sp[me()] = current_fp[me()];
+     current_fp[me()] = current_sp[me()];
+     DEBUG_PRINT("(%p) --> FP = (%p) -> old-frame-fp = %p \n", current_sp[me()], current_sp[me()], fp);
+     fp = current_sp[me()];
      INC_SP(sizeof(uint8_t*))
      
      //old sp
-     *(uint32_t*)current_sp = sp;
-     DEBUG_PRINT("(%p) old-stack-pointer = %p \n", current_sp, *(uint8_t**)current_sp);
+     *(uint32_t*)current_sp[me()] = sp;
+     DEBUG_PRINT("(%p) old-stack-pointer = %p \n", current_sp[me()], *(uint8_t**)current_sp[me()]);
      INC_SP(sizeof(uint8_t*))
      
      //return pc
-     *(uint32_t*)current_sp = (uint32_t)return_pc;
-     DEBUG_PRINT("(%p) return pc = 0x%x \n", current_sp, *(uint8_t**)current_sp);
+     *(uint32_t*)current_sp[me()] = (uint32_t)return_pc;
+     DEBUG_PRINT("(%p) return pc = 0x%x \n", current_sp[me()], *(uint8_t**)current_sp[me()]);
      INC_SP(sizeof(uint8_t*))
 
      // method
-     *(uint8_t**)current_sp = (uint8_t*)func_thunk.func;
-     DEBUG_PRINT("(%p) method-ref = %p \n", current_sp, *(uint8_t**)current_sp);
+     *(uint8_t**)current_sp[me()] = (uint8_t*)func_thunk.func;
+     DEBUG_PRINT("(%p) method-ref = %p \n", current_sp[me()], *(uint8_t**)current_sp[me()]);
      INC_SP(sizeof(uint8_t*))
 
      // class
-     *(uint8_t**)current_sp = (uint8_t*)func_thunk.jc;
-     DEBUG_PRINT("(%p) class-ref = %p \n", current_sp, *(uint8_t**)current_sp);
+     *(uint8_t**)current_sp[me()] = (uint8_t*)func_thunk.jc;
+     DEBUG_PRINT("(%p) class-ref = %p \n", current_sp[me()], *(uint8_t**)current_sp[me()]);
      INC_SP(sizeof(uint8_t*))
 
 
      // cp
-     *(uint8_t**)current_sp = (uint8_t*)func_thunk.jc->items;
-     DEBUG_PRINT("(%p) constant-pool-ref = %p \n", current_sp, *(uint8_t**)current_sp); // TODO: not the right value
+     *(uint8_t**)current_sp[me()] = (uint8_t*)func_thunk.jc->items;
+     DEBUG_PRINT("(%p) constant-pool-ref = %p \n", current_sp[me()], *(uint8_t**)current_sp[me()]); // TODO: not the right value
      INC_SP(sizeof(uint8_t*))
 
      // bytecode
-     *(uint8_t**)current_sp = (uint8_t*)func_thunk.func->bytecodes;
-     DEBUG_PRINT("(%p) bytecodes = %p \n", current_sp, *(uint8_t**)current_sp);
+     *(uint8_t**)current_sp[me()] = (uint8_t*)func_thunk.func->bytecodes;
+     DEBUG_PRINT("(%p) bytecodes = %p \n", current_sp[me()], *(uint8_t**)current_sp[me()]);
      INC_SP(sizeof(uint8_t*))
 
      // operand stacks;
      
-     current_sp -= 4;
-     DEBUG_PRINT("-------> new current_sp = %p\n", current_sp);
+     current_sp[me()] -= 4;
+     DEBUG_PRINT("-------> new current_sp = %p\n", current_sp[me()]);
 
      DEBUG_PRINT("------------------------------ End Create Frame ------------------------------\n");
      

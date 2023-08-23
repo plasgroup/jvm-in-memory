@@ -169,9 +169,6 @@ void exec_task_from_host() {
         //print_method(fc.func);
         //print_virtual_table(fc.jc);
         
-    params_buffer_pt[tasklet_id] = params_buffer + tasklet_id * this_tasklet_params_buffer_len;
-    printf("reset param buffer pt to %p\n", params_buffer_pt[tasklet_id]);
-return;
         interp(fc);
 
         return_values[task_count * 2] = task_id;

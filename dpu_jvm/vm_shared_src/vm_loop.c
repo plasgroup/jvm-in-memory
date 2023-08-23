@@ -29,7 +29,6 @@ void interp(struct function_thunk func_thunk) {
     func2 = func;
     jc = func_thunk.jc;
     code_buffer = func->bytecodes;
-
     pc = 0;
     times = 0;
     #ifdef INMEMORY
@@ -38,6 +37,8 @@ void interp(struct function_thunk func_thunk) {
 
 
     current_fp[tasklet_id] = create_new_vmframe(func_thunk, NULL);
+
+    return;
     DEBUG_PRINT("code_buffer = %p\n", code_buffer);
 
    
@@ -47,7 +48,7 @@ void interp(struct function_thunk func_thunk) {
 
     DEBUG_PRINT("FP = (%p)\n", current_fp[tasklet_id]);
     while (1) {
-        if(times > 1) return;
+        if(1) return;
         switch (code_buffer[pc++])
         {
         case NOP:

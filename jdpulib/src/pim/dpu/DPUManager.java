@@ -53,6 +53,7 @@ public class DPUManager {
         System.out.printf("%x\n",methodPt);
         if(UPMEM.batchDispatchingRecording) {
             System.out.println("record batch dispatching");
+            System.out.printf("method pt %x\n", methodPt);
             int t = UPMEM.batchDispatcher.taskletPosition[dpuID];
             int t2 = (t + 1) % 24;
             int size = (1 + 2 + 1 + params.length) * 4;
