@@ -2,9 +2,7 @@
 #define VM_VM_LOOP_H
 #include <defs.h>
 
-//return value register
 extern __host SLOTVAL ret_val;
-
 #if DEBUG_PRINT_ENABLE==1
 #define DEBUG_PRINT(format, ...) printf(format, ##__VA_ARGS__);
 #else

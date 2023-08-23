@@ -6,6 +6,7 @@
 #ifdef INMEMORY
 #include <alloc.h>
 #include <mram.h>
+#include <defs.h>
 #else
 #include <malloc.h>
 #endif // INMEMORY
@@ -46,16 +47,16 @@ extern int debug_eval;
 #define LOG_STACK_POP(X) DEBUG_PRINT(RED "\t[Pop %d]\n" RESET, X);
 #endif
 
-#define INC_EVAL_STACK current_sp += SLOTSIZE;
-#define DESC_EVAL_STACK current_sp -= SLOTSIZE;
-#define REF_EVAL_STACK_CURRENT_SLOT *SLOTPT (current_sp + 4)
+#define INC_EVAL_STACK current_sp[me()] += SLOTSIZE;
+#define DESC_EVAL_STACK current_sp[me()] -= SLOTSIZE;
+#define REF_EVAL_STACK_CURRENT_SLOT *SLOTPT (current_sp[me()] + 4)
 
 #define READ_INT32_BIT_BY_BIT(ADDR, REG) \
 	REG = 0; \
 	REG |= *(uint8_t __mram_ptr *)(ADDR); \
-    REG |= (*(uint8_t __mram_ptr *)((ADDR) + 1) << 8); \
-    REG |= ( *(uint8_t __mram_ptr *)((ADDR) + 2) << 16); \
-    REG |= ( *(uint8_t __mram_ptr *)((ADDR) + 3) << 24);
+    REG |= (*(uint8_t __mram_ptr *)((ADDR) + 1) << 8);  \
+    REG |= (*(uint8_t __mram_ptr *)((ADDR) + 2) << 16); \
+    REG |= (*(uint8_t __mram_ptr *)((ADDR) + 3) << 24);
 
 #define GET_CLASSSTRUT(OBJREF, OUTVAR) \
     OUTVAR = (uint8_t __mram_ptr*)*(struct j_class __mram_ptr**) OBJREF
@@ -76,6 +77,8 @@ extern int debug_eval;
 
 
 #define EVAL_STACK_TOPSLOT_VALUE *SLOTPT (current_sp)
+
+extern __host int return_values[512];
 
 #ifdef LOG_STACK_POP_EVENT
 #define POP_EVAL_STACK(X) \
@@ -103,16 +106,15 @@ struct memory {
 #define WRAM_SIZE (8 * 1024)
 #define MRAM_HEAP_SIZE (48 * 1024 * 1024)
 #define PARAMS_BUFFER_SIZE (6 * 1024)
-#define WRAM_DATA_SPACE_SIZE (4 * 1024)
+#define WRAM_DATA_SPACE_SIZE (8 * 1024)
 #define META_SPACE_SIZE (8 * 1024 * 1024)
 
 
 extern struct memory mem;
 
 
-extern uint8_t* current_sp;
-extern uint8_t* current_fp;
-extern uint8_t* current_fbegin;
+extern uint8_t* current_sp[24];
+extern uint8_t* current_fp[24];
 extern uint8_t* stack_top;
 
 extern __host uint8_t __mram_ptr* mram_heap_pt;
@@ -124,7 +126,6 @@ extern __host uint8_t __mram_ptr* exec_class_pt[24];
 
 extern __dma_aligned __mram_noinit uint8_t m_heapspace[MRAM_HEAP_SIZE];
 extern __dma_aligned __mram_noinit uint8_t m_metaspace[META_SPACE_SIZE];
-
 
 extern __host uint8_t params_buffer[PARAMS_BUFFER_SIZE];
 extern __host uint8_t wram_data_space[WRAM_DATA_SPACE_SIZE];
@@ -170,7 +171,6 @@ extern struct static_field_line __mram_ptr* static_var_m;
 #define ARRAY_CACHE_DIRTY_BITS 2
 #define ARRAY_CACHE_LINE_SIZE (32 + ARRAY_CACHE_SEGMENT_BITS + ARRAY_CACHE_DIRTY_BITS + ARRAY_CACHE_SIZE)
 
-
 struct array_buffer_cache_item {
     uint8_t* array;
     int state;
@@ -190,13 +190,10 @@ extern struct function_inline_array_buffer_cache inline_array_buffer_cache;
 
 #pragma endregion
 
-
 extern uint8_t* wram_data_space_pt;
 
 void init_memory();
 void release_global_memory();
-
-
 
 struct static_field_line {
     uint32_t type_token;

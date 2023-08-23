@@ -49,8 +49,8 @@ public class DPUManager {
         garbageCollector.readBackMetaSpacePt();
     }
 
-
     public void callNonstaticMethod(int classPt, int methodPt, int instanceAddr, Object[] params) throws DpuException {
+        System.out.printf("%x\n",methodPt);
         if(UPMEM.batchDispatchingRecording) {
             System.out.println("record batch dispatching");
             int t = UPMEM.batchDispatcher.taskletPosition[dpuID];
@@ -66,9 +66,9 @@ public class DPUManager {
             }
             bd.taskletPosition[dpuID] = t2;
             int from = bd.paramsBufferPointer[dpuID][t2] + DPUGarbageCollector.perDPUBufferSize * t2;
-            BytesUtils.writeU4LittleEndian(UPMEM.batchDispatcher.paramsBuffer[dpuID], bd.recordedCount++, from);
+            BytesUtils.writeU4LittleEndian(UPMEM.batchDispatcher.paramsBuffer[dpuID], bd.recordedCount[dpuID]++, from);
             BytesUtils.writeU4LittleEndian(UPMEM.batchDispatcher.paramsBuffer[dpuID], classPt, from + 4);
-            BytesUtils.writeU4LittleEndian(UPMEM.batchDispatcher.paramsBuffer[dpuID], classPt, from + 8);
+            BytesUtils.writeU4LittleEndian(UPMEM.batchDispatcher.paramsBuffer[dpuID], methodPt, from + 8);
             int offset = 12;
             for(Object obj : params){
                 int v;
@@ -90,7 +90,6 @@ public class DPUManager {
             return;
         }
 
-
         // choose a tasklet
         int tasklet = currentTasklet;
         while(true){
@@ -108,15 +107,13 @@ public class DPUManager {
         }
         System.out.println("select tasklet = " + tasklet);
 
-        setClassPt(classPt,tasklet);
-        setMethodPt(methodPt,tasklet);
         int[] paramsConverted = new int[params.length + 1 + 2 + 1];
         paramsConverted[0] = 0;
         paramsConverted[1] = classPt;
         paramsConverted[2] = methodPt;
         paramsConverted[3] = instanceAddr;
 
-        int i = 1;
+        int i = 4;
         for(Object obj : params){
             if(obj instanceof Integer){
                 paramsConverted[i] = (int) obj;
@@ -130,7 +127,7 @@ public class DPUManager {
         }
 
         garbageCollector.pushParameters(paramsConverted, tasklet);
-        dpuExecute(null);
+        dpuExecute(System.out);
 
         taskletSemaphore[tasklet] = 0;
         currentTasklet = (currentTasklet + 1) % 24;
@@ -185,7 +182,6 @@ public class DPUManager {
 
         // call the init func
         callNonstaticMethod(classAddr, initMethodAddr, handler.address, params);
-
         return handler;
     }
 

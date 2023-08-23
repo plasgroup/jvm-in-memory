@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>
-  #include <stddef.h>
+#include <stddef.h>
 #ifndef INMEMORY
 #include <malloc.h>
 #else
@@ -105,8 +105,7 @@ void print_method(struct j_method __mram_ptr* jm){
     DEBUG_PRINT("-- (%p) bytecodes_list_ref = %p === %p\n", loc, *(uint32_t __mram_ptr*)loc, jm->bytecodes);
     loc += 4;
     
-    
-    //loc += 4;
+    // loc += 4;
     // bytecodes
     for(i = 0; i < jm->code_length; i++){
         DEBUG_PRINT("---- (%p) bytecode[%d] = 0x%02x\n", loc, i,
@@ -116,10 +115,8 @@ void print_method(struct j_method __mram_ptr* jm){
     DEBUG_PRINT("-------------------------------------------------------------------\n");
 }
 
-
-
-
 void exec_task_from_host() {
+    if(me() > 1) return;
     struct function_thunk fc;
     int i;
     uint8_t __mram_ptr* cpt = m_heapspace;
@@ -134,57 +131,58 @@ void exec_task_from_host() {
         init_memory();
         inited = 1;
     }
-
-
-    
+   
     printf("me = %d, buffer_begin = %p, buffer_pt = %p\n", me(), buffer_begin, params_buffer_pt[tasklet_id]);
     
     int tasklet_buffer_pt = params_buffer_pt[tasklet_id];
 
     if(buffer_begin >= tasklet_buffer_pt){
-        printf("me = %d, return\n", me());
+        printf("return ...\n");
         return;
     }
 
-    DEBUG_PRINT(RED " --------------------- (IN DPU) -----------------------------\n" RESET);
 
-  
+    DEBUG_PRINT(RED " --------------------- (IN DPU) -----------------------------\n" RESET);
 
     /* ================================ Object Instance ================================ */
     DEBUG_PRINT("meta_space_pt = 0x%x, heap_space_pt = 0x%x, param_pt = 0x%x\n"
-                , meta_space_pt, mram_heap_pt, params_buffer_pt);
+                , meta_space_pt, mram_heap_pt, params_buffer_pt[me()]);
     /* ================================ Write Params ================================ */
 #define PUSH_PARAM(X) \ 
                     *(uint32_t*)params_buffer_pt = X; \
                     params_buffer_pt[me()] += 4;    
     
-
+    int task_count = 0;
     while(buffer_begin < tasklet_buffer_pt){
+       
+        DEBUG_PRINT("tasklet_buffer_begin = 0x%x, me = %d\n", buffer_begin, tasklet_id);
         int task_id = *(uint32_t*)buffer_begin;
         buffer_begin += 4;
-        fc.func = (struct j_method __mram_ptr*)(*(uint32_t*)buffer_begin);
-        buffer_begin += 4;
         fc.jc = (struct j_class __mram_ptr*)(*(uint32_t*)buffer_begin);
-        buffer_begin += 4 + jm->params_count * 4;
+        buffer_begin += 4;
+        fc.func = (struct j_method __mram_ptr*)(*(uint32_t*)buffer_begin);
+        buffer_begin += 4 + fc.func->params_count * 4;
         fc.params = buffer_begin;
+        printf("me = %d, task id = %d, func = %p, jc = %p, params_top = %p\n", me(), task_id, fc.func, fc.jc, buffer_begin);
 
-        DEBUG_PRINT("tasklet_buffer_begin = 0x%x, me = %d\n", buffer_begin, tasklet_id);
-        DEBUG_PRINT("params_buffer = 0x%x\n", params_buffer);
-        print_class(jc);
-        print_method(jm);
-        print_virtual_table(jc);
-
+        //print_class(fc.jc);
+        //print_method(fc.func);
+        //print_virtual_table(fc.jc);
+        
+    params_buffer_pt[tasklet_id] = params_buffer + tasklet_id * this_tasklet_params_buffer_len;
+    printf("reset param buffer pt to %p\n", params_buffer_pt[tasklet_id]);
+return;
         interp(fc);
-    }
-    
-   
-    
-    release_global_memory();
 
-    params_buffer_pt[tasklet_id] = buffer_begin;
+        return_values[task_count * 2] = task_id;
+        return_values[task_count * 2 + 1] = return_val;
+    }
+    release_global_memory();
+    params_buffer_pt[tasklet_id] = params_buffer + tasklet_id * this_tasklet_params_buffer_len;
+    printf("reset param buffer pt to %p\n", params_buffer_pt[tasklet_id]);
+    
     DEBUG_PRINT(RED " --------------------- (END DPU) -----------------------------\n" RESET);
 }
-
 
 int main() {
     exec_task_from_host();

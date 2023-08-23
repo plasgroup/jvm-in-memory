@@ -1,9 +1,8 @@
 #include "memory.h"
 struct memory mem;
 
-uint8_t* current_sp = wram_data_space - 4;
-uint8_t* current_fp = 0;
-uint8_t* current_fbegin = 0;
+uint8_t* current_sp[24];
+uint8_t* current_fp[24] = {0};
 uint8_t* stack_top;
 __host uint8_t __mram_ptr* exec_method_pt[24];
 __host uint8_t __mram_ptr* exec_class_pt[24];
@@ -42,6 +41,8 @@ struct static_fields_table __mram_ptr* sfields_table;
 struct static_field_line __mram_ptr* static_var_m;
 
 __host uint8_t* return_val;
+__host int return_values[512];
+
 
 void init_memory() {
     int i;
@@ -53,7 +54,10 @@ void init_memory() {
 
     printf("param_buffer(wram)=%p, sim_wram(wram)=%p, mram = %p\n", params_buffer, mem.wram, 
         (uint8_t __mram_ptr*)((uint8_t __mram_ptr*)mem.mram_heap + (SLOTVAL) mram_heap_pt));
-
+        
+    for(i = 0; i < 24; i++){
+        current_sp[me()] = wram_data_space + (WRAM_DATA_SPACE_SIZE / 24) * me() - 4;
+    }
     stack_top = (uint8_t*)mem.wram;
 }
 
