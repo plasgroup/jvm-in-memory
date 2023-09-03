@@ -229,7 +229,7 @@ void interp(struct function_thunk func_thunk) {
             DEBUG_PRINT(" - v-index = %p\n", op2);
 
             callee.func = func_thunk.jc->virtual_table[op2].methodref;
-            op4 = (uint8_t*)(current_sp[tasklet_id] - 4 * (callee.func->params_count - 1));
+            op4 = (uint8_t __mram_ptr*)(current_sp[tasklet_id] - 4 * (callee.func->params_count - 1));
 
             DEBUG_PRINT(" - instance-address [me()]= %p, %p\n", *(uint32_t*)op4, op4);
 

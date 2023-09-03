@@ -49,7 +49,7 @@ extern int debug_eval;
 
 #define INC_EVAL_STACK current_sp[me()] += SLOTSIZE;
 #define DESC_EVAL_STACK current_sp[me()] -= SLOTSIZE;
-#define REF_EVAL_STACK_CURRENT_SLOT *SLOTPT (current_sp[me()] + 4)
+#define REF_EVAL_STACK_CURRENT_SLOT *(uint32_t __mram_ptr*)(current_sp[me()] + 4)
 
 #define READ_INT32_BIT_BY_BIT(ADDR, REG) \
 	REG = 0; \
@@ -76,9 +76,9 @@ extern int debug_eval;
 
 
 
-#define EVAL_STACK_TOPSLOT_VALUE *SLOTPT (current_sp[me()])
+#define EVAL_STACK_TOPSLOT_VALUE *(uint32_t __mram_ptr*)(current_sp[me()])
 
-extern __host int return_values[512];
+extern __host int return_values[1024];
 
 #ifdef LOG_STACK_POP_EVENT
 #define POP_EVAL_STACK(X) \
@@ -100,21 +100,20 @@ extern __host int return_values[512];
 struct memory {
     uint8_t __mram_ptr *mram_heap;
     uint8_t __mram_ptr* meta_space;
-    uint8_t* wram;
+    uint8_t __mram_ptr* wram;
 };
 
-#define WRAM_SIZE (8 * 1024)
 #define MRAM_HEAP_SIZE (48 * 1024 * 1024)
 #define PARAMS_BUFFER_SIZE (6 * 1024)
-#define WRAM_DATA_SPACE_SIZE (12 * 1024)
+#define WRAM_DATA_SPACE_SIZE (12 * 12 * 1024)
 #define META_SPACE_SIZE (8 * 1024 * 1024)
 
 
 extern struct memory mem;
 
 
-extern uint8_t* current_sp[24];
-extern uint8_t* current_fp[24];
+extern uint8_t __mram_ptr* current_sp[24];
+extern uint8_t __mram_ptr* current_fp[24];
 extern uint8_t* stack_top;
 
 extern __host uint8_t __mram_ptr* mram_heap_pt;
@@ -128,8 +127,7 @@ extern __dma_aligned __mram_noinit uint8_t m_heapspace[MRAM_HEAP_SIZE];
 extern __dma_aligned __mram_noinit uint8_t m_metaspace[META_SPACE_SIZE];
 
 extern __host uint8_t params_buffer[PARAMS_BUFFER_SIZE];
-extern __host uint8_t wram_data_space[WRAM_DATA_SPACE_SIZE];
-extern __host uint8_t wram_frames_space[WRAM_SIZE];
+extern __dma_aligned __mram_noinit uint8_t wram_data_space[WRAM_DATA_SPACE_SIZE];
 extern __host uint8_t* return_val;
 extern __host uint8_t* params_buffer_pt[24];
 
@@ -190,7 +188,7 @@ extern struct function_inline_array_buffer_cache inline_array_buffer_cache;
 
 #pragma endregion
 
-extern uint8_t* wram_data_space_pt;
+extern uint8_t __mram_ptr* wram_data_space_pt;
 
 void init_memory();
 void release_global_memory();

@@ -66,7 +66,7 @@
 
 #pragma endregion
 void print_frame(uint8_t* fp, uint8_t* sp);
-uint8_t* create_new_vmframe(struct function_thunk func_thunk,
+uint8_t __mram_ptr* create_new_vmframe(struct function_thunk func_thunk,
                             uint8_t* return_pc);
 
 #endif
