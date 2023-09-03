@@ -27,7 +27,7 @@ struct function_thunk
 {
     struct j_method __mram_ptr *func;
     struct j_class __mram_ptr *jc;
-    uint8_t* params;
+    uint8_t __mram_ptr* params;
 };
 
 #endif // !VM_FUNCTION_H

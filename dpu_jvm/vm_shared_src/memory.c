@@ -3,7 +3,7 @@ struct memory mem;
 
 uint8_t __mram_ptr* current_sp[24];
 uint8_t __mram_ptr* current_fp[24] = {0};
-uint8_t* stack_top;
+uint8_t __mram_ptr* stack_top;
 __host uint8_t __mram_ptr* exec_method_pt[24];
 __host uint8_t __mram_ptr* exec_class_pt[24];
 
@@ -12,9 +12,9 @@ __host uint8_t __mram_ptr* func_pt;
 
 __host uint8_t __mram_ptr* meta_space_pt;
 
-__host uint8_t* params_buffer_pt[24];
+__host uint8_t __mram_ptr* params_buffer_pt[24];
 
-uint8_t* evaluation_stack_pt;
+uint8_t __mram_ptr* evaluation_stack_pt;
 
 #ifdef DEBUG_STACK
 int debug_eval;
@@ -28,12 +28,10 @@ struct function_inline_array_buffer_cache inline_array_buffer_cache;
 
 __dma_aligned __mram_noinit uint8_t m_heapspace[MRAM_HEAP_SIZE];
 __dma_aligned __mram_noinit uint8_t m_metaspace[META_SPACE_SIZE];
-
-
-__host uint8_t params_buffer[PARAMS_BUFFER_SIZE];
 __dma_aligned __mram_noinit uint8_t wram_data_space[WRAM_DATA_SPACE_SIZE];
+__dma_aligned __mram_noinit uint8_t params_buffer[PARAMS_BUFFER_SIZE];
 
-uint8_t __mram_ptr __mram_ptr* wram_data_space_pt = wram_data_space;
+uint8_t __mram_ptr* wram_data_space_pt = wram_data_space;
 
 
 struct static_fields_table __mram_ptr* sfields_table;
@@ -57,7 +55,7 @@ void init_memory() {
     for(i = 0; i < 24; i++){
         current_sp[me()] = wram_data_space + (WRAM_DATA_SPACE_SIZE / 24) * me() - 4;
     }
-    stack_top = (uint8_t*)mem.wram;
+    stack_top = (uint8_t __mram_ptr*)mem.wram;
 }
 
 

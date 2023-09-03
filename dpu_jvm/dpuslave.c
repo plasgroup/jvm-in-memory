@@ -150,17 +150,17 @@ void exec_task_from_host() {
                 , meta_space_pt, mram_heap_pt, params_buffer_pt[me()]);
     /* ================================ Write Params ================================ */
 #define PUSH_PARAM(X) \ 
-                    *(uint32_t*)params_buffer_pt = X; \
+                    *(uint32_t __mram_ptr*)params_buffer_pt = X; \
                     params_buffer_pt[me()] += 4;    
     
     while(buffer_begin < tasklet_buffer_pt){
        
         //DEBUG_PRINT("tasklet_buffer_begin = 0x%x, me = %d\n", buffer_begin, tasklet_id);
-        int task_id = *(uint32_t*)buffer_begin;
+        int task_id = *(uint32_t __mram_ptr*)buffer_begin;
         buffer_begin += 4;
-        fc.jc = (struct j_class __mram_ptr*)(*(uint32_t*)buffer_begin);
+        fc.jc = (struct j_class __mram_ptr*)(*(uint32_t __mram_ptr*)buffer_begin);
         buffer_begin += 4;
-        fc.func = (struct j_method __mram_ptr*)(*(uint32_t*)buffer_begin);
+        fc.func = (struct j_method __mram_ptr*)(*(uint32_t __mram_ptr*)buffer_begin);
         buffer_begin += 4 + fc.func->params_count * 4;
         fc.params = buffer_begin;
         

@@ -114,7 +114,7 @@ extern struct memory mem;
 
 extern uint8_t __mram_ptr* current_sp[24];
 extern uint8_t __mram_ptr* current_fp[24];
-extern uint8_t* stack_top;
+extern uint8_t __mram_ptr* stack_top;
 
 extern __host uint8_t __mram_ptr* mram_heap_pt;
 extern __host uint8_t __mram_ptr* func_pt;
@@ -126,10 +126,10 @@ extern __host uint8_t __mram_ptr* exec_class_pt[24];
 extern __dma_aligned __mram_noinit uint8_t m_heapspace[MRAM_HEAP_SIZE];
 extern __dma_aligned __mram_noinit uint8_t m_metaspace[META_SPACE_SIZE];
 
-extern __host uint8_t params_buffer[PARAMS_BUFFER_SIZE];
 extern __dma_aligned __mram_noinit uint8_t wram_data_space[WRAM_DATA_SPACE_SIZE];
+extern __dma_aligned __mram_noinit uint8_t params_buffer[PARAMS_BUFFER_SIZE];
 extern __host uint8_t* return_val;
-extern __host uint8_t* params_buffer_pt[24];
+extern __host uint8_t __mram_ptr* params_buffer_pt[24];
 
 extern struct static_fields_table __mram_ptr* sfields_table;
 extern struct static_field_line __mram_ptr* static_var_m;
@@ -137,7 +137,7 @@ extern struct static_field_line __mram_ptr* static_var_m;
 
 #define ALIGN_8BYTE(ADDR) (ADDR + 7) & -8
 #define MRAM_HEAP_ALLOC_STRUT(TYPE) \
-                                    (TYPE __mram_ptr *)mram_heap_pt; \
+                                    (TYPE __mram_ptr*)mram_heap_pt; \
                                     mram_heap_pt += sizeof(TYPE); \
 
 #define MRAM_HEAP_ALLOC_S(S) \       
@@ -168,23 +168,6 @@ extern struct static_field_line __mram_ptr* static_var_m;
 #define ARRAY_CACHE_ITEM_COUNT 3
 #define ARRAY_CACHE_DIRTY_BITS 2
 #define ARRAY_CACHE_LINE_SIZE (32 + ARRAY_CACHE_SEGMENT_BITS + ARRAY_CACHE_DIRTY_BITS + ARRAY_CACHE_SIZE)
-
-struct array_buffer_cache_item {
-    uint8_t* array;
-    int state;
-    uint8_t* page_num;
-#ifdef INMEMORY
-    __dma_aligned
-#endif
-    uint8_t* buffer;
-};
-
-struct function_inline_array_buffer_cache {
-    struct array_buffer_cache_item cache_lines[3];
-};
-
-
-extern struct function_inline_array_buffer_cache inline_array_buffer_cache;
 
 #pragma endregion
 

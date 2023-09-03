@@ -231,9 +231,9 @@ void interp(struct function_thunk func_thunk) {
             callee.func = func_thunk.jc->virtual_table[op2].methodref;
             op4 = (uint8_t __mram_ptr*)(current_sp[tasklet_id] - 4 * (callee.func->params_count - 1));
 
-            DEBUG_PRINT(" - instance-address [me()]= %p, %p\n", *(uint32_t*)op4, op4);
+            DEBUG_PRINT(" - instance-address [me()]= %p, %p\n", *(uint32_t __mram_ptr*)op4, op4);
 
-            op3 = *(uint32_t*)op4 + 4;
+            op3 = *(uint32_t __mram_ptr*)op4 + 4;
 
             op1 = *(uint32_t __mram_ptr*)(op3);
             DEBUG_PRINT(" - instance-class-address = %p\n", op1); 
@@ -243,7 +243,8 @@ void interp(struct function_thunk func_thunk) {
             DEBUG_PRINT(" - jmethod-ref = %p\n", ((struct j_class __mram_ptr*)(op1))->virtual_table[op2].methodref);
             callee.jc = ((struct j_class __mram_ptr*)(op1))->virtual_table[op2].classref;
             callee.func = ((struct j_class __mram_ptr*)(op1))->virtual_table[op2].methodref;
-            callee.params = current_sp[tasklet_id];
+            callee.params = 
+            current_sp[tasklet_id];
            
 
             current_sp[tasklet_id] -= 4 * callee.func->params_count;
