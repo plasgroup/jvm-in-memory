@@ -46,7 +46,7 @@ void interp(struct function_thunk func_thunk) {
     DEBUG_PRINT("FP = (%p)\n", current_fp[tasklet_id]);
     while (1) {
     
- //   if(func2 == 0x3000c50 && times > 1) return;
+    if(func2 == 0x3000c50 && times > 2) return;
         switch (code_buffer[pc++])
         {
         case NOP:
@@ -227,14 +227,19 @@ void interp(struct function_thunk func_thunk) {
             
             op2 = func_thunk.jc->items[op1].direct_value;
             DEBUG_PRINT(" - v-index = %p\n", op2);
+
             callee.func = func_thunk.jc->virtual_table[op2].methodref;
             op4 = (uint8_t*)(current_sp[tasklet_id] - 4 * (callee.func->params_count - 1));
-          
+
             DEBUG_PRINT(" - instance-address [me()]= %p, %p\n", *(uint32_t*)op4, op4);
+
             op3 = *(uint32_t*)op4 + 4;
+
+            if(func2 == 0x3000c50) return;
+            
             op1 = *(uint32_t __mram_ptr*)(op3);
             DEBUG_PRINT(" - instance-class-address = %p\n", op1); 
-            
+
             
             DEBUG_PRINT(" - jclass-ref = %p\n", ((struct j_class __mram_ptr*)(op1))->virtual_table[op2].classref);
             DEBUG_PRINT(" - jmethod-ref = %p\n", ((struct j_class __mram_ptr*)(op1))->virtual_table[op2].methodref);
