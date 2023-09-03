@@ -48,6 +48,10 @@ public class Main {
         }
     }
 
+    /**
+     * Checkout
+     *
+     */
 
     public static void main(String[] args) {
         parseParameters(args);
@@ -121,24 +125,25 @@ public class Main {
 
             System.out.println("begin evaluate PIM Tree 500,000 queries performance");
             totalTimeInMs = 0;
-            repeatTime = 1;
+            repeatTime = 5;
+            BatchDispatcher bd = new BatchDispatcher();
+            UPMEM.beginRecordBatchDispatching(bd);
             for(int i = 0; i < repeatTime; i++){
                 long startTime = System.nanoTime();
+                int k = 0;
                 for(int key : keys){
-                    System.out.println(key);
                     int v = PIMRoot.search(key);
-                    System.out.println("e2e");
-                    break;
+                    k++;
+                    if(k % 1000 == 0) System.out.println(k);
                 }
                 long endTime = System.nanoTime();
                 long timeElapsed = endTime - startTime;
                 System.out.println((i + 1) + "/" + repeatTime + " Execution time in milliseconds: " + timeElapsed / 1000000);
                 totalTimeInMs += timeElapsed / 1000000;
             }
+            UPMEM.endRecordBatchDispatching();
             System.out.println("PIM 500,000 queries average time = " + totalTimeInMs / repeatTime);
             System.out.println("end evaluate PIM Tree 500,000 queries performance");
-
-
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

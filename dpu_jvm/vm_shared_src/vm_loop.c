@@ -39,14 +39,14 @@ void interp(struct function_thunk func_thunk) {
   
     DEBUG_PRINT("code_buffer = %p\n", code_buffer);
 
-  
-   
 #define DEBUG
     DEBUG_PRINT("create frame finished\n");
     DEBUG_PRINT("FP = (%p)\n", current_fp[tasklet_id]);
+
+    
     while (1) {
     
-    if(func2 == 0x3000c50 && times > 2) return;
+    if(func2 == 0x3000c50 && times > 30) return;
         switch (code_buffer[pc++])
         {
         case NOP:
@@ -235,8 +235,6 @@ void interp(struct function_thunk func_thunk) {
 
             op3 = *(uint32_t*)op4 + 4;
 
-            if(func2 == 0x3000c50) return;
-            
             op1 = *(uint32_t __mram_ptr*)(op3);
             DEBUG_PRINT(" - instance-class-address = %p\n", op1); 
 

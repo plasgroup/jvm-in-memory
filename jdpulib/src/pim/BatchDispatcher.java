@@ -8,6 +8,7 @@ import pim.dpu.java_strut.DPUJVMMemSpaceKind;
 import pim.utils.BytesUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
@@ -27,18 +28,25 @@ public class BatchDispatcher {
         for (int dpuID: dpusInUse) {
             System.out.println(" === write tasks to DPU " + dpuID + " === ");
             byte[] ptBytes = new byte[4];
+
+            // for each tasklet of a DPU
             for(int i = 0; i < 24; i++){
                 int pbp = paramsBufferPointer[dpuID][i];
                 if(pbp == 0) continue;
 
                 System.out.println("dpu id = " + dpuID + " tasklet " + i + ":");
                 System.out.println("parameters buffer pointer = " + pbp);
+                // pbp is relative offset of a tasklet, so, the i'th tasklet's  params_buffer_pt[i] should be parameterBufferBeginAddr + i * perDPUBufferSize + pbp
                 BytesUtils.writeU4LittleEndian(ptBytes, parameterBufferBeginAddr + i * perDPUBufferSize + pbp,0);
+                // write pointer to params_buffer_pt[i]
                 UPMEM.getInstance().getDPUManager(dpuID).dpu.copy("params_buffer_pt", ptBytes , 4 * i);
             }
+            // transfer the DPU#i's params buffer
             UPMEM.getInstance().getDPUManager(dpuID).garbageCollector.transfer(DPUJVMMemSpaceKind.DPU_PARAMETER_BUFFER,paramsBuffer[dpuID], parameterBufferBeginAddr );
         }
 
+
+        // calculate the result array size
         int count = 0;
 
         // O(|DPUs|)
@@ -49,14 +57,17 @@ public class BatchDispatcher {
 
         // O(N)
         for(int dpuID : dpusInUse){
-            UPMEM.getInstance().getDPUManager(dpuID).dpuExecute(null);
+            UPMEM.getInstance().getDPUManager(dpuID).dpuExecute(System.out);
             UPMEM.getInstance().getDPUManager(dpuID).dpu.copy(resultBytes, "return_values");
-            for(int i = 0; i < recordedCount[dpuID]; i++){
-                int taskID = BytesUtils.readU4LittleEndian(resultBytes, (i * 2) * 4);
-                int res = BytesUtils.readU4LittleEndian(resultBytes, (i * 2 + 1) * 4);
-                result[taskID] = res;
-                System.out.println(res);
-            }
+
+//            for(int i = 0; i < recordedCount[dpuID]; i++){
+//                int taskID = BytesUtils.readU4LittleEndian(resultBytes, (i * 2) * 4);
+//                int res = BytesUtils.readU4LittleEndian(resultBytes, (i * 2 + 1) * 4);
+//                result[taskID] = res;
+//                System.out.println(res);
+//            }
+//            Arrays.fill(paramsBufferPointer[dpuID], 0);
+//            Arrays.fill(paramsBuffer[dpuID], (byte)0);
         }
 
         dpusInUse.clear();

@@ -167,9 +167,7 @@ public class BSTBuilder {
             }else{
                 int dpuID = Integer.parseInt(dpuIDString.toString());
                 int address = Integer.parseInt(mramAddressString.toString());
-                if(dpuID == 374218770 || address == 374218770 || key == 374218770 || value == 374218770){
-                    System.out.println("aa");
-                }
+
                 newNode = new DPUTreeNodeProxyAutoGen(key, value, dpuID, address);
             }
 

@@ -132,15 +132,16 @@ void exec_task_from_host() {
         inited = 1;
     }
    
-    printf("me = %d, buffer_begin = %p, buffer_pt = %p\n", me(), buffer_begin, params_buffer_pt[tasklet_id]);
+    //printf("me = %d, buffer_begin = %p, buffer_pt = %p\n", me(), buffer_begin, params_buffer_pt[tasklet_id]);
     
     int tasklet_buffer_pt = params_buffer_pt[tasklet_id];
 
     if(buffer_begin >= tasklet_buffer_pt){
-        printf("return ...\n");
+      //  printf("return ...\n");
         return;
     }
 
+    //if(tasklet_id != 0) return;
 
     DEBUG_PRINT(RED " --------------------- (IN DPU) -----------------------------\n" RESET);
 
@@ -154,7 +155,7 @@ void exec_task_from_host() {
     
     while(buffer_begin < tasklet_buffer_pt){
        
-        DEBUG_PRINT("tasklet_buffer_begin = 0x%x, me = %d\n", buffer_begin, tasklet_id);
+        //DEBUG_PRINT("tasklet_buffer_begin = 0x%x, me = %d\n", buffer_begin, tasklet_id);
         int task_id = *(uint32_t*)buffer_begin;
         buffer_begin += 4;
         fc.jc = (struct j_class __mram_ptr*)(*(uint32_t*)buffer_begin);
@@ -162,20 +163,24 @@ void exec_task_from_host() {
         fc.func = (struct j_method __mram_ptr*)(*(uint32_t*)buffer_begin);
         buffer_begin += 4 + fc.func->params_count * 4;
         fc.params = buffer_begin;
+        
         printf("me = %d, task id = %d, func = %p, jc = %p, params_top = %p\n", me(), task_id, fc.func, fc.jc, buffer_begin);
 
         //print_class(fc.jc);
         //print_method(fc.func);
         //print_virtual_table(fc.jc);
         
+        current_fp[tasklet_id] = 0;
+        current_sp[tasklet_id] = wram_data_space +  tasklet_id * (WRAM_DATA_SPACE_SIZE / 24) - 4;
         interp(fc);
-        printf("write to %d\n", task_id * 2);
+        //printf("write to %d\n", task_id * 2);
+       
         return_values[task_id * 2] = task_id;
         return_values[task_id * 2 + 1] = return_val;
     }
     release_global_memory();
     params_buffer_pt[tasklet_id] = params_buffer + tasklet_id * this_tasklet_params_buffer_len;
-    printf("reset param buffer pt to %p\n", params_buffer_pt[tasklet_id]);
+    //printf("reset param buffer pt to %p\n", params_buffer_pt[tasklet_id]);
     
     DEBUG_PRINT(RED " --------------------- (END DPU) -----------------------------\n" RESET);
 }
