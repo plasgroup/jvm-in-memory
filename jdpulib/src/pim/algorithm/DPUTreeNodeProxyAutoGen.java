@@ -20,8 +20,8 @@ public class DPUTreeNodeProxyAutoGen extends DPUTreeNode implements IDPUProxyObj
     public static int getKeyDispatchCount = 0;
     public static int insertDispatchCount = 0;
     public static int createNodeDispatchCount = 0;
-    public Integer dpuID;
-    public Integer address;
+    public int dpuID;
+    public int address;
 
     static Logger pimProxy = PIMLoggers.pimProxy;
 

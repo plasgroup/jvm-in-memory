@@ -1,16 +1,20 @@
+import com.sun.source.tree.Tree;
 import com.upmem.dpu.DpuException;
 import pim.BatchDispatcher;
 import pim.ExperimentConfigurator;
 import pim.UPMEM;
 import pim.UPMEMConfigurator;
-import pim.algorithm.BSTTester;
-import pim.algorithm.DPUTreeNode;
-import pim.algorithm.TreeNode;
+import pim.algorithm.*;
 
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
 import static pim.ExperimentConfigurator.*;
+import static pim.algorithm.BSTBuilder.buildCpuPartTreeFromFile;
+import static pim.algorithm.BSTTester.readIntergerArrayList;
 import static pim.algorithm.BSTTester.writeKV;
+import static pim.algorithm.TreeWriter.writeDPUImages;
 
 public class Main {
     public static UPMEMConfigurator upmemConfigurator = new UPMEMConfigurator();
@@ -66,17 +70,76 @@ public class Main {
                 .setDpuInUseCount(dpuInUse)
                 .setThreadPerDPU(UPMEM.perDPUThreadsInUse);
 
-
-        TreeNode tn = (TreeNode) UPMEM.getInstance().createObject(0, DPUTreeNode.class, 10,22231);
-        UPMEM.beginRecordBatchDispatching(new BatchDispatcher());
-        for(int i = 0; i < 100; i++){
-            tn.search(10);
-        }
-        UPMEM.endRecordBatchDispatching();
+//        TreeNode tn = (TreeNode) UPMEM.getInstance().createObject(0, DPUTreeNode.class, 10,22231);
+////        UPMEM.beginRecordBatchDispatching(new BatchDispatcher());
+////        for(int i = 0; i < 100; i++){
+////            tn.search(10);
+////        }
+////        UPMEM.endRecordBatchDispatching();
+//        System.out.println(tn.search(10));
+//        try {
+//            UPMEM.batchDispatcher.dispatchAll();
+//        } catch (DpuException e) {
+//            throw new RuntimeException(e);
+//        }
 
         try {
-            UPMEM.batchDispatcher.dispatchAll();
-        } catch (DpuException e) {
+            TreeNode CPURoot = BSTBuilder.buildCpuPartTreeFromFile("CPU_TREE_10000000.txt");
+            TreeNode PIMRoot;
+            try {
+                for(int i = 0; i < UPMEM.dpuInUse; i++){
+                    UPMEM.getInstance().getDPUManager(i).createObject(DPUTreeNode.class, new Object[]{0, 0});
+                }
+                writeDPUImages(totalNodeCount, ExperimentConfigurator.imagesPath);
+
+                System.out.println("load CPU part tree");
+                PIMRoot = buildCpuPartTreeFromFile("PIM_TREE_" + totalNodeCount + ".txt");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } catch (DpuException e) {
+                throw new RuntimeException(e);
+            }
+
+            List<Integer> keys = readIntergerArrayList("keys_random.txt");
+
+            System.out.println("begin evaluate CPU Tree 500,000 queries performance");
+            int repeatTime = 1;
+            long totalTimeInMs = 0;
+            for(int i = 0; i < repeatTime; i++){
+                long startTime = System.nanoTime();
+                for(int key : keys){
+                    int v = CPURoot.search(key);
+                }
+                long endTime = System.nanoTime();
+                long timeElapsed = endTime - startTime;
+                System.out.println((i + 1) + "/" + repeatTime + " Execution time in milliseconds: " + timeElapsed / 1000000);
+                totalTimeInMs += timeElapsed / 1000000;
+            }
+            System.out.println("CPU 500,000 queries average time = " + totalTimeInMs / repeatTime);
+            System.out.println("end evaluate CPU Tree 500,000 queries performance");
+
+
+            System.out.println("begin evaluate PIM Tree 500,000 queries performance");
+            totalTimeInMs = 0;
+            repeatTime = 1;
+            for(int i = 0; i < repeatTime; i++){
+                long startTime = System.nanoTime();
+                for(int key : keys){
+                    System.out.println(key);
+                    int v = PIMRoot.search(key);
+                    System.out.println("e2e");
+                    break;
+                }
+                long endTime = System.nanoTime();
+                long timeElapsed = endTime - startTime;
+                System.out.println((i + 1) + "/" + repeatTime + " Execution time in milliseconds: " + timeElapsed / 1000000);
+                totalTimeInMs += timeElapsed / 1000000;
+            }
+            System.out.println("PIM 500,000 queries average time = " + totalTimeInMs / repeatTime);
+            System.out.println("end evaluate PIM Tree 500,000 queries performance");
+
+
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
 

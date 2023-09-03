@@ -10,6 +10,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import static pim.ExperimentConfigurator.totalNodeCount;
 import static pim.algorithm.TreeWriter.convertCPUTreeToPIMTree;
 
 public class BSTBuilder {
@@ -161,10 +162,17 @@ public class BSTBuilder {
             int key = Integer.parseInt(keyString.toString());
             int value = Integer.parseInt(valueString.toString());
 
-            if(key == 9 && value == 43179707){
-                System.out.println();
+            if(type == '-'){
+                newNode = new CPUTreeNode(key, value);
+            }else{
+                int dpuID = Integer.parseInt(dpuIDString.toString());
+                int address = Integer.parseInt(mramAddressString.toString());
+                if(dpuID == 374218770 || address == 374218770 || key == 374218770 || value == 374218770){
+                    System.out.println("aa");
+                }
+                newNode = new DPUTreeNodeProxyAutoGen(key, value, dpuID, address);
             }
-            newNode = (type == '-' ? new CPUTreeNode(key, value) : new DPUTreeNodeProxyAutoGen(key, value));
+
             nodes++;
             if(type != '-'){
                 proxy ++;
@@ -274,6 +282,9 @@ public class BSTBuilder {
 
 
         TreeNode root = BSTBuilder.buildCPUTree(filePath);
+        if(ExperimentConfigurator.serializeToFile){
+            serializeTreeToFile(root, "CPU_TREE_" + totalNodeCount + ".txt");
+        }
         convertCPUTreeToPIMTree(root, cpuLayerCount);
 
         return root;

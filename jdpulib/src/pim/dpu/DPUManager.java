@@ -50,7 +50,6 @@ public class DPUManager {
     }
 
     public void callNonstaticMethod(int classPt, int methodPt, int instanceAddr, Object[] params) throws DpuException {
-        System.out.printf("%x\n",methodPt);
         if(UPMEM.batchDispatchingRecording) {
             System.out.println("record batch dispatching");
             System.out.printf("method pt %x\n", methodPt);
@@ -110,7 +109,7 @@ public class DPUManager {
                 tasklet = (tasklet + 1) % 24;
             }
         }
-        System.out.println("select tasklet = " + tasklet);
+        // System.out.println("select tasklet = " + tasklet);
 
         int[] paramsConverted = new int[params.length + 1 + 2 + 1];
         paramsConverted[0] = 0;
@@ -132,7 +131,7 @@ public class DPUManager {
         }
 
         garbageCollector.pushParameters(paramsConverted, tasklet);
-        dpuExecute(null);
+        dpuExecute(System.out);
 
         taskletSemaphore[tasklet] = 0;
         currentTasklet = (currentTasklet + 1) % 24;
