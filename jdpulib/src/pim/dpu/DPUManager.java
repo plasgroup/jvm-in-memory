@@ -55,7 +55,7 @@ public class DPUManager {
             //System.out.printf("method pt %x\n", methodPt);
             int t = UPMEM.batchDispatcher.taskletPosition[dpuID];
             int t2 = (t + 1) % 24;
-            int size = (1 + 2 + 1 + params.length) * 4;
+            int size = (((1 + 2 + 1 + params.length) * 4) + 0b111) & (~0b111);
             BatchDispatcher bd = UPMEM.batchDispatcher;
             while(t2 != t){
                 if(bd.paramsBufferPointer[dpuID][t2] + size < DPUGarbageCollector.perDPUBufferSize){

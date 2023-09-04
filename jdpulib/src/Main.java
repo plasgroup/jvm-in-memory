@@ -74,6 +74,21 @@ public class Main {
                 .setDpuInUseCount(dpuInUse)
                 .setThreadPerDPU(UPMEM.perDPUThreadsInUse);
 
+        TreeNode tn =
+                (TreeNode) UPMEM.getInstance().createObject(0, DPUTreeNode.class, 10, 22231);
+
+        BatchDispatcher bd = new BatchDispatcher();
+        UPMEM.beginRecordBatchDispatching(bd);
+        for(int i = 0; i < 100; i++){
+            tn.search(10);
+        }
+        try {
+            bd.dispatchAll();
+        } catch (DpuException e) {
+            throw new RuntimeException(e);
+        }
+        if(true) return;
+
 //        TreeNode tn = (TreeNode) UPMEM.getInstance().createObject(0, DPUTreeNode.class, 10,22231);
 ////        UPMEM.beginRecordBatchDispatching(new BatchDispatcher());
 ////        for(int i = 0; i < 100; i++){
@@ -126,7 +141,7 @@ public class Main {
             System.out.println("begin evaluate PIM Tree 500,000 queries performance");
             totalTimeInMs = 0;
             repeatTime = 5;
-            BatchDispatcher bd = new BatchDispatcher();
+
             UPMEM.beginRecordBatchDispatching(bd);
             for(int i = 0; i < repeatTime; i++){
                 long startTime = System.nanoTime();

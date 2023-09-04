@@ -14,9 +14,9 @@ public class DPUGarbageCollector {
     Dpu dpu;
     int heapSpacePt;
     int metaSpacePt;
-    public final static int heapSpaceBeginAddr = 0x000000;
-    public final static int metaSpaceBeginAddr = 48 * 1024 * 1024;
-    public final static int parameterBufferBeginAddr = 0x6648;
+    public final static int heapSpaceBeginAddr = 0x24000;
+    public final static int metaSpaceBeginAddr = 0x3024000;
+    public final static int parameterBufferBeginAddr = 0x3824000;
     public final static int parameterBufferSize = 6 * 1024;
     public final static int perDPUBufferSize = 6 * 1024 / 24;
     public final static int heapSpaceSize = 48 * 1024 * 1024;
@@ -27,7 +27,7 @@ public class DPUGarbageCollector {
     public DPUGarbageCollector(int dpuID, Dpu dpu) throws DpuException {
         this.dpuID = dpuID;
         this.dpu = dpu;
-        this.heapSpacePt = 0x00000008;
+        this.heapSpacePt = heapSpaceBeginAddr + 0x00000008;
         this.metaSpacePt = metaSpaceBeginAddr;
         byte[] ptBytes = new byte[4];
 
@@ -56,7 +56,7 @@ public class DPUGarbageCollector {
     }
 
     public int pushParameters(int[] params, int tasklet) throws DpuException {
-        int size = params.length * 4;
+        int size = (params.length * 4 + 0b111) & ~(0b111);
         byte[] data = new byte[size];
         int addr = parameterBufferBeginAddr + (parameterBufferSize / 24) * tasklet;
         gcLogger.log(" - allocate " + size + " byte in parameter buffer");
@@ -106,7 +106,7 @@ public class DPUGarbageCollector {
             beginAddr = parameterBufferBeginAddr;
         }
 
-        if(!"".equals(spaceVarName) && beginAddr != -1){
+            if(!"".equals(spaceVarName) && beginAddr != -1){
             gcLogger.logf("copy %d bytes to MRAM, pt = 0x%x" + " [%s]", data.length, pt, spaceVarName);
             dpu.copy(spaceVarName, data, pt - beginAddr);
         }
@@ -126,7 +126,7 @@ public class DPUGarbageCollector {
     public int allocate(DPUJVMMemSpaceKind spaceKind, int size) throws DpuException, RuntimeException {
         int alignmentMask;
         if(spaceKind == DPUJVMMemSpaceKind.DPU_PARAMETER_BUFFER){
-            alignmentMask = 0b11;
+            alignmentMask = 0b111;
         }else{
             alignmentMask = 0b111;
         }
