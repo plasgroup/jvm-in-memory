@@ -164,7 +164,7 @@ void exec_task_from_host() {
         buffer_begin += 4 + fc.func->params_count * 4;
         fc.params = buffer_begin;
         
-        printf("me = %d, task id = %d, func = %p, jc = %p, params_top = %p\n", me(), task_id, fc.func, fc.jc, buffer_begin);
+        printf("me = %d, task id = %d, func = %p, jc = %p, current_params = %p, top = %p\n", me(), task_id, fc.func, fc.jc, buffer_begin, tasklet_buffer_pt);
         
         //print_class(fc.jc);
         //print_method(fc.func);
@@ -178,6 +178,7 @@ void exec_task_from_host() {
        
         return_values[task_id * 2] = task_id;
         return_values[task_id * 2 + 1] = return_val;
+        buffer_begin = (buffer_begin + 0b111) & (~0b111);
     }
     release_global_memory();
     params_buffer_pt[tasklet_id] = params_buffer + tasklet_id * this_tasklet_params_buffer_len;

@@ -71,7 +71,7 @@ extern int debug_eval;
 #define PUSH_EVAL_STACK(X) \
       REF_EVAL_STACK_CURRENT_SLOT = X; \
       INC_EVAL_STACK \
-      printf(">> new sp = %p\n", current_sp[tasklet_id]);
+      DEBUG_PRINT(">> new sp = %p\n", current_sp[tasklet_id]);
 #endif
 
 

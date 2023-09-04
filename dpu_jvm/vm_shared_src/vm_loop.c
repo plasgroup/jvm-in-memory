@@ -45,7 +45,7 @@ void interp(struct function_thunk func_thunk) {
     DEBUG_PRINT("FP = (%p)\n", current_fp[tasklet_id]);
 
     while (1) {
-    if(times > 5) return;
+    //if(times > 5) return;
     if(func2 == 0x3000c50 && times > 30) return;
         switch (code_buffer[pc++])
         {
@@ -71,7 +71,7 @@ void interp(struct function_thunk func_thunk) {
         case ALOAD_0:
             DEBUG_OUT_INSN_PARSED("ALOAD_0")
             op1 = FRAME_GET_LOCALS(current_fp[tasklet_id], func->params_count, 0);
-            printf(" - Load ref %p to stack\n", *(uint8_t __mram_ptr* __mram_ptr*)(0x1800));
+            DEBUG_PRINT(" - Load ref %p to stack\n", *(uint8_t __mram_ptr* __mram_ptr*)(0x1800));
             
             PUSH_EVAL_STACK(op1)
             break;
@@ -230,7 +230,7 @@ void interp(struct function_thunk func_thunk) {
             callee.func = func_thunk.jc->virtual_table[op2].methodref;
             op4 = (uint8_t __mram_ptr*)(current_sp[tasklet_id] - 4 * (callee.func->params_count - 1));
             
-            printf(" - instance-address [me()]= %p, %p\n", *(uint8_t __mram_ptr* __mram_ptr*)op4, op4);
+            DEBUG_PRINT(" - instance-address [me()]= %p, %p\n", *(uint8_t __mram_ptr* __mram_ptr*)op4, op4);
 
             op3 = *(uint32_t __mram_ptr*)op4 + 4;
 
@@ -302,7 +302,7 @@ void interp(struct function_thunk func_thunk) {
             break;
         case RETURN:
             DEBUG_OUT_INSN_PARSED("RETURN")
-            printf("return");
+            DEBUG_PRINT("return");
             DEBUG_PRINT(" - last-sp = %p\n", FRAME_GET_OLDSP(current_fp[tasklet_id]));
             DEBUG_PRINT(" - last-fp = %p\n", FRAME_GET_OLDFP(current_fp[tasklet_id]));
             DEBUG_PRINT(" - return-pc = %p\n", FRAME_GET_RETPC(current_fp[tasklet_id]));
