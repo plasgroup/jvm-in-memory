@@ -21,10 +21,6 @@ int debug_eval;
 #endif
 
 
-#ifdef INMEMORY && ARRAY_CACHE
-struct function_inline_array_buffer_cache inline_array_buffer_cache;
-#endif
-
 
 __dma_aligned __mram_noinit uint8_t m_heapspace[MRAM_HEAP_SIZE];
 __dma_aligned __mram_noinit uint8_t m_metaspace[META_SPACE_SIZE];

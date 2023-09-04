@@ -35,17 +35,17 @@ void interp(struct function_thunk func_thunk) {
     DEBUG_PRINT(RED);
     #endif
 
+    
     current_fp[tasklet_id] = create_new_vmframe(func_thunk, NULL);
   
     DEBUG_PRINT("code_buffer = %p\n", code_buffer);
-
+    
 #define DEBUG
     DEBUG_PRINT("create frame finished\n");
     DEBUG_PRINT("FP = (%p)\n", current_fp[tasklet_id]);
 
-    
     while (1) {
-    
+    if(times > 5) return;
     if(func2 == 0x3000c50 && times > 30) return;
         switch (code_buffer[pc++])
         {
@@ -70,9 +70,8 @@ void interp(struct function_thunk func_thunk) {
         
         case ALOAD_0:
             DEBUG_OUT_INSN_PARSED("ALOAD_0")
-            
             op1 = FRAME_GET_LOCALS(current_fp[tasklet_id], func->params_count, 0);
-            DEBUG_PRINT(" - Load ref %p to stack\n", op1);
+            printf(" - Load ref %p to stack\n", *(uint8_t __mram_ptr* __mram_ptr*)(0x1800));
             
             PUSH_EVAL_STACK(op1)
             break;
@@ -134,7 +133,7 @@ void interp(struct function_thunk func_thunk) {
             DEBUG_PRINT(" - value 2 = %d\n", op2);
             DEBUG_PRINT(" - value 1 = %d\n", op3);
             op1 = pc + (short)op1 - 1;
-            DEBUG_PRINT(" - branch-target = 0x%02x\n", op1);
+          //  DEBUG_PRINT(" - branch-target = 0x%02x\n", op1);
             pc += 2;
             if(op3 >= op2){
                 pc = op1;
@@ -230,8 +229,8 @@ void interp(struct function_thunk func_thunk) {
 
             callee.func = func_thunk.jc->virtual_table[op2].methodref;
             op4 = (uint8_t __mram_ptr*)(current_sp[tasklet_id] - 4 * (callee.func->params_count - 1));
-
-            DEBUG_PRINT(" - instance-address [me()]= %p, %p\n", *(uint32_t __mram_ptr*)op4, op4);
+            
+            printf(" - instance-address [me()]= %p, %p\n", *(uint8_t __mram_ptr* __mram_ptr*)op4, op4);
 
             op3 = *(uint32_t __mram_ptr*)op4 + 4;
 

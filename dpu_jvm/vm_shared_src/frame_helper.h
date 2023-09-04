@@ -44,16 +44,17 @@
 
 #pragma region FRAME_GETTER
 //// Getter
+// (- LOCAL_INDEX * SLOTSIZE)
+#define FRAME_GET_OLDFP(FP) *(uint8_t __mram_ptr* __mram_ptr*)FRAME_LOC(FP, FRAME_OFFSET_OLDFP_PT)
+#define FRAME_GET_LOCALS(FP, MAX_LOCALS, LOCAL_INDEX) *(uint8_t __mram_ptr* __mram_ptr*)FRAME_LOC(FP, FRAME_OFFSET_LOCALS_PT((MAX_LOCALS - LOCAL_INDEX)))
 
-#define FRAME_GET_OLDFP(FP) *(uint8_t __mram_ptr**)FRAME_LOC(FP, FRAME_OFFSET_OLDFP_PT)
-#define FRAME_GET_LOCALS(FP, MAX_LOCALS, LOCAL_INDEX) *(uint8_t __mram_ptr**)FRAME_LOC(FP, FRAME_OFFSET_LOCALS_PT((MAX_LOCALS - LOCAL_INDEX)))
-#define FRAME_GET_OLDSP(FP) *(uint8_t __mram_ptr**)FRAME_LOC(FP, FRAME_OFFSET_OLDSP_PT)
-#define FRAME_GET_RETPC(FP) *(uint8_t __mram_ptr**)FRAME_LOC(FP, FRAME_OFFSET_RETPC_PT)
-#define FRAME_GET_METHOD(FP) *(struct j_method __mram_ptr**)FRAME_LOC(FP, FRAME_OFFSET_METHOD_PT)
-#define FRAME_GET_CLASS(FP) *(struct j_class __mram_ptr**)FRAME_LOC(FP, FRAME_OFFSET_CLASS_PT)
-#define FRAME_GET_CONSTANTPOOL(FP) *(uint8_t __mram_ptr**)FRAME_LOC(FP, FRAME_OFFSET_CONSTANTPOOL_PT)
-#define FRAME_GET_BYTECODE(FP) *(uint8_t __mram_ptr**)FRAME_LOC(FP, FRAME_OFFSET_BYTECODE_PT)
-#define FRAME_GET_OPERAND_STACK_ELEM(FP, OPRAND_INDEX) *(uint8_t __mram_ptr**)FRAME_LOC(FP, FRAME_OFFSET_OPERAND_STACK_ELEM_PT(OPRAND_INDEX))
+#define FRAME_GET_OLDSP(FP) *(uint8_t __mram_ptr* __mram_ptr*)FRAME_LOC(FP, FRAME_OFFSET_OLDSP_PT)
+#define FRAME_GET_RETPC(FP) *(uint8_t __mram_ptr* __mram_ptr*)FRAME_LOC(FP, FRAME_OFFSET_RETPC_PT)
+#define FRAME_GET_METHOD(FP) *(struct j_method __mram_ptr* __mram_ptr*)FRAME_LOC(FP, FRAME_OFFSET_METHOD_PT)
+#define FRAME_GET_CLASS(FP) *(struct j_class __mram_ptr* __mram_ptr*)FRAME_LOC(FP, FRAME_OFFSET_CLASS_PT)
+#define FRAME_GET_CONSTANTPOOL(FP) *(uint8_t __mram_ptr* __mram_ptr*)FRAME_LOC(FP, FRAME_OFFSET_CONSTANTPOOL_PT)
+#define FRAME_GET_BYTECODE(FP) *(uint8_t __mram_ptr* __mram_ptr*)FRAME_LOC(FP, FRAME_OFFSET_BYTECODE_PT)
+#define FRAME_GET_OPERAND_STACK_ELEM(FP, OPRAND_INDEX) *(uint8_t __mram_ptr* __mram_ptr*)FRAME_LOC(FP, FRAME_OFFSET_OPERAND_STACK_ELEM_PT(OPRAND_INDEX))
 
 
 #define FRAME_GET_OPERAND_STACK_SIZE(FP, SP) ((SP - FP - 24) / 4)

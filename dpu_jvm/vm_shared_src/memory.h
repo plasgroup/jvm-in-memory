@@ -59,7 +59,7 @@ extern int debug_eval;
     REG |= (*(uint8_t __mram_ptr *)((ADDR) + 3) << 24);
 
 #define GET_CLASSSTRUT(OBJREF, OUTVAR) \
-    OUTVAR = (uint8_t __mram_ptr*)*(struct j_class __mram_ptr**) OBJREF
+    OUTVAR = (uint8_t __mram_ptr*)*(struct j_class __mram_ptr* __mram_ptr*) OBJREF
 
 #ifdef LOG_STACK_POP_EVENT
 #define PUSH_EVAL_STACK(X) \
@@ -71,7 +71,7 @@ extern int debug_eval;
 #define PUSH_EVAL_STACK(X) \
       REF_EVAL_STACK_CURRENT_SLOT = X; \
       INC_EVAL_STACK \
-      DEBUG_PRINT(">> new sp = %p\n", current_sp[tasklet_id]);
+      printf(">> new sp = %p\n", current_sp[tasklet_id]);
 #endif
 
 

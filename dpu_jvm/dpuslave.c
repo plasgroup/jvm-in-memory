@@ -152,7 +152,7 @@ void exec_task_from_host() {
 #define PUSH_PARAM(X) \ 
                     *(uint32_t __mram_ptr*)params_buffer_pt = X; \
                     params_buffer_pt[me()] += 4;    
-    
+   
     while(buffer_begin < tasklet_buffer_pt){
        
         //DEBUG_PRINT("tasklet_buffer_begin = 0x%x, me = %d\n", buffer_begin, tasklet_id);
@@ -165,13 +165,14 @@ void exec_task_from_host() {
         fc.params = buffer_begin;
         
         printf("me = %d, task id = %d, func = %p, jc = %p, params_top = %p\n", me(), task_id, fc.func, fc.jc, buffer_begin);
-
+        
         //print_class(fc.jc);
         //print_method(fc.func);
         //print_virtual_table(fc.jc);
         
         current_fp[tasklet_id] = 0;
-        current_sp[tasklet_id] = wram_data_space +  tasklet_id * (WRAM_DATA_SPACE_SIZE / 24) - 4;
+        current_sp[tasklet_id] = wram_data_space +  tasklet_id * (WRAM_DATA_SPACE_SIZE / 24);
+        
         interp(fc);
         //printf("write to %d\n", task_id * 2);
        
@@ -186,7 +187,8 @@ void exec_task_from_host() {
 }
 
 int main() {
-
+     printf("meta_space_begin = 0x%x, heap_space_begin = 0x%x, param_begin = 0x%x, wram_space_begin = 0x%x\n"
+                , m_metaspace, m_heapspace, params_buffer, wram_data_space);
     exec_task_from_host();
     return 0;
 }
