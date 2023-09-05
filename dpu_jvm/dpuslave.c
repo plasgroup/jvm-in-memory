@@ -189,8 +189,8 @@ void exec_task_from_host() {
         
         // printf("write to %d\n", task_id * 2);
         
-        // return_values[task_id * 2] = task_id;
-        // return_values[task_id * 2 + 1] = return_val;
+        return_values[task_id * 2] = task_id;
+        return_values[task_id * 2 + 1] = return_val;
         buffer_begin = (buffer_begin + 0b111) & (~0b111);
         
     }
