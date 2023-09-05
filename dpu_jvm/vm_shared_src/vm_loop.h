@@ -13,11 +13,9 @@ extern __host SLOTVAL ret_val;
 
 #ifdef DEBUG_OUTPUT_INSN_PARSED
 
-#ifdef SLIENT
-#define DEBUG_OUT_INSN_PARSED(X) ;
-#else
-#define DEBUG_OUT_INSN_PARSED(X) printf("pc:0x%x op = 0x%02x, %s (addr: 0x%08x)\n", pc - 1, code_buffer[pc - 1], X, &code_buffer[pc - 1]);
-#endif
+
+#define DEBUG_OUT_INSN_PARSED(X) if(mem.meta_space == 0x38901d4) printf("pc:0x%x op = 0x%02x, %s (addr: 0x%08x)\n", pc - 1, code_buffer[pc - 1], X, &code_buffer[pc - 1]);
+
 
 #else
 #define DEBUG_OUT_INSN_PARSED(X) ;

@@ -52,11 +52,12 @@ public class BatchDispatcher {
         for(int dpuID : dpusInUse){
           count += recordedCount[dpuID];
         }
+        System.out.println("count == " + count);
         result = new int[count];
-
+        System.out.println("=== dispatch all ====");
         // O(N)
         for(int dpuID : dpusInUse){
-            UPMEM.getInstance().getDPUManager(dpuID).dpuExecute(System.out);
+            UPMEM.getInstance().getDPUManager(dpuID).dpuExecute(null);
             UPMEM.getInstance().getDPUManager(dpuID).dpu.copy(resultBytes, "return_values");
 
 //            for(int i = 0; i < recordedCount[dpuID]; i++){
@@ -68,9 +69,10 @@ public class BatchDispatcher {
 
             Arrays.fill(paramsBufferPointer[dpuID], 0);
             Arrays.fill(paramsBuffer[dpuID], (byte)0);
-            throw new RuntimeException();
+            System.out.println("dpu#" + dpuID + "dispatched");
         }
 
         dpusInUse.clear();
+        System.out.println("all dispatched");
     }
 }

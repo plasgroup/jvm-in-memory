@@ -143,7 +143,6 @@ void exec_task_from_host() {
         return;
     }
 
-    //if(tasklet_id != 0) return;
 
     DEBUG_PRINT(RED " --------------------- (IN DPU) -----------------------------\n" RESET);
 
@@ -165,19 +164,18 @@ void exec_task_from_host() {
         buffer_begin += 4 + fc.func->params_count * 4;
         fc.params = buffer_begin;
         
-
         // if(fc.func == 0x3090c50 && tasklet_id != 1)
         //     return;
+
         printf("me = %d, task id = %d, func = %p, jc = %p, current_params = %p, top = %p\n", me(), task_id, fc.func, fc.jc, buffer_begin, tasklet_buffer_pt);
         printf("instance = %d, key = %d\n", *(uint8_t __mram_ptr* __mram_ptr*)(buffer_begin - 8), *(uint8_t __mram_ptr* __mram_ptr*)(buffer_begin - 4));
         mem.meta_space = buffer_begin;
         
-        return_values[task_id * 2] = task_id;
-        return_values[task_id * 2 + 1] = return_val;
+        // return_values[task_id * 2] = task_id;
+        // return_values[task_id * 2 + 1] = return_val;
 
         // buffer_begin = (buffer_begin + 0b111) & (~0b111);
 
-        
         // print_class(fc.jc);
         // print_method(fc.func);
         // print_virtual_table(fc.jc);
@@ -187,15 +185,12 @@ void exec_task_from_host() {
        
         interp(fc);
 
-        if(fc.func == 0x3090c50) return;
-        t++;
-
-        if(t == 9)
-            break;
+//        if(fc.func == 0x3090c50) return;
+        
         // printf("write to %d\n", task_id * 2);
         
-        return_values[task_id * 2] = task_id;
-        return_values[task_id * 2 + 1] = return_val;
+        // return_values[task_id * 2] = task_id;
+        // return_values[task_id * 2 + 1] = return_val;
         buffer_begin = (buffer_begin + 0b111) & (~0b111);
         
     }

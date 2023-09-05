@@ -163,16 +163,6 @@ extern struct static_field_line __mram_ptr* static_var_m;
                                     meta_space_pt += S; \
 
 
-#pragma region array_buffer_for_scrtachpad(unuse)
-#define SET_DIRTY(CLine, bit2) *(uint8_t*)(Cline + 32 + 16) = bit2
-#define ARRAY_CACHE_SIZE (1024)
-#define ARRAY_CACHE_SEGMENT_BITS (32 - 10)
-#define ARRAY_CACHE_ITEM_COUNT 3
-#define ARRAY_CACHE_DIRTY_BITS 2
-#define ARRAY_CACHE_LINE_SIZE (32 + ARRAY_CACHE_SEGMENT_BITS + ARRAY_CACHE_DIRTY_BITS + ARRAY_CACHE_SIZE)
-
-#pragma endregion
-
 extern uint8_t __mram_ptr* wram_data_space_pt;
 
 void init_memory();

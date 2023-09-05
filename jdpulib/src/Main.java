@@ -129,7 +129,7 @@ public class Main {
 
             BatchDispatcher bd1 = new BatchDispatcher();
 
-            //UPMEM.beginRecordBatchDispatching(bd1);
+            UPMEM.beginRecordBatchDispatching(bd1);
             for(int i = 0; i < repeatTime; i++){
                 long startTime = System.nanoTime();
                 int k = 0;
