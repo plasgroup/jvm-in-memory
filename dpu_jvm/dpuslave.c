@@ -167,8 +167,8 @@ void exec_task_from_host() {
         // if(fc.func == 0x3090c50 && tasklet_id != 1)
         //     return;
 
-        printf("me = %d, task id = %d, func = %p, jc = %p, current_params = %p, top = %p\n", me(), task_id, fc.func, fc.jc, buffer_begin, tasklet_buffer_pt);
-        printf("instance = %d, key = %d\n", *(uint8_t __mram_ptr* __mram_ptr*)(buffer_begin - 8), *(uint8_t __mram_ptr* __mram_ptr*)(buffer_begin - 4));
+        //printf("me = %d, task id = %d, func = %p, jc = %p, current_params = %p, top = %p\n", me(), task_id, fc.func, fc.jc, buffer_begin, tasklet_buffer_pt);
+        //printf("instance = %d, key = %d\n", *(uint8_t __mram_ptr* __mram_ptr*)(buffer_begin - 8), *(uint8_t __mram_ptr* __mram_ptr*)(buffer_begin - 4));
         mem.meta_space = buffer_begin;
         
         // return_values[task_id * 2] = task_id;

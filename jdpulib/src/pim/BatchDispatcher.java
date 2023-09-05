@@ -38,7 +38,7 @@ public class BatchDispatcher {
         }
         public void run(){
             try {
-                System.out.println("DPU#" + id + "dispatched");
+                //System.out.println("DPU#" + id + "dispatched");
                 UPMEM.getInstance().getDPUManager(id).dpuExecute(null);
             } catch (DpuException e) {
                 throw new RuntimeException(e);
