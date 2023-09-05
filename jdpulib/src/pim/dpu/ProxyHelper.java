@@ -39,9 +39,9 @@ public class ProxyHelper {
         // pimProxy.logf("pim:proxy: class mram addr = 0x%x, method mram addr = 0x%x, instance addr = 0x%x\n", classMRAMAddr, methodMRAMAddr, objectHandler.address);
         try {
             upmem.getDPUManager(dpuID).callNonstaticMethod(classMRAMAddr, methodMRAMAddr, address, params);
-
         } catch (DpuException e) {
             throw new RuntimeException(e);
         }
     }
 }
+

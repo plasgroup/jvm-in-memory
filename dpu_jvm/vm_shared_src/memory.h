@@ -36,7 +36,7 @@
 #pragma region Eval_Stack
 
 #if DEBUG_PRINT_ENABLE==1
-#define DEBUG_PRINT(format, ...) printf(format, ##__VA_ARGS__);
+#define DEBUG_PRINT(format, ...)  printf(format, ##__VA_ARGS__);
 #else
 #define DEBUG_PRINT(format, ...) ;
 #endif
@@ -105,7 +105,7 @@ struct memory {
 
 #define MRAM_HEAP_SIZE (48 * 1024 * 1024)
 #define PARAMS_BUFFER_SIZE (6 * 1024)
-#define WRAM_DATA_SPACE_SIZE (12 * 12 * 1024)
+#define WRAM_DATA_SPACE_SIZE (24 * 24 * 1024)
 #define META_SPACE_SIZE (8 * 1024 * 1024)
 
 
@@ -123,10 +123,12 @@ extern __host uint8_t __mram_ptr* meta_space_pt;
 extern __host uint8_t __mram_ptr* exec_method_pt[24];
 extern __host uint8_t __mram_ptr* exec_class_pt[24];
 
-extern __dma_aligned __mram_noinit uint8_t m_heapspace[MRAM_HEAP_SIZE];
-extern __dma_aligned __mram_noinit uint8_t m_metaspace[META_SPACE_SIZE];
 
 extern __dma_aligned __mram_noinit uint8_t wram_data_space[WRAM_DATA_SPACE_SIZE];
+extern __dma_aligned __mram_noinit uint8_t m_metaspace[META_SPACE_SIZE];
+
+extern __dma_aligned __mram_noinit uint8_t m_heapspace[MRAM_HEAP_SIZE];
+
 extern __dma_aligned __mram_noinit uint8_t params_buffer[PARAMS_BUFFER_SIZE];
 extern __host uint8_t* return_val;
 extern __host uint8_t __mram_ptr* params_buffer_pt[24];

@@ -24,6 +24,7 @@ struct MethodTable* array_type;
 void interp(struct function_thunk func_thunk) {
     int tasklet_id = me();
     int buffer_begin = params_buffer + tasklet_id * (PARAMS_BUFFER_SIZE / 24);
+    uint8_t __mram_ptr* p = func_thunk.params;
 #include "vmloop_parts/registers.def"
     func = func_thunk.func;
     func2 = func;
@@ -34,27 +35,26 @@ void interp(struct function_thunk func_thunk) {
     #ifdef INMEMORY
     DEBUG_PRINT(RED);
     #endif
-
     
     current_fp[tasklet_id] = create_new_vmframe(func_thunk, NULL);
-  
+    
     DEBUG_PRINT("code_buffer = %p\n", code_buffer);
     
 #define DEBUG
     DEBUG_PRINT("create frame finished\n");
     DEBUG_PRINT("FP = (%p)\n", current_fp[tasklet_id]);
-
+   
+                
     while (1) {
-    //if(times > 5) return;
-    if(func2 == 0x3000c50 && times > 30) return;
+        // if(mem.meta_space == 0x38901d4 && times > 360) return;
+
         switch (code_buffer[pc++])
         {
         case NOP:
             DEBUG_OUT_INSN_PARSED("NOP");
             break;
-     
         case ILOAD_1:
-            DEBUG_OUT_INSN_PARSED("ILOAD_1")
+            DEBUG_OUT_INSN_PARSED("ILOAD_1");
             op1 = FRAME_GET_LOCALS(current_fp[tasklet_id], func->max_locals, 1);
             DEBUG_PRINT(" - Load INT %d to stack\n", op1);
             PUSH_EVAL_STACK(op1)
@@ -65,13 +65,12 @@ void interp(struct function_thunk func_thunk) {
             DEBUG_PRINT(" - Load INT %d to stack\n", op1);
             PUSH_EVAL_STACK(op1)
             break;
-       
-     
         
         case ALOAD_0:
             DEBUG_OUT_INSN_PARSED("ALOAD_0")
+
             op1 = FRAME_GET_LOCALS(current_fp[tasklet_id], func->params_count, 0);
-            DEBUG_PRINT(" - Load ref %p to stack\n", *(uint8_t __mram_ptr* __mram_ptr*)(0x1800));
+            DEBUG_PRINT(" - Load ref %p to stack\n", op1);
             
             PUSH_EVAL_STACK(op1)
             break;
@@ -111,6 +110,7 @@ void interp(struct function_thunk func_thunk) {
             break;
         case IF_ICMPNE:
             DEBUG_OUT_INSN_PARSED("IF_ICMPNE")
+
             op1 = ((uint8_t)code_buffer[pc] << 8 | code_buffer[pc + 1]);
            
             POP_EVAL_STACK(op2);
@@ -217,7 +217,6 @@ void interp(struct function_thunk func_thunk) {
 
         case INVOKEVIRTUAL: // function call
             DEBUG_OUT_INSN_PARSED("INVOKEVIRTUAL")
-
         
             op1 = (uint8_t)(code_buffer[pc] << 8) | code_buffer[pc + 1]; // constant table index to methoderef
 

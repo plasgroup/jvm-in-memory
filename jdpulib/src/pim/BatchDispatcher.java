@@ -21,7 +21,7 @@ public class BatchDispatcher {
     public int[] taskletPosition = new int[UPMEM.dpuInUse];
 
     int[] result;
-    byte[] resultBytes = new byte[2048];
+    byte[] resultBytes = new byte[4 * 1024];
     public int[] recordedCount = new int[UPMEM.dpuInUse];
     public HashSet<Integer> dpusInUse = new HashSet<>();
     public void dispatchAll() throws DpuException {
@@ -45,7 +45,6 @@ public class BatchDispatcher {
             UPMEM.getInstance().getDPUManager(dpuID).garbageCollector.transfer(DPUJVMMemSpaceKind.DPU_PARAMETER_BUFFER,paramsBuffer[dpuID], parameterBufferBeginAddr );
         }
 
-
         // calculate the result array size
         int count = 0;
 
@@ -60,14 +59,16 @@ public class BatchDispatcher {
             UPMEM.getInstance().getDPUManager(dpuID).dpuExecute(System.out);
             UPMEM.getInstance().getDPUManager(dpuID).dpu.copy(resultBytes, "return_values");
 
-            for(int i = 0; i < recordedCount[dpuID]; i++){
-                int taskID = BytesUtils.readU4LittleEndian(resultBytes, (i * 2) * 4);
-                int res = BytesUtils.readU4LittleEndian(resultBytes, (i * 2 + 1) * 4);
-                result[taskID] = res;
-                System.out.println(res);
-            }
+//            for(int i = 0; i < recordedCount[dpuID]; i++){
+//                int taskID = BytesUtils.readU4LittleEndian(resultBytes, (i * 2) * 4);
+//                int res = BytesUtils.readU4LittleEndian(resultBytes, (i * 2 + 1) * 4);
+//                result[taskID] = res;
+//                System.out.println(res);
+//            }
+
             Arrays.fill(paramsBufferPointer[dpuID], 0);
             Arrays.fill(paramsBuffer[dpuID], (byte)0);
+            throw new RuntimeException();
         }
 
         dpusInUse.clear();

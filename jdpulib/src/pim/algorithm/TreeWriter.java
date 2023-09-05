@@ -31,10 +31,16 @@ public class TreeWriter {
         BytesUtils.writeU4LittleEndian(heap, val, instanceAddress + 8 + 4 * VALUE_POS);
     }
     static void writeLeft(int left, byte[] heap, int instanceAddress){
-        BytesUtils.writeU4LittleEndian(heap, left, instanceAddress + 8 + 4 * LEFT_POS);
+        if(left == 0)
+            BytesUtils.writeU4LittleEndian(heap, 0, instanceAddress + 8 + 4 * LEFT_POS);
+        else
+            BytesUtils.writeU4LittleEndian(heap, DPUGarbageCollector.heapSpaceBeginAddr + left, instanceAddress + 8 + 4 * LEFT_POS);
     }
     static void writeRight(int right, byte[] heap, int instanceAddress){
-        BytesUtils.writeU4LittleEndian(heap, right, instanceAddress + 8 + 4 * RIGHT_POS);
+        if(right == 0)
+            BytesUtils.writeU4LittleEndian(heap, 0, instanceAddress + 8 + 4 * RIGHT_POS);
+        else
+            BytesUtils.writeU4LittleEndian(heap, DPUGarbageCollector.heapSpaceBeginAddr + right, instanceAddress + 8 + 4 * RIGHT_POS);
     }
 
     static void writeClassReference(int classReference, byte[] heap, int instanceAddress){
@@ -51,7 +57,7 @@ public class TreeWriter {
             try (FileInputStream inputStream = new FileInputStream(imagesPath + "[" + totalNodeCount + "]DPU#" + i + ".img")) {
                 byte[] bs = inputStream.readAllBytes();
                 UPMEM.getInstance().getDPUManager(i).garbageCollector.allocate(DPUJVMMemSpaceKind.DPU_HEAPSPACE,2000000 * INSTANCE_SIZE);
-                UPMEM.getInstance().getDPUManager(i).garbageCollector.transfer(DPUJVMMemSpaceKind.DPU_HEAPSPACE,  bs, 0);
+                UPMEM.getInstance().getDPUManager(i).garbageCollector.transfer(DPUJVMMemSpaceKind.DPU_HEAPSPACE,  bs, DPUGarbageCollector.heapSpaceBeginAddr);
                 UPMEM.getInstance().getDPUManager(i).garbageCollector.updateHeapPointerToDPU();
             }catch (Exception e){
                 throw new RuntimeException(e);
@@ -128,7 +134,6 @@ public class TreeWriter {
         }
     }
 
-
     /* Convert a CPU tree to PIM tree, with keeping first cpuLayerCount layers in CPU */
     static void convertCPUTreeToPIMTree(TreeNode root, int cpuLayerCount){
         TreeNode point = root;
@@ -157,7 +162,7 @@ public class TreeWriter {
         heapMemory = new byte[DPU_MAX_NODES_COUNT * INSTANCE_SIZE + 8];
         int currentChildrenCount = 0;
         int dpuID = 0;
-        int currentHeapAddr = DPUGarbageCollector.heapSpaceBeginAddr + 8;
+        int currentHeapAddr = 8;
 
         // move subtree from (cpuLayerCount + 1) layers to a certain DPU
         while(queue.size() > 0){
@@ -190,7 +195,7 @@ public class TreeWriter {
                 currentChildrenCount += c;
                 cpuProxyNode++;
                 dpuTreeNodeProxyAutoGen.dpuID = dpuID;
-                dpuTreeNodeProxyAutoGen.address = currentHeapAddr;
+                dpuTreeNodeProxyAutoGen.address = DPUGarbageCollector.heapSpaceBeginAddr + currentHeapAddr;
                 dpuTreeNodeProxyAutoGen.left = null;
                 dpuTreeNodeProxyAutoGen.right = null;
 
@@ -212,7 +217,7 @@ public class TreeWriter {
                 dpuID++;
 
                 // reset
-                currentHeapAddr = DPUGarbageCollector.heapSpaceBeginAddr + 8;
+                currentHeapAddr = 8;
                 Arrays.fill(heapMemory, (byte) 0);
 
                 // add new node
@@ -223,7 +228,7 @@ public class TreeWriter {
 
                 cpuProxyNode++;
                 dpuTreeNodeProxyAutoGen.dpuID = dpuID;
-                dpuTreeNodeProxyAutoGen.address = currentHeapAddr;
+                dpuTreeNodeProxyAutoGen.address = DPUGarbageCollector.heapSpaceBeginAddr + currentHeapAddr;
                 dpuTreeNodeProxyAutoGen.left = null;
                 dpuTreeNodeProxyAutoGen.right = null;
 
@@ -249,7 +254,7 @@ public class TreeWriter {
     private static void writeHeapImageToDPU(int dpuID) {
         try {
             UPMEM.getInstance().getDPUManager(dpuID).garbageCollector.allocate(DPUJVMMemSpaceKind.DPU_HEAPSPACE,2000000 * INSTANCE_SIZE);
-            UPMEM.getInstance().getDPUManager(dpuID).garbageCollector.transfer(DPUJVMMemSpaceKind.DPU_HEAPSPACE, heapMemory, 0);
+            UPMEM.getInstance().getDPUManager(dpuID).garbageCollector.transfer(DPUJVMMemSpaceKind.DPU_HEAPSPACE, heapMemory, DPUGarbageCollector.heapSpaceBeginAddr);
             UPMEM.getInstance().getDPUManager(dpuID).garbageCollector.updateHeapPointerToDPU();
         } catch (DpuException e) {
             throw new RuntimeException(e);

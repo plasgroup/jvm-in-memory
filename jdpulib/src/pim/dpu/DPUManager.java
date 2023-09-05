@@ -137,7 +137,7 @@ public class DPUManager {
         }
 
         garbageCollector.pushParameters(paramsConverted, tasklet);
-        dpuExecute(System.out);
+        dpuExecute(null);
 
         taskletSemaphore[tasklet] = 0;
         currentTasklet = (currentTasklet + 1) % 24;

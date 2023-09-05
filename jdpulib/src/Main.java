@@ -74,34 +74,19 @@ public class Main {
                 .setDpuInUseCount(dpuInUse)
                 .setThreadPerDPU(UPMEM.perDPUThreadsInUse);
 
-        TreeNode tn =
-                (TreeNode) UPMEM.getInstance().createObject(0, DPUTreeNode.class, 10, 22231);
 
-        BatchDispatcher bd = new BatchDispatcher();
-        UPMEM.beginRecordBatchDispatching(bd);
-        for(int i = 0; i < 100; i++){
-            tn.search(10);
-        }
-        try {
-            bd.dispatchAll();
-        } catch (DpuException e) {
-            throw new RuntimeException(e);
-        }
-        if(true) return;
 
-//        TreeNode tn = (TreeNode) UPMEM.getInstance().createObject(0, DPUTreeNode.class, 10,22231);
-////        UPMEM.beginRecordBatchDispatching(new BatchDispatcher());
-////        for(int i = 0; i < 100; i++){
-////            tn.search(10);
-////        }
-////        UPMEM.endRecordBatchDispatching();
-//        System.out.println(tn.search(10));
-//        try {
-//            UPMEM.batchDispatcher.dispatchAll();
-//        } catch (DpuException e) {
-//            throw new RuntimeException(e);
+        // 任务队列内的任务识别是正常结束的。
+        // 单个任务下也能正常结束
+//
+//
+//        BatchDispatcher bd = new BatchDispatcher();
+//        UPMEM.beginRecordBatchDispatching(bd);
+//        TreeNode tn = (TreeNode) UPMEM.getInstance().createObject(0, DPUTreeNode.class, 2000,1214);
+//        for(int i = 0; i < 1000; i++){
+//            tn.search(2000);
 //        }
-
+//        if(true) return;
         try {
             TreeNode CPURoot = BSTBuilder.buildCpuPartTreeFromFile("CPU_TREE_10000000.txt");
             TreeNode PIMRoot;
@@ -134,22 +119,25 @@ public class Main {
                 System.out.println((i + 1) + "/" + repeatTime + " Execution time in milliseconds: " + timeElapsed / 1000000);
                 totalTimeInMs += timeElapsed / 1000000;
             }
+
             System.out.println("CPU 500,000 queries average time = " + totalTimeInMs / repeatTime);
             System.out.println("end evaluate CPU Tree 500,000 queries performance");
-
 
             System.out.println("begin evaluate PIM Tree 500,000 queries performance");
             totalTimeInMs = 0;
             repeatTime = 5;
 
-            UPMEM.beginRecordBatchDispatching(bd);
+            BatchDispatcher bd1 = new BatchDispatcher();
+
+            //UPMEM.beginRecordBatchDispatching(bd1);
             for(int i = 0; i < repeatTime; i++){
                 long startTime = System.nanoTime();
                 int k = 0;
                 for(int key : keys){
                     int v = PIMRoot.search(key);
                     k++;
-                    if(k % 1000 == 0) System.out.println(k);
+                    if(k % 1000 == 0)
+                        System.out.println(k);
                 }
                 long endTime = System.nanoTime();
                 long timeElapsed = endTime - startTime;

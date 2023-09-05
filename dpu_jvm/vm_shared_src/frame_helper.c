@@ -83,16 +83,15 @@ uint8_t __mram_ptr* create_new_vmframe(struct function_thunk func_thunk
      int params_count = func_thunk.func->params_count;
 
      DEBUG_PRINT("\n--------------------------------- Create Frame ---------------------------------\n");
-     DEBUG_PRINT("--------- Frame from (%p) ------------\n", current_sp[me()]);
-   
-   
+     DEBUG_PRINT("--------- [%d] Frame from (%p) ------------\n", me(), current_sp[me()]);
+      
      if(func_thunk.params == current_sp[me()] + 4 * params_count){
        DEBUG_PRINT(" >> create frame from an existed function call\n");
        INC_SP(sizeof(uint8_t __mram_ptr*))
        for(i = 0; i < locals_count; i++){
               DEBUG_PRINT("(%p) ", current_sp[me()]);
               if(i < params_count){
-                  printf("(param) ");
+                  DEBUG_PRINT("(param) ");
               }
               DEBUG_PRINT("local %d = %d\n", i, *(u4 __mram_ptr*)current_sp[me()]);
               func_thunk.params += sizeof(uint8_t __mram_ptr*);
@@ -117,7 +116,7 @@ uint8_t __mram_ptr* create_new_vmframe(struct function_thunk func_thunk
        }
      } 
      DEBUG_PRINT("-------> new current_sp = %p\n", current_sp[me()]);
-
+   
      //old fp
      *(uint32_t __mram_ptr*)current_sp[me()] = current_fp[me()];
      current_fp[me()] = current_sp[me()];
@@ -129,12 +128,13 @@ uint8_t __mram_ptr* create_new_vmframe(struct function_thunk func_thunk
      *(uint32_t __mram_ptr*)current_sp[me()] = sp;
      DEBUG_PRINT("(%p) old-stack-pointer = %p \n", current_sp[me()], *(uint8_t __mram_ptr* __mram_ptr*)current_sp[me()]);
      INC_SP(sizeof(uint8_t __mram_ptr*))
-     
+
+
      //return pc
      *(uint32_t __mram_ptr*)current_sp[me()] = (uint32_t)return_pc;
      DEBUG_PRINT("(%p) return pc = 0x%x \n", current_sp[me()], *(uint8_t __mram_ptr* __mram_ptr*)current_sp[me()]);
      INC_SP(sizeof(uint8_t __mram_ptr*))
-
+     
      // method
      *(uint8_t __mram_ptr* __mram_ptr*)current_sp[me()] = (uint8_t __mram_ptr*)func_thunk.func;
      DEBUG_PRINT("(%p) method-ref = %p \n", current_sp[me()], *(uint8_t __mram_ptr* __mram_ptr*)current_sp[me()]);
@@ -145,16 +145,16 @@ uint8_t __mram_ptr* create_new_vmframe(struct function_thunk func_thunk
      DEBUG_PRINT("(%p) class-ref = %p \n", current_sp[me()], *(uint8_t __mram_ptr* __mram_ptr*)current_sp[me()]);
      INC_SP(sizeof(uint8_t __mram_ptr*))
 
-
      // cp
      *(uint8_t __mram_ptr* __mram_ptr*)current_sp[me()] = (uint8_t __mram_ptr*)func_thunk.jc->items;
-     DEBUG_PRINT("(%p) constant-pool-ref = %p \n", current_sp[me()], *(uint8_t __mram_ptr**)current_sp[me()]); // TODO: not the right value
+     DEBUG_PRINT("(%p) constant-pool-ref = %p \n", current_sp[me()], *(uint8_t __mram_ptr* __mram_ptr*)current_sp[me()]); // TODO: not the right value
      INC_SP(sizeof(uint8_t __mram_ptr*))
 
      // bytecode
      *(uint8_t __mram_ptr* __mram_ptr*)current_sp[me()] = (uint8_t __mram_ptr*)func_thunk.func->bytecodes;
      DEBUG_PRINT("(%p) bytecodes = %p \n", current_sp[me()], *(uint8_t __mram_ptr* __mram_ptr*)current_sp[me()]);
      INC_SP(sizeof(uint8_t __mram_ptr*))
+
 
      // operand stacks;
      current_sp[me()] -= 4;

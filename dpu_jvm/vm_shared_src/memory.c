@@ -22,9 +22,9 @@ int debug_eval;
 
 
 
-__dma_aligned __mram_noinit uint8_t m_heapspace[MRAM_HEAP_SIZE];
-__dma_aligned __mram_noinit uint8_t m_metaspace[META_SPACE_SIZE];
 __dma_aligned __mram_noinit uint8_t wram_data_space[WRAM_DATA_SPACE_SIZE];
+__dma_aligned __mram_noinit uint8_t m_metaspace[META_SPACE_SIZE];
+__dma_aligned __mram_noinit uint8_t m_heapspace[MRAM_HEAP_SIZE];
 __dma_aligned __mram_noinit uint8_t params_buffer[PARAMS_BUFFER_SIZE];
 
 uint8_t __mram_ptr* wram_data_space_pt = wram_data_space;
@@ -45,7 +45,7 @@ void init_memory() {
     mem.wram = wram_data_space;
     mem.meta_space = m_metaspace;
 
-    printf("param_buffer(wram)=%p, sim_wram(wram)=%p, mram = %p\n", params_buffer, mem.wram, 
+    DEBUG_PRINT("param_buffer(wram)=%p, sim_wram(wram)=%p, mram = %p\n", params_buffer, mem.wram, 
         (uint8_t __mram_ptr*)((uint8_t __mram_ptr*)mem.mram_heap + (SLOTVAL) mram_heap_pt));
         
     for(i = 0; i < 24; i++){
