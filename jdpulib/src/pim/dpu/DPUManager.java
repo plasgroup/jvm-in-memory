@@ -61,9 +61,7 @@ public class DPUManager {
                 if(bd.paramsBufferPointer[dpuID][t2] + size < DPUGarbageCollector.perDPUBufferSize){
                     break;
                 }
-
                 t2 = (t2 + 1) % 24;
-                System.out.println("dispatch all");
                 bd.dispatchAll();
             }
             bd.taskletPosition[dpuID] = t2; // next time from t2 to find a proper tasklet

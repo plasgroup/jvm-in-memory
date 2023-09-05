@@ -16,6 +16,10 @@ public class PIMManager {
     }
     static Logger pimManagerLogger = PIMLoggers.pimManagerLogger;
 
+    static DpuSystem getDpuSystem(){
+        return system;
+    }
+
     public static DpuSystem getSystem() {
         return system;
     }
