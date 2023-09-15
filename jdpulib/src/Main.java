@@ -155,9 +155,9 @@ public class Main {
         parseParameters(args);
         Registry registry = LocateRegistry.getRegistry("localhost", 9239 + 5);
         try {
-            JVMRemote jvmRemote = (JVMRemote) registry.lookup("jvm" + 5);
+            JVMRemote jvmRemote = (JVMRemote) registry.lookup("DPUJVM" + 5);
             System.out.println("get JVM id = " + jvmRemote.getID());
-            System.out.println(jvmRemote.welcome("from client"));
+            jvmRemote.start();
         } catch (NotBoundException e) {
             throw new RuntimeException(e);
         }
