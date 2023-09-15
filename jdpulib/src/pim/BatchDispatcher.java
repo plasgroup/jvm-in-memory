@@ -10,8 +10,8 @@ import pim.logger.PIMLoggers;
 import pim.utils.BytesUtils;
 
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static pim.dpu.DPUGarbageCollector.parameterBufferBeginAddr;
 import static pim.dpu.DPUGarbageCollector.perDPUBufferSize;
@@ -29,44 +29,51 @@ public class BatchDispatcher {
     byte[] resultBytes = new byte[4 * 1024];
     public int[] recordedCount = new int[UPMEM.dpuInUse];
     public HashSet<Integer> dpusInUse = new HashSet<>();
-    volatile int dpucount = dpusInUse.size();
     int dispatchedCount = 0;
+    CountDownLatch latch;
     public BatchDispatcher(){
         result = new int[maxResult];
     }
+    UPMEM upmem = UPMEM.getInstance();
     class DPUExecutionTask implements Runnable{
         private int id;
+
         public DPUExecutionTask(int dpuId){
             this.id = dpuId;
         }
         public void run(){
             try {
-                //System.out.println("DPU#" + id + "dispatched");
-                UPMEM.getInstance().getDPUManager(id).dpuExecute(null);
+              //  System.out.println("DPU#" + id + "dispatched");
+                upmem.getDPUManager(id).dpuExecute(null);
             } catch (DpuException e) {
                 throw new RuntimeException(e);
             }
 
-            try {
-                UPMEM.getInstance().getDPUManager(id).dpu.copy(resultBytes, "return_values");
-            } catch (DpuException e) {
-                throw new RuntimeException(e);
-            }
-
-            for(int i = 0; i < recordedCount[id]; i++){
-                int taskID = BytesUtils.readU4LittleEndian(resultBytes, 0);
-                int res = BytesUtils.readU4LittleEndian(resultBytes, 0);
-                result[taskID + dispatchedCount] = res;
-            }
-            Arrays.fill(paramsBufferPointer[id], 0);
-            Arrays.fill(paramsBuffer[id], (byte)0);
+//            try {
+//                synchronized (resultBytes){
+//                    UPMEM.getInstance().getDPUManager(id).dpu.copy(resultBytes, "return_values");
+//                }
+//            } catch (DpuException e) {
+//                throw new RuntimeException(e);
+//            }
+//
+//            for(int i = 0; i < recordedCount[id]; i++){
+//                synchronized (resultBytes){
+//                    int taskID = BytesUtils.readU4LittleEndian(resultBytes, 0);
+//                    int res = BytesUtils.readU4LittleEndian(resultBytes, 0);
+//                    //result[taskID + dispatchedCount] = res;
+//                }
+//            }
             System.out.println("dpu#" + id + " finished");
-            dpucount--;
+
+            latch.countDown();
+
         }
     }
     {
         dispatchLogger.setEnable(false);
     }
+
     public void dispatchAll() throws DpuException {
         for (int dpuID: dpusInUse) {
             dispatchLogger.logln(" === write tasks to DPU " + dpuID + " === ");
@@ -98,16 +105,20 @@ public class BatchDispatcher {
 
         System.out.println("=== dispatch all ====");
 
-        dpucount = dpusInUse.size();
+        latch = new CountDownLatch(dpusInUse.size());
         for(int dpuID : dpusInUse){
             executorService.submit(new DPUExecutionTask(dpuID));
         }
 
-        while (dpucount > 0) {
-            Thread.onSpinWait();
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
         for(int dpuID : dpusInUse){
             recordedCount[dpuID] = 0;
+            Arrays.fill(paramsBufferPointer[dpuID], 0);
+            Arrays.fill(paramsBuffer[dpuID], (byte)0);
         }
 
         dpusInUse.clear();

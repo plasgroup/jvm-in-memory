@@ -5,8 +5,16 @@ import pim.ExperimentConfigurator;
 import pim.UPMEM;
 import pim.UPMEMConfigurator;
 import pim.algorithm.*;
+import simulator.JVMRemote;
+import simulator.JVMRemoteImpl;
 
 import java.io.IOException;
+import java.rmi.NotBoundException;
+import java.rmi.Remote;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.List;
@@ -143,43 +151,58 @@ public class Main {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws RemoteException {
         parseParameters(args);
-        upmemConfigurator.setDpuInUseCount(dpuInUse);
-
-        System.out.println("dpu in use = " + dpuInUse);
-        System.out.println(experimentType + " mode, nodes count = " + totalNodeCount + " query count = " + queryCount);
-        System.out.println("cpu tree layer count = " + cpuLayerCount);
-        if(noSearch) System.out.println("No search mode");
-        if(buildFromSerializedData) System.out.println("build tree from images, path = " + imagesPath);
-        if(serializeToFile) System.out.println("output tree to file. Imgs path = " + imagesPath);
-        if(writeKeyValue){
-            System.out.println("Generate key value paris, and write to file. Count = " + writeKeyValueCount);
-            writeKV(writeKeyValueCount, "key_values-" + writeKeyValueCount + ".txt");
+        Registry registry = LocateRegistry.getRegistry("localhost", 9239 + 5);
+        try {
+            JVMRemote jvmRemote = (JVMRemote) registry.lookup("jvm" + 5);
+            System.out.println("get JVM id = " + jvmRemote.getID());
+            System.out.println(jvmRemote.welcome("from client"));
+        } catch (NotBoundException e) {
+            throw new RuntimeException(e);
         }
-
-        UPMEM.initialize(upmemConfigurator);
-
-        upmemConfigurator
-                .setDpuInUseCount(dpuInUse)
-                .setThreadPerDPU(UPMEM.perDPUThreadsInUse);
-
-        if(performanceEvaluationMode) {
-            performanceEvaluation();
-            return;
-        }
-
-        if(args.length == 0){
-            BSTTester.evaluatePIMBST(totalNodeCount, ExperimentConfigurator.queryCount,  ExperimentConfigurator.cpuLayerCount);
-            return;
-        }
-
-        if("CPU".equals(experimentType)){
-            BSTTester.evaluateCPU(totalNodeCount, queryCount);
-        }else if("PIM".equals(experimentType)){
-            BSTTester.evaluatePIMBST(totalNodeCount, queryCount, cpuLayerCount);
-        }
+//        upmemConfigurator.setDpuInUseCount(dpuInUse);
+//
+//        System.out.println("dpu in use = " + dpuInUse);
+//        System.out.println(experimentType + " mode, nodes count = " + totalNodeCount + " query count = " + queryCount);
+//        System.out.println("cpu tree layer count = " + cpuLayerCount);
+//        if(noSearch) System.out.println("No search mode");
+//        if(buildFromSerializedData) System.out.println("build tree from images, path = " + imagesPath);
+//        if(serializeToFile) System.out.println("output tree to file. Imgs path = " + imagesPath);
+//        if(writeKeyValue){
+//            System.out.println("Generate key value paris, and write to file. Count = " + writeKeyValueCount);
+//            writeKV(writeKeyValueCount, "key_values-" + writeKeyValueCount + ".txt");
+//        }
+//
+//        UPMEM.initialize(upmemConfigurator);
+//
+//        upmemConfigurator
+//                .setDpuInUseCount(dpuInUse)
+//                .setThreadPerDPU(UPMEM.perDPUThreadsInUse);
+//
+//        if(performanceEvaluationMode) {
+//            performanceEvaluation();
+//            return;
+//        }
+//
+//        if(args.length == 0){
+//            BSTTester.evaluatePIMBST(totalNodeCount, ExperimentConfigurator.queryCount,  ExperimentConfigurator.cpuLayerCount);
+//            return;
+//        }
+//
+//        if("CPU".equals(experimentType)){
+//            BSTTester.evaluateCPU(totalNodeCount, queryCount);
+//        }else if("PIM".equals(experimentType)){
+//            BSTTester.evaluatePIMBST(totalNodeCount, queryCount, cpuLayerCount);
+//        }
 
     }
+
+
+
+
+
+
+
 }
 
