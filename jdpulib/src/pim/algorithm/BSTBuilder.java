@@ -293,7 +293,7 @@ public class BSTBuilder {
             for(int i = 0; i < ExperimentConfigurator.dpuInUse; i++){
                 UPMEM.getInstance().getDPUManager(i).createObject(DPUTreeNode.class, new Object[]{0, 0});
             }
-        } catch (DpuException | IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
 

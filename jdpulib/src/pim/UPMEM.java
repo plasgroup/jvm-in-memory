@@ -5,6 +5,7 @@ import pim.dpu.DPUManager;
 import pim.dpu.DPUObjectHandler;
 import pim.dpu.PIMManager;
 import pim.logger.Logger;
+import simulator.PIMManagerSimulator;
 import sun.misc.Unsafe;
 
 import java.io.IOException;
@@ -102,8 +103,6 @@ public class UPMEM {
         DPUObjectHandler handler;
         try {
             handler = getDPUManager(dpuID).createObject(objectClass, arguments);
-        } catch (DpuException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -123,10 +122,11 @@ public class UPMEM {
         if(instance == null){
             synchronized (locker){
                 if(instance == null) instance = new UPMEM();
-                try {
-                    pimManager = PIMManager.init(dpuInUse);
-                } catch (DpuException e) {
-                    throw new RuntimeException(e);
+                if(!ExperimentConfigurator.useSimulator){
+                    pimManager = new PIMManagerUPMEM().init(dpuInUse);
+                }
+                else{
+                    pimManager = new PIMManagerSimulator().init(dpuInUse);
                 }
             }
         }

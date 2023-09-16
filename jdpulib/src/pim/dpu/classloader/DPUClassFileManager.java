@@ -2,6 +2,7 @@ package pim.dpu.classloader;
 
 import com.upmem.dpu.Dpu;
 import com.upmem.dpu.DpuException;
+import pim.ExperimentConfigurator;
 import pim.dpu.cache.DPUCacheManager;
 import pim.dpu.cache.DPUClassFileCacheItem;
 import pim.dpu.cache.DPUFieldCacheItem;
@@ -14,8 +15,8 @@ import pim.dpu.java_strut.DPUJVMMemSpaceKind;
 import pim.logger.Logger;
 import pim.logger.PIMLoggers;
 import pim.utils.BytesUtils;
-import pim.utils.StringUtils;
 import pim.UPMEM;
+import simulator.DPUJVMRemote;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,12 +24,12 @@ import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
-import static pim.dpu.classloader.ClassWriter.cvtDPUClassStrut2Bytes;
 import static pim.dpu.classloader.ClassWriter.pushJClassToDPU;
 import static pim.utils.ClassLoaderUtils.*;
 
 public class DPUClassFileManager {
     static Logger classfileLogger = PIMLoggers.classfileLogger;
+    private DPUJVMRemote DPUJVMRemote;
     int dpuID;
     Dpu dpu;
     UPMEM upmem = UPMEM.getInstance();
@@ -36,7 +37,10 @@ public class DPUClassFileManager {
         this.dpuID = dpuID;
         this.dpu = dpu;
     }
-
+    public DPUClassFileManager(int dpuID, DPUJVMRemote registry) {
+        this.dpuID = dpuID;
+        this.DPUJVMRemote = registry;
+    }
     private boolean isClassLoaded(String className){
         className = className.replace(".", "/");
         DPUClassFileCacheItem item = upmem.getDPUManager(dpuID).classCacheManager.getClassStrutCacheLine(className);
@@ -98,7 +102,9 @@ public class DPUClassFileManager {
             classfileLogger.logln(" - Push class " + className + " to DPU#" + dpuID);
 
             int classAddr =
-                    upmem.getDPUManager(dpuID).garbageCollector.allocate(DPUJVMMemSpaceKind.DPU_METASPACE, jc.totalSize);
+                    ExperimentConfigurator.useSimulator
+                            ? upmem.getDPUManager(dpuID).garbageCollector.allocateSim(DPUJVMMemSpaceKind.DPU_METASPACE, jc.totalSize)
+                            : upmem.getDPUManager(dpuID).garbageCollector.allocate(DPUJVMMemSpaceKind.DPU_METASPACE, jc.totalSize);
 
 
             recordClass(className, jc, classAddr);

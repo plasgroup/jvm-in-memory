@@ -20,4 +20,5 @@ public class ExperimentConfigurator {
     public static int performanceEvaluationNodeCount = 10000000;
     public static boolean pimPerformanceEvaluation = true;
     public static boolean performanceEvaluationEnableBatchDispatch = true;
+    public static boolean useSimulator = true;
 }

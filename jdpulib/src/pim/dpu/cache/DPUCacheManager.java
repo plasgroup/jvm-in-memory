@@ -1,12 +1,12 @@
 package pim.dpu.cache;
 
 import com.upmem.dpu.Dpu;
-import pim.dpu.classloader.DPUClassFileManager;
 import pim.dpu.java_strut.DPUJClass;
 import pim.dpu.java_strut.DPUJMethod;
 import pim.logger.Logger;
 import pim.logger.PIMLoggers;
 import pim.utils.ClassLoaderUtils;
+import simulator.DPUJVMRemote;
 
 import java.util.ArrayList;
 import java.util.Dictionary;
@@ -14,12 +14,23 @@ import java.util.Hashtable;
 import java.util.List;
 
 public class DPUCacheManager {
+    private DPUJVMRemote DPUJVMRemote;
     public DPUClassCache dpuClassCache;
     public DPUMethodCache methodCache;
     public DPUFieldCache fieldCache;
     int dpuID;
     Dpu dpu;
     Logger pimCacheLogger = PIMLoggers.pimCacheLogger;
+
+    public DPUCacheManager(int dpuID, DPUJVMRemote DPUJVMRemote) {
+
+        this.dpuID = dpuID;
+        this.DPUJVMRemote = DPUJVMRemote;
+        this.dpuClassCache = new DPUClassCache();
+        this.methodCache = new DPUMethodCache();
+        this.fieldCache = new DPUFieldCache();
+    }
+
     public static class DPUClassCache {
         public Dictionary<String, DPUClassFileCacheItem> cache = new Hashtable<>();
         public List<DPUClassFileCacheItem> dpuClassFileCacheItemList = new ArrayList<>();

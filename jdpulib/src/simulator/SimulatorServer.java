@@ -9,7 +9,7 @@ public class SimulatorServer {
         /* TODO: Read configuration from file */
         String deviceName = "DPU";
         for(int i = 0; i < PIMRemoteJVMConfiguration.JVMCount; i++){
-            JVMRemoteImpl jvmRemote = new JVMRemoteImpl(i, PIMRemoteJVMConfiguration.threadCount);
+            DPUJVMRemoteImpl jvmRemote = new DPUJVMRemoteImpl(i, PIMRemoteJVMConfiguration.threadCount);
             System.out.println("[device:" + deviceName + "(" + i +")] bind server at port = " + (9239 + i));
             Registry registry = LocateRegistry.createRegistry(9239 + i);
             registry.rebind(deviceName + "JVM" + i, jvmRemote);

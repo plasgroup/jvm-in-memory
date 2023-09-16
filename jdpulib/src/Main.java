@@ -1,29 +1,22 @@
-import com.sun.source.tree.Tree;
 import com.upmem.dpu.DpuException;
 import pim.BatchDispatcher;
 import pim.ExperimentConfigurator;
 import pim.UPMEM;
 import pim.UPMEMConfigurator;
 import pim.algorithm.*;
-import simulator.JVMRemote;
-import simulator.JVMRemoteImpl;
+import simulator.DPUJVMRemote;
 
 import java.io.IOException;
 import java.rmi.NotBoundException;
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Queue;
 
 import static pim.ExperimentConfigurator.*;
 import static pim.algorithm.BSTBuilder.buildCpuPartTreeFromFile;
 import static pim.algorithm.BSTTester.readIntergerArrayList;
-import static pim.algorithm.BSTTester.writeKV;
 import static pim.algorithm.TreeWriter.writeDPUImages;
 
 public class Main {
@@ -120,7 +113,7 @@ public class Main {
                 writeDPUImages(performanceEvaluationNodeCount, ExperimentConfigurator.imagesPath);
                 System.out.println("load CPU part tree");
                 PIMRoot = buildCpuPartTreeFromFile("PIM_TREE_" + performanceEvaluationNodeCount + ".txt");
-            } catch (IOException | DpuException e) {
+            } catch (IOException e) {
                 throw new RuntimeException(e);
             }
 
@@ -153,14 +146,14 @@ public class Main {
 
     public static void main(String[] args) throws RemoteException {
         parseParameters(args);
+        UPMEM.initialize(upmemConfigurator);
+        if(true) return;
+        UPMEM.getInstance().createObject(0, TreeNode.class, 123, 424);
+        if(true) return;
         Registry registry = LocateRegistry.getRegistry("localhost", 9239 + 5);
-        try {
-            JVMRemote jvmRemote = (JVMRemote) registry.lookup("DPUJVM" + 5);
-            System.out.println("get JVM id = " + jvmRemote.getID());
-            jvmRemote.start();
-        } catch (NotBoundException e) {
-            throw new RuntimeException(e);
-        }
+        TNodeProxy tp = new TNodeProxy();
+
+        tp.getKey();
 //        upmemConfigurator.setDpuInUseCount(dpuInUse);
 //
 //        System.out.println("dpu in use = " + dpuInUse);
@@ -197,12 +190,42 @@ public class Main {
 //        }
 
     }
-
-
-
-
-
-
-
 }
 
+
+class TNodeProxy extends TNode{
+    int dpuID = 4;
+    int dpuAddress = 5;
+
+    @Override
+    public int getKey() {
+        Registry registry;
+        try {
+
+            // 1. Find DPU
+            // 2. send argument and method/class pt to queue.
+            // 3. compile method at the first time
+            // 4. send binary if needed
+            // 5. launch processor for execution
+               // 5.1 server get instance and method structure, execution;
+            // 6. finish the execution
+            System.out.println("1. Find DPU " + dpuID);
+            registry = LocateRegistry.getRegistry("localhost", 9239 + dpuID);
+            DPUJVMRemote DPUJVMRemote = (DPUJVMRemote) registry.lookup("DPUJVM" + dpuID);
+            System.out.println("get JVM id = " + DPUJVMRemote.getID());
+            System.out.println("2. send argument and method/class pt to queue.");
+            DPUJVMRemote.setParameter(0, 0);
+            DPUJVMRemote.setParameter(1, 1);
+            DPUJVMRemote.setParameter(2, 0);
+            DPUJVMRemote.pushToMetaSpace(TNode.class);
+            DPUJVMRemote.pushToMetaSpace(TNode.class, "getKey");
+            DPUJVMRemote.pushObject(0, new TNode());
+            DPUJVMRemote.start();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        } catch (NotBoundException e) {
+            throw new RuntimeException(e);
+        }
+        return 0;
+    }
+}
