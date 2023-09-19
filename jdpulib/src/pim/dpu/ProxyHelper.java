@@ -12,13 +12,9 @@ public class ProxyHelper {
     static Logger pimProxy = PIMLoggers.pimProxy;
     static UPMEM upmem = UPMEM.getInstance();
     public static int getIReturnValue(int dpuID){
-        try {
-            int returnVal = upmem.getDPUManager(dpuID).garbageCollector.getReturnVal();
-            // pimProxy.logf( "pim:proxy","return int = %d\n", returnVal);
-            return returnVal;
-        } catch (DpuException e) {
-            throw new RuntimeException(e);
-        }
+        int returnVal = upmem.getDPUManager(dpuID).garbageCollector.getReturnVal();
+        // pimProxy.logf( "pim:proxy","return int = %d\n", returnVal);
+        return returnVal;
     }
 
     public static IDPUProxyObject getAReturnValue(int dpuID){
@@ -27,7 +23,7 @@ public class ProxyHelper {
             // pimProxy.logf("pim:proxy","return pointer = 0x%x\n", returnVal);
             if(returnVal == 0) return null;
             return UPMEM.generateProxyObject(DPUTreeNodeProxyAutoGen.class, dpuID, returnVal);
-        } catch (DpuException | NoSuchFieldException | InstantiationException e) {
+        } catch (NoSuchFieldException | InstantiationException e) {
             throw new RuntimeException(e);
         }
     }

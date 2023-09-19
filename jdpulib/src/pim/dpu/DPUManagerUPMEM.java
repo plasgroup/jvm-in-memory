@@ -2,10 +2,7 @@ package pim.dpu;
 
 import com.upmem.dpu.Dpu;
 import com.upmem.dpu.DpuException;
-import pim.BatchDispatcher;
-import pim.ExperimentConfigurator;
-import pim.IDPUProxyObject;
-import pim.UPMEM;
+import pim.*;
 import pim.dpu.cache.DPUCacheManager;
 import pim.dpu.classloader.DPUClassFileManager;
 import pim.utils.BytesUtils;
@@ -17,7 +14,7 @@ import static pim.dpu.java_strut.DPUJVMMemSpaceKind.DPU_HEAPSPACE;
 
 public class DPUManagerUPMEM extends DPUManager{
 
-    public <T> DPUObjectHandler createObject(Class c, Object[] params) throws IOException {
+    public <T> DPUObjectHandler createObject(Class c, Object[] params) {
         if(ExperimentConfigurator.useSimulator) {
             int fieldCount = calcFieldCount(c);
             int instanceSize = 8 + fieldCount * 4;
@@ -25,11 +22,7 @@ public class DPUManagerUPMEM extends DPUManager{
             int classAddr;
             int initMethodAddr;
             if(classCacheManager.getClassStrutCacheLine(c.getName().replace(".","/")) == null){
-                try {
-                    dpuClassFileManager.loadClassForDPU(c);
-                } catch (DpuException e) {
-                    throw new RuntimeException(e);
-                }
+                dpuClassFileManager.loadClassForDPU(c);
             }
             classAddr = classCacheManager.getClassStrutCacheLine(c.getName().replace(".","/")).marmAddr;
             dpuManagerLogger.logln(" * Get Class Addr = " + classAddr);
@@ -41,13 +34,7 @@ public class DPUManagerUPMEM extends DPUManager{
             BytesUtils.writeU4LittleEndian(objectDataStream, classAddr, 4);
 
             int objAddr = 0;
-            try {
-                objAddr = ExperimentConfigurator.useSimulator
-                        ? garbageCollector.allocateSim(DPU_HEAPSPACE, instanceSize)
-                        : garbageCollector.allocate(DPU_HEAPSPACE, instanceSize);
-            } catch (DpuException e) {
-                throw new RuntimeException(e);
-            }
+            objAddr = garbageCollector.allocate(DPU_HEAPSPACE, instanceSize);
             garbageCollector.transfer(DPU_HEAPSPACE, objectDataStream, objAddr);
             DPUObjectHandler handler = garbageCollector.dpuAddress2ObjHandler(objAddr, dpuID);
             dpuManagerLogger.logln("---> Object Create Finish, handler = " + " (addr: " + handler.address + "," + "dpu: " + handler.dpuID + ") <---");
@@ -66,11 +53,7 @@ public class DPUManagerUPMEM extends DPUManager{
         int classAddr;
         int initMethodAddr;
         if(classCacheManager.getClassStrutCacheLine(c.getName().replace(".","/")) == null){
-            try {
-                dpuClassFileManager.loadClassForDPU(c);
-            } catch (DpuException e) {
-                throw new RuntimeException(e);
-            }
+            dpuClassFileManager.loadClassForDPU(c);
         }
         classAddr = classCacheManager.getClassStrutCacheLine(c.getName().replace(".","/")).marmAddr;
         dpuManagerLogger.logln(" * Get Class Addr = " + classAddr);
@@ -83,13 +66,7 @@ public class DPUManagerUPMEM extends DPUManager{
 
         int objAddr =
                 0;
-        try {
-            objAddr = ExperimentConfigurator.useSimulator
-                    ? garbageCollector.allocateSim(DPU_HEAPSPACE, instanceSize)
-                    : garbageCollector.allocate(DPU_HEAPSPACE, instanceSize);
-        } catch (DpuException e) {
-            throw new RuntimeException(e);
-        }
+        objAddr = garbageCollector.allocate(DPU_HEAPSPACE, instanceSize);
         garbageCollector.transfer(DPU_HEAPSPACE, objectDataStream, objAddr);
         DPUObjectHandler handler = garbageCollector.dpuAddress2ObjHandler(objAddr, dpuID);
         dpuManagerLogger.logln("---> Object Create Finish, handler = " + " (addr: " + handler.address + "," + "dpu: " + handler.dpuID + ") <---");
@@ -107,8 +84,8 @@ public class DPUManagerUPMEM extends DPUManager{
         this.dpuID = dpuID;
         this.dpu = upmemdpu;
         garbageCollector = new DPUGarbageCollectorUPMEM(dpuID, dpu);
-        dpuClassFileManager = new DPUClassFileManager(dpuID, dpu);
-        classCacheManager = new DPUCacheManager(dpuID, dpu);
+        dpuClassFileManager = new DPUClassFileManagerUPMEM(dpuID, dpu);
+        classCacheManager = new DPUCacheManagerUPMEM(dpuID, dpu);
     }
 
     @Override

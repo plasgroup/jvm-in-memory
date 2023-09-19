@@ -147,7 +147,7 @@ public class Main {
     public static void main(String[] args) throws RemoteException {
         parseParameters(args);
         UPMEM.initialize(upmemConfigurator);
-        if(true) return;
+        //if(true) return;
         UPMEM.getInstance().createObject(0, TreeNode.class, 123, 424);
         if(true) return;
         Registry registry = LocateRegistry.getRegistry("localhost", 9239 + 5);

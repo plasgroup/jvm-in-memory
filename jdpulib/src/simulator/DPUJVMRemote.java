@@ -4,7 +4,6 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 public interface DPUJVMRemote extends Remote, SimulatorBackend {
-
     void multiThreadExecution() throws RemoteException;
     int getID() throws RemoteException;
 
@@ -28,7 +27,6 @@ public interface DPUJVMRemote extends Remote, SimulatorBackend {
     void setHeapPointer(int p) throws RemoteException;
 
     void setParamsBufferPointer(int p) throws RemoteException;
-
 
     int getMetaSpaceIndex() throws RemoteException;
 

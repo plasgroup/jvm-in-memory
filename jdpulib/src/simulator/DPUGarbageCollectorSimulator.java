@@ -17,37 +17,56 @@ public class DPUGarbageCollectorSimulator extends DPUGarbageCollector {
     }
     @Override
     public void updateHeapPointerToDPU() {
-
+        throw new RuntimeException();
     }
 
     @Override
     public int pushParameters(int[] params) {
-        return 0;
+        throw new RuntimeException();
+
     }
 
     @Override
-    public int pushParameters(int[] params, int tasklet) {
-        return 0;
+    public int pushParameters(int[] params, int tasklet)       {
+        throw new RuntimeException();
     }
 
     @Override
     public void readBackHeapSpacePt() {
+        throw new RuntimeException();
 
     }
 
     @Override
     public void readBackMetaSpacePt() {
+        throw new RuntimeException();
 
     }
 
     @Override
     public void transfer(DPUJVMMemSpaceKind spaceKind, byte[] data, int pt) {
+        try {
+
+            switch (spaceKind){
+                case DPU_HEAPSPACE:
+                    dpujvmRemote.setHeapPointer(dpujvmRemote.getHeapPointer() + data.length);
+                    break;
+                case DPU_METASPACE:
+                    dpujvmRemote.setMetaSpacePointer(dpujvmRemote.getMetaSpacePointer() + data.length);
+                    break;
+                case DPU_PARAMETER_BUFFER:
+                    dpujvmRemote.setParamsBufferPointer(dpujvmRemote.getParamsBufferPointer() + data.length);
+                    break;
+            }
+        }catch (RemoteException e){
+
+        }
 
     }
 
     @Override
     public int allocate(DPUJVMMemSpaceKind spaceKind, byte[] data) {
-        return 0;
+        throw new RuntimeException();
     }
 
     @Override
@@ -144,16 +163,18 @@ public class DPUGarbageCollectorSimulator extends DPUGarbageCollector {
 
     @Override
     public int getRemainHeapMemory() {
-        return 0;
+        throw new RuntimeException();
     }
 
     @Override
     public int getRemainMetaMemory() {
-        return 0;
+        throw new RuntimeException();
+
     }
 
     @Override
     public int getReturnVal() {
-        return 0;
+        throw new RuntimeException();
+
     }
 }

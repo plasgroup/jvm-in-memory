@@ -11,11 +11,11 @@ public class PIMManagerSimulator extends PIMManager {
     @Override
     public PIMManager init(int dpuInUse) {
         for(int i = 0; i < PIMRemoteJVMConfiguration.JVMCount; i++){
-            System.out.println("init PIMManager Simulator " + i);
+            System.out.println("init DPU JVM simulator " + i);
             dpuManagers.add(new DPUManagerSimulator(i));
         }
 
-        instance = new PIMManagerSimulator();
+        instance = this;
         return instance;
     }
 }

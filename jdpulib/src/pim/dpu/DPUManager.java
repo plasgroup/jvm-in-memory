@@ -31,22 +31,22 @@ public abstract class DPUManager {
     public byte[] dispatchingBuffer = new byte[1024];
 
     protected Logger dpuManagerLogger = PIMLoggers.dpuManagerLogger;
-    int currentTasklet = 0;
-    int[] taskletSemaphore = new int[UPMEM.TOTAL_HARDWARE_THREADS_COUNT];
+    protected int currentTasklet = 0;
+    protected int[] taskletSemaphore = new int[UPMEM.TOTAL_HARDWARE_THREADS_COUNT];
 
 
     public abstract void dpuExecute(PrintStream printStream) throws DpuException;
 
     public abstract void callNonstaticMethod(int classPt, int methodPt, int instanceAddr, Object[] params);
 
-    int calcFieldCount(Class c){
+    protected int calcFieldCount(Class c){
         if(c.getSuperclass() == null){
             return c.getDeclaredFields().length;
         }
         return calcFieldCount(c.getSuperclass()) + c.getDeclaredFields().length;
     }
 
-    String generateInitializationDescriptor(Object[] params){
+    protected String generateInitializationDescriptor(Object[] params){
         String desc = "<init>:(";
         for(Object obj : params){
             if(obj instanceof Integer){

@@ -270,12 +270,8 @@ public class BSTBuilder {
 
 
     public static TreeNode buildPIMTree(String filePath, int cpuLayerCount){
-        try {
-            for(int i = 0; i < UPMEM.dpuInUse; i++){
-                UPMEM.getInstance().getDPUManager(i).dpuClassFileManager.loadClassForDPU(DPUTreeNode.class);
-            }
-        } catch (DpuException | IOException e) {
-            throw new RuntimeException(e);
+        for(int i = 0; i < UPMEM.dpuInUse; i++){
+            UPMEM.getInstance().getDPUManager(i).dpuClassFileManager.loadClassForDPU(DPUTreeNode.class);
         }
 
 

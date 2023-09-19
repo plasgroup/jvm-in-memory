@@ -252,13 +252,9 @@ public class TreeWriter {
 
     /* Write the heap memory bytes array to a DPU */
     private static void writeHeapImageToDPU(int dpuID) {
-        try {
-            UPMEM.getInstance().getDPUManager(dpuID).garbageCollector.allocate(DPUJVMMemSpaceKind.DPU_HEAPSPACE,2000000 * INSTANCE_SIZE);
-            UPMEM.getInstance().getDPUManager(dpuID).garbageCollector.transfer(DPUJVMMemSpaceKind.DPU_HEAPSPACE, heapMemory, DPUGarbageCollector.heapSpaceBeginAddr);
-            UPMEM.getInstance().getDPUManager(dpuID).garbageCollector.updateHeapPointerToDPU();
-        } catch (DpuException e) {
-            throw new RuntimeException(e);
-        }
+        UPMEM.getInstance().getDPUManager(dpuID).garbageCollector.allocate(DPUJVMMemSpaceKind.DPU_HEAPSPACE,2000000 * INSTANCE_SIZE);
+        UPMEM.getInstance().getDPUManager(dpuID).garbageCollector.transfer(DPUJVMMemSpaceKind.DPU_HEAPSPACE, heapMemory, DPUGarbageCollector.heapSpaceBeginAddr);
+        UPMEM.getInstance().getDPUManager(dpuID).garbageCollector.updateHeapPointerToDPU();
     }
 
     /* Write the tree represented by thisNode to the heap memory, write from 'heapAddress'*/
