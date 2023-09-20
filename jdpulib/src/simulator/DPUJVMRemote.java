@@ -39,4 +39,6 @@ public interface DPUJVMRemote extends Remote, SimulatorBackend {
     void setHeapIndex(int p) throws RemoteException;
 
     void setParamsBufferIndex(int p) throws RemoteException;
+
+    int getResultValue(int taskID) throws RemoteException;
 }

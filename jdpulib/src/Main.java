@@ -1,3 +1,4 @@
+import com.sun.source.tree.Tree;
 import com.upmem.dpu.DpuException;
 import pim.BatchDispatcher;
 import pim.ExperimentConfigurator;
@@ -149,11 +150,16 @@ public class Main {
         UPMEM.initialize(upmemConfigurator);
         //if(true) return;
 
-        UPMEM.getInstance().createObject(0, DPUTreeNode.class, 123, 424);
-        Registry registry = LocateRegistry.getRegistry("localhost", 9239 + 5);
-        TNodeProxy tp = new TNodeProxy();
-
-        tp.getKey();
+        TreeNode tn = (TreeNode) UPMEM.getInstance().createObject(0, DPUTreeNode.class, 123, 424);
+        TreeNode tn2 = (TreeNode) UPMEM.getInstance().createObject(0, DPUTreeNode.class, 214, 134);
+        tn.setRight(tn2);
+        System.out.println(tn.getKey());
+        System.out.println(tn.getVal());
+        System.out.println(tn2.getKey());
+        System.out.println(tn2.getVal());
+        System.out.println(tn.search(1));
+        System.out.println(tn.search(123));
+        System.out.println(tn.search(214));
 
 //        upmemConfigurator.setDpuInUseCount(dpuInUse);
 //

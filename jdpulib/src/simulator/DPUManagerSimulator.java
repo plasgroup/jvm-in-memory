@@ -105,7 +105,7 @@ public class DPUManagerSimulator extends DPUManager {
                     }
                 }
             }else{
-                tasklet = (tasklet + 1) % 24;
+                tasklet = (tasklet + 1) % PIMRemoteJVMConfiguration.threadCount;
             }
         }
         // System.out.println("select tasklet = " + tasklet);
@@ -137,7 +137,7 @@ public class DPUManagerSimulator extends DPUManager {
         }
 
         taskletSemaphore[tasklet] = 0;
-        currentTasklet = (currentTasklet + 1) % 24;
+        currentTasklet = (currentTasklet + 1) % PIMRemoteJVMConfiguration.threadCount;
     }
 
     @Override
@@ -161,7 +161,12 @@ public class DPUManagerSimulator extends DPUManager {
         BytesUtils.writeU4LittleEndian(objectDataStream, classAddr, 4);
 
         int objAddr;
-        objAddr = garbageCollector.allocate(DPU_HEAPSPACE, instanceSize);
+        try {
+            objAddr = dpujvmRemote.getHeapIndex();
+            dpujvmRemote.setHeapIndex(objAddr + 1);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
         garbageCollector.transfer(DPU_HEAPSPACE, objectDataStream, objAddr);
         DPUObjectHandler handler = garbageCollector.dpuAddress2ObjHandler(objAddr, dpuID);
         dpuManagerLogger.logln("---> Object Create Finish, handler = " + " (addr: " + handler.address + "," + "dpu: " + handler.dpuID + ") <---");
@@ -170,6 +175,7 @@ public class DPUManagerSimulator extends DPUManager {
 
         // call the init func
         callNonstaticMethod(classAddr, initMethodAddr, handler.address, params);
+
         return handler;
 
     }

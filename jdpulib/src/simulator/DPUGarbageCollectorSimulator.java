@@ -32,7 +32,8 @@ public class DPUGarbageCollectorSimulator extends DPUGarbageCollector {
         int addr = parameterBufferBeginAddr + (parameterBufferSize / 24) * tasklet;
         for(int i = 0; i < params.length; i++) {
             try {
-                dpujvmRemote.setParameter(i, params[i]);
+                System.out.println("write param " + i + " to " + ((parameterBufferSize / 24) * tasklet + i));
+                dpujvmRemote.setParameter((parameterBufferSize / 24) * tasklet + i, params[i]);
             } catch (RemoteException e) {
                 throw new RuntimeException(e);
             }
@@ -195,7 +196,10 @@ public class DPUGarbageCollectorSimulator extends DPUGarbageCollector {
 
     @Override
     public int getReturnVal() {
-        throw new RuntimeException();
-
+        try {
+            return dpujvmRemote.getResultValue(0);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

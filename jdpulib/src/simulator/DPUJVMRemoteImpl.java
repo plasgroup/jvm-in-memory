@@ -25,6 +25,7 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
     public int maxMetaspaceSize = 12 * 1024 * 1024;
     public int[] parameterQueue;
     public Object[] metaSpace;
+    public Object[] resultQueue;
     int metaSpaceIndex = 0;
     int heapSpaceIndex = 0;
     int paramsSpaceIndex = 0;
@@ -72,21 +73,25 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
             Method m = (Method) metaSpace[parameterQueue[2]];
             System.out.println("class = " + c.getSimpleName());
             System.out.println("method = " + m.getName());
-            System.out.println("instance pos = " + parameterQueue[2]);
+            System.out.println("instance pos = " + parameterQueue[3]);
             System.out.println("method params count = " + m.getParameterCount());
-            Object instance =  heap[parameterQueue[2]];
-            Class<?>[] classes = new Class[m.getParameterCount()];
-            for(int i = 0; i < classes.length; i++){
-                classes[i] = m.getParameterTypes()[i];
+            Object instance =  heap[parameterQueue[3]];
+            pt = 4;
+            Object[] params = new Object[m.getParameterCount()];
+            for(int i = 0; i < params.length; i++){
+                if(m.getParameterTypes()[0].isPrimitive()){
+                    params[i] = parameterQueue[pt++];
+                }else{
+                    params[i] = heap[parameterQueue[pt++]];
+                }
+
             }
 
             try {
-
-                Object ret = m.invoke(instance, classes);
+                Object ret = m.invoke(instance, params);
                 System.out.println("ret = " + ret);
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
-            } catch (InvocationTargetException e) {
+                resultQueue[0] = ret;
+            } catch (IllegalAccessException | InvocationTargetException e) {
                 throw new RuntimeException(e);
             }
             countDownLatch.countDown();
@@ -97,6 +102,7 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
         this.id = id;
         this.threadCount = threadCount;
         this.threads = new Runnable[threadCount];
+        this.resultQueue = new Object[20 * 24];
         for(int i = 0; i < threadCount; i++){
             this.threads[i] = (Runnable) new ProcessorBinary(i);
         }
@@ -222,6 +228,10 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
         paramsSpaceIndex = p;
     }
 
+    @Override
+    public int getResultValue(int taskID) throws RemoteException {
+        return (int) resultQueue[taskID];
+    }
 
 
     @Override
