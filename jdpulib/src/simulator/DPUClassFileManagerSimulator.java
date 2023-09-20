@@ -15,11 +15,8 @@ import pim.utils.BytesUtils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.rmi.RemoteException;
-import java.util.Arrays;
-import java.util.Dictionary;
-import java.util.Hashtable;
+import java.util.*;
 
-import static pim.dpu.classloader.ClassWriter.cvtDPUClassStrut2Bytes;
 import static pim.dpu.classloader.ClassWriter.pushJClassToDPU;
 import static pim.utils.ClassLoaderUtils.*;
 import static pim.utils.ClassLoaderUtils.getMethodDescriptor;
@@ -33,6 +30,7 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
 
     @Override
     public void recordClass(String className, DPUJClass jc, int classMramAddr) {
+        System.out.println("record " + className + ":" + classMramAddr);
         upmem.getDPUManager(dpuID).classCacheManager.setClassStructure(className, jc, classMramAddr);
 
     }
@@ -48,15 +46,112 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
     }
     private void recordMethodDistribution(Class c, DPUJClass jc, int classAddr) {
         for(int mIndex = 0; mIndex < jc.methodCount; mIndex++){
-            upmem.getDPUManager(dpuID).classCacheManager
-                    .setMethodCacheItem(c.getName().replace(".", "/"),
-                            getUTF8(jc, jc.methodTable[mIndex].nameIndex) + ":" + getUTF8(jc,jc.methodTable[mIndex].descriptorIndex),
-                            jc.methodOffset[mIndex] + 48 + 8 +
-                                    + 8 * jc.cpItemCount +
-                                    Arrays.stream(jc.fields).map(e -> e.size).reduce((s1, s2) -> s1  + s2).orElseGet(()->0)
-                                    + classAddr
-                            , jc.methodTable[mIndex]);
+
+
+
+
+            String desc = getUTF8(jc,jc.methodTable[mIndex].descriptorIndex);
+            List<Class> classes = descriptorToClasses(desc.substring(1, desc.indexOf(')')));
+            System.out.println("param count = " + classes.size() + ", desc = " + desc + " full desc = " + getUTF8(jc,jc.methodTable[mIndex].nameIndex) + ":" + getUTF8(jc,jc.methodTable[mIndex].descriptorIndex));
+            //System.out.println(desc.substring(1, desc.indexOf(')')));
+
+            try {
+                int addr;
+                if(classes.size() == 0){
+                    addr = dpujvmRemote.pushToMetaSpace(c, (getUTF8(jc,jc.methodTable[mIndex].nameIndex)));
+                }else{
+                    Class[] classesArray = new Class[classes.size()];
+                    for(int i = 0; i < classes.size(); i++){
+                        classesArray[i] = classes.get(i);
+                    }
+                    addr = dpujvmRemote.pushToMetaSpace(c, (getUTF8(jc,jc.methodTable[mIndex].nameIndex)), classesArray);
+
+                }
+//                upmem.getDPUManager(dpuID).classCacheManager
+//                        .setMethodCacheItem(c.getName().replace(".", "/"),
+//                                getUTF8(jc, jc.methodTable[mIndex].nameIndex) + ":" + getUTF8(jc,jc.methodTable[mIndex].descriptorIndex),
+//                                jc.methodOffset[mIndex] + 48 + 8 +
+//                                        + 8 * jc.cpItemCount +
+//                                        Arrays.stream(jc.fields).map(e -> e.size).reduce((s1, s2) -> s1  + s2).orElseGet(()->0)
+//                                        + classAddr
+//                                , jc.methodTable[mIndex]);
+                upmem.getDPUManager(dpuID).classCacheManager
+                        .setMethodCacheItem(c.getName().replace(".", "/"),
+                                getUTF8(jc, jc.methodTable[mIndex].nameIndex) + ":" + getUTF8(jc,jc.methodTable[mIndex].descriptorIndex),
+                                addr
+                                , jc.methodTable[mIndex]);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
         }
+    }
+
+
+    List<Class> descriptorToClasses(String desc){
+        System.out.println("parse " + desc);
+        if("Lpim/algorithm/TreeNode;".equals(desc)){
+            System.out.println("");
+        }
+        String matched = "";
+        int state = 0;
+        List<Class> classes = new ArrayList<>();
+        for(int ci = 0; ci < desc.length(); ci++){
+            char ch = desc.charAt(ci);
+            if(state == 0){
+                switch (ch){
+                    case 'B':
+                        classes.add(byte.class);
+                        break;
+                    case 'C':
+                        classes.add(char.class);
+                        break;
+                    case 'D':
+                        classes.add(double.class);
+                        break;
+                    case 'F':
+                        classes.add(float.class);
+                        break;
+                    case 'I':
+                        classes.add(int.class);
+                        break;
+                    case 'J':
+                        classes.add(long.class);
+                        break;
+                    case 'S':
+                        classes.add(short.class);
+                        break;
+                    case 'Z':
+                        classes.add(boolean.class);
+                        break;
+                    case 'L':
+                        state = 1;
+                        break;
+
+                    case '[':
+                        break;
+                }
+            }else if(state == 1){
+                if(ch != ';'){
+                    matched += ch;
+                }else{
+
+                    Class c = null;
+                    try {
+                        c = Class.forName(matched.replace("/", "."));
+                    } catch (ClassNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
+                    classes.add(c);
+
+                    matched = "";
+                    state = 0;
+                }
+
+
+                }
+            }
+
+        return classes;
     }
     private void recordFieldDistribution(Class c, DPUJClass jc) {
         for(int i = 0; i < jc.fieldCount; i++){
@@ -274,8 +369,11 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
             } catch (RemoteException e) {
                 throw new RuntimeException();
             }
-
-            recordClass(className, jc, metaspaceIndex);
+            try {
+                recordClass(className, jc, dpujvmRemote.pushToMetaSpace(c));
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
             recordMethodDistribution(c, jc, metaspaceIndex);
             recordFieldDistribution(c, jc);
             createVirtualTable(jc, classFileBytes);
@@ -296,10 +394,8 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
             }
 
             try {
-                pushJClassToDPU(jc,classAddr , dpuID);
-                dpujvmRemote.pushToMetaSpace(c);
-            } catch (RemoteException e) {
-                throw new RuntimeException(e);
+                pushJClassToDPU(jc, classAddr , dpuID);
+
             } catch (DpuException e) {
                 throw new RuntimeException(e);
             }
@@ -319,7 +415,12 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
-        recordClass(formalClassName(c.getName()), jc, metaspaceIndex);
+
+        try {
+            recordClass(formalClassName(c.getName()), jc, dpujvmRemote.pushToMetaSpace(c));
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
         recordMethodDistribution(c, jc, metaspaceIndex);
         recordFieldDistribution(c, jc);
         createVirtualTable(jc, classFileBytes);
@@ -547,8 +648,8 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
         classfileLogger.logln("" + classCacheManager);
         try {
             pushJClassToDPU(jc, classAddr, dpuID);
-            dpujvmRemote.pushToMetaSpace(c);
-        } catch (RemoteException | DpuException e) {
+
+        } catch (DpuException e) {
             throw new RuntimeException(e);
         }
 

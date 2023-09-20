@@ -148,12 +148,13 @@ public class Main {
         parseParameters(args);
         UPMEM.initialize(upmemConfigurator);
         //if(true) return;
-        UPMEM.getInstance().createObject(0, TreeNode.class, 123, 424);
-        if(true) return;
+
+        UPMEM.getInstance().createObject(0, DPUTreeNode.class, 123, 424);
         Registry registry = LocateRegistry.getRegistry("localhost", 9239 + 5);
         TNodeProxy tp = new TNodeProxy();
 
         tp.getKey();
+
 //        upmemConfigurator.setDpuInUseCount(dpuInUse);
 //
 //        System.out.println("dpu in use = " + dpuInUse);

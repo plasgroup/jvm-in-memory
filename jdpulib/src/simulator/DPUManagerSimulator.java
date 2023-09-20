@@ -111,7 +111,7 @@ public class DPUManagerSimulator extends DPUManager {
         // System.out.println("select tasklet = " + tasklet);
 
         int[] paramsConverted = new int[params.length + 1 + 2 + 1];
-        paramsConverted[0] = 0;
+        paramsConverted[0] = 0; // task id
         paramsConverted[1] = classPt;
         paramsConverted[2] = methodPt;
         paramsConverted[3] = instanceAddr;
@@ -150,6 +150,7 @@ public class DPUManagerSimulator extends DPUManager {
         if(classCacheManager.getClassStrutCacheLine(c.getName().replace(".","/")) == null){
             dpuClassFileManager.loadClassForDPU(c);
         }
+
         classAddr = classCacheManager.getClassStrutCacheLine(c.getName().replace(".","/")).marmAddr;
         dpuManagerLogger.logln(" * Get Class Addr = " + classAddr);
         String initMethodDesc = generateInitializationDescriptor(params);

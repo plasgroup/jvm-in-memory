@@ -1,5 +1,6 @@
 package simulator;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.rmi.RemoteException;
@@ -36,8 +37,39 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
         @Override
         public void run() {
             System.out.println("run thread, ID = " + threadID);
-            Class c = (Class) metaSpace[parameterQueue[0]];
-            Method m = (Method) metaSpace[parameterQueue[1]];
+            for(int i = 0; i < 10; i++){
+                System.out.println("param queue " + i + ":" + parameterQueue[i]);
+            }
+            int taskId =  parameterQueue[0];
+            Class c = (Class) metaSpace[parameterQueue[1]];
+            int pt = 4;
+            if(metaSpace[parameterQueue[2]] instanceof Constructor){
+                Constructor constructor = (Constructor) metaSpace[parameterQueue[2]];
+                int instanceIndex = parameterQueue[3];
+                int paramCount =  constructor.getParameterCount();
+                System.out.println("constructor param count = " + paramCount);
+                if(paramCount == 0){
+                    try {
+                        heap[instanceIndex] = constructor.newInstance();
+                    } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+                        throw new RuntimeException(e);
+                    }
+                }else{
+                    Object[] params = new Object[paramCount];
+
+                    for(int i = 0; i < paramCount; i++){
+                        params[i] = parameterQueue[pt++];
+                    }
+                    try {
+                        heap[instanceIndex] = constructor.newInstance(params);
+                    } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                countDownLatch.countDown();
+                return;
+            }
+            Method m = (Method) metaSpace[parameterQueue[2]];
             System.out.println("class = " + c.getSimpleName());
             System.out.println("method = " + m.getName());
             System.out.println("instance pos = " + parameterQueue[2]);
@@ -88,7 +120,6 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
             throw new RuntimeException(e);
         }
         System.out.println("Finish");
-
     }
 
     @Override
@@ -100,16 +131,23 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
 
     @Override
     public int pushToMetaSpace(Class c) throws RemoteException {
+        System.out.println(c + "be push to index = " + metaSpaceIndex);
         metaSpace[metaSpaceIndex] = c;
+        System.out.println("return addr = " + metaSpaceIndex);
         return metaSpaceIndex++;
     }
 
     @Override
     public int pushToMetaSpace(Class c, String methodName, Class<?>... params) throws RemoteException {
         try {
-            Method m = c.getDeclaredMethod(methodName, params);
+            if("<init>".equals(methodName)){
+                Constructor constructor = c.getDeclaredConstructor(params);
+                metaSpace[metaSpaceIndex] = constructor;
+            }else{
 
-            metaSpace[metaSpaceIndex] = m;
+                Method m = c.getDeclaredMethod(methodName, params);
+                metaSpace[metaSpaceIndex] = m;
+            }
         } catch (NoSuchMethodException e) {
             throw new RuntimeException(e);
         }
@@ -153,6 +191,7 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
 
     @Override
     public int getMetaSpaceIndex() throws RemoteException {
+        System.out.println("get meta space index = " + metaSpaceIndex);
         return metaSpaceIndex;
     }
 
@@ -168,6 +207,8 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
 
     @Override
     public void setMetaSpaceIndex(int p) throws RemoteException {
+        System.out.println("set meta space index = " + p);
+
         metaSpaceIndex = p;
     }
 
