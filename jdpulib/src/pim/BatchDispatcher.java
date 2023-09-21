@@ -77,7 +77,6 @@ public class BatchDispatcher {
     public void dispatchAll() throws DpuException {
         for (int dpuID: dpusInUse) {
             dispatchLogger.logln(" === write tasks to DPU " + dpuID + " === ");
-            dispatchLogger.logln(" === write tasks to DPU " + dpuID + " === ");
             byte[] ptBytes = new byte[4];
 
             // for each tasklet of a DPU
@@ -92,6 +91,7 @@ public class BatchDispatcher {
                 // write pointer to params_buffer_pt[i]
                 UPMEM.getInstance().getDPUManager(dpuID).dpu.copy("params_buffer_pt", ptBytes , 4 * i);
             }
+
             // transfer the DPU#i's params buffer
             UPMEM.getInstance().getDPUManager(dpuID).garbageCollector.transfer(DPUJVMMemSpaceKind.DPU_PARAMETER_BUFFER,paramsBuffer[dpuID], parameterBufferBeginAddr );
         }

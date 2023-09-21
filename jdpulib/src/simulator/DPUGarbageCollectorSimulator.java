@@ -29,15 +29,22 @@ public class DPUGarbageCollectorSimulator extends DPUGarbageCollector {
     public int pushParameters(int[] params, int tasklet)       {
         int size = (params.length * 4 + 0b111) & ~(0b111);
         byte[] data = new byte[size];
-        int addr = parameterBufferBeginAddr + (parameterBufferSize / 24) * tasklet;
-        for(int i = 0; i < params.length; i++) {
-            try {
-                System.out.println("write param " + i + " to " + ((parameterBufferSize / 24) * tasklet + i));
-                dpujvmRemote.setParameter((parameterBufferSize / 24) * tasklet + i, params[i]);
-            } catch (RemoteException e) {
-                throw new RuntimeException(e);
-            }
+
+        try {
+            return dpujvmRemote.pushArguments(params, tasklet);
+
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
         }
+//        int addr = parameterBufferBeginAddr + (parameterBufferSize / 24) * tasklet;
+//        for(int i = 0; i < params.length; i++) {
+//            try {
+//                System.out.println("write param " + i + " to " + ((parameterBufferSize / 24) * tasklet + i));
+//                dpujvmRemote.setParameter((parameterBufferSize / 24) * tasklet + i, params[i]);
+//            } catch (RemoteException e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
 
 //        }
 //        gcLogger.log(" - allocate " + size + " byte in parameter buffer");
@@ -56,8 +63,8 @@ public class DPUGarbageCollectorSimulator extends DPUGarbageCollector {
 //            throw new RuntimeException(e);
 //        }
 //        return addr;
-
-        return addr;
+//
+//        return addr;
     }
 
     @Override
@@ -83,9 +90,7 @@ public class DPUGarbageCollectorSimulator extends DPUGarbageCollector {
                 case DPU_METASPACE:
                     dpujvmRemote.setMetaSpacePointer(dpujvmRemote.getMetaSpacePointer() + data.length);
                     break;
-                case DPU_PARAMETER_BUFFER:
-                    dpujvmRemote.setParamsBufferPointer(dpujvmRemote.getParamsBufferPointer() + data.length);
-                    break;
+
             }
         }catch (RemoteException e){
 
@@ -133,13 +138,7 @@ public class DPUGarbageCollectorSimulator extends DPUGarbageCollector {
                     throw new RuntimeException(e);
                 }
                 break;
-            case "params_buffer_pt":
-                try {
-                    ptBytes = dpujvmRemote.getParamsBufferPointer();
-                } catch (RemoteException e) {
-                    throw new RuntimeException(e);
-                }
-                break;
+
         }
 
         // update latest pointer temporary
@@ -173,7 +172,7 @@ public class DPUGarbageCollectorSimulator extends DPUGarbageCollector {
                 break;
             case "params_buffer_pt":
                 try {
-                    dpujvmRemote.setParamsBufferPointer(ptBytes);
+                    dpujvmRemote.setParamsBufferPointer(ptBytes,0);
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
                 }
@@ -186,7 +185,11 @@ public class DPUGarbageCollectorSimulator extends DPUGarbageCollector {
 
     @Override
     public int getRemainHeapMemory() {
-        throw new RuntimeException();
+        try {
+            return dpujvmRemote.getHeapLength() - dpujvmRemote.getHeapPointer();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

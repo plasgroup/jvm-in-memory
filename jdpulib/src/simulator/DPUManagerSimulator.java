@@ -162,8 +162,7 @@ public class DPUManagerSimulator extends DPUManager {
 
         int objAddr;
         try {
-            objAddr = dpujvmRemote.getHeapIndex();
-            dpujvmRemote.setHeapIndex(objAddr + 1);
+            objAddr = dpujvmRemote.allocateObject();
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
