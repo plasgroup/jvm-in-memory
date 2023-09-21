@@ -17,11 +17,11 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
     static CountDownLatch countDownLatch;
     public Object[] heap;
     public int currentHeapSize = 0;
-    public int maxHeapSize = 48 * 1024 * 1024;
+    public int maxHeapSize = PIMRemoteJVMConfiguration.heapSize;
     public int[] currentParamPointer;
-    public int maxParamSize = 24 * 4 * 1024;
+    public int maxParamSize = PIMRemoteJVMConfiguration.maxParameterSpaceSize;
     public int currentMetaspaceSize = 0;
-    public int maxMetaspaceSize = 12 * 1024 * 1024;
+    public int maxMetaspaceSize = PIMRemoteJVMConfiguration.maxMetaspaceSize;
     public int[] parameterQueue;
     public Object[] metaSpace;
     public Object[] resultQueue;

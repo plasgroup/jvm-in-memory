@@ -47,7 +47,7 @@ public class DPUManagerSimulator extends DPUManager {
             int size = (((1 + 2 + 1 + params.length) * 4) + 0b111) & (~0b111);
             BatchDispatcher bd = UPMEM.batchDispatcher;
             while(t2 != t){
-                if(bd.paramsBufferPointer[dpuID][t2] + size < DPUGarbageCollector.perDPUBufferSize){
+                if(bd.paramsBufferPointer[dpuID][t2] + size < PIMRemoteJVMConfiguration.heapSize){
                     break;
                 }
                 t2 = (t2 + 1) % 24;

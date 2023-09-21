@@ -1,6 +1,5 @@
 package pim.algorithm;
 
-import com.upmem.dpu.DpuException;
 import pim.ExperimentConfigurator;
 import pim.UPMEM;
 import pim.logger.Logger;
@@ -248,7 +247,6 @@ public class BSTBuilder {
             ArrayList<BSTBuilder.Pair<Integer, Integer>> pairs = new ArrayList<>();
             String s = br.readLine();
             while(s != null){
-
                 int k = Integer.parseInt(s.split(" ")[0]);
                 int v = Integer.parseInt(s.split(" ")[1]);
                 if(root == null) {
@@ -273,7 +271,6 @@ public class BSTBuilder {
         for(int i = 0; i < UPMEM.dpuInUse; i++){
             UPMEM.getInstance().getDPUManager(i).dpuClassFileManager.loadClassForDPU(DPUTreeNode.class);
         }
-
 
         TreeNode root = BSTBuilder.buildCPUTree(filePath);
         if(ExperimentConfigurator.serializeToFile){
@@ -303,7 +300,6 @@ public class BSTBuilder {
         if (pairs.size() == 0) return null;
         TreeNode root = new CPUTreeNode(pairs.get(0).key, pairs.get(0).val);
         bstBuildingLogger.logf("(TreeBuilder) ===> insert %d 'th node, key = %d, val = %d\n", 1, pairs.get(0).key, pairs.get(0).val);
-        System.out.println(pairs.size());
         for (int i = 1; i < pairs.size(); i++) {
             bstBuildingLogger.logf( "(TreeBuilder) ===> insert %d 'th node, key = %d, val = %d\n", i + 1, pairs.get(i).key, pairs.get(i).val);
             root.insert(pairs.get(i).key, pairs.get(i).val);
