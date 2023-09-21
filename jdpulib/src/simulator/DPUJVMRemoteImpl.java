@@ -37,9 +37,9 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
 
         @Override
         public void run() {
-            System.out.println("run thread, ID = " + threadID);
+            //System.out.println("run thread, ID = " + threadID);
             for(int i = 0; i < 10; i++){
-                System.out.println("param queue " + i + ":" + parameterQueue[i]);
+                //System.out.println("param queue " + i + ":" + parameterQueue[i]);
             }
             int pt = threadID * perThreadParameterQueueLength;
             int taskId =  parameterQueue[pt];
@@ -49,7 +49,7 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
                 Constructor constructor = (Constructor) metaSpace[parameterQueue[pt + 2]];
                 int instanceIndex = parameterQueue[pt + 3];
                 int paramCount =  constructor.getParameterCount();
-                System.out.println("constructor param count = " + paramCount);
+                //System.out.println("constructor param count = " + paramCount);
                 if(paramCount == 0){
                     try {
                         heap[instanceIndex] = constructor.newInstance();
@@ -70,15 +70,15 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
                 }
                 taskletParameterTop[threadID] = perThreadParameterQueueLength * threadID;
                 currentParamPointer[threadID] = perThreadParameterQueueSize * threadID;
-                System.out.println("reset taskletParameterTop of " + threadID + "to" + taskletParameterTop[threadID]);
                 countDownLatch.countDown();
                 return;
             }
             Method m = (Method) metaSpace[parameterQueue[pt + 2]];
-            System.out.println("class = " + c.getSimpleName());
-            System.out.println("method = " + m.getName());
-            System.out.println("instance pos = " + parameterQueue[pt + 3]);
-            System.out.println("method params count = " + m.getParameterCount());
+//
+//            System.out.println("class = " + c.getSimpleName());
+//            System.out.println("method = " + m.getName());
+//            System.out.println("instance pos = " + parameterQueue[pt + 3]);
+//            System.out.println("method params count = " + m.getParameterCount());
             Object instance =  heap[parameterQueue[pt + 3]];
             pt += 4;
             Object[] params = new Object[m.getParameterCount()];
@@ -93,14 +93,14 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
 
             try {
                 Object ret = m.invoke(instance, params);
-                System.out.println("ret = " + ret);
+                // System.out.println("ret = " + ret);
                 resultQueue[0] = ret;
             } catch (IllegalAccessException | InvocationTargetException e) {
                 throw new RuntimeException(e);
             }
             taskletParameterTop[threadID] = perThreadParameterQueueLength * threadID;
             currentParamPointer[threadID] = perThreadParameterQueueSize * threadID;
-            System.out.println("reset taskletParameterTop of " + threadID + "to" + taskletParameterTop[threadID]);
+            // System.out.println("reset taskletParameterTop of " + threadID + "to" + taskletParameterTop[threadID]);
             countDownLatch.countDown();
         }
     }
@@ -149,10 +149,10 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
 
     @Override
     public int pushToMetaSpace(Class c) throws RemoteException {
-        System.out.println(c + "be push to index = " + metaSpaceIndex);
+        //System.out.println(c + "be push to index = " + metaSpaceIndex);
         if(metaSpaceIndex > metaSpace.length) throw new RuntimeException("metaspace overflow");
         metaSpace[metaSpaceIndex] = c;
-        System.out.println("return addr = " + metaSpaceIndex);
+        //System.out.println("return addr = " + metaSpaceIndex);
 
         return metaSpaceIndex++;
     }
@@ -213,7 +213,7 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
 
     @Override
     public int getMetaSpaceIndex() throws RemoteException {
-        System.out.println("get meta space index = " + metaSpaceIndex);
+        //System.out.println("get meta space index = " + metaSpaceIndex);
         return metaSpaceIndex;
     }
 
@@ -229,8 +229,7 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
 
     @Override
     public void setMetaSpaceIndex(int p) throws RemoteException {
-        System.out.println("set meta space index = " + p);
-
+        //System.out.println("set meta space index = " + p);
         metaSpaceIndex = p;
     }
 

@@ -42,8 +42,6 @@ public class DPUManagerSimulator extends DPUManager {
     @Override
     public void callNonstaticMethod(int classPt, int methodPt, int instanceAddr, Object[] params) {
         if(UPMEM.batchDispatchingRecording) {
-            //System.out.println("record batch dispatching");
-            //System.out.printf("method pt %x\n", methodPt);
             int t = UPMEM.batchDispatcher.taskletPosition[dpuID];
             int t2 = (t + 1) % 24;
             int size = (((1 + 2 + 1 + params.length) * 4) + 0b111) & (~0b111);
@@ -60,17 +58,13 @@ public class DPUManagerSimulator extends DPUManager {
                 }
             }
             bd.taskletPosition[dpuID] = t2; // next time from t2 to find a proper tasklet
-            // beginning of params_buffer[t2]
-            int from = bd.paramsBufferPointer[dpuID][t2] + DPUGarbageCollector.perDPUBufferSize * t2;
-            // id
-            BytesUtils.writeU4LittleEndian(UPMEM.batchDispatcher.paramsBuffer[dpuID], bd.recordedCount[dpuID]++, from);
-            // class address
-            BytesUtils.writeU4LittleEndian(UPMEM.batchDispatcher.paramsBuffer[dpuID], classPt, from + 4);
-            // method address
-            BytesUtils.writeU4LittleEndian(UPMEM.batchDispatcher.paramsBuffer[dpuID], methodPt, from + 8);
-            // instance address
-            BytesUtils.writeU4LittleEndian(UPMEM.batchDispatcher.paramsBuffer[dpuID], instanceAddr, from + 12);
-            int offset = 16;
+
+            int[] paramPrepared = new int[4 + params.length];
+            paramPrepared[0] = bd.recordedCount[dpuID]++;
+            paramPrepared[1] = classPt;
+            paramPrepared[2] = methodPt;
+            paramPrepared[3] = instanceAddr;
+            int offset = 4;
             for(Object obj : params){
                 int v;
                 if(obj instanceof Integer){
@@ -83,13 +77,16 @@ public class DPUManagerSimulator extends DPUManager {
                 }else{
                     throw new RuntimeException("can not send CPU object to DPU");
                 }
-                BytesUtils.writeU4LittleEndian(UPMEM.batchDispatcher.paramsBuffer[dpuID], v, from + offset);
-                offset += 4;
+                params[offset] = v;
+                offset++;
             }
-
-            // System.out.println("write to dpu " + dpuID + " tasklet " + t2 + " buffer from " + UPMEM.batchDispatcher.paramsBufferPointer[dpuID][t2]);
             bd.paramsBufferPointer[dpuID][t2] += size;
             bd.dpusInUse.add(dpuID);
+            try {
+                dpujvmRemote.pushArguments(paramPrepared, t2);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
             return;
         }
 

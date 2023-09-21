@@ -93,7 +93,7 @@ public class BatchDispatcher {
             }
 
             // transfer the DPU#i's params buffer
-            UPMEM.getInstance().getDPUManager(dpuID).garbageCollector.transfer(DPUJVMMemSpaceKind.DPU_PARAMETER_BUFFER,paramsBuffer[dpuID], parameterBufferBeginAddr );
+            UPMEM.getInstance().getDPUManager(dpuID).garbageCollector.transfer(DPUJVMMemSpaceKind.DPU_PARAMETER_BUFFER,paramsBuffer[dpuID], parameterBufferBeginAddr);
         }
 
         int count = 0;
@@ -106,6 +106,7 @@ public class BatchDispatcher {
         System.out.println("=== dispatch all ====");
 
         latch = new CountDownLatch(dpusInUse.size());
+
         for(int dpuID : dpusInUse){
             executorService.submit(new DPUExecutionTask(dpuID));
         }

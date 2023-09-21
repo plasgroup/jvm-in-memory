@@ -1,17 +1,14 @@
-import com.sun.source.tree.Tree;
-import com.upmem.dpu.DpuException;
 import pim.BatchDispatcher;
 import pim.ExperimentConfigurator;
 import pim.UPMEM;
 import pim.UPMEMConfigurator;
-import pim.algorithm.*;
-import simulator.DPUJVMRemote;
+import pim.algorithm.BSTBuilder;
+import pim.algorithm.DPUTreeNode;
+import pim.algorithm.IntIntValuePairGenerator;
+import pim.algorithm.TreeNode;
 
 import java.io.IOException;
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -150,10 +147,12 @@ public class Main {
     public static void main(String[] args) throws RemoteException {
         parseParameters(args);
         UPMEM.initialize(upmemConfigurator);
-        //if(true) return;
+        // if(true) return;
 
-        ArrayList<BSTBuilder.Pair<Integer, Integer>> pairs = new IntIntValuePairGenerator(0, Integer.MAX_VALUE).generatePairs(1000000);
+        ArrayList<BSTBuilder.Pair<Integer, Integer>> pairs =
+                new IntIntValuePairGenerator(0, Integer.MAX_VALUE).generatePairs(1000000);
         TreeNode t = buildPIMTreeByInsert(pairs);
+
         for(int i = 0; i < pairs.size(); i++){
             int retrievedVal = t.search(pairs.get(i).getKey());
             int expectedVal = pairs.get(i).getVal();
