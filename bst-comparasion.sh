@@ -5,7 +5,7 @@ VM_OPTIONS="-XX:+UnlockDiagnosticVMOptions -XX:+PreserveFramePointer -XX:+DumpPe
 NODES_COUNT=500000000
 DPU_COUNT=1024
 QUERY_COUNT=500000
-LAYER=21
+LAYER=18
 JAVA=~/jdk-17.0.1/bin/java
 
 ## stat mode
