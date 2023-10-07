@@ -5,7 +5,7 @@ VM_OPTIONS="-XX:+UnlockDiagnosticVMOptions -XX:+PreserveFramePointer -XX:+DumpPe
 NODES_COUNT=500000000
 DPU_COUNT=1024
 QUERY_COUNT=500000
-LAYER=18
+LAYER=21
 JAVA=~/jdk-17.0.1/bin/java
 
 ## stat mode
@@ -16,9 +16,9 @@ perf stat -a -e $EVENT_LIST $JAVA $VM_OPTIONS -jar bst-latest.jar TYPE=PIM NODES
 
 
 ## record mode
-perf record -e $RECORD_EVENT_LIST $JAVA $VM_OPTIONS -jar bst-latest.jar TYPE=CPU NODES=$NODES_COUNT QUERIES=$QUERY_COUNT DPU_COUNT=$DPU_COUNT CPU_LAYER_COUNT=$LAYER -classpath dpu.jar
+perf record -e $RECORD_EVENT_LIST $JAVA $VM_OPTIONS -jar -classpath dpu.jar bst-latest.jar TYPE=CPU NODES=$NODES_COUNT QUERIES=$QUERY_COUNT DPU_COUNT=$DPU_COUNT CPU_LAYER_COUNT=$LAYER
 perf script --itrace | grep 'search' >  "./record_files/[q]cpu-search-samples-${i}q.txt";
 
-perf record -e $RECORD_EVENT_LIST $JAVA $VM_OPTIONS -jar bst-latest.jar TYPE=PIM NODES=$NODES_COUNT QUERIES=$QUERY_COUNT DPU_COUNT=$DPU_COUNT CPU_LAYER_COUNT=$LAYER -classpath dpu.jar
+perf record -e $RECORD_EVENT_LIST $JAVA $VM_OPTIONS -jar -classpath dpu.jar bst-latest.jar TYPE=PIM NODES=$NODES_COUNT QUERIES=$QUERY_COUNT DPU_COUNT=$DPU_COUNT CPU_LAYER_COUNT=$LAYER
 perf script --itrace | grep 'search' >  "./record_files/[q]pim-search-samples-${i}q.txt";
 

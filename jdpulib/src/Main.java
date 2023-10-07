@@ -28,11 +28,11 @@ public class Main {
                 queryCount = Integer.parseInt(items[1]);
             }else if("CPU_LAYER_COUNT".equals(argumentName)){
                 cpuLayerCount = Integer.parseInt(items[1]);
-            }else if("DPU_COUNT".equals(items[1])){
+            }else if("DPU_COUNT".equals(argumentName)){
                 dpuInUse = Integer.parseInt(items[1]);
-            }else if("NODES".equals(items[1])){
+            }else if("NODES".equals(argumentName)){
                 totalNodeCount = Integer.parseInt(items[1]);
-            }else if("IMG_PATH".equals(items[1])){
+            }else if("IMG_PATH".equals(argumentName)){
                 imagesPath = Arrays.stream(items).skip(1).reduce((s1,s2) -> s1+s2).get().replace("\"", "");
             }else if("WRITE_KV".equals(argumentName)){
                 writeKeyValue = true;
