@@ -29,7 +29,7 @@ public class Main {
             }else if("CPU_LAYER_COUNT".equals(argumentName)){
                 cpuLayerCount = Integer.parseInt(items[1]);
             }else if("DPU_COUNT".equals(argumentName)){
-                dpuInUse = Integer.parseInt(item[1]);
+                dpuInUse = Integer.parseInt(items[1]);
             }else if("NODES".equals(argumentName)){
                 totalNodeCount = Integer.parseInt(items[1]);
             }else if("IMG_PATH".equals(argumentName)){
