@@ -6,7 +6,7 @@ NODES_COUNT=500000000
 DPU_COUNT=1024
 QUERY_COUNT=500000
 LAYER=18
-JAVA=~/jdk-17.0.1/bin/java
+JAVA=/jdk-17/bin/java
 
 ## stat mode
 perf stat -a -e $EVENT_LIST $JAVA $VM_OPTIONS -jar bst-latest.jar TYPE=CPU NODES=$NODES_COUNT QUERIES=$QUERY_COUNT DPU_COUNT=$DPU_COUNT CPU_LAYER_COUNT=$LAYER -classpath dpu.jar 2> "cpu-nodes-all-$i-($j).txt"
