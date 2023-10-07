@@ -2,23 +2,29 @@
 EVENT_LIST=LLC-load-misses,offcore_requests.all_data_rd,uncore_imc_0/cas_count_read/,uncore_imc_0/cas_count_write/,uncore_imc_1/cas_count_read/,uncore_imc_1/cas_count_write/
 RECORD_EVENT_LIST="LLC-load-misses,LLC-store-misses"
 VM_OPTIONS="-XX:+UnlockDiagnosticVMOptions -XX:+PreserveFramePointer -XX:+DumpPerfMapAtExit -Xmx131072m"
-NODES_COUNT=500000000
+NODES_COUNT=100000000
 DPU_COUNT=1024
 QUERY_COUNT=500000
-LAYER=21
-JAVA=~/jdk-17.0.1/bin/java
+LAYER=18
+JAVA=~/jdk-17/bin/java
 
 ## stat mode
-perf stat -a -e $EVENT_LIST $JAVA $VM_OPTIONS -jar bst-latest.jar TYPE=CPU NODES=$NODES_COUNT QUERIES=$QUERY_COUNT DPU_COUNT=$DPU_COUNT CPU_LAYER_COUNT=$LAYER -classpath dpu.jar 2> "cpu-nodes-all-$i-($j).txt"
-perf stat -a -e $EVENT_LIST $JAVA $VM_OPTIONS -jar bst-latest.jar TYPE=CPU NODES=$NODES_COUNT QUERIES=$QUERY_COUNT NO_SEARCH DPU_COUNT=$DPU_COUNT CPU_LAYER_COUNT=$LAYER -classpath dpu.jar 2> "cpu-nodes-prepare-$i-($j).txt"
-perf stat -a -e $EVENT_LIST $JAVA $VM_OPTIONS -jar bst-latest.jar TYPE=PIM NODES=$NODES_COUNT QUERIES=$QUERY_COUNT DPU_COUNT=$DPU_COUNT CPU_LAYER_COUNT=$LAYER -classpath dpu.jar 2> "pim-nodes-all-$i-($j).txt"
-perf stat -a -e $EVENT_LIST $JAVA $VM_OPTIONS -jar bst-latest.jar TYPE=PIM NODES=$NODES_COUNT QUERIES=$QUERY_COUNT NO_SEARCH DPU_COUNT=$DPU_COUNT CPU_LAYER_COUNT=$LAYER -classpath dpu.jar 2> "pim-nodes-prepare-$i-($j).txt"
+echo "profile status CPU-Full"
+perf stat -a -e $EVENT_LIST $JAVA $VM_OPTIONS -cp bst-latest.jar:dpu.jar Main TYPE=CPU NODES=$NODES_COUNT QUERIES=$QUERY_COUNT DPU_COUNT=$DPU_COUNT CPU_LAYER_COUNT=$LAYER 2> "cpu-nodes-all-$i-($j).txt"
+echo "profile status CPU-prepare"
+perf stat -a -e $EVENT_LIST $JAVA $VM_OPTIONS -cp bst-latest.jar:dpu.jar Main TYPE=CPU NODES=$NODES_COUNT QUERIES=$QUERY_COUNT NO_SEARCH DPU_COUNT=$DPU_COUNT CPU_LAYER_COUNT=$LAYER 2> "cpu-nodes-prepare-$i-($j).txt"
+echo "profile status PIM-Full"
+perf stat -a -e $EVENT_LIST $JAVA $VM_OPTIONS -cp bst-latest.jar:dpu.jar Main TYPE=PIM NODES=$NODES_COUNT QUERIES=$QUERY_COUNT DPU_COUNT=$DPU_COUNT CPU_LAYER_COUNT=$LAYER 2> "pim-nodes-all-$i-($j).txt"
+echo "profile status PIM-prepare"
+perf stat -a -e $EVENT_LIST $JAVA $VM_OPTIONS -cp bst-latest.jar:dpu.jar Main TYPE=PIM NODES=$NODES_COUNT QUERIES=$QUERY_COUNT NO_SEARCH DPU_COUNT=$DPU_COUNT CPU_LAYER_COUNT=$LAYER 2> "pim-nodes-prepare-$i-($j).txt"
 
 
 ## record mode
-perf record -e $RECORD_EVENT_LIST $JAVA $VM_OPTIONS -jar -classpath dpu.jar bst-latest.jar TYPE=CPU NODES=$NODES_COUNT QUERIES=$QUERY_COUNT DPU_COUNT=$DPU_COUNT CPU_LAYER_COUNT=$LAYER
-perf script --itrace | grep 'search' >  "./record_files/[q]cpu-search-samples-${i}q.txt";
+echo "profile record CPU"
+perf record -e $RECORD_EVENT_LIST $JAVA $VM_OPTIONS -cp bst-latest.jar:dpu.jar Main TYPE=CPU NODES=$NODES_COUNT QUERIES=$QUERY_COUNT DPU_COUNT=$DPU_COUNT CPU_LAYER_COUNT=$LAYER
+perf script --itrace | grep 'search' >  "./record_files/[q]cpu-search-samples-${QUERY_COUNT}q.txt";
 
-perf record -e $RECORD_EVENT_LIST $JAVA $VM_OPTIONS -jar -classpath dpu.jar bst-latest.jar TYPE=PIM NODES=$NODES_COUNT QUERIES=$QUERY_COUNT DPU_COUNT=$DPU_COUNT CPU_LAYER_COUNT=$LAYER
-perf script --itrace | grep 'search' >  "./record_files/[q]pim-search-samples-${i}q.txt";
+echo "profile record PIM"
+perf record -e $RECORD_EVENT_LIST $JAVA $VM_OPTIONS -cp bst-latest.jar:dpu.jar Main TYPE=PIM NODES=$NODES_COUNT QUERIES=$QUERY_COUNT DPU_COUNT=$DPU_COUNT CPU_LAYER_COUNT=$LAYER
+perf script --itrace | grep 'search' >  "./record_files/[q]pim-search-samples-${QUERY_COUNT}q.txt";
 
