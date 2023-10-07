@@ -9,16 +9,16 @@ LAYER=21
 JAVA=~/jdk-17.0.1/bin/java
 
 ## stat mode
-perf stat -a -e $EVENT_LIST $JAVA -jar bst-latest.jar CPU $NODES_COUNT $QUERY_COUNT - $DPU_COUNT $LAYER 2> "cpu-nodes-all-$i-($j).txt"
-perf stat -a -e $EVENT_LIST $JAVA -jar bst-latest.jar CPU $NODES_COUNT $QUERY_COUNT NO_SEARCH $DPU_COUNT $LAYER 2> "cpu-nodes-prepare-$i-($j).txt"
-perf stat -a -e $EVENT_LIST $JAVA -jar bst-latest.jar PIM $NODES_COUNT $QUERY_COUNT - $DPU_COUNT $LAYER 2> "pim-nodes-all-$i-($j).txt"
-perf stat -a -e $EVENT_LIST $JAVA -jar bst-latest.jar PIM $NODES_COUNT $QUERY_COUNT NO_SEARCH $DPU_COUNT $LAYER 2> "pim-nodes-prepare-$i-($j).txt"
+perf stat -a -e $EVENT_LIST $JAVA -jar bst-latest.jar TYPE=CPU NODES=$NODES_COUNT QUERIES=$QUERY_COUNT DPU_COUNT=$DPU_COUNT CPU_LAYER_COUNT=$LAYER 2> "cpu-nodes-all-$i-($j).txt"
+perf stat -a -e $EVENT_LIST $JAVA -jar bst-latest.jar TYPE=CPU NODES=$NODES_COUNT QUERIES=$QUERY_COUNT NO_SEARCH DPU_COUNT=$DPU_COUNT CPU_LAYER_COUNT=$LAYER 2> "cpu-nodes-prepare-$i-($j).txt"
+perf stat -a -e $EVENT_LIST $JAVA -jar bst-latest.jar TYPE=PIM NODES=$NODES_COUNT QUERIES=$QUERY_COUNT DPU_COUNT=$DPU_COUNT CPU_LAYER_COUNT=$LAYER 2> "pim-nodes-all-$i-($j).txt"
+perf stat -a -e $EVENT_LIST $JAVA -jar bst-latest.jar TYPE=PIM NODES=$NODES_COUNT QUERIES=$QUERY_COUNT NO_SEARCH DPU_COUNT=$DPU_COUNT CPU_LAYER_COUNT=$LAYER 2> "pim-nodes-prepare-$i-($j).txt"
 
 
 ## record mode
-perf record -e $RECORD_EVENT_LIST $JAVA $VM_OPTIONS -jar bst-latest.jar CPU $NODES_COUNT $QUERY_COUNT - $DPU_COUNT $LAYER
+perf record -e $RECORD_EVENT_LIST $JAVA $VM_OPTIONS -jar bst-latest.jar TYPE=CPU NODES=$NODES_COUNT QUERIES=$QUERY_COUNT DPU_COUNT=$DPU_COUNT CPU_LAYER_COUNT=$LAYER
 perf script --itrace | grep 'search' >  "./record_files/[q]cpu-search-samples-${i}q.txt";
 
-perf record -e $RECORD_EVENT_LIST $JAVA $VM_OPTIONS -jar bst-latest.jar PIM $NODES_COUNT $QUERY_COUNT - $DPU_COUNT $LAYER
+perf record -e $RECORD_EVENT_LIST $JAVA $VM_OPTIONS -jar bst-latest.jar TYPE=PIM NODES=$NODES_COUNT QUERIES=$QUERY_COUNT DPU_COUNT=$DPU_COUNT CPU_LAYER_COUNT=$LAYER
 perf script --itrace | grep 'search' >  "./record_files/[q]pim-search-samples-${i}q.txt";
 
