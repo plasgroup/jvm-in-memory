@@ -3,6 +3,7 @@ import pim.ExperimentConfigurator;
 import pim.UPMEM;
 import pim.UPMEMConfigurator;
 import pim.algorithm.BSTBuilder;
+import pim.algorithm.BSTTester;
 import pim.algorithm.DPUTreeNode;
 import pim.algorithm.IntIntValuePairGenerator;
 import pim.algorithm.TreeNode;
@@ -31,7 +32,7 @@ public class Main {
                 noSearch = true;
                 if(items.length > 1) noSearch = Integer.parseInt(items[1]) != 0;
             }else if("BUILD_FROM_IMG".equals(argumentName)){
-                buildFromSerializedData = true;
+                buildFromSerializedData = false;
                 if(items.length > 1) buildFromSerializedData = Integer.parseInt(items[1]) != 0;
             }else if("SERIALIZE_TREE".equals(argumentName)){
                 serializeToFile = true;
@@ -69,7 +70,10 @@ public class Main {
             }else if("BATCH_DISPATCH".equals(argumentName)){
                 performanceEvaluationEnableBatchDispatch = true;
                 if(items.length > 1) performanceEvaluationEnableBatchDispatch = Integer.parseInt(items[1]) != 0;
-            }
+            }else if("JVM_SIMULATOR".equals(argumentName)){
+	        useSimulator = true;
+		if(items.length > 1) useSimulator = Integer.parseInt(items[1]) != 0;
+	    }
 
         }
     }
@@ -153,19 +157,7 @@ public class Main {
 
     public static void main(String[] args) throws RemoteException {
         parseParameters(args);
-        UPMEM.initialize(upmemConfigurator);
         // if(true) return;
-
-        ArrayList<BSTBuilder.Pair<Integer, Integer>> pairs =
-                new IntIntValuePairGenerator(0, Integer.MAX_VALUE).generatePairs(1000000);
-        TreeNode t = buildPIMTreeByInsert(pairs);
-
-        for(int i = 0; i < pairs.size(); i++){
-            int retrievedVal = t.search(pairs.get(i).getKey());
-            int expectedVal = pairs.get(i).getVal();
-            if(retrievedVal != expectedVal) throw new RuntimeException();
-        }
-
 
        upmemConfigurator.setDpuInUseCount(dpuInUse);
 
@@ -177,7 +169,7 @@ public class Main {
        if(serializeToFile) System.out.println("output tree to file. Imgs path = " + imagesPath);
        if(writeKeyValue){
            System.out.println("Generate key value paris, and write to file. Count = " + writeKeyValueCount);
-           writeKV(writeKeyValueCount, "key_values-" + writeKeyValueCount + ".txt");
+           BSTTester.writeKV(writeKeyValueCount, "key_values-" + writeKeyValueCount + ".txt");
        }
 
        UPMEM.initialize(upmemConfigurator);
