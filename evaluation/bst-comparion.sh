@@ -15,10 +15,10 @@ PARAM_LIST="BUILD_FROM_IMG CPU_LAYER_COUNT=$LAYER_COUNT DPU_COUNT=$DPU_COUNT QUE
 #perf stat -a -e $EVENT_LIST java $VM_OPTIONS -jar bst-latest.jar TYPE=PIM $PARAM_LIST 2> "pim-nodes-all-$NODES_COUNT-($QUERY_COUNT).txt"
 #perf stat -a -e $EVENT_LIST java $VM_OPTIONS -jar bst-latest.jar TYPE=PIM NO_SEARCH $PARAM_LIST 2> "pim-nodes-prepare-$NODES_COUNT-($QUERY_COUNT).txt"
 
-## record mode
-perf record -B -e $RECORD_EVENT_LIST $JAVA $VM_OPTIONS -jar $BST_JAR TYPE=CPU $PARAM_LIST
-perf report -n -f --stdio > "./record_files/[q]cpu-profile-${NODES_COUNT}n-${QUERY_COUNT}q.txt";
+## record 
+$JAVA $VM_OPTIONS -jar $BST_JAR TYPE=CPU $PARAM_LIST
+#perf report -n -f --stdio > "./record_files/[q]cpu-profile-${NODES_COUNT}n-${QUERY_COUNT}q.txt";
 
-perf record -B -e $RECORD_EVENT_LIST $JAVA $VM_OPTIONS -jar $BST_JAR TYPE=PIM $PARAM_LIST
-perf report -n -f --stdio > "./record_files/[q]pim-profile-${NODES_COUNT}n-${QUERY_COUNT}q.txt";
+$JAVA $VM_OPTIONS -jar $BST_JAR TYPE=PIM $PARAM_LIST
+#perf report -n -f --stdio > "./record_files/[q]pim-profile-${NODES_COUNT}n-${QUERY_COUNT}q.txt";
 

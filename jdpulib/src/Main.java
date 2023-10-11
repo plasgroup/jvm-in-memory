@@ -78,6 +78,7 @@ public class Main {
         TreeNode PIMRoot;
         TreeNode CPURoot;
         long totalTimeInMs = 0;
+        int r = 0;
         List<Integer> keys = readIntergerArrayList("keys_random.txt");
 
         if (cpuPerformanceEvaluation) {
@@ -93,6 +94,7 @@ public class Main {
                 for(int j = 0; j < queryCount; j++){
                     int key = keys.get(j);
                     int v = CPURoot.search(key);
+                    r += v;
                 }
                 long endTime = System.nanoTime();
                 long timeElapsed = endTime - startTime;
@@ -125,11 +127,16 @@ public class Main {
 
             if(performanceEvaluationEnableBatchDispatch)
                 UPMEM.beginRecordBatchDispatching(bd1);
+            
             for (int i = 0; i < pimPerformanceEvaluationRepeatTime; i++) {
                 long startTime = System.nanoTime();
-                for(int j = 0; j < queryCount; j++){
-                    int key = keys.get(j);
-                    int v = PIMRoot.search(key);
+                for(int j = 0; j < queryCount / 10000; j++){    
+                    for(int k = 0; k < 10000; k++){
+                        int key = keys.get(k);
+                        int v = PIMRoot.search(key);
+                        r += v;
+                    }
+                    System.out.println("avg per time = " + (System.nanoTime() - startTime) / 1000000);
                 }
                 long endTime = System.nanoTime();
                 long timeElapsed = endTime - startTime;
@@ -158,52 +165,42 @@ public class Main {
             int expectedVal = pairs.get(i).getVal();
             if(retrievedVal != expectedVal) throw new RuntimeException();
         }
-//
-//        TreeNode tn = (TreeNode) UPMEM.getInstance().createObject(0, DPUTreeNode.class, 123, 424);
-//        TreeNode tn2 = (TreeNode) UPMEM.getInstance().createObject(0, DPUTreeNode.class, 214, 134);
-//        tn.setRight(tn2);
-//        System.out.println(tn.getKey());
-//        System.out.println(tn.getVal());
-//        System.out.println(tn2.getKey());
-//        System.out.println(tn2.getVal());
-//        System.out.println(tn.search(1));
-//        System.out.println(tn.search(123));
-//        System.out.println(tn.search(214));
 
-//        upmemConfigurator.setDpuInUseCount(dpuInUse);
-//
-//        System.out.println("dpu in use = " + dpuInUse);
-//        System.out.println(experimentType + " mode, nodes count = " + totalNodeCount + " query count = " + queryCount);
-//        System.out.println("cpu tree layer count = " + cpuLayerCount);
-//        if(noSearch) System.out.println("No search mode");
-//        if(buildFromSerializedData) System.out.println("build tree from images, path = " + imagesPath);
-//        if(serializeToFile) System.out.println("output tree to file. Imgs path = " + imagesPath);
-//        if(writeKeyValue){
-//            System.out.println("Generate key value paris, and write to file. Count = " + writeKeyValueCount);
-//            writeKV(writeKeyValueCount, "key_values-" + writeKeyValueCount + ".txt");
-//        }
-//
-//        UPMEM.initialize(upmemConfigurator);
-//
-//        upmemConfigurator
-//                .setDpuInUseCount(dpuInUse)
-//                .setThreadPerDPU(UPMEM.perDPUThreadsInUse);
-//
-//        if(performanceEvaluationMode) {
-//            performanceEvaluation();
-//            return;
-//        }
-//
-//        if(args.length == 0){
-//            BSTTester.evaluatePIMBST(totalNodeCount, ExperimentConfigurator.queryCount,  ExperimentConfigurator.cpuLayerCount);
-//            return;
-//        }
-//
-//        if("CPU".equals(experimentType)){
-//            BSTTester.evaluateCPU(totalNodeCount, queryCount);
-//        }else if("PIM".equals(experimentType)){
-//            BSTTester.evaluatePIMBST(totalNodeCount, queryCount, cpuLayerCount);
-//        }
+
+       upmemConfigurator.setDpuInUseCount(dpuInUse);
+
+       System.out.println("dpu in use = " + dpuInUse);
+       System.out.println(experimentType + " mode, nodes count = " + totalNodeCount + " query count = " + queryCount);
+       System.out.println("cpu tree layer count = " + cpuLayerCount);
+       if(noSearch) System.out.println("No search mode");
+       if(buildFromSerializedData) System.out.println("build tree from images, path = " + imagesPath);
+       if(serializeToFile) System.out.println("output tree to file. Imgs path = " + imagesPath);
+       if(writeKeyValue){
+           System.out.println("Generate key value paris, and write to file. Count = " + writeKeyValueCount);
+           writeKV(writeKeyValueCount, "key_values-" + writeKeyValueCount + ".txt");
+       }
+
+       UPMEM.initialize(upmemConfigurator);
+
+       upmemConfigurator
+               .setDpuInUseCount(dpuInUse)
+               .setThreadPerDPU(UPMEM.perDPUThreadsInUse);
+
+       if(performanceEvaluationMode) {
+           performanceEvaluation();
+           return;
+       }
+
+       if(args.length == 0){
+           BSTTester.evaluatePIMBST(totalNodeCount, ExperimentConfigurator.queryCount,  ExperimentConfigurator.cpuLayerCount);
+           return;
+       }
+
+       if("CPU".equals(experimentType)){
+           BSTTester.evaluateCPU(totalNodeCount, queryCount);
+       }else if("PIM".equals(experimentType)){
+           BSTTester.evaluatePIMBST(totalNodeCount, queryCount, cpuLayerCount);
+       }
 
     }
 }
