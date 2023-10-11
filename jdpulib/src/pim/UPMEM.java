@@ -1,6 +1,5 @@
 package pim;
 
-import com.upmem.dpu.DpuException;
 import pim.dpu.DPUManager;
 import pim.dpu.DPUObjectHandler;
 import pim.dpu.PIMManager;
@@ -10,9 +9,6 @@ import sun.misc.Unsafe;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.ArrayDeque;
-import java.util.HashSet;
-import java.util.Queue;
 
 
 /** UPMEM class
@@ -35,17 +31,9 @@ public class UPMEM {
 
     /* Singleton */
     private static volatile UPMEM instance = null;
-    private static Object locker = new Object();
+    private static final Object locker = new Object();
 
-    public static HashSet<String> whiteList = new HashSet<>();
-    static
-    {
-        whiteList.add("pim/algorithm/DPUTreeNode");
-        whiteList.add("pim/algorithm/TreeNode");
-        whiteList.add("java/lang/Object");
-    };
 
-    private Queue<DPUTask>[] pendingTasks = new ArrayDeque[TOTAL_DPU_COUNT];
 
     public static void endRecordBatchDispatching() {
         batchDispatchingRecording = false;
@@ -59,7 +47,7 @@ public class UPMEM {
     }
 
 
-    static Logger upmemLogger = Logger.getLogger("pi:upmem");
+    static Logger upmemLogger = Logger.getLogger("pim:upmem");
     {
         upmemLogger.setEnable(false);
     }

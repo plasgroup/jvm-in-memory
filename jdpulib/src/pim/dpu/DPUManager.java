@@ -59,7 +59,7 @@ public abstract class DPUManager {
         return desc + ")V";
     }
 
-    public abstract  <T> DPUObjectHandler createObject(Class c, Object[] params) throws IOException;
+    public abstract  <T> DPUObjectHandler createObject(Class c, Object... params) throws IOException;
 
     protected DPUManager(){}
 

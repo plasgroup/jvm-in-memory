@@ -36,9 +36,6 @@ public class PIMManagerUPMEM extends PIMManager {
                         }
                         dpuManagers.add(dm);
                     }
-
-
-
             }
         }
         return instance;

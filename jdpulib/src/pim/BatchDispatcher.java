@@ -48,6 +48,7 @@ public class BatchDispatcher {
             } catch (DpuException e) {
                 throw new RuntimeException(e);
             }
+            // ignore result retrieving
 
 //            try {
 //                synchronized (resultBytes){

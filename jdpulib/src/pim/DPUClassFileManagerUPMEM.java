@@ -189,7 +189,7 @@ public class DPUClassFileManagerUPMEM extends DPUClassFileManager {
                             getUTF8(jc, jc.methodTable[mIndex].nameIndex) + ":" + getUTF8(jc,jc.methodTable[mIndex].descriptorIndex),
                             jc.methodOffset[mIndex] + 48 + 8 +
                                     + 8 * jc.cpItemCount +
-                                    Arrays.stream(jc.fields).map(e -> e.size).reduce((s1, s2) -> s1 + s2).orElseGet(()->0)
+                                    Arrays.stream(jc.fields).map(e -> e.size).reduce(Integer::sum).orElse(0)
                                     + classAddr
                             , jc.methodTable[mIndex]);
         }
@@ -207,8 +207,7 @@ public class DPUClassFileManagerUPMEM extends DPUClassFileManager {
     }
     private DPUClassFileCacheItem getLoadedClassRecord(String className){
         className = className.replace(".", "/");
-        DPUClassFileCacheItem item = upmem.getDPUManager(dpuID).classCacheManager.getClassStrutCacheLine(className);
-        return item;
+        return upmem.getDPUManager(dpuID).classCacheManager.getClassStrutCacheLine(className);
     }
     private DPUClassFileCacheItem getLoadedClassRecord(Class c){
         return getLoadedClassRecord(c.getName());
@@ -222,7 +221,6 @@ public class DPUClassFileManagerUPMEM extends DPUClassFileManager {
 
     @Override
     public DPUJClass loadClassForDPU(Class c) {
-
         String className = formalClassName(c.getName());
         classfileLogger.logln(" ==========--> Try load class " + className + " to dpu#" + dpuID + " <--==========");
 
@@ -535,7 +533,6 @@ public class DPUClassFileManagerUPMEM extends DPUClassFileManager {
         UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getClassStructure(formalClassName(c.getName()))
                 .virtualTable = jc.virtualTable;
         DPUCacheManager classCacheManager = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager;
-        classfileLogger.logln("" + classCacheManager);
         try {
             pushJClassToDPU(jc, classAddr, dpuID);
         } catch (DpuException e) {

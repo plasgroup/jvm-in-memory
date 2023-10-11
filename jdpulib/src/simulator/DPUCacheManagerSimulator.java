@@ -25,7 +25,6 @@ public class DPUCacheManagerSimulator extends DPUCacheManager {
 
     @Override
     public DPUFieldCacheItem getFieldCacheItem(String className, String fieldName) {
-        pimCacheLogger.log("get DPUID = " + dpuID + " field =  " + fieldName + ", of class " + className + " from cache");
         if(fieldCache.cache.get(className) == null) return null;
         return fieldCache.cache.get(className).get(fieldName);
     }
@@ -41,7 +40,8 @@ public class DPUCacheManagerSimulator extends DPUCacheManager {
         fieldCacheItem.indexInInstance = indexInInstance;
         this.fieldCache.cache.get(className).put(fieldName, fieldCacheItem);
 
-        pimCacheLogger.logf("set field: " + fieldName + " of class " + className + " to " + dpujvmRemote + " v(index) = %x\n", indexInInstance);    }
+        pimCacheLogger.logf("set field: " + fieldName + " of class " + className + " to " + dpujvmRemote + " v(index) = %x\n", indexInInstance);
+    }
 
     @Override
     public DPUMethodCacheItem getMethodCacheItem(String classDesc, String methodDesc) {
@@ -91,5 +91,6 @@ public class DPUCacheManagerSimulator extends DPUCacheManager {
 
         dpuClassCache.cache.get(desc).dpuClassStructure = dpuClassStrut;
         dpuClassCache.cache.get(desc).marmAddr = marmAddr;
-        pimCacheLogger.logf("set " + dpuClassStrut + " to " + dpujvmRemote + ", key=" + desc + ", val = %x"  + " class name = " + ClassLoaderUtils.getUTF8(dpuClassStrut, dpuClassStrut.thisClassNameIndex) + "\n", marmAddr);    }
+        pimCacheLogger.logf("set " + dpuClassStrut + " to " + dpujvmRemote + ", key=" + desc + ", val = %x"  + " class name = " + ClassLoaderUtils.getUTF8(dpuClassStrut, dpuClassStrut.thisClassNameIndex) + "\n", marmAddr);
+    }
 }

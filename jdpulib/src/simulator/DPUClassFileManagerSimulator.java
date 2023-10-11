@@ -22,7 +22,7 @@ import static pim.utils.ClassLoaderUtils.*;
 import static pim.utils.ClassLoaderUtils.getMethodDescriptor;
 
 public class DPUClassFileManagerSimulator extends DPUClassFileManager {
-    private DPUJVMRemote dpujvmRemote;
+    private final DPUJVMRemote dpujvmRemote;
     public DPUClassFileManagerSimulator(int dpuID, simulator.DPUJVMRemote dpujvmRemote) {
         this.dpuID = dpuID;
         this.dpujvmRemote = dpujvmRemote;
@@ -32,12 +32,10 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
     public void recordClass(String className, DPUJClass jc, int classMramAddr) {
         System.out.println("record " + className + ":" + classMramAddr);
         upmem.getDPUManager(dpuID).classCacheManager.setClassStructure(className, jc, classMramAddr);
-
     }
     private DPUClassFileCacheItem getLoadedClassRecord(String className){
         className = className.replace(".", "/");
-        DPUClassFileCacheItem item = upmem.getDPUManager(dpuID).classCacheManager.getClassStrutCacheLine(className);
-        return item;
+        return upmem.getDPUManager(dpuID).classCacheManager.getClassStrutCacheLine(className);
     }
     private boolean isClassLoaded(String className){
         className = className.replace(".", "/");
@@ -46,15 +44,8 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
     }
     private void recordMethodDistribution(Class c, DPUJClass jc, int classAddr) {
         for(int mIndex = 0; mIndex < jc.methodCount; mIndex++){
-
-
-
-
             String desc = getUTF8(jc,jc.methodTable[mIndex].descriptorIndex);
             List<Class> classes = descriptorToClasses(desc.substring(1, desc.indexOf(')')));
-            System.out.println("param count = " + classes.size() + ", desc = " + desc + " full desc = " + getUTF8(jc,jc.methodTable[mIndex].nameIndex) + ":" + getUTF8(jc,jc.methodTable[mIndex].descriptorIndex));
-            //System.out.println(desc.substring(1, desc.indexOf(')')));
-
             try {
                 int addr;
                 if(classes.size() == 0){
@@ -67,14 +58,7 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
                     addr = dpujvmRemote.pushToMetaSpace(c, (getUTF8(jc,jc.methodTable[mIndex].nameIndex)), classesArray);
 
                 }
-//                upmem.getDPUManager(dpuID).classCacheManager
-//                        .setMethodCacheItem(c.getName().replace(".", "/"),
-//                                getUTF8(jc, jc.methodTable[mIndex].nameIndex) + ":" + getUTF8(jc,jc.methodTable[mIndex].descriptorIndex),
-//                                jc.methodOffset[mIndex] + 48 + 8 +
-//                                        + 8 * jc.cpItemCount +
-//                                        Arrays.stream(jc.fields).map(e -> e.size).reduce((s1, s2) -> s1  + s2).orElseGet(()->0)
-//                                        + classAddr
-//                                , jc.methodTable[mIndex]);
+
                 upmem.getDPUManager(dpuID).classCacheManager
                         .setMethodCacheItem(c.getName().replace(".", "/"),
                                 getUTF8(jc, jc.methodTable[mIndex].nameIndex) + ":" + getUTF8(jc,jc.methodTable[mIndex].descriptorIndex),
@@ -89,9 +73,6 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
 
     List<Class> descriptorToClasses(String desc){
         System.out.println("parse " + desc);
-        if("Lpim/algorithm/TreeNode;".equals(desc)){
-            System.out.println("");
-        }
         String matched = "";
         int state = 0;
         List<Class> classes = new ArrayList<>();
@@ -301,8 +282,8 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
 
 
         jc.totalSize = 48 + jc.cpItemCount * 8 + 8 +
-                Arrays.stream(jc.fields).map(e -> e.size).reduce((s1, s2) -> s1 + s2).orElseGet(()->0) +
-                Arrays.stream(jc.methodTable).map(e -> e.size).reduce((s1, s2) -> s1 + s2).orElseGet(()->0)
+                Arrays.stream(jc.fields).map(e -> e.size).reduce((s1, s2) -> s1 + s2).orElse(0) +
+                Arrays.stream(jc.methodTable).map(e -> e.size).reduce((s1, s2) -> s1 + s2).orElse(0)
                 + ((jc.stringINTConstantPoolLength + 0b111) & (~0b111))
                 + ((8 * jc.virtualTable.items.size()) + 0b111 & (~0b111));
         ;
@@ -512,10 +493,6 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
                             vItem.className, vItem.descriptor
                     );
 
-                    if(methodCacheItem != null){
-
-                    }
-
                     cacheLine =
                             upmem.getDPUManager(dpuID).classCacheManager.dpuClassCache.cache.get(vItem.className);
                     if(cacheLine != null){
@@ -645,7 +622,6 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
         UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getClassStructure(formalClassName(c.getName()))
                 .virtualTable = jc.virtualTable;
         DPUCacheManager classCacheManager = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager;
-        classfileLogger.logln("" + classCacheManager);
         try {
             pushJClassToDPU(jc, classAddr, dpuID);
 

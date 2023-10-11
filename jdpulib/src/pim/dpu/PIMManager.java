@@ -9,7 +9,7 @@ import pim.logger.Logger;
 import pim.logger.PIMLoggers;
 
 public abstract class PIMManager {
-    protected ArrayList<DPUManager> dpuManagers = new ArrayList<>();
+    protected final ArrayList<DPUManager> dpuManagers = new ArrayList<>();
     protected PIMManager instance;
     protected DpuSystem system;
     public DPUManager getDPUManager(int dpuID){

@@ -1,6 +1,5 @@
 package pim.dpu;
 
-import com.upmem.dpu.DpuException;
 import pim.IDPUProxyObject;
 import pim.UPMEM;
 import pim.algorithm.DPUTreeNodeProxyAutoGen;
@@ -15,6 +14,11 @@ public class ProxyHelper {
         int returnVal = upmem.getDPUManager(dpuID).garbageCollector.getReturnVal();
         // pimProxy.logf( "pim:proxy","return int = %d\n", returnVal);
         return returnVal;
+    }
+    public static boolean getBooleanReturnValue(int dpuID){
+        int returnVal = upmem.getDPUManager(dpuID).garbageCollector.getReturnVal();
+        // pimProxy.logf( "pim:proxy","return int = %d\n", returnVal);
+        return returnVal == 0 ? false : true;
     }
 
     public static IDPUProxyObject getAReturnValue(int dpuID){

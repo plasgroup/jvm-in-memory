@@ -27,44 +27,11 @@ public class DPUGarbageCollectorSimulator extends DPUGarbageCollector {
 
     @Override
     public int pushParameters(int[] params, int tasklet)       {
-        int size = (params.length * 4 + 0b111) & ~(0b111);
-        byte[] data = new byte[size];
-
         try {
             return dpujvmRemote.pushArguments(params, tasklet);
-
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
-//        int addr = parameterBufferBeginAddr + (parameterBufferSize / 24) * tasklet;
-//        for(int i = 0; i < params.length; i++) {
-//            try {
-//                System.out.println("write param " + i + " to " + ((parameterBufferSize / 24) * tasklet + i));
-//                dpujvmRemote.setParameter((parameterBufferSize / 24) * tasklet + i, params[i]);
-//            } catch (RemoteException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
-
-//        }
-//        gcLogger.log(" - allocate " + size + " byte in parameter buffer");
-//        gcLogger.log(" - push ");
-//        for(int i = 0; i < params.length; i++){
-//            gcLogger.log(" -- " + params[i]);
-//            BytesUtils.writeU4LittleEndian(data, params[i], i * 4);
-//        }
-//
-//        transfer(DPUJVMMemSpaceKind.DPU_PARAMETER_BUFFER, data, addr);
-//        byte[] ptBytes = new byte[4];
-//        BytesUtils.writeU4LittleEndian(ptBytes, parameterBufferBeginAddr + tasklet * perDPUBufferSize + size, 0);
-//        try {
-//            dpu.copy("params_buffer_pt", ptBytes , 4 * tasklet);
-//        } catch (DpuException e) {
-//            throw new RuntimeException(e);
-//        }
-//        return addr;
-//
-//        return addr;
     }
 
     @Override
@@ -92,8 +59,7 @@ public class DPUGarbageCollectorSimulator extends DPUGarbageCollector {
                     break;
 
             }
-        }catch (RemoteException e){
-
+        }catch (RemoteException ignored){
         }
 
     }
@@ -106,11 +72,7 @@ public class DPUGarbageCollectorSimulator extends DPUGarbageCollector {
     @Override
     public int allocate(DPUJVMMemSpaceKind spaceKind, int size) {
         int alignmentMask;
-        if(spaceKind == DPUJVMMemSpaceKind.DPU_PARAMETER_BUFFER){
-            alignmentMask = 0b111;
-        }else{
-            alignmentMask = 0b111;
-        }
+        alignmentMask = 0b111;
         size = (size + alignmentMask) & ~alignmentMask;
 
         // list contains values for selection, according to the spaceKind

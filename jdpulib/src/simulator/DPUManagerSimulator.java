@@ -23,7 +23,6 @@ public class DPUManagerSimulator extends DPUManager {
         System.out.println("Init DPU " +  dpuID + "'s JVM");
         this.dpuID = dpuID;
         try {
-
             this.dpujvmRemote = (DPUJVMRemote) LocateRegistry.getRegistry("localhost", 9239 + dpuID).lookup("DPUJVM" + dpuID);
         } catch (RemoteException | NotBoundException e) {
             throw new RuntimeException(e);
@@ -34,36 +33,39 @@ public class DPUManagerSimulator extends DPUManager {
     }
 
     @Override
-    public void dpuExecute(PrintStream printStream) throws DpuException {
-        throw new RuntimeException();
-
+    public void dpuExecute(PrintStream printStream) {
+        try {
+            dpujvmRemote.start();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
-    public void callNonstaticMethod(int classPt, int methodPt, int instanceAddr, Object[] params) {
+    public void callNonstaticMethod(int classPt, int methodPt, int instanceAddress, Object[] params) {
         if(UPMEM.batchDispatchingRecording) {
-            int t = UPMEM.batchDispatcher.taskletPosition[dpuID];
-            int t2 = (t + 1) % 24;
+            int lastTaskletId = UPMEM.batchDispatcher.taskletPosition[dpuID];
+            int taskletId = (lastTaskletId + 1) % 24;
             int size = (((1 + 2 + 1 + params.length) * 4) + 0b111) & (~0b111);
             BatchDispatcher bd = UPMEM.batchDispatcher;
-            while(t2 != t){
-                if(bd.paramsBufferPointer[dpuID][t2] + size < PIMRemoteJVMConfiguration.heapSize){
+            while(taskletId != lastTaskletId){
+                if(bd.paramsBufferPointer[dpuID][taskletId] + size < PIMRemoteJVMConfiguration.heapSize){
                     break;
                 }
-                t2 = (t2 + 1) % 24;
+                taskletId = (taskletId + 1) % 24;
                 try {
                     bd.dispatchAll();
                 } catch (DpuException e) {
                     throw new RuntimeException(e);
                 }
             }
-            bd.taskletPosition[dpuID] = t2; // next time from t2 to find a proper tasklet
+            bd.taskletPosition[dpuID] = taskletId; // next time from t2 to find a proper tasklet
 
-            int[] paramPrepared = new int[4 + params.length];
+            int[] paramPrepared = new int[params.length + 4];
             paramPrepared[0] = bd.recordedCount[dpuID]++;
             paramPrepared[1] = classPt;
             paramPrepared[2] = methodPt;
-            paramPrepared[3] = instanceAddr;
+            paramPrepared[3] = instanceAddress;
             int offset = 4;
             for(Object obj : params){
                 int v;
@@ -80,10 +82,10 @@ public class DPUManagerSimulator extends DPUManager {
                 params[offset] = v;
                 offset++;
             }
-            bd.paramsBufferPointer[dpuID][t2] += size;
+            bd.paramsBufferPointer[dpuID][taskletId] += size;
             bd.dpusInUse.add(dpuID);
             try {
-                dpujvmRemote.pushArguments(paramPrepared, t2);
+                dpujvmRemote.pushArguments(paramPrepared, taskletId);
             } catch (RemoteException e) {
                 throw new RuntimeException(e);
             }
@@ -105,13 +107,12 @@ public class DPUManagerSimulator extends DPUManager {
                 tasklet = (tasklet + 1) % PIMRemoteJVMConfiguration.threadCount;
             }
         }
-        // System.out.println("select tasklet = " + tasklet);
 
-        int[] paramsConverted = new int[params.length + 1 + 2 + 1];
-        paramsConverted[0] = 0; // task id
-        paramsConverted[1] = classPt;
-        paramsConverted[2] = methodPt;
-        paramsConverted[3] = instanceAddr;
+        int[] paramsConverted = new int[params.length + 4];
+        paramsConverted[0] = 0;         // task id
+        paramsConverted[1] = classPt;   // class location
+        paramsConverted[2] = methodPt;  // method location
+        paramsConverted[3] = instanceAddress; // instance address
 
         int i = 4;
         for(Object obj : params){
@@ -138,7 +139,7 @@ public class DPUManagerSimulator extends DPUManager {
     }
 
     @Override
-    public <T> DPUObjectHandler createObject(Class c, Object[] params) {
+    public DPUObjectHandler createObject(Class c, Object[] params) {
         int fieldCount = calcFieldCount(c);
         int instanceSize = 8 + fieldCount * 4;
         byte[] objectDataStream = new byte[(instanceSize + 7) & ~7];
@@ -163,10 +164,11 @@ public class DPUManagerSimulator extends DPUManager {
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
+
         garbageCollector.transfer(DPU_HEAPSPACE, objectDataStream, objAddr);
-        DPUObjectHandler handler = garbageCollector.dpuAddress2ObjHandler(objAddr, dpuID);
+        DPUObjectHandler handler = DPUGarbageCollector.dpuAddress2ObjHandler(objAddr, dpuID);
         dpuManagerLogger.logln("---> Object Create Finish, handler = " + " (addr: " + handler.address + "," + "dpu: " + handler.dpuID + ") <---");
-        System.out.println("addr " + objAddr);
+        System.out.println("get obj addr = " + objAddr);
 
 
         // call the init func

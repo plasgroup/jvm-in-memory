@@ -3,13 +3,10 @@ package simulator;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-public interface DPUJVMRemote extends Remote, SimulatorBackend {
-    void multiThreadExecution() throws RemoteException;
+public interface DPUJVMRemote extends Remote {
     int getID() throws RemoteException;
-
     /* boot */
     void start() throws RemoteException;
-
     /* memory space operation */
     void setParameter(int pos, int value, int tasklet) throws RemoteException;
     int pushToMetaSpace(Class c) throws RemoteException;
@@ -29,11 +26,8 @@ public interface DPUJVMRemote extends Remote, SimulatorBackend {
     void setParamsBufferPointer(int p, int tasklet) throws RemoteException;
 
     int getMetaSpaceIndex() throws RemoteException;
-
     int getHeapIndex() throws RemoteException;
-
     int getParamsBufferIndex(int tasklet) throws RemoteException;
-
     void setMetaSpaceIndex(int p) throws RemoteException;
 
     void setHeapIndex(int p) throws RemoteException;

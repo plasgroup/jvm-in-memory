@@ -273,11 +273,6 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
 
 
     @Override
-    public void multiThreadExecution() throws RemoteException {
-        
-    }
-
-    @Override
     public int getID() {
         return this.id;
     }

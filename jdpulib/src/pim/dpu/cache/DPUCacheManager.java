@@ -1,13 +1,9 @@
 package pim.dpu.cache;
 
-import com.upmem.dpu.Dpu;
-import pim.dpu.ProxyHelper;
 import pim.dpu.java_strut.DPUJClass;
 import pim.dpu.java_strut.DPUJMethod;
 import pim.logger.Logger;
 import pim.logger.PIMLoggers;
-import pim.utils.ClassLoaderUtils;
-import simulator.DPUJVMRemote;
 
 import java.util.ArrayList;
 import java.util.Dictionary;
