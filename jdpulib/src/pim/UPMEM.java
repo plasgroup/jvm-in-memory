@@ -1,15 +1,14 @@
 package pim;
 
-import com.upmem.dpu.DpuException;
 import pim.dpu.DPUManager;
 import pim.dpu.DPUObjectHandler;
 import pim.dpu.PIMManager;
 import pim.logger.Logger;
+import simulator.PIMManagerSimulator;
 import sun.misc.Unsafe;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.HashSet;
 
 
 /** UPMEM class
@@ -29,31 +28,26 @@ public class UPMEM {
     /* Facade Class for PIM management*/
     private static PIMManager pimManager;
 
+
     /* Singleton */
     private static volatile UPMEM instance = null;
-    private static Object locker = new Object();
+    private static final Object locker = new Object();
 
-    public static HashSet<String> whiteList = new HashSet<>();
-    static
-    {
-        whiteList.add("pim/algorithm/DPUTreeNode");
-        whiteList.add("pim/algorithm/TreeNode");
-        whiteList.add("java/lang/Object");
-    };
 
-    public void beginLazyDispatching(){
 
+    public static void endRecordBatchDispatching() {
+        batchDispatchingRecording = false;
     }
 
-    public void dispatchAllPendingCalls(){
-
+    public static boolean batchDispatchingRecording = false;
+    public static BatchDispatcher batchDispatcher;
+    public static void beginRecordBatchDispatching(BatchDispatcher batchDispatcher) {
+        UPMEM.batchDispatcher = batchDispatcher;
+        batchDispatchingRecording = true;
     }
 
-    public void endLazyDispatching(){
 
-    }
-
-    static Logger upmemLogger = Logger.getLogger("pi:upmem");
+    static Logger upmemLogger = Logger.getLogger("pim:upmem");
     {
         upmemLogger.setEnable(false);
     }
@@ -76,11 +70,14 @@ public class UPMEM {
 
 
     /* create a proxy object of a given class, by using a pim object handler (contains a dpuID and an object instance address in DPU MRAM) */
-    public static IDPUProxyObject generateProxyObjectFromHandler(Class proxyClass, DPUObjectHandler objectHandler) throws NoSuchFieldException, InstantiationException {
+    public static IDPUProxyObject generateProxyObject(Class proxyClass, int dpuID, int address) throws NoSuchFieldException, InstantiationException {
         IDPUProxyObject proxyObject;
         proxyObject = (IDPUProxyObject) unsafe.allocateInstance(proxyClass);
-        long handlerOffset = unsafe.objectFieldOffset(proxyClass.getField("objectHandler"));
-        unsafe.getAndSetObject(proxyObject, handlerOffset, objectHandler);
+        long dpuIDOffset = unsafe.objectFieldOffset(proxyClass.getField("dpuID"));
+        unsafe.getAndSetObject(proxyObject, dpuIDOffset, dpuID);
+        long addressOffset = unsafe.objectFieldOffset(proxyClass.getField("address"));
+        unsafe.getAndSetObject(proxyObject, addressOffset, address);
+
         return proxyObject;
     }
 
@@ -94,8 +91,6 @@ public class UPMEM {
         DPUObjectHandler handler;
         try {
             handler = getDPUManager(dpuID).createObject(objectClass, arguments);
-        } catch (DpuException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -104,7 +99,7 @@ public class UPMEM {
 
         try {
             Class pClass = Class.forName( objectClass.getName() + "ProxyAutoGen");
-            proxyObject = generateProxyObjectFromHandler(pClass, handler);
+            proxyObject = generateProxyObject(pClass, handler.dpuID, handler.address);
         } catch (ClassNotFoundException | InstantiationException | NoSuchFieldException e) {
             throw new RuntimeException(e);
         }
@@ -115,10 +110,11 @@ public class UPMEM {
         if(instance == null){
             synchronized (locker){
                 if(instance == null) instance = new UPMEM();
-                try {
-                    pimManager = PIMManager.init(dpuInUse);
-                } catch (DpuException e) {
-                    throw new RuntimeException(e);
+                if(!ExperimentConfigurator.useSimulator){
+                    pimManager = new PIMManagerUPMEM().init(dpuInUse);
+                }
+                else{
+                    pimManager = new PIMManagerSimulator().init(dpuInUse);
                 }
             }
         }
