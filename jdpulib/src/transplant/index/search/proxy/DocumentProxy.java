@@ -7,8 +7,8 @@ public class DocumentProxy extends Document implements IDPUProxyObject {
     int dpuID;
     int address;
 
-    private DocumentProxy(int id, String context) {
-        super(id, context);
+    public DocumentProxy(int id) {
+        super(id);
     }
 
     @Override

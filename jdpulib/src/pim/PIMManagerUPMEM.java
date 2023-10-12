@@ -12,7 +12,7 @@ public class PIMManagerUPMEM extends PIMManager {
     public PIMManager init(int dpuInUse) {
         if (instance == null){
             synchronized (dpuManagers){
-                instance = new PIMManagerUPMEM();
+                instance = this;
                 pimManagerLogger.logln("DPUSystem load " + dpuInUse + " DPUs");
                     // init DpuSystem. Allocate dpuInUses' DPUs
                     try {
@@ -28,7 +28,7 @@ public class PIMManagerUPMEM extends PIMManager {
                         } catch (DpuException e) {
                             throw new RuntimeException(e);
                         }
-                        DPUManager dm = null;
+                        DPUManager dm;
                         try {
                             dm = new DPUManagerUPMEM(dpu, i);
                         } catch (DpuException e) {
