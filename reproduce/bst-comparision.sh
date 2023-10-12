@@ -26,20 +26,24 @@ echo "profile record PIM"
 perf record -e $RECORD_EVENT_LIST $JAVA $VM_OPTIONS -cp ${PROG}:dpu.jar Main TYPE=PIM NODES=$NODES_COUNT QUERIES=$QUERY_COUNT DPU_COUNT=$DPU_COUNT CPU_LAYER_COUNT=$LAYER
 perf script --itrace | grep 'search' >  "./record_files/[q]pim-search-samples-${QUERY_COUNT}q.txt";
 
+
 ## stat mode
 echo "profile status CPU-Full"
-$JAVA $VM_OPTIONS -cp ${PROG}:dpu.jar Main TYPE=CPU NODES=$NODES_COUNT QUERIES=$QUERY_COUNT DPU_COUNT=$DPU_COUNT CPU_LAYER_COUNT=$LAYER 2> "cpu-nodes-all-${NODES_COUNT}-(${QUERY_COUNT}).txt"
-echo $(cat "cpu-nodes-all-${NODES_COUNT}-(${QUERY_COUNT}).txt")
+$JAVA $VM_OPTIONS -cp ${PROG}:dpu.jar Main TYPE=CPU NODES=$NODES_COUNT QUERIES=$QUERY_COUNT DPU_COUNT=$DPU_COUNT CPU_LAYER_COUNT=$LAYER 2> "./record_files/cpu-nodes-all-${NODES_COUNT}-(${QUERY_COUNT}).txt"
+echo $(cat "./record_files/cpu-nodes-all-${NODES_COUNT}-(${QUERY_COUNT}).txt")
 
 echo "profile status CPU-prepare"
-$JAVA $VM_OPTIONS -cp ${PROG}:dpu.jar Main TYPE=CPU NODES=$NODES_COUNT QUERIES=$QUERY_COUNT NO_SEARCH DPU_COUNT=$DPU_COUNT CPU_LAYER_COUNT=$LAYER 2> "cpu-nodes-prepare-${NODES_COUNT}-(${QUERY_COUNT}).txt"
-echo $(cat "cpu-nodes-prepare-${NODES_COUNT}-(${QUERY_COUNT}).txt")
+$JAVA $VM_OPTIONS -cp ${PROG}:dpu.jar Main TYPE=CPU NODES=$NODES_COUNT QUERIES=$QUERY_COUNT NO_SEARCH DPU_COUNT=$DPU_COUNT CPU_LAYER_COUNT=$LAYER 2> "./record_filescpu-nodes-prepare-${NODES_COUNT}-(${QUERY_COUNT}).txt"
+echo $(cat "./record_files/cpu-nodes-prepare-${NODES_COUNT}-(${QUERY_COUNT}).txt")
 
 echo "profile status PIM-Full"
-$JAVA $VM_OPTIONS -cp ${PROG}:dpu.jar Main TYPE=PIM NODES=$NODES_COUNT QUERIES=$QUERY_COUNT DPU_COUNT=$DPU_COUNT CPU_LAYER_COUNT=$LAYER 2> "pim-nodes-all-${NODES_COUNT}-(${QUERY_COUNT}).txt"
-echo $(cat "pim-nodes-all-${NODES_COUNT}-(${QUERY_COUNT}).txt")
+$JAVA $VM_OPTIONS -cp ${PROG}:dpu.jar Main TYPE=PIM NODES=$NODES_COUNT QUERIES=$QUERY_COUNT DPU_COUNT=$DPU_COUNT CPU_LAYER_COUNT=$LAYER 2> "./record_files/pim-nodes-all-${NODES_COUNT}-(${QUERY_COUNT}).txt"
+echo $(cat "./record_files/pim-nodes-all-${NODES_COUNT}-(${QUERY_COUNT}).txt")
 
 echo "profile status PIM-prepare"
-$JAVA $VM_OPTIONS -cp ${PROG}:dpu.jar Main TYPE=PIM NODES=$NODES_COUNT QUERIES=$QUERY_COUNT NO_SEARCH DPU_COUNT=$DPU_COUNT CPU_LAYER_COUNT=$LAYER 2> "pim-nodes-prepare-${NODES_COUNT}-(${QUERY_COUNT}).txt"
-echo $(cat "pim-nodes-prepare-${NODES_COUNT}-(${QUERY_COUNT}).txt")
+$JAVA $VM_OPTIONS -cp ${PROG}:dpu.jar Main TYPE=PIM NODES=$NODES_COUNT QUERIES=$QUERY_COUNT NO_SEARCH DPU_COUNT=$DPU_COUNT CPU_LAYER_COUNT=$LAYER 2> "./record_files/pim-nodes-prepare-${NODES_COUNT}-(${QUERY_COUNT}).txt"
+echo $(cat "./record_files/pim-nodes-prepare-${NODES_COUNT}-(${QUERY_COUNT}).txt")
 
+git add ./record_files
+git commit -m "add record_files"
+git push
