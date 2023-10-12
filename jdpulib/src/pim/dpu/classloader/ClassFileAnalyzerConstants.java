@@ -1,9 +1,9 @@
 package pim.dpu.classloader;
 
 public class ClassFileAnalyzerConstants {
-    static final byte CT_Class = 7;
-    static final byte CT_Fieldref = 9;
-    static final byte CT_Methodref = 10;
+    public static final byte CT_Class = 7;
+    public static final byte CT_Fieldref = 9;
+    public static final byte CT_Methodref = 10;
     static final byte CT_InterfaceMethodref = 11;
     static final byte CT_String = 8;
     static final byte CT_Integer = 3;

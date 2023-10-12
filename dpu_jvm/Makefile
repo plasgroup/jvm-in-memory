@@ -61,9 +61,8 @@ SHARD_DEPS += ir/opcode.h \
 DPU_SLAVE_CFILES += dpuslave.c \
     $(SHARD_CFILES)
 
-DPU_CFLAGE += -DINMEMORY -DDEBUG_PRINT_ENABLE=0 -DDEBUG_OUTPUT_INSN_PARSED -DJAVA_BYTECODE -DSLIENT
+DPU_CFLAGE += -DINMEMORY -DDEBUG_PRINT_ENABLE=0 -DJAVA_BYTECODE -DNR_TASKLETS=24 -DSLIENT  # -DDEBUG_OUTPUT_INSN_PARSED#  -DDEBUG_OUTPUT_INSN_PARSED
 HOST_CFLAGE += -DHOST -DDEBUG_PRINT_ENABLE=1 -DDEBUG_OUTPUT_INSN_PARSED
-
 
 rundpu:
 	$(CXX) --std=c++11 $(HOST_CFLAGE) rundpu.cpp -o rundpu `dpu-pkg-config --cflags --libs dpu` -g
@@ -79,3 +78,7 @@ dpuslave: $(DPU_DEPS)
 
 test: vm_shared_src/memory.h
 	$(CC) -DINMEMORY test.c vm_shared_src/memory.c -o test
+
+
+dpuslave_assembly: $(DPU_DEPS)
+	$(CC) $(DPU_CFLAGE) -w -S -o dpuslave.S $(DPU_SLAVE_CFILES)

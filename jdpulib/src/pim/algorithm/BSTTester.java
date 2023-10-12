@@ -113,8 +113,6 @@ public class BSTTester {
                 root = buildCpuPartTreeFromFile("PIM_TREE_" + totalNodeCount + ".txt");
             } catch (IOException e) {
                 throw new RuntimeException(e);
-            } catch (DpuException e) {
-                throw new RuntimeException(e);
             }
         }else{
             root = BSTBuilder.buildPIMTree("key_values-" + totalNodeCount + ".txt", cpuLayerCount);
