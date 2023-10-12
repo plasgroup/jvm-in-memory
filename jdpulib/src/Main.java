@@ -137,7 +137,7 @@ public class Main {
 
             if(performanceEvaluationEnableBatchDispatch)
                 UPMEM.beginRecordBatchDispatching(bd1);
-            pos = 0;
+            int pos = 0;
 	    System.out.println("query count = " + queryCount);
             for (int i = 0; i < pimPerformanceEvaluationRepeatTime; i++) {
                 long startTime = System.nanoTime();
