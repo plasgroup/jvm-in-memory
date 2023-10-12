@@ -2,8 +2,8 @@
 EVENT_LIST=LLC-load-misses,offcore_requests.all_data_rd,uncore_imc_0/cas_count_read/,uncore_imc_0/cas_count_write/,uncore_imc_1/cas_count_read/,uncore_imc_1/cas_count_write/
 RECORD_EVENT_LIST="LLC-load-misses,LLC-store-misses"
 VM_OPTIONS="-XX:+UnlockDiagnosticVMOptions -XX:+PreserveFramePointer -XX:+DumpPerfMapAtExit -Xmx131072m"
-NODES_COUNT=100000000
-DPU_COUNT=1024
+NODES_COUNT=10000000
+DPU_COUNT=64
 QUERY_COUNT=500000
 LAYER=18
 JAVA=~/jdk-17/bin/java
@@ -13,12 +13,12 @@ $JAVA -jar generate-key-values.jar $NODES_COUNT
 
 ## record mode
 echo "profile record CPU"
-$JAVA $VM_OPTIONS -cp ${PROG}:dpu.jar Main TYPE=CPU NODES=$NODES_COUNT QUERIES=$QUERY_COUNT DPU_COUNT=$DPU_COUNT CPU_LAYER_COUNT=$LAYER
+perf record -e $RECORD_EVENT_LIST $JAVA $VM_OPTIONS -cp ${PROG}:dpu.jar Main TYPE=CPU NODES=$NODES_COUNT QUERIES=$QUERY_COUNT DPU_COUNT=$DPU_COUNT CPU_LAYER_COUNT=$LAYER
 
 perf script --itrace | grep 'search' >  "./record_files/[q]cpu-search-samples-${QUERY_COUNT}q.txt";
 
 echo "profile record PIM"
-$JAVA $VM_OPTIONS -cp ${PROG}:dpu.jar Main TYPE=PIM NODES=$NODES_COUNT QUERIES=$QUERY_COUNT DPU_COUNT=$DPU_COUNT CPU_LAYER_COUNT=$LAYER
+perf record -e $RECORD_EVENT_LIST $JAVA $VM_OPTIONS -cp ${PROG}:dpu.jar Main TYPE=PIM NODES=$NODES_COUNT QUERIES=$QUERY_COUNT DPU_COUNT=$DPU_COUNT CPU_LAYER_COUNT=$LAYER
 perf script --itrace | grep 'search' >  "./record_files/[q]pim-search-samples-${QUERY_COUNT}q.txt";
 
 
