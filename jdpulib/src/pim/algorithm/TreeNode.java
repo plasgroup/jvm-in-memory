@@ -2,7 +2,9 @@ package pim.algorithm;
 
 import pim.UPMEM;
 
-public abstract class TreeNode{
+import java.io.Serializable;
+
+public abstract class TreeNode implements Serializable {
     public int key;
     public int val;
     public TreeNode left;

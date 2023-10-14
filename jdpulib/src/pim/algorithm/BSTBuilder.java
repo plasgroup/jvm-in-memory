@@ -1,6 +1,5 @@
 package pim.algorithm;
 
-import com.upmem.dpu.DpuException;
 import pim.ExperimentConfigurator;
 import pim.UPMEM;
 import pim.logger.Logger;
@@ -10,6 +9,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import static pim.ExperimentConfigurator.totalNodeCount;
 import static pim.algorithm.TreeWriter.convertCPUTreeToPIMTree;
 
 public class BSTBuilder {
@@ -161,10 +161,15 @@ public class BSTBuilder {
             int key = Integer.parseInt(keyString.toString());
             int value = Integer.parseInt(valueString.toString());
 
-            if(key == 9 && value == 43179707){
-                System.out.println();
+            if(type == '-'){
+                newNode = new CPUTreeNode(key, value);
+            }else{
+                int dpuID = Integer.parseInt(dpuIDString.toString());
+                int address = Integer.parseInt(mramAddressString.toString());
+
+                newNode = new DPUTreeNodeProxyAutoGen(key, value, dpuID, address);
             }
-            newNode = (type == '-' ? new CPUTreeNode(key, value) : new DPUTreeNodeProxyAutoGen(key, value));
+
             nodes++;
             if(type != '-'){
                 proxy ++;
@@ -242,7 +247,6 @@ public class BSTBuilder {
             ArrayList<BSTBuilder.Pair<Integer, Integer>> pairs = new ArrayList<>();
             String s = br.readLine();
             while(s != null){
-
                 int k = Integer.parseInt(s.split(" ")[0]);
                 int v = Integer.parseInt(s.split(" ")[1]);
                 if(root == null) {
@@ -264,16 +268,14 @@ public class BSTBuilder {
 
 
     public static TreeNode buildPIMTree(String filePath, int cpuLayerCount){
-        try {
-            for(int i = 0; i < UPMEM.dpuInUse; i++){
-                UPMEM.getInstance().getDPUManager(i).dpuClassFileManager.loadClassForDPU(DPUTreeNode.class);
-            }
-        } catch (DpuException | IOException e) {
-            throw new RuntimeException(e);
+        for(int i = 0; i < UPMEM.dpuInUse; i++){
+            UPMEM.getInstance().getDPUManager(i).dpuClassFileManager.loadClassForDPU(DPUTreeNode.class);
         }
 
-
         TreeNode root = BSTBuilder.buildCPUTree(filePath);
+        if(ExperimentConfigurator.serializeToFile){
+            serializeTreeToFile(root, "CPU_TREE_" + totalNodeCount + ".txt");
+        }
         convertCPUTreeToPIMTree(root, cpuLayerCount);
 
         return root;
@@ -284,7 +286,7 @@ public class BSTBuilder {
             for(int i = 0; i < ExperimentConfigurator.dpuInUse; i++){
                 UPMEM.getInstance().getDPUManager(i).createObject(DPUTreeNode.class, new Object[]{0, 0});
             }
-        } catch (DpuException | IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
@@ -298,7 +300,6 @@ public class BSTBuilder {
         if (pairs.size() == 0) return null;
         TreeNode root = new CPUTreeNode(pairs.get(0).key, pairs.get(0).val);
         bstBuildingLogger.logf("(TreeBuilder) ===> insert %d 'th node, key = %d, val = %d\n", 1, pairs.get(0).key, pairs.get(0).val);
-
         for (int i = 1; i < pairs.size(); i++) {
             bstBuildingLogger.logf( "(TreeBuilder) ===> insert %d 'th node, key = %d, val = %d\n", i + 1, pairs.get(i).key, pairs.get(i).val);
             root.insert(pairs.get(i).key, pairs.get(i).val);
