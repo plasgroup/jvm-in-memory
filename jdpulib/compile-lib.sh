@@ -8,4 +8,4 @@ fi
 cd outlib
 cp ../src/META-INF/MANIFEST.MF ./
 cp ../dpu.jar ./
-jar cvfm bst-latest.jar MANIFEST.MF .
+jar cvfm upmemlib.jar MANIFEST.MF .
