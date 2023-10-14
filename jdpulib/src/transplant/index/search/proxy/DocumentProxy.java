@@ -11,6 +11,7 @@ public class DocumentProxy extends Document implements IDPUProxyObject {
         super(id);
     }
 
+
     @Override
     public int getAddr() {
         return address;

@@ -28,7 +28,29 @@ public class UPMEM {
     /* Facade Class for PIM management*/
     private static PIMManager pimManager;
 
+    static boolean[] specifiedTasklet = new boolean[UPMEM.dpuInUse];
 
+    static int[] decidedTasklet = new int[UPMEM.dpuInUse];
+
+    public static boolean isSpecifyTasklet(int dpu){
+        return specifiedTasklet[dpu];
+    }
+
+    public static void cancelSpecifyTasklet(int dpu){
+        specifiedTasklet[dpu] = false;
+    }
+    public static int getSpecifiedTasklet(int dpu){
+        return decidedTasklet[dpu];
+    }
+    public static int getSpecifiedTaskletAndCancel(int dpu){
+        int t =  decidedTasklet[dpu];
+        cancelSpecifyTasklet(dpu);
+        return t;
+    }
+    public static void inTasklet(int dpu, int tasklet){
+        specifiedTasklet[dpu] = true;
+        decidedTasklet[dpu] = tasklet;
+    }
     /* Singleton */
     private static volatile UPMEM instance = null;
     private static final Object locker = new Object();
