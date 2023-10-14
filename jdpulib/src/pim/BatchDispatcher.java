@@ -1,9 +1,6 @@
 package pim;
 
-import com.upmem.dpu.DpuCallback;
 import com.upmem.dpu.DpuException;
-import com.upmem.dpu.DpuSet;
-import pim.dpu.PIMManager;
 import pim.dpu.java_strut.DPUJVMMemSpaceKind;
 import pim.logger.Logger;
 import pim.logger.PIMLoggers;
@@ -11,7 +8,6 @@ import pim.utils.BytesUtils;
 
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static pim.dpu.DPUGarbageCollector.parameterBufferBeginAddr;
 import static pim.dpu.DPUGarbageCollector.perDPUBufferSize;
@@ -35,6 +31,8 @@ public class BatchDispatcher {
         result = new int[maxResult];
     }
     UPMEM upmem = UPMEM.getInstance();
+
+
     class DPUExecutionTask implements Runnable{
         private int id;
 
@@ -74,6 +72,7 @@ public class BatchDispatcher {
     {
         dispatchLogger.setEnable(false);
     }
+
 
     public void dispatchAll() throws DpuException {
         for (int dpuID: dpusInUse) {
