@@ -73,6 +73,7 @@ public class IndexSearchDatabaseBuilder {
             for (String w : words) {
                 insertWordIndexRecord(dpuID, getWordID(w), did, location++);
             }
+
             did++;
         }
         return this;

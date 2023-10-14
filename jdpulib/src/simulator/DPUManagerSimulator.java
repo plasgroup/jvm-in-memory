@@ -48,17 +48,24 @@ public class DPUManagerSimulator extends DPUManager {
             int taskletId = (lastTaskletId + 1) % 24;
             int size = (((1 + 2 + 1 + params.length) * 4) + 0b111) & (~0b111);
             BatchDispatcher bd = UPMEM.batchDispatcher;
-            while(taskletId != lastTaskletId){
-                if(bd.paramsBufferPointer[dpuID][taskletId] + size < PIMRemoteJVMConfiguration.heapSize){
-                    break;
-                }
-                taskletId = (taskletId + 1) % 24;
-                try {
-                    bd.dispatchAll();
-                } catch (DpuException e) {
-                    throw new RuntimeException(e);
+            if(UPMEM.isSpecifyTasklet(dpuID)){
+                taskletId = UPMEM.getSpecifiedTaskletAndCancel(dpuID);
+            }else{
+                while(taskletId != lastTaskletId){
+                    if(bd.paramsBufferPointer[dpuID][taskletId] + size < PIMRemoteJVMConfiguration.heapSize){
+                        break;
+                    }
+                    taskletId = (taskletId + 1) % 24;
+                    try {
+                        bd.dispatchAll();
+                    } catch (DpuException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
+
+
+
             bd.taskletPosition[dpuID] = taskletId; // next time from t2 to find a proper tasklet
 
             int[] paramPrepared = new int[params.length + 4];
@@ -92,19 +99,25 @@ public class DPUManagerSimulator extends DPUManager {
             return;
         }
 
+
         // choose a tasklet
-        int tasklet = currentTasklet;
-        while(true){
-            if(taskletSemaphore[tasklet] == 0){
-                synchronized (taskletSemaphore){
-                    if(taskletSemaphore[tasklet] == 0){
-                        taskletSemaphore[tasklet] = 1;
-                        currentTasklet = tasklet;
-                        break;
+        int tasklet;
+        if(UPMEM.isSpecifyTasklet(dpuID)){
+            tasklet = UPMEM.getSpecifiedTaskletAndCancel(dpuID);
+        }else{
+            tasklet = currentTasklet;
+            while(true){
+                if(taskletSemaphore[tasklet] == 0){
+                    synchronized (taskletSemaphore){
+                        if(taskletSemaphore[tasklet] == 0){
+                            taskletSemaphore[tasklet] = 1;
+                            currentTasklet = tasklet;
+                            break;
+                        }
                     }
+                }else{
+                    tasklet = (tasklet + 1) % PIMRemoteJVMConfiguration.threadCount;
                 }
-            }else{
-                tasklet = (tasklet + 1) % PIMRemoteJVMConfiguration.threadCount;
             }
         }
 
