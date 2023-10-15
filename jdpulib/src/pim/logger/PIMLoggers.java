@@ -10,7 +10,7 @@ public class PIMLoggers {
     public static Logger pimManagerLogger = appendLogger("pim:pim-manager");
     public static Logger dpuManagerLogger = appendLogger("pim:dpu-manager");
     public static Logger gcLogger = appendLogger("pim:gc");
-
+    public static Logger batchDispatchLogger = appendLogger("pim:batch-dispatch");
     public static Logger classfileLogger = appendLogger("pim:classfile");
     static{
         disableLoggers( "tree:cpu-node", "bst:testing", "bst:building",

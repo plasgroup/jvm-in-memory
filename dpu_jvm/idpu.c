@@ -48,7 +48,7 @@ void test_dpu_side() {
     //params
     for (i = 0; i < fc.func->params_count * 2; i++) {
         //it seem *(uint64_t*) will cause a problem(align?), which will return 0;
-        DEBUG_PRINT(" params %d = %p\n", i, *(uint32_t*)(params_buffer + i * 4));
+        DEBUG_PRINT(" params %d = %p\n", i, *(uint32_t __mram_ptr*)(params_buffer + i * 4));
     }
 
     fc.params = params_buffer + fc.func->params_count * SLOTSIZE;

@@ -21,83 +21,66 @@ struct MethodTable* array_type;
 #endif
 
 
-
-
-
 void interp(struct function_thunk func_thunk) {
+    int tasklet_id = me();
+    int buffer_begin = params_buffer + tasklet_id * (PARAMS_BUFFER_SIZE / 24);
+    uint8_t __mram_ptr* p = func_thunk.params;
 #include "vmloop_parts/registers.def"
     func = func_thunk.func;
     func2 = func;
     jc = func_thunk.jc;
     code_buffer = func->bytecodes;
-
     pc = 0;
     times = 0;
     #ifdef INMEMORY
     DEBUG_PRINT(RED);
     #endif
-
-
-
-    current_fp = create_new_vmframe(func_thunk, NULL);
+    
+    current_fp[tasklet_id] = create_new_vmframe(func_thunk, NULL);
+    
     DEBUG_PRINT("code_buffer = %p\n", code_buffer);
-
+    
 #define DEBUG
     DEBUG_PRINT("create frame finished\n");
-
-
-
-
-
-#ifdef HOST
-    array_type = MRAM_METASPACE_ALLOC_STRUT(struct MethodTable);
-    array_type->metadata_token = 0x1;
-
-    auto system = DpuSet::allocate(1);
-    auto dpu = system.dpus()[0];
-    dpu->load("dpuslave");
-#endif
-
-    DEBUG_PRINT("FP = (%p)\n", current_fp);
+    DEBUG_PRINT("FP = (%p)\n", current_fp[tasklet_id]);
+   
+                
     while (1) {
-      //  if((func2 == 0x1000c88) && times > 45) return;
+        // if(mem.meta_space == 0x38901d4 && times > 360) return;
+
         switch (code_buffer[pc++])
         {
         case NOP:
             DEBUG_OUT_INSN_PARSED("NOP");
             break;
-     
         case ILOAD_1:
-            DEBUG_OUT_INSN_PARSED("ILOAD_1")
-            op1 = FRAME_GET_LOCALS(current_fp, func->max_locals, 1);
+            DEBUG_OUT_INSN_PARSED("ILOAD_1");
+            op1 = FRAME_GET_LOCALS(current_fp[tasklet_id], func->max_locals, 1);
             DEBUG_PRINT(" - Load INT %d to stack\n", op1);
             PUSH_EVAL_STACK(op1)
             break;
         case ILOAD_2:
             DEBUG_OUT_INSN_PARSED("ILOAD_2")
-            op1 = FRAME_GET_LOCALS(current_fp, func->max_locals, 2);
+            op1 = FRAME_GET_LOCALS(current_fp[tasklet_id], func->max_locals, 2);
             DEBUG_PRINT(" - Load INT %d to stack\n", op1);
             PUSH_EVAL_STACK(op1)
             break;
-       
-     
         
         case ALOAD_0:
             DEBUG_OUT_INSN_PARSED("ALOAD_0")
-            op1 = FRAME_GET_LOCALS(current_fp, func->params_count, 0);
+
+            op1 = FRAME_GET_LOCALS(current_fp[tasklet_id], func->params_count, 0);
             DEBUG_PRINT(" - Load ref %p to stack\n", op1);
+            
             PUSH_EVAL_STACK(op1)
             break;
         case ALOAD_1:
             DEBUG_OUT_INSN_PARSED("ALOAD_1")
-            op1 = FRAME_GET_LOCALS(current_fp, func->params_count, 1);
+            op1 = FRAME_GET_LOCALS(current_fp[tasklet_id], func->params_count, 1);
             DEBUG_PRINT(" - Load ref %p to stack\n", op1);
             PUSH_EVAL_STACK(op1)
             break;
-     
-        
-   
-       
+
         case ICONST_0:
             DEBUG_OUT_INSN_PARSED("ICONST_0")
             DEBUG_PRINT(" - push const 0 to stack\n");
@@ -127,6 +110,7 @@ void interp(struct function_thunk func_thunk) {
             break;
         case IF_ICMPNE:
             DEBUG_OUT_INSN_PARSED("IF_ICMPNE")
+
             op1 = ((uint8_t)code_buffer[pc] << 8 | code_buffer[pc + 1]);
            
             POP_EVAL_STACK(op2);
@@ -149,7 +133,7 @@ void interp(struct function_thunk func_thunk) {
             DEBUG_PRINT(" - value 2 = %d\n", op2);
             DEBUG_PRINT(" - value 1 = %d\n", op3);
             op1 = pc + (short)op1 - 1;
-            DEBUG_PRINT(" - branch-target = 0x%02x\n", op1);
+          //  DEBUG_PRINT(" - branch-target = 0x%02x\n", op1);
             pc += 2;
             if(op3 >= op2){
                 pc = op1;
@@ -233,7 +217,6 @@ void interp(struct function_thunk func_thunk) {
 
         case INVOKEVIRTUAL: // function call
             DEBUG_OUT_INSN_PARSED("INVOKEVIRTUAL")
-
         
             op1 = (uint8_t)(code_buffer[pc] << 8) | code_buffer[pc + 1]; // constant table index to methoderef
 
@@ -242,30 +225,34 @@ void interp(struct function_thunk func_thunk) {
             
             op2 = func_thunk.jc->items[op1].direct_value;
             DEBUG_PRINT(" - v-index = %p\n", op2);
+
             callee.func = func_thunk.jc->virtual_table[op2].methodref;
-            op4 = (uint8_t*)(current_sp - 4 * (callee.func->params_count - 1));
-          
-            DEBUG_PRINT(" - instance-address = %p, %p\n", *(uint32_t*)op4, op4);
-            op3 = *(uint32_t*)op4 + 4;
+            op4 = (uint8_t __mram_ptr*)(current_sp[tasklet_id] - 4 * (callee.func->params_count - 1));
+            
+            DEBUG_PRINT(" - instance-address [me()]= %p, %p\n", *(uint8_t __mram_ptr* __mram_ptr*)op4, op4);
+
+            op3 = *(uint32_t __mram_ptr*)op4 + 4;
+
             op1 = *(uint32_t __mram_ptr*)(op3);
             DEBUG_PRINT(" - instance-class-address = %p\n", op1); 
-            
+
             
             DEBUG_PRINT(" - jclass-ref = %p\n", ((struct j_class __mram_ptr*)(op1))->virtual_table[op2].classref);
             DEBUG_PRINT(" - jmethod-ref = %p\n", ((struct j_class __mram_ptr*)(op1))->virtual_table[op2].methodref);
             callee.jc = ((struct j_class __mram_ptr*)(op1))->virtual_table[op2].classref;
             callee.func = ((struct j_class __mram_ptr*)(op1))->virtual_table[op2].methodref;
-            callee.params = current_sp;
+            callee.params = 
+            current_sp[tasklet_id];
            
 
-            current_sp -= 4 * callee.func->params_count;
+            current_sp[tasklet_id] -= 4 * callee.func->params_count;
             DEBUG_PRINT(" - pop %d elements from operand stack\n", callee.func->params_count);
-            DEBUG_PRINT(" -- new sp = %p\n", current_sp);
+            DEBUG_PRINT(" -- new sp = %p\n", current_sp[tasklet_id]);
             DEBUG_PRINT(" -- params-pt = %p\n", callee.params);
             DEBUG_PRINT(" -- return pc = %d\n", pc + 2);
 
 
-            current_fp = create_new_vmframe(callee,  pc + 2);
+            current_fp[tasklet_id] = create_new_vmframe(callee,  pc + 2);
             
             pc = 0;
             func = callee.func;
@@ -314,27 +301,29 @@ void interp(struct function_thunk func_thunk) {
             break;
         case RETURN:
             DEBUG_OUT_INSN_PARSED("RETURN")
-            DEBUG_PRINT(" - last-sp = %p\n", FRAME_GET_OLDSP(current_fp));
-            DEBUG_PRINT(" - last-fp = %p\n", FRAME_GET_OLDFP(current_fp));
-            DEBUG_PRINT(" - return-pc = %p\n", FRAME_GET_RETPC(current_fp));
-            op2 = FRAME_GET_OLDSP(current_fp);
-            op3 = FRAME_GET_OLDFP(current_fp);
-            op4 = FRAME_GET_RETPC(current_fp);
+            DEBUG_PRINT("return");
+            DEBUG_PRINT(" - last-sp = %p\n", FRAME_GET_OLDSP(current_fp[tasklet_id]));
+            DEBUG_PRINT(" - last-fp = %p\n", FRAME_GET_OLDFP(current_fp[tasklet_id]));
+            DEBUG_PRINT(" - return-pc = %p\n", FRAME_GET_RETPC(current_fp[tasklet_id]));
+            
+            op2 = FRAME_GET_OLDSP(current_fp[tasklet_id]);
+            op3 = FRAME_GET_OLDFP(current_fp[tasklet_id]);
+            op4 = FRAME_GET_RETPC(current_fp[tasklet_id]);
             if(op3 == NULL){
                 DEBUG_PRINT(" - >> final frame\n");
-                return_val = op1;
-                current_fp = 0;
-                current_sp = wram_data_space - 4;
-                params_buffer_pt = params_buffer;
+                return_val = 0;
+                current_fp[tasklet_id] = 0;
+                current_sp[tasklet_id] = wram_data_space +  tasklet_id * (WRAM_DATA_SPACE_SIZE / 24) - 4;
+                params_buffer_pt[tasklet_id] = buffer_begin;
                 return;
             }
-            current_sp = op2;
+            current_sp[tasklet_id] = op2;
             DEBUG_PRINT(" - change sp to %p\n", op2);
             DEBUG_PRINT(" - reset pc to 0x%02x\n", op4);
 
             func = FRAME_GET_METHOD(op3);
             DEBUG_PRINT(" - reset func pt to 0x%08x\n", func);
-            current_fp = op3;
+            current_fp[tasklet_id] = op3;
             code_buffer = func->bytecodes;
             jc = FRAME_GET_CLASS(op3);
             pc = op4;
@@ -345,25 +334,25 @@ void interp(struct function_thunk func_thunk) {
             break;
         case ARETURN:
             DEBUG_OUT_INSN_PARSED("ARETURN")
-            if(FRAME_GET_OPERAND_STACK_SIZE(current_fp, current_sp) >= 0){
+            if(FRAME_GET_OPERAND_STACK_SIZE(current_fp[tasklet_id], current_sp[tasklet_id]) >= 0){
                 POP_EVAL_STACK(op1);
                 DEBUG_PRINT(" - ret val = %d\n", op1);
             }
-            DEBUG_PRINT(" - last-sp = %p\n", FRAME_GET_OLDSP(current_fp));
-            DEBUG_PRINT(" - last-fp = %p\n", FRAME_GET_OLDFP(current_fp));
-            DEBUG_PRINT(" - return-pc = %p\n", FRAME_GET_RETPC(current_fp));
-            op2 = FRAME_GET_OLDSP(current_fp);
-            op3 = FRAME_GET_OLDFP(current_fp);
-            op4 =  FRAME_GET_RETPC(current_fp);
+            DEBUG_PRINT(" - last-sp = %p\n", FRAME_GET_OLDSP(current_fp[tasklet_id]));
+            DEBUG_PRINT(" - last-fp = %p\n", FRAME_GET_OLDFP(current_fp[tasklet_id]));
+            DEBUG_PRINT(" - return-pc = %p\n", FRAME_GET_RETPC(current_fp[tasklet_id]));
+            op2 = FRAME_GET_OLDSP(current_fp[tasklet_id]);
+            op3 = FRAME_GET_OLDFP(current_fp[tasklet_id]);
+            op4 =  FRAME_GET_RETPC(current_fp[tasklet_id]);
             if(op3 == NULL){
                 DEBUG_PRINT(" - >> final frame\n");
                 return_val = op1;
-                current_fp = 0;
-                current_sp = wram_data_space - 4;
-                params_buffer_pt = params_buffer;
+                current_fp[tasklet_id] = 0;
+                current_sp[tasklet_id] = wram_data_space +  tasklet_id * (WRAM_DATA_SPACE_SIZE / 24) - 4;
+                params_buffer_pt[tasklet_id] = buffer_begin;
                 return;
             }
-            current_sp = op2;
+            current_sp[tasklet_id] = op2;
             DEBUG_PRINT(" - change sp to %p\n", op2);
             DEBUG_PRINT(" - push ret val %d\n", op1);
             PUSH_EVAL_STACK(op1)
@@ -372,7 +361,7 @@ void interp(struct function_thunk func_thunk) {
             
             func = FRAME_GET_METHOD(op3);
             DEBUG_PRINT(" - reset func pt to 0x%08x\n", func);
-            current_fp = op3;
+            current_fp[tasklet_id] = op3;
             code_buffer = func->bytecodes;
             jc = FRAME_GET_CLASS(op3);
             pc = op4;
@@ -382,26 +371,25 @@ void interp(struct function_thunk func_thunk) {
             break;
         case IRETURN:
             DEBUG_OUT_INSN_PARSED("IRETURN")
-            if(FRAME_GET_OPERAND_STACK_SIZE(current_fp, current_sp) >= 0){
+            if(FRAME_GET_OPERAND_STACK_SIZE(current_fp[tasklet_id], current_sp[tasklet_id]) >= 0){
                 POP_EVAL_STACK(op1);
                 DEBUG_PRINT(" - ret val = %d\n", op1);
             }
-            DEBUG_PRINT(" - last-sp = %p\n", FRAME_GET_OLDSP(current_fp));
-            DEBUG_PRINT(" - last-fp = %p\n", FRAME_GET_OLDFP(current_fp));
-            DEBUG_PRINT(" - return-pc = %p\n", FRAME_GET_RETPC(current_fp));
-            op2 = FRAME_GET_OLDSP(current_fp);
-            op3 = FRAME_GET_OLDFP(current_fp);
-            op4 =  FRAME_GET_RETPC(current_fp);
+            DEBUG_PRINT(" - last-sp = %p\n", FRAME_GET_OLDSP(current_fp[tasklet_id]));
+            DEBUG_PRINT(" - last-fp = %p\n", FRAME_GET_OLDFP(current_fp[tasklet_id]));
+            DEBUG_PRINT(" - return-pc = %p\n", FRAME_GET_RETPC(current_fp[tasklet_id]));
+            op2 = FRAME_GET_OLDSP(current_fp[tasklet_id]);
+            op3 = FRAME_GET_OLDFP(current_fp[tasklet_id]);
+            op4 =  FRAME_GET_RETPC(current_fp[tasklet_id]);
             if(op3 == NULL){
                 DEBUG_PRINT(" - >> final frame\n");
                 return_val = op1;
-                
-                current_fp = 0;
-                current_sp = wram_data_space - 4;
-                params_buffer_pt = params_buffer;
+                current_fp[tasklet_id] = 0;
+                current_sp[tasklet_id] = wram_data_space + tasklet_id * (WRAM_DATA_SPACE_SIZE / 24) - 4;
+                params_buffer_pt[tasklet_id] = buffer_begin;
                 return;
             }
-            current_sp = op2;
+            current_sp[tasklet_id] = op2;
             DEBUG_PRINT(" - change sp to %p\n", op2);
             DEBUG_PRINT(" - push ret val %d\n", op1);
             PUSH_EVAL_STACK(op1)
@@ -410,7 +398,7 @@ void interp(struct function_thunk func_thunk) {
             
             func = FRAME_GET_METHOD(op3);
             DEBUG_PRINT(" - reset func pt to 0x%08x\n", func);
-            current_fp = op3;
+            current_fp[tasklet_id] = op3;
             code_buffer = func->bytecodes;
             jc = FRAME_GET_CLASS(op3);
             pc = op4;
@@ -447,20 +435,20 @@ void interp(struct function_thunk func_thunk) {
             DEBUG_PRINT(" - jmethod-v-index = %p\n", func_thunk.jc->items[op1].direct_value);
             op4 = func_thunk.jc->items[op1].direct_value;
             DEBUG_PRINT(" - jmethod-ref = %p\n", func_thunk.jc->virtual_table[op4].methodref);
-            
+       
             callee.func = func_thunk.jc->virtual_table[op4].methodref;
             op2 = (func_thunk.jc->items[op1].info >> 16) & 0xFFFF;
             DEBUG_PRINT(" - class-ref-cp-index = %d\n", op2);
             DEBUG_PRINT(" - jclass-ref = %p\n", func_thunk.jc->items[op2].direct_value);
             callee.jc = func_thunk.jc->items[op2].direct_value;
-            callee.params = current_sp;
-            current_sp -= 4 * callee.func->params_count;
+            callee.params = current_sp[tasklet_id];
+            current_sp[tasklet_id] -= 4 * callee.func->params_count;
             DEBUG_PRINT(" - pop %d elements from operand stack\n", callee.func->params_count);
-            DEBUG_PRINT(" -- new sp = %p\n", current_sp);
+            DEBUG_PRINT(" -- new sp = %p\n", current_sp[tasklet_id]);
             DEBUG_PRINT(" -- params-pt = %p\n", callee.params);
             DEBUG_PRINT(" -- return pc = %d\n", pc + 2);
-           
-            current_fp = create_new_vmframe(callee,  pc + 2);
+               
+            current_fp[tasklet_id] = create_new_vmframe(callee,  pc + 2);
 
             pc = 0;
             func = callee.func;
