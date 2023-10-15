@@ -54,7 +54,9 @@ def calc_cache_misses(exp_type = 'cpu'):
                     v = ((float)(percentage.replace('%',''))/100.0)
                     search_llc_load_misses = v * llc_load_misses_event_count
                     print("%s search LLC misses count approx. = %d" % ((exp_type).upper(), search_llc_load_misses))
+    return search_llc_load_misses
 
 
-calc_cache_misses('cpu')
-calc_cache_misses('pim')
+cpu_search_misses = calc_cache_misses('cpu')
+pim_search_misses = calc_cache_misses('pim')
+print("factors = %lf", pim_search_misses / cpu_search_misses)
