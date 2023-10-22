@@ -135,6 +135,7 @@ public class DPUManagerUPMEM extends DPUManager{
             }
 
 
+
             bd.taskletPosition[dpuID] = t2; // next time from t2 to find a proper tasklet
             // beginning of params_buffer[t2]
             int from = bd.paramsBufferPointer[dpuID][t2] + DPUGarbageCollector.perDPUBufferSize * t2;
@@ -189,6 +190,7 @@ public class DPUManagerUPMEM extends DPUManager{
                 }
             }
         }
+
 
         // System.out.println("select tasklet = " + tasklet);
 

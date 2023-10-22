@@ -15,7 +15,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import static pim.ExperimentConfigurator.*;
+
 import static pim.algorithm.BSTBuilder.*;
+import static pim.algorithm.BSTBuilder.buildCpuPartTreeFromFile;
+import static pim.algorithm.BSTBuilder.buildPIMTreeByInsert;
 import static pim.algorithm.BSTTester.readIntergerArrayList;
 import static pim.algorithm.TreeWriter.writeDPUImages;
 
@@ -92,12 +95,19 @@ public class Main {
             }
 
             System.out.println("begin evaluate CPU Tree 500,000 queries performance");
+
+	    int pos = 0;
             for (int i = 0; i < cpuPerformanceEvaluationRepeatTime; i++) {
-                long startTime = System.nanoTime();
-                for(int j = 0; j < queryCount; j++){
-                    int key = keys.get(j);
+                
+		long startTime = System.nanoTime();
+                for(int j = 0; j < queryCount / 10000; j++){
+			for(int k = 0; k < 10000; k++){
+                    int key = keys.get(pos++);
                     int v = CPURoot.search(key);
                     r += v;
+			}
+			  System.out.println("avg per query time = " + (System.nanoTime() - startTime) / pos / 100000 + "ms");
+
                 }
                 long endTime = System.nanoTime();
                 long timeElapsed = endTime - startTime;
@@ -130,16 +140,21 @@ public class Main {
 
             if(performanceEvaluationEnableBatchDispatch)
                 UPMEM.beginRecordBatchDispatching(bd1);
-            
+
+            int pos = 0;
+	    System.out.println("query count = " + queryCount);
+
             for (int i = 0; i < pimPerformanceEvaluationRepeatTime; i++) {
                 long startTime = System.nanoTime();
                 for(int j = 0; j < queryCount / 10000; j++){    
                     for(int k = 0; k < 10000; k++){
-                        int key = keys.get(k);
+
+                        int key = keys.get(pos++);
                         int v = PIMRoot.search(key);
                         r += v;
                     }
-                    System.out.println("avg per time = " + (System.nanoTime() - startTime) / 1000000);
+                    System.out.println("avg per query time = " + (System.nanoTime() - startTime) / pos / 100000 + "ms");
+
                 }
                 long endTime = System.nanoTime();
                 long timeElapsed = endTime - startTime;
@@ -177,9 +192,6 @@ public class Main {
                .setDpuInUseCount(dpuInUse)
                .setThreadPerDPU(UPMEM.perDPUThreadsInUse);
 
-       performanceEvaluationMode = true;
-       nodes = 100000000;
-       performanceEvaluationNodeCount = 100000000;
 
        if(performanceEvaluationMode) {
            performanceEvaluation();
