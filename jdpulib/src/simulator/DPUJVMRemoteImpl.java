@@ -271,6 +271,11 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
         return taskletParameterTop[tasklet];
     }
 
+    @Override
+    public int getInt32(int i) {
+        return (int) heap[i];
+    }
+
 
     @Override
     public int getID() {

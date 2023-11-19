@@ -12,10 +12,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.*;
 import java.net.URI;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Vector;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.Collections.singletonList;
@@ -64,13 +61,14 @@ public class ProxyGenerator{
     }
 
     private static String buildClassHeader(Class c) {
+        System.out.println("create proxy for " + c.getName());
         StringBuilder sb = new StringBuilder();
         int modifiers = c.getModifiers();
         if(isAbstract(modifiers)) throw new RuntimeException("Cannot create proxy for abstract class");
         if(isEnum(modifiers)) throw new RuntimeException("Cannot create proxy for enum type");
         if(isModule(modifiers)) throw new RuntimeException("Not a class");
         if(isInterface(modifiers)) throw new RuntimeException("Cannot create proxy for interface");
-        if(isFinal(modifiers)) throw new RuntimeException("Cannot create proxy for final class");
+        if(isFinal(modifiers)) return "";
 
         String accessFlag = "";
         String staticWord = "";
@@ -291,41 +289,29 @@ public class ProxyGenerator{
                     try {
                         Field f = ClassLoader.class.getDeclaredField("classes");
                         f.setAccessible(true);
-                        Vector<Class>[] classLoaders = (Vector<Class>[]) Thread.getAllStackTraces().keySet().stream().map(e -> e.getContextClassLoader()).map(e -> {
-                            try {
-                                return f.get(e);
-                            } catch (IllegalAccessException ex) {
-                                throw new RuntimeException(ex);
-                            }
-                        }).toArray();
+                        Vector<Class> vec = (Vector<Class>) f.get(Thread.currentThread().getContextClassLoader());
 
-                        for(int i = 0; i < classLoaders.length; i++){
-                            Vector<Class> vec = classLoaders[i];
-                            for(int j = 0; j < vec.size(); i++){
-                                vec.get(j).getName().contains(method.getReturnType().getSimpleName() + "Proxy");
-                                typeName = vec.get(j).getName();
-                                break;
+
+
+                            for(int j = 0; j < vec.size(); j++){
+                                if(vec.get(j).getName().contains(method.getReturnType().getSimpleName() + "Proxy")){
+                                    typeName = vec.get(j).getName();
+                                    break;
+                                }
                             }
-                            if(!"".equals(typeName)) break;
-                        }
-                    } catch (NoSuchFieldException e) {
+                    } catch (NoSuchFieldException | IllegalAccessException e) {
                         throw new RuntimeException(e);
                     }
 
-                    if(typeName == "") {
+                    if("".equals(typeName)) {
                         try {
                             typeName = generateProxy(method.getReturnType()).getName();
-                        } catch (NoSuchFieldException e) {
-                            throw new RuntimeException(e);
-                        } catch (InvocationTargetException e) {
-                            throw new RuntimeException(e);
-                        } catch (IllegalAccessException e) {
-                            throw new RuntimeException(e);
-                        } catch (NoSuchMethodException e) {
+                        } catch (NoSuchFieldException | InvocationTargetException | IllegalAccessException | NoSuchMethodException e) {
                             throw new RuntimeException(e);
                         }
+                    }else{
+                        sb.append(t4 + "return (" + typeName + ") ProxyHelper.getAReturnValue(dpuID);\r\n");
                     }
-                    sb.append(t4 + "return (" + typeName + ") ProxyHelper.getAReturnValue(dpuID);\r\n");
                 }
             }
         }

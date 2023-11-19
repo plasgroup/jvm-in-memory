@@ -1,9 +1,12 @@
 package pim;
 
+import lang.internal.DPUInt32ArrayHandler;
 import pim.dpu.DPUManager;
 import pim.dpu.DPUObjectHandler;
 import pim.dpu.PIMManager;
+import pim.dpu.java_strut.DPUJVMMemSpaceKind;
 import pim.logger.Logger;
+import pim.utils.BytesUtils;
 import simulator.PIMManagerSimulator;
 import sun.misc.Unsafe;
 
@@ -165,4 +168,12 @@ public class UPMEM {
         return getDPUManager(dpuID).garbageCollector.getRemainMetaMemory();
     }
 
+    public <T> DPUInt32ArrayHandler createArray(int dpuID, int len) {
+        // must 1 + 4 * a bit
+        int addr = UPMEM.getInstance().getDPUManager(dpuID).garbageCollector.allocate(DPUJVMMemSpaceKind.DPU_HEAPSPACE, len * 4 + 4);
+        byte[] lenBytes = new byte[4];
+        BytesUtils.writeU4LittleEndian(lenBytes, len ,0);
+        UPMEM.getInstance().getDPUManager(dpuID).garbageCollector.transfer(DPUJVMMemSpaceKind.DPU_HEAPSPACE, lenBytes, addr);
+        return new DPUInt32ArrayHandler(dpuID, addr, len);
+    }
 }

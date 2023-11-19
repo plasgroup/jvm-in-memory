@@ -50,4 +50,6 @@ public abstract class DPUGarbageCollector {
     public abstract int getRemainMetaMemory();
 
     public abstract int getReturnVal();
+
+    public abstract int getInt32(int i);
 }

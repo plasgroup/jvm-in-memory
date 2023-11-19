@@ -167,4 +167,9 @@ public class DPUGarbageCollectorSimulator extends DPUGarbageCollector {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public int getInt32(int i) {
+        return dpujvmRemote.getInt32(i);
+    }
 }
