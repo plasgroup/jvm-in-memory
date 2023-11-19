@@ -1,4 +1,4 @@
-package pim.algorithm;
+package algorithm;
 
 import pim.ExperimentConfigurator;
 import pim.UPMEM;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 import static pim.ExperimentConfigurator.totalNodeCount;
-import static pim.algorithm.TreeWriter.convertCPUTreeToPIMTree;
+import static algorithm.TreeWriter.convertCPUTreeToPIMTree;
 
 public class BSTBuilder {
     static Logger bstBuildingLogger = PIMLoggers.bstBuildingLogger;

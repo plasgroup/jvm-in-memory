@@ -2,22 +2,20 @@ import pim.BatchDispatcher;
 import pim.ExperimentConfigurator;
 import pim.UPMEM;
 import pim.UPMEMConfigurator;
-import pim.algorithm.BSTBuilder;
-import pim.algorithm.BSTTester;
-import pim.algorithm.DPUTreeNode;
-import pim.algorithm.IntIntValuePairGenerator;
-import pim.algorithm.TreeNode;
+import algorithm.BSTBuilder;
+import algorithm.BSTTester;
+import algorithm.DPUTreeNode;
+import algorithm.TreeNode;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import static pim.ExperimentConfigurator.*;
-import static pim.algorithm.BSTBuilder.*;
-import static pim.algorithm.BSTTester.readIntergerArrayList;
-import static pim.algorithm.TreeWriter.writeDPUImages;
+import static algorithm.BSTBuilder.*;
+import static algorithm.BSTTester.readIntergerArrayList;
+import static algorithm.TreeWriter.writeDPUImages;
 
 public class Main {
     public static UPMEMConfigurator upmemConfigurator = new UPMEMConfigurator();
@@ -71,7 +69,7 @@ public class Main {
                 if(items.length > 1) performanceEvaluationEnableBatchDispatch = Integer.parseInt(items[1]) != 0;
             }else if("JVM_SIMULATOR".equals(argumentName)){
 	        useSimulator = true;
-		if(items.length > 1) useSimulator = Integer.parseInt(items[1]) != 0;
+		    if(items.length > 1) useSimulator = Integer.parseInt(items[1]) != 0;
 	    }
 
         }

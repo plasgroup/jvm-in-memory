@@ -1,4 +1,4 @@
-package pim.algorithm;
+package algorithm;
 
 import pim.UPMEM;
 import pim.logger.Logger;

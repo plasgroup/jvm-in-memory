@@ -1,6 +1,5 @@
-package pim.algorithm;
+package algorithm;
 
-import com.upmem.dpu.DpuException;
 import pim.ExperimentConfigurator;
 import pim.UPMEM;
 import pim.dpu.DPUGarbageCollector;

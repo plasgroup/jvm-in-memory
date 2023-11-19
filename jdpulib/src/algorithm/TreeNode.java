@@ -1,6 +1,4 @@
-package pim.algorithm;
-
-import pim.UPMEM;
+package algorithm;
 
 import java.io.Serializable;
 

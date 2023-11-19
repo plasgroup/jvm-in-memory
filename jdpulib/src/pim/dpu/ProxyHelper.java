@@ -2,7 +2,7 @@ package pim.dpu;
 
 import pim.IDPUProxyObject;
 import pim.UPMEM;
-import pim.algorithm.DPUTreeNodeProxyAutoGen;
+import algorithm.DPUTreeNodeProxyAutoGen;
 import pim.dpu.cache.DPUCacheManager;
 import pim.logger.Logger;
 import pim.logger.PIMLoggers;

@@ -1,6 +1,5 @@
-package pim.algorithm;
+package algorithm;
 
-import com.upmem.dpu.DpuException;
 import pim.ExperimentConfigurator;
 import pim.UPMEM;
 import pim.logger.Logger;
@@ -11,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static pim.ExperimentConfigurator.noSearch;
-import static pim.algorithm.BSTBuilder.*;
-import static pim.algorithm.TreeWriter.*;
+import static algorithm.BSTBuilder.*;
+import static algorithm.TreeWriter.*;
 
 public class BSTTester {
     static List<Integer> keys = readIntergerArrayList("keys_random.txt");

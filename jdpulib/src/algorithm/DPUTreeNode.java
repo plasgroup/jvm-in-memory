@@ -1,4 +1,4 @@
-package pim.algorithm;
+package algorithm;
 
 public class DPUTreeNode extends TreeNode {
     public DPUTreeNode(int k, int v) {
