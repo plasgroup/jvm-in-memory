@@ -1,0 +1,11 @@
+Exception in thread "main" java.lang.UnsatisfiedLinkError: 'void com.upmem.dpu.NativeDpuSet.copy(java.lang.String, byte[][], int[], boolean, boolean)'
+	at com.upmem.dpu.NativeDpuSet.copy(Native Method)
+	at com.upmem.dpu.DpuSetBase.copy(DpuSetBase.java:41)
+	at com.upmem.dpu.Dpu.copy(Dpu.java:17)
+	at com.upmem.dpu.Dpu.copy(Dpu.java:44)
+	at pim.dpu.DPUGarbageCollector.<init>(DPUGarbageCollector.java:34)
+	at pim.dpu.DPUManager.<init>(DPUManager.java:122)
+	at pim.dpu.PIMManager.init(PIMManager.java:31)
+	at pim.UPMEM.initialize(UPMEM.java:119)
+	at pim.UPMEM.initialize(UPMEM.java:131)
+	at Main.main(Main.java:59)

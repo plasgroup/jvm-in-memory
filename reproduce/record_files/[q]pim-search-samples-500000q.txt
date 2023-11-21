@@ -1,0 +1,2 @@
+            java 23782  7963.215459:        619  LLC-load-misses:      7f81d55b77ed metaspace::FreeChunkListVector::search_chunk_ascending+0xd (/home/upmem0054/hokuda/jdk-17/lib/server/libjvm.so)
+            java 23782  7963.915269:        521  LLC-load-misses:      7f81d55b789c metaspace::FreeChunkListVector::search_chunk_descending+0xc (/home/upmem0054/hokuda/jdk-17/lib/server/libjvm.so)
