@@ -1,0 +1,1 @@
+ C2 CompilerThre 27461  8563.912465:        483  LLC-load-misses:      7f94112128c0 Klass::search_secondary_supers+0x20 (/home/upmem0054/hokuda/jdk-17/lib/server/libjvm.so)
