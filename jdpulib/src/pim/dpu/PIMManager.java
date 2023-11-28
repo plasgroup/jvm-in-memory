@@ -1,17 +1,16 @@
 package pim.dpu;
 
-import java.util.ArrayList;
-import com.upmem.dpu.Dpu;
-import com.upmem.dpu.DpuException;
 import com.upmem.dpu.DpuSystem;
-import pim.ExperimentConfigurator;
 import pim.logger.Logger;
 import pim.logger.PIMLoggers;
+
+import java.util.ArrayList;
 
 public abstract class PIMManager {
     protected final ArrayList<DPUManager> dpuManagers = new ArrayList<>();
     protected PIMManager instance;
     protected DpuSystem system;
+    
     public DPUManager getDPUManager(int dpuID){
         return dpuManagers.get(dpuID);
     }
