@@ -211,6 +211,7 @@ public class DPUClassFileManagerUPMEM extends DPUClassFileManager {
     }
 
 
+    /** record loaded DPU class to lookup table **/
     @Override
     public void recordClass(String className, DPUJClass jc, int classMramAddr) {
         upmem.getDPUManager(dpuID).classCacheManager.setClassStructure(className, jc, classMramAddr);
@@ -459,7 +460,7 @@ public class DPUClassFileManagerUPMEM extends DPUClassFileManager {
                     int state = 0;
 
 
-                    /** parse and process discriptor **/
+                    /** parse and process descriptor **/
                     for(int ci = 0; ci < paramsDesc.length(); ci++){
                         char ch = paramsDesc.charAt(ci);
                         if(state == 0){
@@ -520,6 +521,7 @@ public class DPUClassFileManagerUPMEM extends DPUClassFileManager {
 
 
 
+        // update virtual table
         for(int i = 0; i < jc.virtualTable.items.size(); i++){
             String vClassName = jc.virtualTable.items.get(i).className;
             String vDescriptor = jc.virtualTable.items.get(i).descriptor;
@@ -530,6 +532,7 @@ public class DPUClassFileManagerUPMEM extends DPUClassFileManager {
                 jc.virtualTable.items.get(i).classReferenceAddress = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getClassStrutCacheLine(vClassName).marmAddr;
             }
         }
+
         UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getClassStructure(formalClassName(c.getName()))
                 .virtualTable = jc.virtualTable;
         DPUCacheManager classCacheManager = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager;

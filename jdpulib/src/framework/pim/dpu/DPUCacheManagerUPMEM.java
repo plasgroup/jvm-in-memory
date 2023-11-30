@@ -24,12 +24,15 @@ public class DPUCacheManagerUPMEM extends DPUCacheManager {
     }
 
 
+
+    // get loaded field structure
     @Override
     public DPUFieldCacheItem getFieldCacheItem(String className, String fieldName) {
         pimCacheLogger.log("get DPUID = " + dpuID + " field =  " + fieldName + ", of class " + className + " from cache");
         if(fieldCache.cache.get(className) == null) return null;
         return fieldCache.cache.get(className).get(fieldName);
     }
+    // set loaded field structure
     @Override
     public void setFieldCacheItem(String className, String fieldName, int indexInInstance)  {
         Dictionary<String, DPUFieldCacheItem> fieldCacheOfClass = fieldCache.cache.get(className);
@@ -43,13 +46,14 @@ public class DPUCacheManagerUPMEM extends DPUCacheManager {
 
         pimCacheLogger.logf("set field: " + fieldName + " of class " + className + " to " + dpu + " v(index) = %x\n", indexInInstance);
     }
-
+    // get loaded method structure
     @Override
     public DPUMethodCacheItem getMethodCacheItem(String classDesc, String methodDesc){
         pimCacheLogger.log("get DPUID = " + dpuID + " method =  " + methodDesc + " of class " + classDesc + " from cache");
         if(methodCache.cache.get(classDesc) == null) return null;
         return methodCache.cache.get(classDesc).get(methodDesc);
     }
+    // set loaded field structure
     @Override
     public void setMethodCacheItem(String classDesc, String methodDesc, int marmAddr, DPUJMethod dpujMethod){
         Dictionary<String, DPUMethodCacheItem> classCacheItem = methodCache.cache.get(classDesc);
@@ -63,19 +67,19 @@ public class DPUCacheManagerUPMEM extends DPUCacheManager {
         this.methodCache.cache.get(classDesc).put(methodDesc, dpuMethodCacheItem);
         pimCacheLogger.logf("set method: " + methodDesc + " of class " + classDesc + " to " + dpu + " v = %x\n", marmAddr);
     }
-
     @Override
     public DPUClassFileCacheItem getClassStrutCacheLine(String desc)  {
         pimCacheLogger.logf("get DPUID = " + dpuID + " class =  " + desc + " from cache");
         return dpuClassCache.cache.get(desc);
     }
+    // get loaded class structure
     @Override
     public DPUJClass getClassStructure(String desc){
         DPUClassFileCacheItem classFileCacheLine = getClassStrutCacheLine(desc);
         if(classFileCacheLine == null) return null;
         return classFileCacheLine.dpuClassStructure;
     }
-
+    // set loaded class structure
     @Override
     public void setClassStructure(String desc, DPUJClass dpuClassStrut, int marmAddr) {
         DPUClassFileCacheItem classFileCacheLine = getClassStrutCacheLine(desc);

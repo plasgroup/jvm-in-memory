@@ -2,11 +2,11 @@ package simulator;
 
 import com.upmem.dpu.DpuException;
 import framework.pim.BatchDispatcher;
-import framework.pim.struct.IDPUProxyObject;
+import framework.lang.struct.IDPUProxyObject;
 import framework.pim.UPMEM;
 import framework.pim.dpu.DPUGarbageCollector;
 import framework.pim.dpu.DPUManager;
-import framework.pim.struct.DPUObjectHandler;
+import framework.lang.struct.DPUObjectHandler;
 import framework.pim.utils.BytesUtils;
 
 import java.io.PrintStream;

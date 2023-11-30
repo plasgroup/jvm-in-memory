@@ -1,7 +1,6 @@
 package framework.lang.struct;
 
-import framework.pim.struct.IDPUProxyObject;
-import framework.pim.dpu.ProxyHelper;
+import framework.pim.dpu.RPCHelper;
 import sun.misc.Unsafe;
 
 import javax.tools.*;
@@ -321,7 +320,7 @@ public class ProxyGenerator{
     private static String buildImport(Class c) {
         StringBuilder sb = new StringBuilder();
         sb.append("import " + IDPUProxyObject.class.getPackageName() + ".*;\r\n");
-        sb.append("import " + ProxyHelper.class.getPackageName() + ".*;\r\n");
+        sb.append("import " + RPCHelper.class.getPackageName() + ".*;\r\n");
         sb.append("import " + c.getPackageName() + "." + c.getSimpleName() + ";\r\n");
         return sb.toString();
     }

@@ -1,7 +1,7 @@
 package application.transplant.index.search.proxy;
 
-import framework.pim.struct.IDPUProxyObject;
-import framework.pim.dpu.ProxyHelper;
+import framework.lang.struct.IDPUProxyObject;
+import framework.pim.dpu.RPCHelper;
 import application.transplant.index.search.IndexTable;
 
 public class IndexTableProxy extends IndexTable implements IDPUProxyObject {
@@ -19,13 +19,13 @@ public class IndexTableProxy extends IndexTable implements IDPUProxyObject {
 
     @Override
     public int getSize() {
-        ProxyHelper.invokeMethod(dpuID, address, "IndexTable", "getSize():I");
-        return ProxyHelper.getIReturnValue(dpuID);
+        RPCHelper.invokeMethod(dpuID, address, "IndexTable", "getSize():I");
+        return RPCHelper.getIReturnValue(dpuID);
     }
 
     @Override
     public void insert(int wordID, int documentId, int location){
-        ProxyHelper.invokeMethod(dpuID, address, "IndexTable", "insert(III):V");
+        RPCHelper.invokeMethod(dpuID, address, "IndexTable", "insert(III):V");
     }
 
 }

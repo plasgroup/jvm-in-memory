@@ -4,7 +4,7 @@ import com.upmem.dpu.Dpu;
 import framework.pim.dpu.java_strut.DPUJVMMemSpaceKind;
 import framework.pim.logger.Logger;
 import framework.pim.logger.PIMLoggers;
-import framework.pim.struct.DPUObjectHandler;
+import framework.lang.struct.DPUObjectHandler;
 
 public abstract class DPUGarbageCollector {
     public int dpuID;

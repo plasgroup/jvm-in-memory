@@ -1,6 +1,6 @@
 package application.transplant.index.search;
 
-import framework.pim.struct.IDPUProxyObject;
+import framework.lang.struct.IDPUProxyObject;
 import framework.pim.UPMEM;
 import application.transplant.index.search.pojo.Word;
 

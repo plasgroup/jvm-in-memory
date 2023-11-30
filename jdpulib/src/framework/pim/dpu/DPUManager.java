@@ -6,7 +6,7 @@ import framework.pim.dpu.cache.DPUCacheManager;
 import framework.pim.dpu.classloader.DPUClassFileManager;
 import framework.pim.logger.Logger;
 import framework.pim.logger.PIMLoggers;
-import framework.pim.struct.DPUObjectHandler;
+import framework.lang.struct.DPUObjectHandler;
 
 import java.io.IOException;
 import java.io.PrintStream;

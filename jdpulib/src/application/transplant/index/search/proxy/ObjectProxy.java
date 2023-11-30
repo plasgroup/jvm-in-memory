@@ -1,6 +1,6 @@
 package application.transplant.index.search.proxy;
 
-import framework.pim.struct.IDPUProxyObject;
+import framework.lang.struct.IDPUProxyObject;
 
 public class ObjectProxy extends Object implements IDPUProxyObject {
     @Override

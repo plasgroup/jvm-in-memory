@@ -3,8 +3,8 @@ package framework.pim.dpu;
 import com.upmem.dpu.Dpu;
 import com.upmem.dpu.DpuException;
 import framework.pim.*;
-import framework.pim.struct.DPUObjectHandler;
-import framework.pim.struct.IDPUProxyObject;
+import framework.lang.struct.DPUObjectHandler;
+import framework.lang.struct.IDPUProxyObject;
 import framework.pim.utils.BytesUtils;
 
 import java.io.PrintStream;

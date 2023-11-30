@@ -1,12 +1,12 @@
 package application.bst;
 
-import framework.pim.struct.IDPUProxyObject;
+import framework.lang.struct.IDPUProxyObject;
 import framework.pim.UPMEM;
 import framework.pim.dpu.cache.DPUCacheManager;
 import framework.pim.logger.Logger;
 import framework.pim.logger.PIMLoggers;
 
-import static framework.pim.dpu.ProxyHelper.*;
+import static framework.pim.dpu.RPCHelper.*;
 
 public class DPUTreeNodeProxyAutoGen extends DPUTreeNode implements IDPUProxyObject {
     public static int getLeftDispatchCount = 0;

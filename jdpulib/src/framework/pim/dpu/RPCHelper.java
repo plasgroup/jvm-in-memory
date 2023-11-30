@@ -1,13 +1,15 @@
 package framework.pim.dpu;
 
-import framework.pim.struct.IDPUProxyObject;
+import framework.lang.struct.IDPUProxyObject;
 import framework.pim.UPMEM;
 import application.bst.DPUTreeNodeProxyAutoGen;
 import framework.pim.dpu.cache.DPUCacheManager;
 import framework.pim.logger.Logger;
 import framework.pim.logger.PIMLoggers;
 
-public class ProxyHelper {
+
+/** contains result retrieving helper functions and method invocation function **/
+public class RPCHelper {
     static Logger pimProxy = PIMLoggers.pimProxy;
     static UPMEM upmem = UPMEM.getInstance();
     public static int getIReturnValue(int dpuID){

@@ -1,6 +1,7 @@
 package framework.pim;
 
 import com.upmem.dpu.DpuException;
+import framework.pim.dpu.DPUGarbageCollector;
 import framework.pim.dpu.java_strut.DPUJVMMemSpaceKind;
 import framework.pim.logger.Logger;
 import framework.pim.logger.PIMLoggers;
@@ -15,7 +16,7 @@ import static framework.pim.dpu.DPUGarbageCollector.perDPUBufferSize;
 public class BatchDispatcher {
     public byte[][] paramsBuffer = new byte[UPMEM.dpuInUse][24 * perDPUBufferSize];
     public int[][] paramsBufferPointer = new int[UPMEM.dpuInUse][24];
-    public int[] taskletPosition = new int[UPMEM.dpuInUse];
+    public int[] taskletPosition = new int[UPMEM.dpuInUse]; // use for Round-robin scheduling
 
     Logger dispatchLogger = PIMLoggers.batchDispatchLogger;
     ExecutorService executorService = Executors.newCachedThreadPool();
@@ -23,7 +24,7 @@ public class BatchDispatcher {
     int[] result;
     byte[] resultBytes = new byte[4 * 1024];
     public int[] recordedCount = new int[UPMEM.dpuInUse];
-    public HashSet<Integer> dpusInUse = new HashSet<>();
+    public HashSet<Integer> dpusInUse = new HashSet<>(); // record the dpu that has more than 1 tasks in record list.
     int dispatchedCount = 0;
     CountDownLatch latch;
     public BatchDispatcher(){
@@ -32,6 +33,7 @@ public class BatchDispatcher {
     UPMEM upmem = UPMEM.getInstance();
 
 
+    /** DPU task structure **/
     class DPUExecutionTask implements Runnable{
         private int id;
 
@@ -45,34 +47,39 @@ public class BatchDispatcher {
             } catch (DpuException e) {
                 throw new RuntimeException(e);
             }
-            // ignore result retrieving
 
-//            try {
-//                synchronized (resultBytes){
-//                    UPMEM.getInstance().getDPUManager(id).dpu.copy(resultBytes, "return_values");
-//                }
-//            } catch (DpuException e) {
-//                throw new RuntimeException(e);
-//            }
-//
-//            for(int i = 0; i < recordedCount[id]; i++){
-//                synchronized (resultBytes){
-//                    int taskID = BytesUtils.readU4LittleEndian(resultBytes, 0);
-//                    int res = BytesUtils.readU4LittleEndian(resultBytes, 0);
-//                    //result[taskID + dispatchedCount] = res;
-//                }
-//            }
+            /** result retrieving **/
+
+            try {
+                synchronized (resultBytes){
+                    UPMEM.getInstance().getDPUManager(id).dpu.copy(resultBytes, "return_values");
+                }
+            } catch (DpuException e) {
+                throw new RuntimeException(e);
+            }
+
+            for(int i = 0; i < recordedCount[id]; i++){
+                synchronized (resultBytes){
+                    /** | task ID (4 bytes) | value (4 bytes) | task ID (4 bytes) | value (4 bytes) | ... **/
+                    int taskID = BytesUtils.readU4LittleEndian(resultBytes, i * 8);
+                    int res = BytesUtils.readU4LittleEndian(resultBytes, i * 8 + 4);
+                    result[taskID + dispatchedCount] = res;
+                }
+            }
+
             dispatchLogger.logln("dpu#" + id + " finished");
 
             latch.countDown();
 
         }
     }
+
     {
         dispatchLogger.setEnable(false);
     }
 
 
+    /** dispatch all recorded tasks **/
     public void dispatchAll() throws DpuException {
         for (int dpuID: dpusInUse) {
             dispatchLogger.logln(" === write tasks to DPU " + dpuID + " === ");

@@ -1,7 +1,7 @@
 package application.transplant.index.search.proxy;
 
-import framework.pim.struct.IDPUProxyObject;
-import framework.pim.dpu.ProxyHelper;
+import framework.lang.struct.IDPUProxyObject;
+import framework.pim.dpu.RPCHelper;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -37,48 +37,48 @@ public class ArrayListProxy extends ArrayList implements IDPUProxyObject {
 
     @Override
     public void trimToSize() {
-       ProxyHelper.invokeMethod(dpuID,  address,"ArrayList", "trimToSize():V");
+       RPCHelper.invokeMethod(dpuID,  address,"ArrayList", "trimToSize():V");
     }
 
     @Override
     public void ensureCapacity(int minCapacity) {
-        ProxyHelper.invokeMethod(dpuID, address, "ArrayList","ensureCapacity():V");
+        RPCHelper.invokeMethod(dpuID, address, "ArrayList","ensureCapacity():V");
     }
 
     @Override
     public int size() {
-        ProxyHelper.invokeMethod(dpuID, address, "ArrayList","size():I");
-        return ProxyHelper.getIReturnValue(dpuID);
+        RPCHelper.invokeMethod(dpuID, address, "ArrayList","size():I");
+        return RPCHelper.getIReturnValue(dpuID);
     }
 
     @Override
     public boolean isEmpty() {
-        ProxyHelper.invokeMethod(dpuID, address, "ArrayList","isEmpty():Z");
-        return ProxyHelper.getBooleanReturnValue(dpuID);
+        RPCHelper.invokeMethod(dpuID, address, "ArrayList","isEmpty():Z");
+        return RPCHelper.getBooleanReturnValue(dpuID);
     }
 
     @Override
     public boolean contains(Object o) {
-        ProxyHelper.invokeMethod(dpuID, address, "ArrayList","contains():Z");
-        return ProxyHelper.getBooleanReturnValue(dpuID);
+        RPCHelper.invokeMethod(dpuID, address, "ArrayList","contains():Z");
+        return RPCHelper.getBooleanReturnValue(dpuID);
     }
 
     @Override
     public int indexOf(Object o) {
-        ProxyHelper.invokeMethod(dpuID, address, "ArrayList","indexOf():I");
-        return ProxyHelper.getIReturnValue(dpuID);
+        RPCHelper.invokeMethod(dpuID, address, "ArrayList","indexOf():I");
+        return RPCHelper.getIReturnValue(dpuID);
     }
 
     @Override
     public int lastIndexOf(Object o) {
-        ProxyHelper.invokeMethod(dpuID, address, "ArrayList","lastIndexOf(Ljava/framework.lang/Object;):I");
-        return ProxyHelper.getIReturnValue(dpuID);
+        RPCHelper.invokeMethod(dpuID, address, "ArrayList","lastIndexOf(Ljava/framework.lang/Object;):I");
+        return RPCHelper.getIReturnValue(dpuID);
     }
 
     @Override
     public Object clone() {
-        ProxyHelper.invokeMethod(dpuID, address, "ArrayList","clone():Ljava/framework.lang/Object;");
-        return ProxyHelper.getAReturnValue(dpuID);
+        RPCHelper.invokeMethod(dpuID, address, "ArrayList","clone():Ljava/framework.lang/Object;");
+        return RPCHelper.getAReturnValue(dpuID);
     }
 
     @Override
@@ -95,8 +95,8 @@ public class ArrayListProxy extends ArrayList implements IDPUProxyObject {
 
     @Override
     public Object get(int index) {
-        ProxyHelper.invokeMethod(dpuID, address, "ArrayList","get(I):Ljava/framework.lang/Object;");
-        return ProxyHelper.getAReturnValue(dpuID);
+        RPCHelper.invokeMethod(dpuID, address, "ArrayList","get(I):Ljava/framework.lang/Object;");
+        return RPCHelper.getAReturnValue(dpuID);
     }
 
     @Override

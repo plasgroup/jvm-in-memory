@@ -1,4 +1,4 @@
-package framework.pim.struct;
+package framework.lang.struct;
 
 public class DPUObjectHandler {
     public int dpuID;

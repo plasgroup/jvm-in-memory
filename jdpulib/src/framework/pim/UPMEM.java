@@ -2,11 +2,11 @@ package framework.pim;
 
 import framework.lang.struct.dist.DPUInt32ArrayHandler;
 import framework.pim.dpu.DPUManager;
-import framework.pim.struct.DPUObjectHandler;
+import framework.lang.struct.DPUObjectHandler;
 import framework.pim.dpu.PIMManager;
 import framework.pim.dpu.java_strut.DPUJVMMemSpaceKind;
 import framework.pim.logger.Logger;
-import framework.pim.struct.IDPUProxyObject;
+import framework.lang.struct.IDPUProxyObject;
 import framework.pim.utils.BytesUtils;
 import simulator.PIMManagerSimulator;
 import sun.misc.Unsafe;

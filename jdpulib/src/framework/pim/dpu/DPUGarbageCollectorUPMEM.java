@@ -6,7 +6,8 @@ import framework.pim.ExperimentConfigurator;
 import framework.pim.dpu.java_strut.DPUJVMMemSpaceKind;
 import framework.pim.utils.BytesUtils;
 
-public class DPUGarbageCollectorUPMEM extends DPUGarbageCollector{
+/** Memory Manager (UPMEM version) **/
+public class DPUGarbageCollectorUPMEM extends DPUGarbageCollector {
 
     public DPUGarbageCollectorUPMEM(int dpuID, Dpu dpu) throws DpuException {
         this.dpuID = dpuID;
@@ -23,6 +24,7 @@ public class DPUGarbageCollectorUPMEM extends DPUGarbageCollector{
         if(!ExperimentConfigurator.useSimulator)
             dpu.copy("mram_heap_pt", ptBytes, 0);
         byte[] bufferPointers = new byte[24 * 4];
+        /** each tasklet of a DPU manage part of the parameter buffer. This loop init the beginning address of i-th tasklet's parameter buffer **/
         for(int i = 0; i < 24; i++){
             BytesUtils.writeU4LittleEndian(bufferPointers, parameterBufferBeginAddr + i * perDPUBufferSize, i * 4);
         }
@@ -42,11 +44,15 @@ public class DPUGarbageCollectorUPMEM extends DPUGarbageCollector{
         }
     }
 
+    /** push parameters to tasklet's parameter buffer (default: tasklet id = 0) **/
+
     @Override
     public int pushParameters(int[] params) {
         return pushParameters(params,0);
     }
 
+
+    /** push parameters to tasklet's parameter buffer **/
     @Override
     public int pushParameters(int[] params, int tasklet) {
         int size = (params.length * 4 + 0b111) & ~(0b111);
@@ -93,6 +99,7 @@ public class DPUGarbageCollectorUPMEM extends DPUGarbageCollector{
         }
     }
 
+    /** transfer data to DPU from pt **/
     @Override
     public void transfer(DPUJVMMemSpaceKind spaceKind, byte[] data, int pt) {
         String spaceVarName = "";
@@ -121,6 +128,8 @@ public class DPUGarbageCollectorUPMEM extends DPUGarbageCollector{
     }
 
 
+    /** allocate memory in DPU memory, and fill bytes data **/
+
     @Override
     public int allocate(DPUJVMMemSpaceKind spaceKind, byte[] data) {
         int addr = 0;
@@ -138,6 +147,7 @@ public class DPUGarbageCollectorUPMEM extends DPUGarbageCollector{
         return addr;
     }
 
+    /** allocate memory in DPU memory **/
     @Override
     public int allocate(DPUJVMMemSpaceKind spaceKind, int size) throws  RuntimeException {
         int alignmentMask;
@@ -148,7 +158,7 @@ public class DPUGarbageCollectorUPMEM extends DPUGarbageCollector{
         }
         size = (size + alignmentMask) & ~alignmentMask;
 
-        // list contains values for selection, according to the spaceKind
+        // This list contains values for selection, according to the spaceKind
         int[] sourceMemoryPointers = new int[]{metaSpacePt, heapSpacePt};
         String[] pointerVarNames = new String[]{"meta_space_pt",  "mram_heap_pt", "params_buffer_pt"};
         String pointerVarName = pointerVarNames[spaceKind.ordinal()];
@@ -194,6 +204,7 @@ public class DPUGarbageCollectorUPMEM extends DPUGarbageCollector{
         return metaSpaceSize - (metaSpacePt - metaSpaceBeginAddr);
     }
 
+    /** get return value from DPU **/
     @Override
     public int getReturnVal() {
         byte[] returnValBytes = new byte[4];
@@ -205,11 +216,13 @@ public class DPUGarbageCollectorUPMEM extends DPUGarbageCollector{
         return BytesUtils.readU4LittleEndian(returnValBytes, 0);
     }
 
+
+    /** get int32 values from address addr **/
     @Override
-    public int getInt32(int i) {
+    public int getInt32(int addr) {
         byte[] returnValBytes = new byte[4];
         try {
-            dpu.copy(returnValBytes, "mram_heap_pt", i);
+            dpu.copy(returnValBytes, "mram_heap_pt", addr);
         } catch (DpuException e) {
             throw new RuntimeException(e);
         }

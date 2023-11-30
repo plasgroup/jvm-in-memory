@@ -1,7 +1,7 @@
 package application.transplant.index.search.proxy;
 
-import framework.pim.struct.IDPUProxyObject;
-import framework.pim.dpu.ProxyHelper;
+import framework.lang.struct.IDPUProxyObject;
+import framework.pim.dpu.RPCHelper;
 import application.transplant.index.search.IndexTable;
 import application.transplant.index.search.Searcher;
 import application.transplant.index.search.pojo.SearchResult;
@@ -26,15 +26,15 @@ public class SearcherProxy extends Searcher implements IDPUProxyObject {
 
     @Override
     public IndexTable getTable() {
-        ProxyHelper.invokeMethod(dpuID, address, "package application.transplant.index.search.Searcher", "getTable():Ltransplant.index.search.IndexTable;\n");
-        IDPUProxyObject proxy = ProxyHelper.getAReturnValue(dpuID);
+        RPCHelper.invokeMethod(dpuID, address, "package application.transplant.index.search.Searcher", "getTable():Ltransplant.index.search.IndexTable;\n");
+        IDPUProxyObject proxy = RPCHelper.getAReturnValue(dpuID);
         return (IndexTable) proxy;
     }
 
     @Override
     public SearchResult searchDocumentIds(int[] keywordIDs) {
-        ProxyHelper.invokeMethod(dpuID, address, "package application.transplant.index.search.Searcher", "getTable():Ltransplant.index.search.IndexTable;\n");
-        IDPUProxyObject proxy = ProxyHelper.getAReturnValue(dpuID);
+        RPCHelper.invokeMethod(dpuID, address, "package application.transplant.index.search.Searcher", "getTable():Ltransplant.index.search.IndexTable;\n");
+        IDPUProxyObject proxy = RPCHelper.getAReturnValue(dpuID);
         return (SearchResult) proxy;
     }
 }

@@ -2,7 +2,7 @@ package framework.primitive;
 
 import com.upmem.dpu.DpuException;
 import framework.pim.BatchDispatcher;
-import framework.pim.struct.IDPUProxyObject;
+import framework.lang.struct.IDPUProxyObject;
 import framework.pim.UPMEM;
 
 import java.util.ArrayList;
