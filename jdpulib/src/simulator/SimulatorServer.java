@@ -3,10 +3,6 @@ package simulator;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.util.Arrays;
-
-import static pim.ExperimentConfigurator.*;
-import static pim.ExperimentConfigurator.useSimulator;
 
 public class SimulatorServer {
     public static void parseParameters(String[] args){

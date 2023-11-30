@@ -1,7 +1,7 @@
 package simulator;
 
-import pim.dpu.DPUGarbageCollector;
-import pim.dpu.java_strut.DPUJVMMemSpaceKind;
+import framework.pim.dpu.DPUGarbageCollector;
+import framework.pim.dpu.java_strut.DPUJVMMemSpaceKind;
 
 import java.rmi.RemoteException;
 

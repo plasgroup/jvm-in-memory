@@ -1,21 +1,21 @@
-import pim.BatchDispatcher;
-import pim.ExperimentConfigurator;
-import pim.UPMEM;
-import pim.UPMEMConfigurator;
-import algorithm.BSTBuilder;
-import algorithm.BSTTester;
-import algorithm.DPUTreeNode;
-import algorithm.TreeNode;
+import framework.pim.BatchDispatcher;
+import framework.pim.ExperimentConfigurator;
+import framework.pim.UPMEM;
+import framework.pim.UPMEMConfigurator;
+import application.bst.BSTBuilder;
+import application.bst.BSTTester;
+import application.bst.DPUTreeNode;
+import application.bst.TreeNode;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.Arrays;
 import java.util.List;
 
-import static pim.ExperimentConfigurator.*;
-import static algorithm.BSTBuilder.*;
-import static algorithm.BSTTester.readIntergerArrayList;
-import static algorithm.TreeWriter.writeDPUImages;
+import static framework.pim.ExperimentConfigurator.*;
+import static application.bst.BSTBuilder.*;
+import static application.bst.BSTTester.readIntergerArrayList;
+import static application.bst.TreeWriter.writeDPUImages;
 
 public class Main {
     public static UPMEMConfigurator upmemConfigurator = new UPMEMConfigurator();

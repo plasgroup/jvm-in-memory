@@ -1,7 +1,7 @@
-package simulator;
+package framework.pim;
 
+import com.upmem.dpu.Dpu;
 import com.upmem.dpu.DpuException;
-import framework.pim.UPMEM;
 import framework.pim.dpu.cache.DPUCacheManager;
 import framework.pim.dpu.cache.DPUClassFileCacheItem;
 import framework.pim.dpu.cache.DPUFieldCacheItem;
@@ -14,142 +14,23 @@ import framework.pim.utils.BytesUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.rmi.RemoteException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Dictionary;
+import java.util.Hashtable;
 
 import static framework.pim.dpu.classloader.ClassWriter.pushJClassToDPU;
 import static framework.pim.utils.ClassLoaderUtils.*;
-import static framework.pim.utils.ClassLoaderUtils.getMethodDescriptor;
 
-public class DPUClassFileManagerSimulator extends DPUClassFileManager {
-    private final DPUJVMRemote dpujvmRemote;
-    public DPUClassFileManagerSimulator(int dpuID, simulator.DPUJVMRemote dpujvmRemote) {
+public class DPUClassFileManagerUPMEM extends DPUClassFileManager {
+
+    public DPUClassFileManagerUPMEM(int dpuID, Dpu dpu) {
         this.dpuID = dpuID;
-        this.dpujvmRemote = dpujvmRemote;
+        this.dpu = dpu;
     }
-
-    @Override
-    public void recordClass(String className, DPUJClass jc, int classMramAddr) {
-        System.out.println("record " + className + ":" + classMramAddr);
-        upmem.getDPUManager(dpuID).classCacheManager.setClassStructure(className, jc, classMramAddr);
-    }
-    private DPUClassFileCacheItem getLoadedClassRecord(String className){
-        className = className.replace(".", "/");
-        return upmem.getDPUManager(dpuID).classCacheManager.getClassStrutCacheLine(className);
-    }
-    private boolean isClassLoaded(String className){
-        className = className.replace(".", "/");
-        DPUClassFileCacheItem item = upmem.getDPUManager(dpuID).classCacheManager.getClassStrutCacheLine(className);
-        return item != null;
-    }
-    private void recordMethodDistribution(Class c, DPUJClass jc, int classAddr) {
-        for(int mIndex = 0; mIndex < jc.methodCount; mIndex++){
-            String desc = getUTF8(jc,jc.methodTable[mIndex].descriptorIndex);
-            List<Class> classes = descriptorToClasses(desc.substring(1, desc.indexOf(')')));
-            try {
-                int addr;
-                if(classes.size() == 0){
-                    addr = dpujvmRemote.pushToMetaSpace(c, (getUTF8(jc,jc.methodTable[mIndex].nameIndex)));
-                }else{
-                    Class[] classesArray = new Class[classes.size()];
-                    for(int i = 0; i < classes.size(); i++){
-                        classesArray[i] = classes.get(i);
-                    }
-                    addr = dpujvmRemote.pushToMetaSpace(c, (getUTF8(jc,jc.methodTable[mIndex].nameIndex)), classesArray);
-
-                }
-
-                upmem.getDPUManager(dpuID).classCacheManager
-                        .setMethodCacheItem(c.getName().replace(".", "/"),
-                                getUTF8(jc, jc.methodTable[mIndex].nameIndex) + ":" + getUTF8(jc,jc.methodTable[mIndex].descriptorIndex),
-                                addr
-                                , jc.methodTable[mIndex]);
-            } catch (RemoteException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
-
-    List<Class> descriptorToClasses(String desc){
-        System.out.println("parse " + desc);
-        String matched = "";
-        int state = 0;
-        List<Class> classes = new ArrayList<>();
-        for(int ci = 0; ci < desc.length(); ci++){
-            char ch = desc.charAt(ci);
-            if(state == 0){
-                switch (ch){
-                    case 'B':
-                        classes.add(byte.class);
-                        break;
-                    case 'C':
-                        classes.add(char.class);
-                        break;
-                    case 'D':
-                        classes.add(double.class);
-                        break;
-                    case 'F':
-                        classes.add(float.class);
-                        break;
-                    case 'I':
-                        classes.add(int.class);
-                        break;
-                    case 'J':
-                        classes.add(long.class);
-                        break;
-                    case 'S':
-                        classes.add(short.class);
-                        break;
-                    case 'Z':
-                        classes.add(boolean.class);
-                        break;
-                    case 'L':
-                        state = 1;
-                        break;
-
-                    case '[':
-                        break;
-                }
-            }else if(state == 1){
-                if(ch != ';'){
-                    matched += ch;
-                }else{
-
-                    Class c = null;
-                    try {
-                        c = Class.forName(matched.replace("/", "."));
-                    } catch (ClassNotFoundException e) {
-                        throw new RuntimeException(e);
-                    }
-                    classes.add(c);
-
-                    matched = "";
-                    state = 0;
-                }
-
-
-                }
-            }
-
-        return classes;
-    }
-    private void recordFieldDistribution(Class c, DPUJClass jc) {
-        for(int i = 0; i < jc.fieldCount; i++){
-            String className = formalClassName(c.getName());
-            String fieldName = getUTF8(jc, jc.fields[i].nameIndex);
-            UPMEM.getInstance().getDPUManager(dpuID).classCacheManager
-                    .setFieldCacheItem(className,fieldName, jc.fields[i].indexInInstance);
-        }
-    }
-    Dictionary<String, Integer> globalVirtualTableIndexCache = new Hashtable<>();
 
     private void createVirtualTable(DPUJClass jc, byte[] classBytes) {
         /* iterate method table */
         String thisClassName = getUTF8(jc, jc.thisClassNameIndex);
-        if("pim/algorithm/DPUTreeNode".equals(thisClassName)){
-            classfileLogger.logln("");
-        }
 
         classfileLogger.logln("in java class = " + thisClassName);
         VirtualTable thisClassVirtualTable = new VirtualTable();
@@ -282,16 +163,61 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
 
 
         jc.totalSize = 48 + jc.cpItemCount * 8 + 8 +
-                Arrays.stream(jc.fields).map(e -> e.size).reduce((s1, s2) -> s1 + s2).orElse(0) +
-                Arrays.stream(jc.methodTable).map(e -> e.size).reduce((s1, s2) -> s1 + s2).orElse(0)
+                Arrays.stream(jc.fields).map(e -> e.size).reduce(Integer::sum).orElseGet(()->0) +
+                Arrays.stream(jc.methodTable).map(e -> e.size).reduce(Integer::sum).orElseGet(()->0)
                 + ((jc.stringINTConstantPoolLength + 0b111) & (~0b111))
                 + ((8 * jc.virtualTable.items.size()) + 0b111 & (~0b111));
         ;
     }
 
+    private void recordFieldDistribution(Class c, DPUJClass jc) {
+        for(int i = 0; i < jc.fieldCount; i++){
+            String className = formalClassName(c.getName());
+            String fieldName = getUTF8(jc, jc.fields[i].nameIndex);
+            UPMEM.getInstance().getDPUManager(dpuID).classCacheManager
+                    .setFieldCacheItem(className,fieldName, jc.fields[i].indexInInstance);
+        }
+    }
+
+    private void recordMethodDistribution(Class c, DPUJClass jc, int classAddr) {
+        for(int mIndex = 0; mIndex < jc.methodCount; mIndex++){
+            upmem.getDPUManager(dpuID).classCacheManager
+                    .setMethodCacheItem(c.getName().replace(".", "/"),
+                            getUTF8(jc, jc.methodTable[mIndex].nameIndex) + ":" + getUTF8(jc,jc.methodTable[mIndex].descriptorIndex),
+                            jc.methodOffset[mIndex] + 48 + 8 +
+                                    + 8 * jc.cpItemCount +
+                                    Arrays.stream(jc.fields).map(e -> e.size).reduce(Integer::sum).orElse(0)
+                                    + classAddr
+                            , jc.methodTable[mIndex]);
+        }
+    }
+
+    Dictionary<String, Integer> globalVirtualTableIndexCache = new Hashtable<>();
+    String getClassNameFromClassReference(DPUJClass jc, byte[] classBytes, int classRefIndex){
+        int classNameUTF8Index = BytesUtils.readU2BigEndian(classBytes, jc.itemBytesEntries[classRefIndex] + 1);
+        return getUTF8(jc, classNameUTF8Index);
+    }
+    private boolean isClassLoaded(String className){
+        className = className.replace(".", "/");
+        DPUClassFileCacheItem item = upmem.getDPUManager(dpuID).classCacheManager.getClassStrutCacheLine(className);
+        return item != null;
+    }
+    private DPUClassFileCacheItem getLoadedClassRecord(String className){
+        className = className.replace(".", "/");
+        return upmem.getDPUManager(dpuID).classCacheManager.getClassStrutCacheLine(className);
+    }
+    private DPUClassFileCacheItem getLoadedClassRecord(Class c){
+        return getLoadedClassRecord(c.getName());
+    }
+
+
+    @Override
+    public void recordClass(String className, DPUJClass jc, int classMramAddr) {
+        upmem.getDPUManager(dpuID).classCacheManager.setClassStructure(className, jc, classMramAddr);
+    }
+
     @Override
     public DPUJClass loadClassForDPU(Class c) {
-
         String className = formalClassName(c.getName());
         classfileLogger.logln(" ==========--> Try load class " + className + " to dpu#" + dpuID + " <--==========");
 
@@ -344,18 +270,9 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
 
             int classAddr = upmem.getDPUManager(dpuID).garbageCollector.allocate(DPUJVMMemSpaceKind.DPU_METASPACE, jc.totalSize);
 
-            int metaspaceIndex;
-            try {
-                  metaspaceIndex = dpujvmRemote.getMetaSpaceIndex();
-            } catch (RemoteException e) {
-                throw new RuntimeException();
-            }
-            try {
-                recordClass(className, jc, dpujvmRemote.pushToMetaSpace(c));
-            } catch (RemoteException e) {
-                throw new RuntimeException(e);
-            }
-            recordMethodDistribution(c, jc, metaspaceIndex);
+
+            recordClass(className, jc, classAddr);
+            recordMethodDistribution(c, jc, classAddr);
             recordFieldDistribution(c, jc);
             createVirtualTable(jc, classFileBytes);
             upmem.getDPUManager(dpuID).garbageCollector.allocate(DPUJVMMemSpaceKind.DPU_METASPACE,
@@ -373,10 +290,8 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
                     jc.virtualTable.items.get(i).classReferenceAddress = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getClassStrutCacheLine(vClassName).marmAddr;
                 }
             }
-
             try {
-                pushJClassToDPU(jc, classAddr , dpuID);
-
+                pushJClassToDPU(jc, classAddr, dpuID);
             } catch (DpuException e) {
                 throw new RuntimeException(e);
             }
@@ -389,20 +304,9 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
 
         int classAddr =
                 upmem.getDPUManager(dpuID).garbageCollector.allocate(DPUJVMMemSpaceKind.DPU_METASPACE, jc.totalSize);
-        int metaspaceIndex;
 
-        try {
-            metaspaceIndex = dpujvmRemote.getMetaSpaceIndex();
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
-
-        try {
-            recordClass(formalClassName(c.getName()), jc, dpujvmRemote.pushToMetaSpace(c));
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
-        recordMethodDistribution(c, jc, metaspaceIndex);
+        recordClass(formalClassName(c.getName()), jc, classAddr);
+        recordMethodDistribution(c, jc, classAddr);
         recordFieldDistribution(c, jc);
         createVirtualTable(jc, classFileBytes);
         upmem.getDPUManager(dpuID).garbageCollector.allocate(DPUJVMMemSpaceKind.DPU_METASPACE,
@@ -493,6 +397,10 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
                             vItem.className, vItem.descriptor
                     );
 
+                    if(methodCacheItem != null){
+
+                    }
+
                     cacheLine =
                             upmem.getDPUManager(dpuID).classCacheManager.dpuClassCache.cache.get(vItem.className);
                     if(cacheLine != null){
@@ -549,6 +457,9 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
 
                     String matched = "";
                     int state = 0;
+
+
+                    /** parse and process discriptor **/
                     for(int ci = 0; ci < paramsDesc.length(); ci++){
                         char ch = paramsDesc.charAt(ci);
                         if(state == 0){
@@ -597,7 +508,7 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
 
                     // find cache
                     jc.entryItems[i] = 0;
-                    jc.entryItems[i] |= ((long) BytesUtils.readU2BigEndian(classFileBytes, jc.itemBytesEntries[i] + 1) << 48) & 0xFFFF000000000000L;
+                    jc.entryItems[i] |= ((long)BytesUtils.readU2BigEndian(classFileBytes, jc.itemBytesEntries[i] + 1) << 48) & 0xFFFF000000000000L;
                     jc.entryItems[i] |= ((long)BytesUtils.readU2BigEndian(classFileBytes, jc.itemBytesEntries[i] + 3) << 32) & 0x0000FFFF00000000L;
 
                     jc.entryItems[i] |=  methodTableIndex;
@@ -624,7 +535,6 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
         DPUCacheManager classCacheManager = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager;
         try {
             pushJClassToDPU(jc, classAddr, dpuID);
-
         } catch (DpuException e) {
             throw new RuntimeException(e);
         }
