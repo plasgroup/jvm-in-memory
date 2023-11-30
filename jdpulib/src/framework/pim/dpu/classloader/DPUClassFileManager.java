@@ -24,7 +24,7 @@ public abstract class DPUClassFileManager {
 
 
 
-    public abstract DPUJClass loadClassForDPU(Class c);
+    public abstract DPUJClass loadClassToDPU(Class c);
 
 
 

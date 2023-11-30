@@ -10,6 +10,8 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.List;
 
+
+/** for saving loaded JVM structures at the host **/
 public abstract class DPUCacheManager {
     public DPUClassCache dpuClassCache;
     public DPUMethodCache methodCache;

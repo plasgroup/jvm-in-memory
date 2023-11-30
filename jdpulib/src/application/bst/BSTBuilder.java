@@ -284,7 +284,7 @@ public class BSTBuilder {
     /** build PIM BST from file, distributing cpuLayerCount layers in CPU side at most **/
     public static TreeNode buildPIMTree(String filePath, int cpuLayerCount){
         for(int i = 0; i < UPMEM.dpuInUse; i++){
-            UPMEM.getInstance().getDPUManager(i).dpuClassFileManager.loadClassForDPU(DPUTreeNode.class);
+            UPMEM.getInstance().getDPUManager(i).dpuClassFileManager.loadClassToDPU(DPUTreeNode.class);
         }
 
         TreeNode root = BSTBuilder.buildCPUTree(filePath);

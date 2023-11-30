@@ -159,7 +159,7 @@ public class DPUManagerSimulator extends DPUManager {
         int classAddr;
         int initMethodAddr;
         if(classCacheManager.getClassStrutCacheLine(c.getName().replace(".","/")) == null){
-            dpuClassFileManager.loadClassForDPU(c);
+            dpuClassFileManager.loadClassToDPU(c);
         }
 
         classAddr = classCacheManager.getClassStrutCacheLine(c.getName().replace(".","/")).marmAddr;

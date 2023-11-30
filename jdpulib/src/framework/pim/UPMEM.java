@@ -24,17 +24,35 @@ import java.lang.reflect.Field;
 
 public class UPMEM {
     /* Configurations Fields */
-    public static final int TOTAL_DPU_COUNT = 1024;
-    public static final int TOTAL_HARDWARE_THREADS_COUNT = 24;
-    public static int dpuInUse = 1024;
+    public static final int TOTAL_DPU_COUNT = 1024; // Total DPUs
+    public static final int TOTAL_HARDWARE_THREADS_COUNT = 24; // hardware thread used in each DPU
+    public static int dpuInUse = 1024; // DPUs in using
     public static int perDPUThreadsInUse = TOTAL_HARDWARE_THREADS_COUNT;
 
-    /* Facade Class for PIM management*/
+    /* Facade Class for PIM management */
     private static PIMManager pimManager;
 
+    // specifiedTasklet[i]: whether require i-th DPU use a specific tasklet decidedTasklet[i] to execute tasks.
     static boolean[] specifiedTasklet = new boolean[UPMEM.dpuInUse];
-
+    // decidedTasklet[i]: when specifiedTasklet[i] = true, this saves tasklet id that the tasklet identified by it would be used to execute tasks.
     static int[] decidedTasklet = new int[UPMEM.dpuInUse];
+
+    /* Unsafe class. It will be used to create a proxy class instance without initialize it */
+    static Unsafe unsafe;
+    static {
+        try {
+            Field singleoneInstanceField = Unsafe.class.getDeclaredField("theUnsafe");
+            singleoneInstanceField.setAccessible(true);
+            unsafe = (Unsafe) singleoneInstanceField.get(null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /* Singleton */
+    private static volatile UPMEM instance = null;
+    private static final Object locker = new Object();
+
 
     public static boolean isSpecifyTasklet(int dpu){
         return specifiedTasklet[dpu];
@@ -55,22 +73,7 @@ public class UPMEM {
         specifiedTasklet[dpu] = true;
         decidedTasklet[dpu] = tasklet;
     }
-    /* Singleton */
-    private static volatile UPMEM instance = null;
-    private static final Object locker = new Object();
 
-
-
-    public static void endRecordBatchDispatching() {
-        batchDispatchingRecording = false;
-    }
-
-    public static boolean batchDispatchingRecording = false;
-    public static BatchDispatcher batchDispatcher;
-    public static void beginRecordBatchDispatching(BatchDispatcher batchDispatcher) {
-        UPMEM.batchDispatcher = batchDispatcher;
-        batchDispatchingRecording = true;
-    }
 
 
     static Logger upmemLogger = Logger.getLogger("framework.pim:upmem");
@@ -78,20 +81,22 @@ public class UPMEM {
         upmemLogger.setEnable(false);
     }
 
-    public DPUManager getDPUManager(int dpuID){
-        return pimManager.getDPUManager(dpuID);
+
+    /** Batch Dispatching **/
+    public static boolean batchDispatchingRecording = false;
+    public static BatchDispatcher batchDispatcher;
+    public static void beginRecordBatchDispatching(BatchDispatcher batchDispatcher) {
+        UPMEM.batchDispatcher = batchDispatcher;
+        batchDispatchingRecording = true;
+    }
+    public static void endRecordBatchDispatching() {
+        batchDispatchingRecording = false;
     }
 
-    /* Unsafe class. It will be used to create a proxy class instance without initialize it */
-    static Unsafe unsafe;
-    static {
-        try {
-            Field singleoneInstanceField = Unsafe.class.getDeclaredField("theUnsafe");
-            singleoneInstanceField.setAccessible(true);
-            unsafe = (Unsafe) singleoneInstanceField.get(null);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+
+    public DPUManager getDPUManager(int dpuID){
+        return pimManager.getDPUManager(dpuID);
     }
 
 

@@ -62,7 +62,7 @@ public class BatchDispatcher {
 //                    //result[taskID + dispatchedCount] = res;
 //                }
 //            }
-            System.out.println("dpu#" + id + " finished");
+            dispatchLogger.logln("dpu#" + id + " finished");
 
             latch.countDown();
 
@@ -122,9 +122,9 @@ public class BatchDispatcher {
         }
 
         dpusInUse.clear();
-        System.out.println("all dispatched");
+        dispatchLogger.logln("all dispatched");
         dispatchedCount += count;
 
-        System.out.println("current total count == " + dispatchedCount);
+        dispatchLogger.logln("current total count == " + dispatchedCount);
     }
 }

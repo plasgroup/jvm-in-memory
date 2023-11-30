@@ -290,7 +290,7 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
     }
 
     @Override
-    public DPUJClass loadClassForDPU(Class c) {
+    public DPUJClass loadClassToDPU(Class c) {
 
         String className = formalClassName(c.getName());
         classfileLogger.logln(" ==========--> Try load class " + className + " to dpu#" + dpuID + " <--==========");
@@ -335,7 +335,7 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
         if(!"".equals(className)) {
             if(!isClassLoaded(superClassName)){
                 classfileLogger.logln(" ---- load super class " + className + ", index " + jc.superClassNameIndex);
-                loadClassForDPU(c.getSuperclass());
+                loadClassToDPU(c.getSuperclass());
             }
         }else{
             classfileLogger.logln(" ---- No superclass ----");
@@ -431,7 +431,7 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
                         if(!"java/lang/System".equals(classNameUTF8)){
                             try {
                                 // TODO className$1 loading..
-                                loadClassForDPU(Class.forName(classNameUTF8.replace("/", ".")));
+                                loadClassToDPU(Class.forName(classNameUTF8.replace("/", ".")));
                             } catch (ClassNotFoundException e) {
                                 classfileLogger.logln("cannot find class " + classNameUTF8);
                             }
@@ -460,7 +460,7 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
                             classfileLogger.logln("ignore " + classNameUTF8);
                         }else{
                             try {
-                                loadClassForDPU(Class.forName(classNameUTF8.replace("/", ".")));
+                                loadClassToDPU(Class.forName(classNameUTF8.replace("/", ".")));
                             } catch (ClassNotFoundException e) {
                                 throw new RuntimeException(e);
                             }
@@ -507,10 +507,10 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
                                 if(!"".equals(cName) && cName.charAt(0) == '['){
                                     cName = cName.substring(1).replace(";", "");
                                     if(cName.charAt(0) == 'L'){
-                                        loadClassForDPU(Class.forName(cName.substring(1)));
+                                        loadClassToDPU(Class.forName(cName.substring(1)));
                                     }
                                 }else{
-                                    loadClassForDPU(Class.forName(cName));
+                                    loadClassToDPU(Class.forName(cName));
                                 }
                             } catch (ClassNotFoundException e) {
                                 throw new RuntimeException(e);
@@ -538,7 +538,7 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
                         if(upmem.getDPUManager(dpuID).classCacheManager.getClassStrutCacheLine(returnTypeName) == null){
                             classfileLogger.logln("class " + returnVal + " unloaded");
                             try {
-                                loadClassForDPU(Class.forName((returnVal.substring(1).replace("/", ".").replace(";", "")) ));
+                                loadClassToDPU(Class.forName((returnVal.substring(1).replace("/", ".").replace(";", "")) ));
                             } catch (ClassNotFoundException e) {
                                 throw new RuntimeException(e);
                             }
@@ -578,7 +578,7 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
                                         classfileLogger.logln("ignore class " + matched);
                                     }else{
                                         try {
-                                            loadClassForDPU(Class.forName(matched.replace("/", ".")));
+                                            loadClassToDPU(Class.forName(matched.replace("/", ".")));
                                         } catch (ClassNotFoundException e) {
                                             throw new RuntimeException(e);
                                         }

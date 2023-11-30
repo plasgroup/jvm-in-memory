@@ -209,8 +209,6 @@ public class ClassFileAnalyzer {
         return pos - beginPos;
     }
 
-
-
     public static void printEntryTable(DPUJClass jc){
 
         for(int i = 1; i < jc.cpItemCount; i++){

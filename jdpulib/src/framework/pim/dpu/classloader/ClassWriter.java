@@ -15,11 +15,15 @@ import java.util.Arrays;
 public class ClassWriter {
     static UPMEM upmem = UPMEM.getInstance();
     static Logger classfileLogger = PIMLoggers.classfileLogger;
+
+    /** push a JClass to DPU **/
     public static void pushJClassToDPU(DPUJClass jc, int addr, int dpuID) throws DpuException {
 
         byte[] classBytes = cvtDPUClassStrut2Bytes(jc, addr);
         upmem.getDPUManager(dpuID).garbageCollector.transfer(DPUJVMMemSpaceKind.DPU_METASPACE, classBytes, addr);
     }
+
+    /** encoding DPUJClass to bytes that prepared to be pushed to DPUs **/
 
     public static byte[] cvtDPUClassStrut2Bytes(DPUJClass ds, int classAddr){
         byte[] bs = new byte[(ds.totalSize + 0b111) & ~(0b111)];
