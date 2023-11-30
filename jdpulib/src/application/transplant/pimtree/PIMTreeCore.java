@@ -120,7 +120,7 @@ public class PIMTreeCore {
         System.out.printf("execute finish!\n");
         // fflush(stdout);
         // TODO: oracle
-        System.out.println(oracle.inserted.size());
+        //System.out.println(oracle.inserted.size());
     }
     public static <T> List<T> make_slice(List<T> ops) {
         return ops;
