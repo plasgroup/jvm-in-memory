@@ -2,14 +2,16 @@ package framework.lang.struct.dist;
 
 import framework.pim.UPMEM;
 
-import static framework.lang.struct.dist.DistributedStrategy.BLOCK;
+import static framework.lang.struct.dist.ArrayDistributedStrategy.BLOCK;
 
+
+/** A distributed array structure **/
 public class DistributedInt32Array{
-    final DistributedStrategy strategy;
+    final ArrayDistributedStrategy strategy;
     final int partitionCount;
     final int length;
     DPUInt32ArrayHandler[] handler;
-    public DistributedInt32Array(int len, int partitionCount, DistributedStrategy strategy) {
+    public DistributedInt32Array(int len, int partitionCount, ArrayDistributedStrategy strategy) {
         this.partitionCount = partitionCount;
         this.strategy = strategy;
         this.length = len;

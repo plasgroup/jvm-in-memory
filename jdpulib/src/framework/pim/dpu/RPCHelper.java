@@ -12,16 +12,24 @@ import framework.pim.logger.PIMLoggers;
 public class RPCHelper {
     static Logger pimProxy = PIMLoggers.pimProxy;
     static UPMEM upmem = UPMEM.getInstance();
+
+
+    /** get int result value **/
     public static int getIReturnValue(int dpuID){
         int returnVal = upmem.getDPUManager(dpuID).garbageCollector.getReturnVal();
         // pimProxy.logf( "framework.pim:proxy","return int = %d\n", returnVal);
         return returnVal;
     }
+
+    /** get boolean result value **/
+
     public static boolean getBooleanReturnValue(int dpuID){
         int returnVal = upmem.getDPUManager(dpuID).garbageCollector.getReturnVal();
         // pimProxy.logf( "framework.pim:proxy","return int = %d\n", returnVal);
         return returnVal == 0 ? false : true;
     }
+
+    /** get reference result value **/
 
     public static IDPUProxyObject getAReturnValue(int dpuID){
         try {
@@ -33,6 +41,10 @@ public class RPCHelper {
             throw new RuntimeException(e);
         }
     }
+
+
+
+    /** invoke method **/
 
     public static void invokeMethod(int dpuID, int address, String className, String methodDescriptor, Object... params){
         DPUCacheManager cm = upmem.getDPUManager(dpuID).classCacheManager;

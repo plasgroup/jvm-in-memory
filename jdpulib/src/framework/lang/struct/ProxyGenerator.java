@@ -13,6 +13,9 @@ import java.util.*;
 
 import static java.util.Collections.singletonList;
 
+
+// TODO: has problem in generate inner final classes' proxies (e.g., String)
+
 public class ProxyGenerator{
     static String generateProxySourceCode(Class c){
 

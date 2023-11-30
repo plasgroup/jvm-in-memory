@@ -2,6 +2,8 @@ package framework.lang.struct.dist;
 
 import framework.pim.UPMEM;
 
+
+/** A handler manage a certain int32 array of a DPU **/
 public class DPUInt32ArrayHandler {
     private final int dpuID;
     private final Class proxyClass;
