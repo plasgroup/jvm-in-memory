@@ -1,7 +1,7 @@
 package simulator;
 
-import pim.dpu.DPUGarbageCollector;
-import pim.dpu.java_strut.DPUJVMMemSpaceKind;
+import framework.pim.dpu.DPUGarbageCollector;
+import framework.pim.dpu.java_strut.DPUJVMMemSpaceKind;
 
 import java.rmi.RemoteException;
 
@@ -167,4 +167,14 @@ public class DPUGarbageCollectorSimulator extends DPUGarbageCollector {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public int getInt32(int i) {
+        try {
+            return dpujvmRemote.getInt32(i);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

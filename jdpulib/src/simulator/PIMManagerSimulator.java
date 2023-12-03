@@ -1,6 +1,6 @@
 package simulator;
 
-import pim.dpu.PIMManager;
+import framework.pim.dpu.PIMManager;
 
 public class PIMManagerSimulator extends PIMManager {
     @Override
