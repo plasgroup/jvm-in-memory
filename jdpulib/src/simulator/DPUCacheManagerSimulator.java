@@ -1,12 +1,13 @@
 package simulator;
 
-import pim.dpu.cache.DPUCacheManager;
-import pim.dpu.cache.DPUClassFileCacheItem;
-import pim.dpu.cache.DPUFieldCacheItem;
-import pim.dpu.cache.DPUMethodCacheItem;
-import pim.dpu.java_strut.DPUJClass;
-import pim.dpu.java_strut.DPUJMethod;
-import pim.utils.ClassLoaderUtils;
+import framework.pim.dpu.cache.DPUCacheManager;
+import framework.pim.dpu.cache.DPUClassFileCacheItem;
+import framework.pim.dpu.cache.DPUFieldCacheItem;
+import framework.pim.dpu.cache.DPUMethodCacheItem;
+import framework.pim.dpu.java_strut.DPUJClass;
+import framework.pim.dpu.java_strut.DPUJMethod;
+import framework.pim.utils.ClassLoaderUtils;
+
 
 import java.util.Dictionary;
 import java.util.Hashtable;

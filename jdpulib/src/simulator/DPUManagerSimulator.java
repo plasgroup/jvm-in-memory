@@ -1,20 +1,20 @@
 package simulator;
 
 import com.upmem.dpu.DpuException;
-import pim.BatchDispatcher;
-import pim.IDPUProxyObject;
-import pim.UPMEM;
-import pim.dpu.DPUGarbageCollector;
-import pim.dpu.DPUManager;
-import pim.dpu.DPUObjectHandler;
-import pim.utils.BytesUtils;
+import framework.pim.BatchDispatcher;
+import framework.lang.struct.IDPUProxyObject;
+import framework.pim.UPMEM;
+import framework.pim.dpu.DPUGarbageCollector;
+import framework.pim.dpu.DPUManager;
+import framework.lang.struct.DPUObjectHandler;
+import framework.pim.utils.BytesUtils;
 
 import java.io.PrintStream;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 
-import static pim.dpu.java_strut.DPUJVMMemSpaceKind.DPU_HEAPSPACE;
+import static framework.pim.dpu.java_strut.DPUJVMMemSpaceKind.DPU_HEAPSPACE;
 
 public class DPUManagerSimulator extends DPUManager {
 
@@ -159,7 +159,7 @@ public class DPUManagerSimulator extends DPUManager {
         int classAddr;
         int initMethodAddr;
         if(classCacheManager.getClassStrutCacheLine(c.getName().replace(".","/")) == null){
-            dpuClassFileManager.loadClassForDPU(c);
+            dpuClassFileManager.loadClassToDPU(c);
         }
 
         classAddr = classCacheManager.getClassStrutCacheLine(c.getName().replace(".","/")).marmAddr;

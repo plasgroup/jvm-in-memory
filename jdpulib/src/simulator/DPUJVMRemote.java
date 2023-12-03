@@ -41,4 +41,7 @@ public interface DPUJVMRemote extends Remote {
     int allocateObject() throws RemoteException;
 
     int pushArguments(int[] params, int tasklet) throws RemoteException;
+
+    int getInt32(int addr) throws RemoteException;
+
 }

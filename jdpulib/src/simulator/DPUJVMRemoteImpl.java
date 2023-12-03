@@ -125,6 +125,7 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
     }
 
 
+
     @Override
     public void start() throws RemoteException{
         countDownLatch = new CountDownLatch(threadCount);
@@ -270,6 +271,12 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
         }
         return taskletParameterTop[tasklet];
     }
+
+    @Override
+    public int getInt32(int addr) {
+        return (int) heap[addr];
+    }
+
 
 
     @Override

@@ -1,24 +1,22 @@
-import pim.BatchDispatcher;
-import pim.ExperimentConfigurator;
-import pim.UPMEM;
-import pim.UPMEMConfigurator;
-import pim.algorithm.BSTBuilder;
-import pim.algorithm.BSTTester;
-import pim.algorithm.DPUTreeNode;
-import pim.algorithm.IntIntValuePairGenerator;
-import pim.algorithm.TreeNode;
+import framework.pim.BatchDispatcher;
+import framework.pim.ExperimentConfigurator;
+import framework.pim.UPMEM;
+import framework.pim.UPMEMConfigurator;
+import application.bst.BSTBuilder;
+import application.bst.BSTTester;
+import application.bst.DPUTreeNode;
+import application.bst.TreeNode;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static pim.ExperimentConfigurator.*;
-import static pim.algorithm.BSTBuilder.buildCpuPartTreeFromFile;
-import static pim.algorithm.BSTBuilder.buildPIMTreeByInsert;
-import static pim.algorithm.BSTTester.readIntergerArrayList;
-import static pim.algorithm.TreeWriter.writeDPUImages;
+import static framework.pim.ExperimentConfigurator.*;
+import static application.bst.BSTBuilder.*;
+import static application.bst.BSTTester.readIntergerArrayList;
+import static application.bst.TreeWriter.writeDPUImages;
+
 
 public class Main {
     public static UPMEMConfigurator upmemConfigurator = new UPMEMConfigurator();
@@ -72,7 +70,7 @@ public class Main {
                 if(items.length > 1) performanceEvaluationEnableBatchDispatch = Integer.parseInt(items[1]) != 0;
             }else if("JVM_SIMULATOR".equals(argumentName)){
 	        useSimulator = true;
-		if(items.length > 1) useSimulator = Integer.parseInt(items[1]) != 0;
+		    if(items.length > 1) useSimulator = Integer.parseInt(items[1]) != 0;
 	    }
 
         }
@@ -178,10 +176,15 @@ public class Main {
                .setDpuInUseCount(dpuInUse)
                .setThreadPerDPU(UPMEM.perDPUThreadsInUse);
 
+       performanceEvaluationMode = true;
+       nodes = 100000000;
+       performanceEvaluationNodeCount = 100000000;
+
        if(performanceEvaluationMode) {
            performanceEvaluation();
            return;
        }
+
 
        if(args.length == 0){
            BSTTester.evaluatePIMBST(totalNodeCount, ExperimentConfigurator.queryCount,  ExperimentConfigurator.cpuLayerCount);
