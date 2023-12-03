@@ -41,18 +41,22 @@ public class ControlPrimitives {
         // get real class
         anomyousClass = anomyousClass.getInterfaces().length == 0 ? anomyousClass.getSuperclass() : anomyousClass.getInterfaces()[0];
         String cName = anomyousClass.getName().replace(".", "/");
-        // send anomynous class to JVM temporary
-        DPUJClass dpuJClass = classFileManager.loadClassToDPU(anomyousClass);
 
         // java/lang/Object is needed
         classFileManager.loadClassToDPU(Object.class);
+
+        // send anomynous class to JVM temporary
+        DPUJClass dpuJClass = classFileManager.loadClassToDPU(anomyousClass);
 
         int beginAddress = garbageCollector.allocate(DPUJVMMemSpaceKind.DPU_METASPACE, dpuJClass.totalSize);
         byte[] bytes = ClassWriter.cvtDPUClassStrut2Bytes(dpuJClass, beginAddress);
         garbageCollector.transfer(DPUJVMMemSpaceKind.DPU_METASPACE, bytes, beginAddress);
 
         StringBuilder sb = new StringBuilder();
-        sb.append("function");
+        sb.append("function:(");
+        sb.append("Ljava/lang/Object;".repeat(params.length));
+        sb.append(")Ljava/lang/Object;");
+
         ProxyHelper.invokeMethod(dpuID, -1, cName, String.valueOf(sb), params);
 
         // clear
