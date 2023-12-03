@@ -277,6 +277,10 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
         return (int) heap[addr];
     }
 
+    @Override
+    public int getMetaSpaceLength() throws RemoteException {
+        return maxMetaspaceSize;
+    }
 
 
     @Override

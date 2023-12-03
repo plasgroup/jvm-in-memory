@@ -44,4 +44,5 @@ public interface DPUJVMRemote extends Remote {
 
     int getInt32(int addr) throws RemoteException;
 
+    int getMetaSpaceLength() throws RemoteException;
 }

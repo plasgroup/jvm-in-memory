@@ -27,6 +27,8 @@ public abstract class DPUGarbageCollector {
 
     public abstract void updateHeapPointerToDPU();
 
+    public abstract void updateMetaSpacePointerToDPU();
+
     public abstract int pushParameters(int[] params);
 
     public abstract int pushParameters(int[] params, int tasklet);
@@ -39,6 +41,8 @@ public abstract class DPUGarbageCollector {
         DPUObjectHandler handler = new DPUObjectHandler(dpuID, addr);
         return handler;
     }
+
+    public abstract int freeFromBack(DPUJVMMemSpaceKind spaceKind, int size);
 
     public abstract int getRemainHeapMemory();
 

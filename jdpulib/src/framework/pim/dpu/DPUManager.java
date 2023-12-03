@@ -37,6 +37,7 @@ public abstract class DPUManager {
         return calcFieldCount(c.getSuperclass()) + c.getDeclaredFields().length;
     }
 
+
     protected String generateInitializationDescriptor(Object[] params){
         String desc = "<init>:(";
         for(Object obj : params){

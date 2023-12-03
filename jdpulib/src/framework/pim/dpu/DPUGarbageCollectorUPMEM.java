@@ -44,6 +44,16 @@ public class DPUGarbageCollectorUPMEM extends DPUGarbageCollector {
         }
     }
 
+    @Override
+    public void updateMetaSpacePointerToDPU() {
+        byte[] ptBytes = new byte[4];
+        BytesUtils.writeU4LittleEndian(ptBytes, this.heapSpacePt, 0);
+        try {
+            dpu.copy("meta_space_pt", ptBytes, 0);
+        } catch (DpuException e) {
+            throw new RuntimeException(e);
+        }
+    }
     /** push parameters to tasklet's parameter buffer (default: tasklet id = 0) **/
 
     @Override
@@ -192,6 +202,25 @@ public class DPUGarbageCollectorUPMEM extends DPUGarbageCollector {
         }
 
         return addr;
+    }
+
+    @Override
+    public int freeFromBack(DPUJVMMemSpaceKind spaceKind, int size) {
+        switch (spaceKind){
+            case DPU_HEAPSPACE:
+                heapSpacePt -= size;
+                if(heapSpacePt < 0) throw new RuntimeException("Exception in freeing DPU memory");
+                updateHeapPointerToDPU();
+                return heapSpacePt;
+            case DPU_METASPACE:
+                metaSpacePt -= size;
+                if(metaSpacePt < 0) throw new RuntimeException("Exception in freeing DPU memory");
+                updateMetaSpacePointerToDPU();
+                return heapSpacePt;
+            case DPU_PARAMETER_BUFFER, DPU_STATIC_TEMP:
+                break;
+        }
+        return -1;
     }
 
     @Override

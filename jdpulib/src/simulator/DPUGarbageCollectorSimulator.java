@@ -17,7 +17,20 @@ public class DPUGarbageCollectorSimulator extends DPUGarbageCollector {
 
     @Override
     public void updateHeapPointerToDPU() {
-        throw new RuntimeException();
+        try {
+            dpujvmRemote.setHeapPointer(heapSpacePt);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void updateMetaSpacePointerToDPU() {
+        try {
+            dpujvmRemote.setMetaSpacePointer(metaSpacePt);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -36,20 +49,25 @@ public class DPUGarbageCollectorSimulator extends DPUGarbageCollector {
 
     @Override
     public void readBackHeapSpacePt() {
-        throw new RuntimeException();
-
+        try {
+            heapSpacePt = dpujvmRemote.getHeapPointer();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void readBackMetaSpacePt() {
-        throw new RuntimeException();
-
+        try {
+            metaSpacePt = dpujvmRemote.getHeapPointer();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void transfer(DPUJVMMemSpaceKind spaceKind, byte[] data, int pt) {
         try {
-
             switch (spaceKind){
                 case DPU_HEAPSPACE:
                     dpujvmRemote.setHeapPointer(dpujvmRemote.getHeapPointer() + data.length);
@@ -57,13 +75,15 @@ public class DPUGarbageCollectorSimulator extends DPUGarbageCollector {
                 case DPU_METASPACE:
                     dpujvmRemote.setMetaSpacePointer(dpujvmRemote.getMetaSpacePointer() + data.length);
                     break;
-
             }
         }catch (RemoteException ignored){
-        }
 
+        }
     }
 
+
+    // TODO: currently ignore transfer byte[] data to simulator heap. Because the heap of simulation
+    //       storage Object directly
     @Override
     public int allocate(DPUJVMMemSpaceKind spaceKind, byte[] data) {
         throw new RuntimeException();
@@ -146,6 +166,33 @@ public class DPUGarbageCollectorSimulator extends DPUGarbageCollector {
     }
 
     @Override
+    public int freeFromBack(DPUJVMMemSpaceKind spaceKind, int size) {
+        switch (spaceKind){
+            case DPU_HEAPSPACE:
+                try {
+                    dpujvmRemote.setHeapPointer(heapSpacePt - size);
+                    heapSpacePt -= size;
+                    if(heapSpacePt < 0) throw new RuntimeException();
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
+                break;
+            case DPU_METASPACE:
+                try {
+                    dpujvmRemote.setMetaSpacePointer(heapSpacePt - size);
+                    metaSpacePt -= size;
+                    if(metaSpacePt < 0) throw new RuntimeException();
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
+                heapSpacePt -= size;
+                if(heapSpacePt < 0) throw new RuntimeException();
+                break;
+        }
+        return -1;
+    }
+
+    @Override
     public int getRemainHeapMemory() {
         try {
             return dpujvmRemote.getHeapLength() - dpujvmRemote.getHeapPointer();
@@ -156,7 +203,11 @@ public class DPUGarbageCollectorSimulator extends DPUGarbageCollector {
 
     @Override
     public int getRemainMetaMemory() {
-        throw new RuntimeException();
+        try {
+            return dpujvmRemote.getMetaSpaceLength() - dpujvmRemote.getMetaSpacePointer();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
