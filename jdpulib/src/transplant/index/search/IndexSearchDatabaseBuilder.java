@@ -1,7 +1,7 @@
 package transplant.index.search;
 
-import pim.IDPUProxyObject;
-import pim.UPMEM;
+import framework.lang.struct.IDPUProxyObject;
+import framework.pim.UPMEM;
 import transplant.index.search.pojo.Word;
 
 import java.io.*;

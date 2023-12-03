@@ -1,11 +1,10 @@
-package pim.dpu;
+package framework.pim;
 
-import pim.IDPUProxyObject;
-import pim.UPMEM;
-import pim.algorithm.DPUTreeNodeProxyAutoGen;
-import pim.dpu.cache.DPUCacheManager;
-import pim.logger.Logger;
-import pim.logger.PIMLoggers;
+import application.bst.DPUTreeNodeProxyAutoGen;
+import framework.lang.struct.IDPUProxyObject;
+import framework.pim.dpu.cache.DPUCacheManager;
+import framework.pim.logger.Logger;
+import framework.pim.logger.PIMLoggers;
 
 public class ProxyHelper {
     static Logger pimProxy = PIMLoggers.pimProxy;
@@ -40,4 +39,3 @@ public class ProxyHelper {
         upmem.getDPUManager(dpuID).callNonstaticMethod(classMRAMAddr, methodMRAMAddr, address, params);
     }
 }
-

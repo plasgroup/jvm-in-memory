@@ -1,8 +1,7 @@
 package transplant.index.search.proxy;
 
-import pim.IDPUProxyObject;
-import pim.UPMEM;
-import pim.dpu.ProxyHelper;
+import framework.lang.struct.IDPUProxyObject;
+import framework.pim.ProxyHelper;
 
 import java.util.*;
 import java.util.function.Consumer;

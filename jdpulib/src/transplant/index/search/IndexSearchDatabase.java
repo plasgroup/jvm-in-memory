@@ -1,6 +1,6 @@
 package transplant.index.search;
 
-import pim.UPMEM;
+import framework.pim.UPMEM;
 import transplant.index.search.pojo.Word;
 
 import javax.xml.transform.Result;
