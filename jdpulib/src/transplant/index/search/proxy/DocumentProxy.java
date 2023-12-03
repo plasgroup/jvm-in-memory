@@ -1,6 +1,6 @@
 package transplant.index.search.proxy;
 
-import pim.IDPUProxyObject;
+import framework.lang.struct.IDPUProxyObject;
 import transplant.index.search.Document;
 
 public class DocumentProxy extends Document implements IDPUProxyObject {

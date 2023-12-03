@@ -1,7 +1,7 @@
 package transplant.index.search.proxy;
 
-import pim.IDPUProxyObject;
-import pim.dpu.ProxyHelper;
+import framework.lang.struct.IDPUProxyObject;
+import framework.pim.ProxyHelper;
 import transplant.index.search.IndexTable;
 import transplant.index.search.Searcher;
 import transplant.index.search.pojo.SearchResult;
