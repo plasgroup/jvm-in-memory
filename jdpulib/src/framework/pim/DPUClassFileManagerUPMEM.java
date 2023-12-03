@@ -17,6 +17,7 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.Objects;
 
 import static framework.pim.dpu.classloader.ClassWriter.pushJClassToDPU;
 import static framework.pim.utils.ClassLoaderUtils.*;
@@ -217,6 +218,9 @@ public class DPUClassFileManagerUPMEM extends DPUClassFileManager {
         upmem.getDPUManager(dpuID).classCacheManager.setClassStructure(className, jc, classMramAddr);
     }
 
+    static {
+        classfileLogger.setEnable(true);
+    }
     @Override
     public DPUJClass loadClassToDPU(Class c) {
         String className = formalClassName(c.getName());
@@ -262,7 +266,13 @@ public class DPUClassFileManagerUPMEM extends DPUClassFileManager {
         if(!"".equals(className)) {
             if(!isClassLoaded(superClassName)){
                 classfileLogger.logln(" ---- load super class " + className + ", index " + jc.superClassNameIndex);
-                loadClassToDPU(c.getSuperclass());
+                if(c.isInterface()){
+                    classfileLogger.logln(" ---- Interface.. Load super class of java/lang/Object");
+
+                    loadClassToDPU(Object.class);
+                }else{
+                    loadClassToDPU(c.getSuperclass());
+                }
             }
         }else{
             classfileLogger.logln(" ---- No superclass ----");

@@ -7,7 +7,7 @@ import framework.pim.logger.PIMLoggers;
 import framework.pim.UPMEM;
 
 public abstract class DPUClassFileManager {
-    protected Logger classfileLogger = PIMLoggers.classfileLogger;
+    protected static Logger classfileLogger = PIMLoggers.classfileLogger;
 
     public int dpuID;
     protected Dpu dpu;
@@ -18,11 +18,7 @@ public abstract class DPUClassFileManager {
 //        this.DPUJVMRemote = registry;
 //    }
 
-
-
     public abstract void recordClass(String className, DPUJClass jc, int classMramAddr);
-
-
 
     public abstract DPUJClass loadClassToDPU(Class c);
 

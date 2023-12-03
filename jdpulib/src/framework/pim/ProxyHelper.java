@@ -8,7 +8,7 @@ import framework.pim.logger.PIMLoggers;
 
 public class ProxyHelper {
     static Logger pimProxy = PIMLoggers.pimProxy;
-    static UPMEM upmem = UPMEM.getInstance();
+    public static UPMEM upmem = UPMEM.getInstance();
     public static int getIReturnValue(int dpuID){
         int returnVal = upmem.getDPUManager(dpuID).garbageCollector.getReturnVal();
         // pimProxy.logf( "pim:proxy","return int = %d\n", returnVal);

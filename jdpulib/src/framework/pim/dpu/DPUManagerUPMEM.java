@@ -5,9 +5,12 @@ import com.upmem.dpu.DpuException;
 import framework.pim.*;
 import framework.lang.struct.DPUObjectHandler;
 import framework.lang.struct.IDPUProxyObject;
+import framework.pim.dpu.cache.DPUMethodCacheItem;
 import framework.pim.utils.BytesUtils;
 
 import java.io.PrintStream;
+import java.util.Dictionary;
+import java.util.Enumeration;
 
 import static framework.pim.dpu.java_strut.DPUJVMMemSpaceKind.DPU_HEAPSPACE;
 
@@ -51,7 +54,7 @@ public class DPUManagerUPMEM extends DPUManager{
         int instanceSize = 8 + fieldCount * 4;
         byte[] objectDataStream = new byte[(instanceSize + 7) & ~7];
         int classAddr;
-        int initMethodAddr;
+        int initMethodAddr = 0;
         if(classCacheManager.getClassStrutCacheLine(c.getName().replace(".","/")) == null){
             dpuClassFileManager.loadClassToDPU(c);
         }
@@ -59,9 +62,32 @@ public class DPUManagerUPMEM extends DPUManager{
         dpuManagerLogger.logln(" * Get Class Addr = " + classAddr);
         String initMethodDesc = generateInitializationDescriptor(params);
 
-        initMethodAddr = classCacheManager
-                .getMethodCacheItem(c.getName().replace(".", "/"), initMethodDesc).mramAddr;
 
+        // TODO: to do method signature matching here. when classCacheManager
+        //                .getMethodCacheItem(c.getName().replace(".", "/"), initMethodDesc) is null,
+        //       we need iterate the class's method table to check whether there exists a method that with the
+        //       same name of the method we want to call with a parameter list that each parameter is assignable
+        //       from the correspondent given argument.
+        if(classCacheManager
+                .getMethodCacheItem(c.getName().replace(".", "/"), initMethodDesc) != null){
+
+            initMethodAddr = classCacheManager
+                    .getMethodCacheItem(c.getName().replace(".", "/"), initMethodDesc).mramAddr;
+        }else{
+            Dictionary<String, DPUMethodCacheItem> stringDPUMethodCacheItemDictionary = classCacheManager.methodCache.cache.get(c.getName().replace(".", "/"));
+            System.out.println(c.getName().replace(".", "/"));
+            System.out.println(c.getName());
+            System.out.println(classCacheManager.methodCache.cache);
+            Enumeration<String> keys = stringDPUMethodCacheItemDictionary.keys();
+            while(keys.hasMoreElements()){
+                String key = keys.nextElement();
+                if(parseParameterList(key, params)){
+                    initMethodAddr = stringDPUMethodCacheItemDictionary.get(key).mramAddr;
+
+                }
+            }
+            throw new RuntimeException("No appropriate method is found.");
+        }
         BytesUtils.writeU4LittleEndian(objectDataStream, classAddr, 4);
 
         int objAddr =
@@ -79,6 +105,134 @@ public class DPUManagerUPMEM extends DPUManager{
         // call the init func
         callNonstaticMethod(classAddr, initMethodAddr, handler.address, params);
         return handler;
+    }
+
+    private boolean parseParameterList(String key, Object[] params) {
+        StringBuilder sb = new StringBuilder(key);
+        int pos =  0;
+
+        while (pos < sb.length()){
+            if (sb.charAt(pos) == '(') {
+                pos++;
+                break;
+            } else {
+                pos++;
+            }
+        }
+        int state = 0;
+        int paramIndex = 0;
+        StringBuilder matched = new StringBuilder();
+        while (pos < sb.length()){
+            if (sb.charAt(pos) == ')') {
+                pos++;
+                break;
+            } else {
+                char ch = sb.charAt(pos);
+                if(state == 0){
+                    switch (ch){
+                        case 'B':
+                            if(paramIndex >= params.length) return false;
+                            if(Byte.class.isAssignableFrom(params[paramIndex].getClass())){
+                                paramIndex++;
+                                pos++;
+                                break;
+                            }else{
+                                return false;
+                            }
+                        case 'C':
+                            if(paramIndex >= params.length) return false;
+                            if(Character.class.isAssignableFrom(params[paramIndex].getClass())){
+                                paramIndex++;
+                                pos++;
+                                break;
+                            }else{
+                                return false;
+                            }
+                        case 'D':
+                            if(paramIndex >= params.length) return false;
+                            if(Double.class.isAssignableFrom(params[paramIndex].getClass())){
+                                paramIndex++;
+                                pos++;
+                                break;
+                            }else{
+                                return false;
+                            }
+                        case 'F':
+                            if(paramIndex >= params.length) return false;
+                            if(Float.class.isAssignableFrom(params[paramIndex].getClass())){
+                                paramIndex++;
+                                pos++;
+                                break;
+                            }else{
+                                return false;
+                            }
+                        case 'I':
+                            if(paramIndex >= params.length) return false;
+                            if(Integer.class.isAssignableFrom(params[paramIndex].getClass())){
+                                paramIndex++;
+                                pos++;
+                                break;
+                            }else{
+                                return false;
+                            }
+                        case 'J':
+                            if(paramIndex >= params.length) return false;
+                            if(Long.class.isAssignableFrom(params[paramIndex].getClass())){
+                                paramIndex++;
+                                pos++;
+                                break;
+                            }else{
+                                return false;
+                            }
+                        case 'S':
+                            if(paramIndex >= params.length) return false;
+                            if(Short.class.isAssignableFrom(params[paramIndex].getClass())){
+                                paramIndex++;
+                                pos++;
+                                break;
+                            }else{
+                                return false;
+                            }
+                        case 'Z':
+                            if(paramIndex >= params.length) return false;
+                            if(Boolean.class.isAssignableFrom(params[paramIndex].getClass())){
+                                paramIndex++;
+                                pos++;
+                                break;
+                            }else{
+                                return false;
+                            }
+                        case 'L':
+                            if(paramIndex >= params.length) return false;
+                            state = 1;
+                            pos++;
+                            break;
+                        case '[':
+                            if(paramIndex >= params.length) return false;
+                            break;
+                    }
+                }else if(state == 1){
+                    if(paramIndex >= params.length) return false;
+                    if(ch != ';'){
+                        matched.append(ch);
+                        pos++;
+                    }else{
+                        try {
+                            if(Class.forName(matched.toString().replace("/",".")).isAssignableFrom(params[paramIndex].getClass())){
+                                paramIndex++;
+                                pos++;
+                            }
+                        } catch (ClassNotFoundException e) {
+                            throw new RuntimeException(e);
+                        }
+                        matched.delete(0, matched.length());
+                        state = 0;
+                    }
+                }
+            }
+        }
+
+        return true;
     }
 
     public DPUManagerUPMEM(Dpu upmemdpu, int dpuID) throws DpuException {

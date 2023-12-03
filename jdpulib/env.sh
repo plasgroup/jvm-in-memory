@@ -1,0 +1,1 @@
+source ~/upmem-2023.1.0-Linux-x86_64/upmem_env.sh
