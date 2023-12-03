@@ -25,6 +25,7 @@ public class SimulatorServer {
 
     public static void main(String[] args) throws RemoteException {
         parseParameters(args);
+
         String deviceName = "DPU";
         for(int i = 0; i < PIMRemoteJVMConfiguration.JVMCount; i++){
             DPUJVMRemoteImpl jvmRemote = new DPUJVMRemoteImpl(i, PIMRemoteJVMConfiguration.threadCount);

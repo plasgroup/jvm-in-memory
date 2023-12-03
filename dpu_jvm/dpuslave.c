@@ -157,7 +157,6 @@ void exec_task_from_host() {
     while(buffer_begin < tasklet_buffer_pt){
         //DEBUG_PRINT("tasklet_buffer_begin = 0x%x, me = %d\n", buffer_begin, tasklet_id);
 
-
         /* get a task from parameter buffer */
         int task_id = *(uint32_t __mram_ptr*)buffer_begin;
         buffer_begin += 4;
@@ -166,8 +165,6 @@ void exec_task_from_host() {
         fc.func = (struct j_method __mram_ptr*)(*(uint32_t __mram_ptr*)buffer_begin);
         buffer_begin += 4 + fc.func->params_count * 4;
         fc.params = buffer_begin;
-        
-    
 
         //printf("me = %d, task id = %d, func = %p, jc = %p, current_params = %p, top = %p\n", me(), task_id, fc.func, fc.jc, buffer_begin, tasklet_buffer_pt);
         //printf("instance = %d, key = %d\n", *(uint8_t __mram_ptr* __mram_ptr*)(buffer_begin - 8), *(uint8_t __mram_ptr* __mram_ptr*)(buffer_begin - 4));
@@ -190,7 +187,7 @@ void exec_task_from_host() {
     }
     release_global_memory();
     params_buffer_pt[tasklet_id] = params_buffer + tasklet_id * this_tasklet_params_buffer_len;
-    
+
     DEBUG_PRINT(RED " --------------------- (END DPU) -----------------------------\n" RESET);
 }
 

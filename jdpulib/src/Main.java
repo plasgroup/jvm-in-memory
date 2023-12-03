@@ -17,6 +17,7 @@ import static application.bst.BSTBuilder.*;
 import static application.bst.BSTTester.readIntergerArrayList;
 import static application.bst.TreeWriter.writeDPUImages;
 
+
 public class Main {
     public static UPMEMConfigurator upmemConfigurator = new UPMEMConfigurator();
     public static void parseParameters(String[] args){
@@ -183,6 +184,7 @@ public class Main {
            performanceEvaluation();
            return;
        }
+
 
        if(args.length == 0){
            BSTTester.evaluatePIMBST(totalNodeCount, ExperimentConfigurator.queryCount,  ExperimentConfigurator.cpuLayerCount);

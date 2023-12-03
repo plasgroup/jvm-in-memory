@@ -40,6 +40,7 @@ public class DPUManagerUPMEM extends DPUManager{
             System.out.println("addr " + objAddr);
 
             // VirtualTable virtualTable = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getClassStructure("framework.pim/algorithm/DPUTreeNode").virtualTable;
+
             // dpuManagerLogger.logln("" + virtualTable);
 
             // call the init func
@@ -72,6 +73,7 @@ public class DPUManagerUPMEM extends DPUManager{
 
 
         // VirtualTable virtualTable = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getClassStructure("framework.pim/algorithm/DPUTreeNode").virtualTable;
+
         // dpuManagerLogger.logln("" + virtualTable);
 
         // call the init func
@@ -132,7 +134,6 @@ public class DPUManagerUPMEM extends DPUManager{
                     }
                 }
             }
-
 
             bd.taskletPosition[dpuID] = t2; // next time from t2 to find a proper tasklet
             // beginning of params_buffer[t2]
