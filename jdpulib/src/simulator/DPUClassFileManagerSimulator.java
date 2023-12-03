@@ -21,6 +21,7 @@ import static framework.pim.dpu.classloader.ClassWriter.pushJClassToDPU;
 import static framework.pim.utils.ClassLoaderUtils.*;
 import static framework.pim.utils.ClassLoaderUtils.getMethodDescriptor;
 
+
 public class DPUClassFileManagerSimulator extends DPUClassFileManager {
     private final DPUJVMRemote dpujvmRemote;
     public DPUClassFileManagerSimulator(int dpuID, simulator.DPUJVMRemote dpujvmRemote) {
@@ -156,6 +157,7 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
         jc.virtualTable = thisClassVirtualTable;
         if(jc.superClass == 0){
             // java/framework.lang/Object
+
             /* iterate method table to put all methods to v_table */
             thisClassVirtualTable.items.add(new VirtualTableItem("", ""));
             for(int i = 0; i < jc.methodTable.length; i++){
@@ -291,7 +293,6 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
 
     @Override
     public DPUJClass loadClassToDPU(Class c) {
-
         String className = formalClassName(c.getName());
         classfileLogger.logln(" ==========--> Try load class " + className + " to dpu#" + dpuID + " <--==========");
 
@@ -432,6 +433,7 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
                             try {
                                 // TODO className$1 loading..
                                 loadClassToDPU(Class.forName(classNameUTF8.replace("/", ".")));
+
                             } catch (ClassNotFoundException e) {
                                 classfileLogger.logln("cannot find class " + classNameUTF8);
                             }
