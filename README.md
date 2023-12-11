@@ -7,6 +7,27 @@
 
 
 
+【Repository Structure】
+
+``` java
+---------------------------------------------------------------------------------------------------
+-- classloader
+|  // A java class parser write in C (It is not used in experiment. But may be useful as an util)
+-- doc
+|  // Documents
+-- dpu_jvm
+|  // in-memory jvm project
+-- jdpulib
+|  // java PIM framework project
+-- lib
+|  // libs that required by java framework
+---------------------------------------------------------------------------------------------------
+
+
+```
+
+
+
 # Part II Compilation
 
 # 1. Prepare Environment
