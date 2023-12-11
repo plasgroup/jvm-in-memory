@@ -382,8 +382,8 @@ bd.dispatchAll();
 
 1. Make use of scratchpad memory
    + Make all in-memory JVM's **MRAM** access through the scratchpad memory
-2. Treat JVM as a distributed system and make an object query language for the system.
-   + ​	Easier and more effective parallelization
+2. Treat JVM as a distributed object-oriented database system and make an object query language for the system.
+   + Easier and more effective parallelization
      + Could be **full-concurrency** as objects' are **storage-centric, not behavior-centric**., and rarely inter-object message passing inside a DPU.
    
      + Should be fast, as there are less method call inside the JVM, which save the cost in costing table look up/class structure obtaining when calling a method.
