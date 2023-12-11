@@ -1,3 +1,14 @@
+# Part I Documents
+
+1. [Project Documents](./doc/ProjectDocument.md)
+2. [Library Documents](./doc/libraryDocument.md)
+
+3. [In Memory JVM Documents](./doc/InMemoryJVMDocument.md)
+
+
+
+# Part II Compilation
+
 # 1. Prepare Environment
 
 ## 1.1 UPMEM SDK
