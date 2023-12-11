@@ -11,7 +11,6 @@
 #include <mram.h>
 #endif // INMEMORY
 
-
 #include "core/memory.h"
 #include "ir/bytecode.h"
 #include "core/frame_helper.h"
@@ -21,12 +20,11 @@
 #include "utils/jstruct_printer.h"
 #include "sample_ils/test_cases_gen.h"
 
-char inited = 0;
-   
-
 #define MARAM_METASPACE_MALLOC(size) meta_space_pt; meta_space_pt += size;
 
 #define TASKLET_CNT 24
+
+char inited = 0;
 
 void print_virtual_table(struct j_class __mram_ptr* jc){
     int len = jc->virtual_table_length;
@@ -83,6 +81,7 @@ void exec_tasks() {
     // Each tasklet hold part of the whole parameter buffer. 
     // This statement calculate the size of subparameter buffer that a tasklet hold.
     int this_tasklet_params_buffer_len = (PARAMS_BUFFER_SIZE / TASKLET_CNT);
+    
     // Calculate the beginning address of subparameter buffer of current tasklet
     int buffer_begin = params_buffer + tasklet_id * this_tasklet_params_buffer_len;
 
