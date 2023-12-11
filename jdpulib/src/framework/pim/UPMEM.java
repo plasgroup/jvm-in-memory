@@ -38,8 +38,14 @@ public class UPMEM {
     // decidedTasklet[i]: when specifiedTasklet[i] = true, this saves tasklet id that the tasklet identified by it would be used to execute tasks.
     static int[] decidedTasklet = new int[UPMEM.dpuInUse];
 
+    // Configuration
+    private static UPMEMConfigurator configurator;
+
     /* Unsafe class. It will be used to create a proxy class instance without initialize it */
     static Unsafe unsafe;
+
+
+
     static {
         try {
             Field singleoneInstanceField = Unsafe.class.getDeclaredField("theUnsafe");
@@ -75,7 +81,9 @@ public class UPMEM {
         decidedTasklet[dpu] = tasklet;
     }
 
-
+    public static UPMEMConfigurator getConfigurator() {
+        return configurator;
+    }
 
     static Logger upmemLogger = Logger.getLogger("framework.pim:upmem");
     {
@@ -138,11 +146,19 @@ public class UPMEM {
         return proxyObject;
     }
 
-    public static UPMEM initialize(){
+
+
+    public static UPMEM initialize(UPMEMConfigurator configurator){
         if(instance == null){
             synchronized (locker){
-                if(instance == null) instance = new UPMEM();
-                if(!ExperimentConfigurator.useSimulator){
+                if(instance == null) {
+                    instance = new UPMEM();
+                    instance.configurator = configurator;
+                    UPMEM.dpuInUse = configurator.getDpuInUseCount();
+                    UPMEM.perDPUThreadsInUse = configurator.getThreadPerDPU();
+                }
+
+                if(!configurator.isUseSimulator()){
                     pimManager = new PIMManagerUPMEM().init(dpuInUse);
                 }
                 else{
@@ -151,12 +167,6 @@ public class UPMEM {
             }
         }
         return instance;
-    }
-
-    public static UPMEM initialize(UPMEMConfigurator configurator){
-        perDPUThreadsInUse = configurator.getThreadPerDPU();
-        dpuInUse = configurator.getDpuInUseCount();
-        return initialize();
     }
 
 

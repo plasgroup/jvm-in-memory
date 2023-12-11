@@ -69,8 +69,8 @@ public class Main {
                 performanceEvaluationEnableBatchDispatch = true;
                 if(items.length > 1) performanceEvaluationEnableBatchDispatch = Integer.parseInt(items[1]) != 0;
             }else if("JVM_SIMULATOR".equals(argumentName)){
-	        useSimulator = true;
-		    if(items.length > 1) useSimulator = Integer.parseInt(items[1]) != 0;
+	        ExperimentConfigurator.useSimulator = true;
+		    if(items.length > 1) ExperimentConfigurator.useSimulator = Integer.parseInt(items[1]) != 0;
 	    }
 
         }
@@ -170,13 +170,15 @@ public class Main {
            BSTTester.writeKV(writeKeyValueCount, "key_values-" + writeKeyValueCount + ".txt");
        }
 
-       UPMEM.initialize(upmemConfigurator);
 
        upmemConfigurator
                .setDpuInUseCount(dpuInUse)
-               .setThreadPerDPU(UPMEM.perDPUThreadsInUse);
+               .setThreadPerDPU(UPMEM.perDPUThreadsInUse)
+               .setUseSimulator(useSimulator);
+        UPMEM.initialize(upmemConfigurator);
 
-       performanceEvaluationMode = true;
+
+        performanceEvaluationMode = true;
        nodes = 100000000;
        performanceEvaluationNodeCount = 100000000;
 

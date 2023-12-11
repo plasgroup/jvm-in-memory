@@ -8,6 +8,16 @@ package framework.pim;
 public class UPMEMConfigurator {
     private int dpuInUseCount = UPMEM.TOTAL_DPU_COUNT;
     private int threadPerDPU = UPMEM.TOTAL_HARDWARE_THREADS_COUNT;
+    private boolean useSimulator = false;
+
+    public boolean isUseSimulator() {
+        return useSimulator;
+    }
+
+    public UPMEMConfigurator setUseSimulator(boolean useSimulator) {
+        this.useSimulator = useSimulator;
+        return this;
+    }
 
     public int getDpuInUseCount() {
         return dpuInUseCount;

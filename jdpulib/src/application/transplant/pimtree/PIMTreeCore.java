@@ -137,7 +137,6 @@ public class PIMTreeCore {
                 break;
             case get_t: {
                 PIMTreeCore.get(make_slice(Arrays.stream(get_ops).toList().subList(0, count)), mut, tid);
-
                 break;
             }
             case update_t: {

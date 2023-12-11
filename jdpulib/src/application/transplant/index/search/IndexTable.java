@@ -2,8 +2,10 @@ package application.transplant.index.search;
 
 import java.util.*;
 
+
+
+
 public class IndexTable {
-    // word id -> (int x int)+
     Dictionary<Integer, List<Match>> mappingTable = new Hashtable<>();
 
     private int recordCount = 0;

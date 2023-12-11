@@ -17,7 +17,8 @@ import static framework.pim.dpu.java_strut.DPUJVMMemSpaceKind.DPU_HEAPSPACE;
 public class DPUManagerUPMEM extends DPUManager{
 
     public <T> DPUObjectHandler createObject(Class c, Object[] params) {
-        if(ExperimentConfigurator.useSimulator) {
+
+        if(UPMEM.getConfigurator().isUseSimulator()) {
             int fieldCount = calcFieldCount(c);
             int instanceSize = 8 + fieldCount * 4;
             byte[] objectDataStream = new byte[(instanceSize + 7) & ~7];
