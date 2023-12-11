@@ -10,7 +10,7 @@ public class IndexSearchMain {
     public static void main(String[] args){
         IndexSearchDatabaseBuilder dm = new IndexSearchDatabaseBuilder();
 
-        UPMEM.initialize(new UPMEMConfigurator().setThreadPerDPU(1).setDpuInUseCount(64).setUseSimulator(true));
+        UPMEM.initialize(new UPMEMConfigurator().setThreadPerDPU(1).setDpuInUseCount(64).setUseSimulator(false));
         try {
             String basePath = (System.getProperty("user.dir"));
 

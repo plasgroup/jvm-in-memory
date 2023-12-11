@@ -155,7 +155,6 @@ public class Main {
 
     public static void main(String[] args) throws RemoteException {
         parseParameters(args);
-        // if(true) return;
 
        upmemConfigurator.setDpuInUseCount(dpuInUse);
 
@@ -175,10 +174,10 @@ public class Main {
                .setDpuInUseCount(dpuInUse)
                .setThreadPerDPU(UPMEM.perDPUThreadsInUse)
                .setUseSimulator(useSimulator);
-        UPMEM.initialize(upmemConfigurator);
 
+       UPMEM.initialize(upmemConfigurator);
 
-        performanceEvaluationMode = true;
+       performanceEvaluationMode = true;
        nodes = 100000000;
        performanceEvaluationNodeCount = 100000000;
 

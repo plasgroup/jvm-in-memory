@@ -153,6 +153,10 @@ public class DPUManagerSimulator extends DPUManager {
 
     @Override
     public DPUObjectHandler createObject(Class c, Object[] params) {
+        // TODO: simplify the createObject in Simulator. (it not need fully simulate the class loading process of DPU JVM,
+        //       because in simulator, the format of the same class is the same in each processor. However, in a real
+        //       DPU JVM, the JVM use a representation of java class that differ to the host JVM.
+        //       But simulator need calculate the DPU class representation's size to simulate the memory space utilization.
         int fieldCount = calcFieldCount(c);
         int instanceSize = 8 + fieldCount * 4;
         byte[] objectDataStream = new byte[(instanceSize + 7) & ~7];

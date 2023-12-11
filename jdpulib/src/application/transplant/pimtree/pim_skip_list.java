@@ -36,10 +36,10 @@ public class pim_skip_list {
             keys_with_offset_sorted[i] = make_pair(i, keys.get(i).key);
         }
 
-
-
         List<Pair<Integer, Long>> kwos_slice =
                 make_slice(Arrays.stream(keys_with_offset_sorted).toList().subList(0, n).stream().collect(toCollection(ArrayList::new)));
+
+
 //                parlay::make_slice(keys_with_offset_sorted,
 //                keys_with_offset_sorted + n);
 
@@ -83,7 +83,10 @@ public class pim_skip_list {
 //        });
 
         boolean[] task_starts = new boolean[n];
-
+        for(int i = 0; i < task_starts.length; i++){
+            if(i == 0 || keys_sorted[i] != keys_sorted[i - 1])
+                task_starts[i] = true;
+        }
 
         List<Integer> ll = pack_index(task_starts);
         int llen = ll.size();
@@ -96,7 +99,7 @@ public class pim_skip_list {
 
         UPMEM.beginRecordBatchDispatching(bd);
         for(int i = 0; i < llen; i++){
-            int t = hash_to_dpu(keys_sorted[ll.get(i)], 0, nr_of_dpus);
+            int targetDPUID = hash_to_dpu(keys_sorted[ll.get(i)], 0, nr_of_dpus);
         }
         UPMEM.endRecordBatchDispatching();
 
@@ -162,7 +165,8 @@ public class pim_skip_list {
     private int hh(Long key, int height, int M) {
         long v = hash64((long)key) + height;
         v = hash64(v);
-        return (int) (v % M);
+
+        return Math.abs((int) (v % M));
     }
 
     private long hash64(long u) {

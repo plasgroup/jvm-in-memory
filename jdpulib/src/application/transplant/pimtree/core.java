@@ -1,5 +1,6 @@
 package application.transplant.pimtree;
 
+
 import framework.pim.UPMEM;
 
 import java.util.ArrayList;
@@ -9,16 +10,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import static application.transplant.pimtree.PIMTreeCore.make_slice;
+import static application.transplant.pimtree.PIMTreeCore.pim_skip_list_drivers;
+import static application.transplant.pimtree.PIMTreeMain.OPERATION_NR_ITEMS;
 
-public class PIMTreeCore {
-    public static int OPERATION_NR_ITEMS = 7;
 
-
-
+public class core {
     public static int push_pull_limit_dynamic;
     public static int num_wait_microsecond;
-    public static pim_skip_list[] pim_skip_list_drivers;
-
     static int num_top_level_threads = 1;
     static final int _block_size = 1000;
 
@@ -40,11 +39,9 @@ public class PIMTreeCore {
     public static final int nr_of_dpus = 4;
     public static PIMTreeExecutor[] executors = new PIMTreeExecutor[UPMEM.dpuInUse];
 
-    
-
     public static void execute(List<operation> ops, int load_batch_size,
                                int execute_batch_size, int threads)  {
-        System.out.printf("execute n=%d batchsize=%d,%d\n",
+        System.out.printf("execute n=%lu batchsize=%d,%d\n",
                 ops.size(),
                 load_batch_size,
                 execute_batch_size);
@@ -122,10 +119,7 @@ public class PIMTreeCore {
         System.out.printf("execute finish!\n");
         // fflush(stdout);
         // TODO: oracle
-        //System.out.println(oracle.inserted.size());
-    }
-    public static <T> List<T> make_slice(List<T> ops) {
-        return ops;
+        System.out.println(oracle.inserted.size());
     }
 
     static int scan_start;
@@ -138,7 +132,8 @@ public class PIMTreeCore {
             case empty_t:
                 break;
             case get_t: {
-                PIMTreeCore.get(make_slice(Arrays.stream(get_ops).toList().subList(0, count)), mut, tid);
+                core.get(make_slice(Arrays.stream(get_ops).toList().subList(0, count)), mut, tid);
+
                 break;
             }
             case update_t: {
@@ -146,7 +141,7 @@ public class PIMTreeCore {
                 break;
             }
             case predecessor_t: {
-                PIMTreeCore.predecessor(
+                core.predecessor(
                         make_slice(Arrays.stream(predecessor_ops).toList().subList(0, count)),
                 mut, tid);
                 break;
@@ -154,7 +149,7 @@ public class PIMTreeCore {
             case scan_t: {
                 int scan_batch = 10000;
                 if (count - scan_start >= scan_batch) {
-                    PIMTreeCore.scan(make_slice(Arrays.stream(scan_ops).toList().subList(scan_start, scan_start + scan_batch)), mut, tid);
+                    core.scan(make_slice(Arrays.stream(scan_ops).toList().subList(scan_start, scan_start + scan_batch)), mut, tid);
                     scan_start += scan_batch;
                 } else if(count - scan_start > 1) {
 
@@ -164,7 +159,7 @@ public class PIMTreeCore {
 
                     op_count[op_type.ordinal()] = count - scan_start;
                     scan_start = 0;
-                    PIMTreeCore.scan(make_slice(
+                    core.scan(make_slice(
                             Arrays.stream(scan_ops).toList().subList(0, (int) op_count[op_type.ordinal()]))
                            , mut, tid);
                     op_count[op_type.ordinal()] = 0;
@@ -177,12 +172,12 @@ public class PIMTreeCore {
                 break;
             }
             case insert_t: {
-                PIMTreeCore.insert(make_slice(
+                core.insert(make_slice(
                         Arrays.stream(insert_ops).toList().subList(0, count)), mut, tid);
                 break;
             }
             case remove_t: {
-                PIMTreeCore.remove(make_slice(
+                core.remove(make_slice(
                         Arrays.stream(remove_ops).toList().subList(0, count)),
                         mut, tid);
                 break;
@@ -209,7 +204,6 @@ public class PIMTreeCore {
     private static <T> void get(List<task_union.get_operation> ops, Lock mut, int tid) {
         List<Long> ops_sequence = new ArrayList<>();
         pim_skip_list ds = pim_skip_list_drivers[tid];
-
         int ds_offset = 0;
         int n = ops.size();
         {
@@ -270,15 +264,10 @@ public class PIMTreeCore {
         if (T >= rounds) {
             return false;
         }
-
-
-        // block position and length
         int l = T * load_batch_size;
         int r = Math.min((T + 1) * load_batch_size, n);
         int len = r - l;
 
-
-        // get a block\
         List<operation> mixed_op_batch = ops.subList(l, r);
 
 
@@ -287,15 +276,14 @@ public class PIMTreeCore {
         for(int i = 0; i < len; i+= _block_size){
             int s = i;
             int e = Math.min(len, i + _block_size);
-            for(int j = s; j < e; j++){
+            for(int j = s; j < e; i++){
                 int t = mixed_op_batch.get(j).type.ordinal();
                 assert(j < len);
                 assert(t >= 0 && t < OPERATION_NR_ITEMS);
-                c[t]++; // t-th operation's count ++
+                c[t]++;
             }
             for (int j = 0; j < OPERATION_NR_ITEMS; j++) {
-                sums[j].set(i, c[j]); // j-th's operation's i block has c[j] operations
-                System.out.printf("%d-th's operation's %d-th block has %d operations\n", j, i, c[j]);
+                sums[j].set(i, c[j]);
             }
         }
 
@@ -315,8 +303,7 @@ public class PIMTreeCore {
             int s = i;
             int e = Math.min(len, s + _block_size);
             for (int j = 0; j < OPERATION_NR_ITEMS; j++) {
-                // TODO: some problem here.
-                c[j] = 0;//(int) (sums[j].get(i) + op_count[j]);
+                c[j] = (int) (sums[j].get(i) + op_count[j]);
             }
             for (int j = s; j < e; j++) {
 
@@ -324,7 +311,6 @@ public class PIMTreeCore {
 
                 operation_t operation_type = t.type;
                 int x = operation_type.ordinal();
-
                 switch (operation_type) {
                     case get_t -> get_ops[c[x]++] = t.tsk.g();
                     case update_t -> update_ops[c[x]++] = t.tsk.u();
@@ -367,9 +353,6 @@ public class PIMTreeCore {
         sums = new List[OPERATION_NR_ITEMS];
         for (int i = 0; i < OPERATION_NR_ITEMS; i++) {
             sums[i] = new ArrayList<>(l); //parlay::sequence<size_t>(l);
-            for(int j = 0; j < l; j++){
-                sums[i].add(0);
-            }
             cnts[i] = 0;
         }
         n = ops.size();
