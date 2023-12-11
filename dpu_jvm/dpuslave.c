@@ -117,10 +117,9 @@ void exec_task_from_host() {
                     params_buffer_pt[me()] += 4;    
    
     while(buffer_begin < tasklet_buffer_pt){
-        // DEBUG_PRINT("tasklet_buffer_begin = 0x%x, me = %d\n", buffer_begin, tasklet_id);
 
         /* get a task from parameter buffer */
-        int task_id = *(uint32_t __mram_ptr*)buffer_begin;
+        int task_id = *(uint32_t __mram_ptr*) buffer_begin;
         buffer_begin += 4;
         fc.jc = (struct j_class __mram_ptr*)(*(uint32_t __mram_ptr*)buffer_begin);
         buffer_begin += 4;
@@ -128,7 +127,7 @@ void exec_task_from_host() {
         buffer_begin += 4 + fc.func->params_count * 4;
         fc.params = buffer_begin;
 
-        mem.meta_space = buffer_begin;
+        // mem.meta_space = buffer_begin;
         
         current_fp[tasklet_id] = 0;
         current_sp[tasklet_id] = wram_data_space +  tasklet_id * (WRAM_DATA_SPACE_SIZE / 24);
