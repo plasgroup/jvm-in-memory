@@ -1,6 +1,6 @@
 # In-Memory JVM Documentation
 
-## I. Space
+## PART I. Project Structure and Files Introduction
 
 ### I.1 Project Structure
 
@@ -15,7 +15,24 @@
 -- jdpulib
 |  // java PIM framework project
 -- core
-|  // core source code of in-memory JVM
+|  // core src
+-- 
 ---------------------------------------------------------------------------------------------------
 ```
 
+
+
+## PART II. Compilation
+
+``` bash
+$ source <path-to-upmem-sdk>/upmem_env.sh
+$ cd <path-to-dpu_jvm>
+$ make dpuslave
+```
+
++ The compilation will generate a binary file "**dpuslave**"
++ The Java framework need this binary file. This binary file can be placed to the root of framework project (./jdpulib).
+
+
+
+ 
