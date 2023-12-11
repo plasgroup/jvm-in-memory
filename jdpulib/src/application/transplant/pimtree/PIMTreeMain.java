@@ -16,8 +16,7 @@ public class PIMTreeMain {
     public static int OPERATION_NR_ITEMS = 7;
 
     public static void main(String[] args){
-        ExperimentConfigurator.useSimulator = true;
-        UPMEM.initialize(new UPMEMConfigurator().setThreadPerDPU(1).setDpuInUseCount(64));
+        UPMEM.initialize(new UPMEMConfigurator().setThreadPerDPU(1).setDpuInUseCount(64).setUseSimulator(true));
 
 
         for(int i = 0; i < executors.length; i++){
@@ -42,10 +41,14 @@ public class PIMTreeMain {
     }
 
     static void run(frontend f, int init_batch_size, int test_batch_size) {
+        // top-level threads, which is host << -
+
         pim_skip_list_drivers = new pim_skip_list[PIMTreeCore.num_top_level_threads];
+
         for(int i = 0; i < PIMTreeCore.num_top_level_threads; i++){
             pim_skip_list_drivers[i] = new pim_skip_list();
         }
+
         pim_skip_list_drivers[0].init();
 
         {

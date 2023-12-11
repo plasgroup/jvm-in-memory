@@ -6,6 +6,7 @@ import application.transplant.index.search.pojo.Word;
 
 import java.io.*;
 import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.List;
 
 
@@ -104,6 +105,7 @@ public class IndexSearchDatabaseBuilder {
         if(!f.exists()) return this;
         BufferedReader br = new BufferedReader(new FileReader(f));
         String line;
+        if(dictionary == null) dictionary = new Hashtable<>();
         while((line = br.readLine()) != null){
             if("".equals(line)) continue;
             Word w = new Word(wid, line);
