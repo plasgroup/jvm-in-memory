@@ -18,8 +18,5 @@
 #define DEBUG_OUT_INSN_PARSED(X) ;
 #endif // DEBUG_OUTPUT_
 
-
-
-
 void interp(struct function_thunk func_thunk);
 #endif // !VM_VM_LOOP_H
