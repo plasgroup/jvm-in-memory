@@ -12,3 +12,17 @@
 > [!CAUTION]
 >
 > This part is in preparing
+
+
+
+## 2.  **Java framework**
+
++ **Components:**
+
+  + Proxy Type and its generator (incompleted)
+
+  + Distributed Collections
+  + Primitives
+
+
+
