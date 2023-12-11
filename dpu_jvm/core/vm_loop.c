@@ -46,7 +46,6 @@ void interp(struct function_thunk func_thunk) {
    
                 
     while (1) {
-        // if(mem.meta_space == 0x38901d4 && times > 360) return;
 
         switch (code_buffer[pc++])
         {
