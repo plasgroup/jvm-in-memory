@@ -33,7 +33,7 @@
 # Part II Compilation
 
 > [!CAUTION]
-> **This part is in preparing.... More specific version can currently refer to repository **[paper-jssst2023-huang](https://github.com/plasgroup/paper-jssst2023-huang)
+> This part is in preparing.... More specific version can currently refer to repository [paper-jssst2023-huang](https://github.com/plasgroup/paper-jssst2023-huang)
 
 
 
@@ -349,5 +349,25 @@ $ cp dpuslave <path-to-workspace>/jvm-in-memory/evaluation/
 
 # PART III Some Future Directions
 
+### Situation Analysis
 
+1. JVM速度十分慢。速度慢的来源于，但不限于（1）非JIT执行引擎，（2）未对MRAM访问次数进行优化以及（3）未利用Scratchpad内存。
+
+2. JVM功能存在限制。
+
+   由于DPU的代码空间有限。当前JVM面临添加新功能的复杂性。
+
+3. 未能很好利用并行。当前并行类似于手动并行化。使用`BatchDispatcher`进行
+
+【Example】
+
+``` java
+BatchDispatcher bd = new BatchDispatcher();
+UPMEM.beginRecordBatchDispatching(bd); // begin record remote procedure call
+
+/* codes of proxy instance's method's dispatching */
+
+UPMEM.endRecordBatchDispatching(); // end record remote procedure call
+bd.dispatchAll();
+```
 
