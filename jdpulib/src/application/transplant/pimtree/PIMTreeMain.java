@@ -1,9 +1,11 @@
 package application.transplant.pimtree;
 
+import com.upmem.dpu.DpuException;
 import framework.pim.ExperimentConfigurator;
 import framework.pim.UPMEM;
 import framework.pim.UPMEMConfigurator;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,14 +16,12 @@ public class PIMTreeMain {
     private static int total_communication;
     private static int total_actual_communication;
     public static int OPERATION_NR_ITEMS = 7;
+    public static PIMTreeCore[] cores = new PIMTreeCore[nr_of_dpus];
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws IOException {
         UPMEM.initialize(new UPMEMConfigurator().setThreadPerDPU(1).setDpuInUseCount(64).setUseSimulator(true));
 
 
-        for(int i = 0; i < executors.length; i++){
-            executors[i] = new PIMTreeExecutor();
-        }
 
         List<Double> pos = new ArrayList<>(OPERATION_NR_ITEMS);
         for(int i = 0; i < OPERATION_NR_ITEMS; i++)

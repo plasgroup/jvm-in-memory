@@ -14,6 +14,7 @@ import framework.pim.utils.BytesUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.constant.DirectMethodHandleDesc;
 import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -139,10 +140,13 @@ public class DPUClassFileManagerUPMEM extends DPUClassFileManager {
                             break;
                         }else{
                             System.out.println("try get " + className);
-                            DPUJClass methodReferenceJc = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getClassStrutCacheLine(className).dpuClassStructure;
+                            DPUClassFileCacheItem methodReferenceJc = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getClassStrutCacheLine(className);
+                            if(methodReferenceJc == null){
+                                break;
+                            }
 
-                            if(methodReferenceJc.superClassNameIndex != 0){
-                                className = getUTF8(methodReferenceJc, methodReferenceJc.superClassNameIndex);
+                            if(methodReferenceJc.dpuClassStructure.superClassNameIndex != 0){
+                                className = getUTF8(methodReferenceJc.dpuClassStructure, methodReferenceJc.dpuClassStructure.superClassNameIndex);
                             }else{
                                 className = "";
                             }
@@ -275,6 +279,7 @@ public class DPUClassFileManagerUPMEM extends DPUClassFileManager {
                     loadClassToDPU(c.getSuperclass());
                 }
             }
+            System.out.println("================= End of load super object ================");
         }else{
             classfileLogger.logln(" ---- No superclass ----");
             className = formalClassName(c.getName());

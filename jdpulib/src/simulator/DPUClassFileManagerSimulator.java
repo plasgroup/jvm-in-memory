@@ -148,9 +148,6 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
     private void createVirtualTable(DPUJClass jc, byte[] classBytes) {
         /* iterate method table */
         String thisClassName = getUTF8(jc, jc.thisClassNameIndex);
-        if("pim/algorithm/DPUTreeNode".equals(thisClassName)){
-            classfileLogger.logln("");
-        }
 
         classfileLogger.logln("in java class = " + thisClassName);
         VirtualTable thisClassVirtualTable = new VirtualTable();
@@ -241,7 +238,6 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
                 }
             }
 
-
             /* set index in entry table */
             for(int i = 0; i < jc.entryItems.length; i++){
                 int tag = classBytes[jc.itemBytesEntries[i]];
@@ -259,7 +255,7 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
                             break;
                         }else{
                             DPUJClass methodReferenceJc = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getClassStrutCacheLine(className).dpuClassStructure;
-
+                            
                             if(methodReferenceJc.superClassNameIndex != 0){
                                 className = getUTF8(methodReferenceJc, methodReferenceJc.superClassNameIndex);
                             }else{

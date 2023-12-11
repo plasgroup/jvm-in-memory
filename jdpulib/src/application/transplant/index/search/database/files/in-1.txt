@@ -1,0 +1,3 @@
+This is the document in the input file two.
+But it is directly follow by a second segement.
+An independent fragement.
