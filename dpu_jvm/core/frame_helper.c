@@ -146,6 +146,7 @@ uint8_t __mram_ptr* create_new_vmframe(struct function_thunk func_thunk, uint8_t
      }
 
 /*
+
 SP -> 
       _____ operand stack[k] ______
                  ....
@@ -161,7 +162,21 @@ FP -> _____ old fp     ______
                ....
       _____ local 1    ______ (params 1)
       _____ local 0    ______ (params 0)
-
+---------------------------------------------
+      _____ operand stack[b] ______
+                .....
+      _____ operand stack[0] ______
+      _____ pointer to bytecodes ______
+      _____ cp         ______
+      _____ class      ______
+      _____ method     ______
+      _____ return pc  ______
+      _____ old sp     ______
+      _____ old fp     ______
+      _____ local a    ______
+               ....
+      _____ local 1    ______ (params 1)
+      _____ local 0    ______ (params 0)
 */
 
 
