@@ -385,15 +385,18 @@ bd.dispatchAll();
 2. Treat JVM as a distributed object-oriented database system and make an object query language for the system.
    + Easier and more effective parallelization
      + Could be **full-concurrency** as objects' are **storage-centric, not behavior-centric**., and rarely inter-object message passing inside a DPU.
-   
+
      + Should be fast, as there are less method call inside the JVM, which save the cost in costing table look up/class structure obtaining when calling a method.
-   
+
      + Can make JVM instruction more compact.
-   
+
      + Can welly utilize scratchpad memory, as many operation can be done serialized.
-   
+
      + Can realize automatic parallelization by utilizing the designed language.
-   
+
      + In-memory JVM module could be make easier, and make help resolving the space limitation problem.
-   
+
+3. Make a JIT compiler
+
+
 
