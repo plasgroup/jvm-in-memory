@@ -120,11 +120,11 @@ void exec_task_from_host() {
 
         /* get a task from parameter buffer */
         int task_id = *(uint32_t __mram_ptr*) buffer_begin;
-        buffer_begin += 4;
+        buffer_begin += 4; // move buffer_begin pointer toward the head (tasklet_buffer_pt)
         fc.jc = (struct j_class __mram_ptr*)(*(uint32_t __mram_ptr*)buffer_begin);
-        buffer_begin += 4;
+        buffer_begin += 4; // move buffer_begin pointer toward the head (tasklet_buffer_pt)
         fc.func = (struct j_method __mram_ptr*)(*(uint32_t __mram_ptr*)buffer_begin);
-        buffer_begin += 4 + fc.func->params_count * 4;
+        buffer_begin += 4 + fc.func->params_count * 4; // move buffer_begin pointer toward the head (tasklet_buffer_pt)
         fc.params = buffer_begin;
 
         // mem.meta_space = buffer_begin;
@@ -134,12 +134,16 @@ void exec_task_from_host() {
         current_fp[tasklet_id] = 0;
         current_sp[tasklet_id] = wram_data_space +  tasklet_id * (WRAM_DATA_SPACE_SIZE / 24);
        
+
+        // interpretation
         interp(fc);
         
 
         // write result. The result space hold format | task_id, return_val | task_id, return_val | ...
         return_values[task_id * 2] = task_id;
         return_values[task_id * 2 + 1] = return_val;
+        
+        // alignment (8 B)
         buffer_begin = (buffer_begin + 0b111) & (~0b111);
     }
 
