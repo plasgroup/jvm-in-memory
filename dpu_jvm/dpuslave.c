@@ -129,18 +129,21 @@ void exec_task_from_host() {
 
         // mem.meta_space = buffer_begin;
         
+
+        // init fp (frame pointer) and sp (stack pointer)
         current_fp[tasklet_id] = 0;
         current_sp[tasklet_id] = wram_data_space +  tasklet_id * (WRAM_DATA_SPACE_SIZE / 24);
        
         interp(fc);
-
         
+
+        // write result. The result space hold format | task_id, return_val | task_id, return_val | ...
         return_values[task_id * 2] = task_id;
         return_values[task_id * 2 + 1] = return_val;
         buffer_begin = (buffer_begin + 0b111) & (~0b111);
-        
     }
-    release_global_memory();
+
+    release_global_memory(); // unused
     params_buffer_pt[tasklet_id] = params_buffer + tasklet_id * this_tasklet_params_buffer_len;
 
     DEBUG_PRINT(RED " --------------------- (END DPU) -----------------------------\n" RESET);
