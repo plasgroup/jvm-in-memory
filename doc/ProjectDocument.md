@@ -39,7 +39,9 @@
 
 ## 2.  **Java framework**
 
-+ Proxy type and its generator (incompleted)
++ Proxy type and its generator (incompleted)	
+  + A proxy class of class A is created by extends the class A, and override all class A's method that dispatch the method execution to a DPU
+
 
 + Distributed Collections
 + Primitives
