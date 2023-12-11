@@ -70,7 +70,7 @@ void print_method(struct j_method __mram_ptr* jm){
     DEBUG_PRINT("-------------------------------------------------------------------\n");
 }
 
-void exec_task_from_host() {
+void exec_tasks() {
     struct function_thunk fc;
     int i;
     int num = 0;
@@ -156,6 +156,6 @@ void exec_task_from_host() {
 int main() {
     DEBUG_PRINT("meta_space_begin = 0x%x, heap_space_begin = 0x%x, param_begin = 0x%x, wram_space_begin = 0x%x\n"
                 , m_metaspace, m_heapspace, params_buffer, wram_data_space);
-    exec_task_from_host();
+    exec_tasks();
     return 0;
 }
