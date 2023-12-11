@@ -351,15 +351,14 @@ $ cp dpuslave <path-to-workspace>/jvm-in-memory/evaluation/
 
 ### Situation Analysis
 
-1. JVM速度十分慢。速度慢的来源于，但不限于（1）非JIT执行引擎，（2）未对MRAM访问次数进行优化以及（3）未利用Scratchpad内存。
-
-2. JVM功能存在限制。
-
-   由于DPU的代码空间有限。当前JVM面临添加新功能的复杂性。
-
-3. 未能很好利用并行。当前并行类似于手动并行化。使用`BatchDispatcher`进行
-
-【Example】
+1. **The JVM is very slow.** The slowness comes from, but is not limited to
+   + (1) non-JIT execution engines
+   + (2) failure to optimize the number of MRAM accesses
+   + (3) failure to utilize Scratchpad memory.
+2. **Limitations in In-memory JVM functionality.**
+   + Due to the limited code space of DPU. The current JVM faces the complexity of adding new features.
+3. **Difficult to utilize parallelism well.** 
+   + Current parallelism is similar to **manual parallelization**. The use of `BatchDispatcher` :
 
 ``` java
 BatchDispatcher bd = new BatchDispatcher();
@@ -370,4 +369,25 @@ UPMEM.beginRecordBatchDispatching(bd); // begin record remote procedure call
 UPMEM.endRecordBatchDispatching(); // end record remote procedure call
 bd.dispatchAll();
 ```
+
+4. we may not be able to get particularly novel research topics from the extension of the library.
+5. Language design may be a good direction.
+6. The use of the in-memory JVM makes it difficult to work with process-intensive data structures such as arrays and matrices.
+
+
+
+
+
+### Some Possible Direction
+
+1. Make use of scratchpad memory
+   + Make all in-memory JVM's **MRAM** access through the scratchpad memory
+2. Treat JVM as a distributed system and make an object query language for the system.
+   + Easier and more effective parallelization
+     + Could be **full-concurrency** as objects' are **storage-centric, not behavior-centric**., and rarely inter-object message passing inside a DPU.
+     + Should be fast, as there are less method call inside the JVM, which save the cost in costing table look up/class structure obtaining when calling a method.
+     + Can make JVM instruction more compact.
+     + Can welly utilize scratchpad memory, as many operation can be done serialized.
+     + Can realize automatic parallelization by utilizing the designed language.
+   + In-memory JVM module could be make easier, and make help resolving the space limitation problem.
 
