@@ -24,8 +24,6 @@
 -- lib
 |  // libs that required by java framework
 ---------------------------------------------------------------------------------------------------
-
-
 ```
 
 
@@ -378,7 +376,7 @@ bd.dispatchAll();
 
 
 
-### Some Possible Direction
+### Some Possible Directions
 
 1. Make use of scratchpad memory
    + Make all in-memory JVM's **MRAM** access through the scratchpad memory
