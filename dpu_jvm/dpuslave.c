@@ -13,12 +13,12 @@
 #endif // INMEMORY
 
 
-#include "vm_shared_src/memory.h"
+#include "core/memory.h"
 #include "ir/bytecode.h"
-#include "vm_shared_src/frame_helper.h"
-#include "vm_shared_src/method.h"
-#include "vm_shared_src/jclass.h"
-#include "vm_shared_src/vm_loop.h"
+#include "core/frame_helper.h"
+#include "core/method.h"
+#include "core/jclass.h"
+#include "core/vm_loop.h"
 #include "utils/jstruct_printer.h"
 #include "sample_ils/test_cases_gen.h"
 
