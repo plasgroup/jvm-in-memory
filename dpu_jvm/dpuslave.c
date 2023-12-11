@@ -26,7 +26,7 @@ char inited = 0;
 
 #define MARAM_METASPACE_MALLOC(size) meta_space_pt; meta_space_pt += size;
 
-
+#define TASKLET_CNT 24
 
 void print_virtual_table(struct j_class __mram_ptr* jc){
     int len = jc->virtual_table_length;
@@ -79,21 +79,29 @@ void exec_task_from_host() {
     int tasklet_id = me(); // get the id of current tasklet.
     struct j_method __mram_ptr *jm = exec_method_pt[tasklet_id];
     struct j_class __mram_ptr *jc = exec_class_pt[tasklet_id];
-    int this_tasklet_params_buffer_len = (PARAMS_BUFFER_SIZE / 24);
+
+    // Each tasklet hold part of the whole parameter buffer. 
+    // This statement calculate the size of subparameter buffer that a tasklet hold.
+    int this_tasklet_params_buffer_len = (PARAMS_BUFFER_SIZE / TASKLET_CNT);
+    // Calculate the beginning address of subparameter buffer of current tasklet
     int buffer_begin = params_buffer + tasklet_id * this_tasklet_params_buffer_len;
 
 
 
-    // condition judgement to prevent 重复replicative initialization of DPU memory.
+    // condition judgement to prevent replicative initialization of DPU memory.
     if (inited == 0) {
         init_memory();
         inited = 1;
     }
 
+    // Get the current "parameter buffer head pointer" of parameter buffer of current tasklet
+    // the parameter buffer store tasks representation. The tasklet will take task form it one by one, 
+    // and each time a task is taken from the buffer, the parameter buffer head pointer of current tasklet will
+    // move forward. 
     int tasklet_buffer_pt = params_buffer_pt[tasklet_id];
 
+    // current tasklet's parameter buffer head should > parameter buffer beginning of current tasklet
     if(buffer_begin >= tasklet_buffer_pt){
-      //  printf("return ...\n");
         return;
     }
 
