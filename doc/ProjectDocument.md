@@ -39,12 +39,10 @@
 
 ## 2.  **Java framework**
 
-+ **Components:**
++ Proxy type and its generator (incompleted)
 
-  + Proxy Type and its generator (incompleted)
-
-  + Distributed Collections
-  + Primitives
++ Distributed Collections
++ Primitives
 
 
 
