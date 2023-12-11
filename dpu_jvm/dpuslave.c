@@ -27,47 +27,7 @@
 __host uint32_t checksum;
 
 char inited = 0;
-
-/*
-struct constant_table_item{
-    u4 key;
-    u4 val;
-};
-struct j_class{
-    u4 total_size;
-    u2 this_class_name_index;
-    u2 super_class_name_index;
-    ref_type super_class;
-    u2 access_flag;
-    u2 cp_2b_offset;
-    int cp_item_count;
-    struct constant_table_item __mram_ptr* items;
-    int fields_count;
-    struct j_field __mram_ptr* fields;
-    int jmethod_count;
-    struct j_methods __mram_ptr* methods;
-    int string_constant_pool_length;
-    uint8_t* string_constant_pool;
-};
-*/
-
-
-/*
-    struct j_method{
-        u4 total_size;
-        u2 access_flags;
-        u2 params_count;
-        u2 name_index;
-        u2 max_stack;
-        u2 max_locals;
-        u2 retained;
-        u4 code_length;
-        ref_type return_type;
-        ref_type* params;
-        ref_type bytecodes;
-    };
-*/
-    
+   
 
 #define MARAM_METASPACE_MALLOC(size) meta_space_pt; meta_space_pt += size;
 
