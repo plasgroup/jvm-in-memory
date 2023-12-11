@@ -3,6 +3,18 @@
 #include <stdio.h>
 
 
+
+/*
+
+
+
+
+
+
+*/
+
+
+// frame printer
 void print_frame(uint8_t __mram_ptr* fp, uint8_t __mram_ptr* sp) {
 
 
@@ -69,12 +81,18 @@ void print_frame(uint8_t __mram_ptr* fp, uint8_t __mram_ptr* sp) {
 }
 
 
-uint8_t __mram_ptr* create_new_vmframe(struct function_thunk func_thunk
-, uint8_t* return_pc)
+
+
+// create new frame
+uint8_t __mram_ptr* create_new_vmframe(struct function_thunk func_thunk, uint8_t* return_pc)
 {
+
+// Two macros for increase or decrease current SP
 #define INC_SP(S) current_sp[me()] += S;
 #define DEC_SP(S) current_sp[me()] -= S;
-     
+
+
+// function structure and FP, SP
      struct function __mram_ptr *func = func_thunk.func;
      uint8_t __mram_ptr* fp = current_fp[me()];
      uint8_t __mram_ptr* sp = current_sp[me()];
@@ -85,14 +103,25 @@ uint8_t __mram_ptr* create_new_vmframe(struct function_thunk func_thunk
      DEBUG_PRINT("\n--------------------------------- Create Frame ---------------------------------\n");
      DEBUG_PRINT("--------- [%d] Frame from (%p) ------------\n", me(), current_sp[me()]);
       
+     // if it is not the first frame, we do need push arguments to frame, just increase the SP.
+     // presume currently has k frames, and this method want to create the (k+1)-frame.
+     // the arguemnts already exists in evaluation stack of k-th frame (in the top of it),
+     // aruguments area is in the bottom of a frame, so we can directly increase the SP with size(arguments)
+     // On the other hand, if the frame we want to create is the initial frame. We need push arguements to 
+     // it from the parameter buffer specified by the func_thunk.params
+
      if(func_thunk.params == current_sp[me()] + 4 * params_count){
        DEBUG_PRINT(" >> create frame from an existed function call\n");
        INC_SP(sizeof(uint8_t __mram_ptr*))
        for(i = 0; i < locals_count; i++){
+              // In the  condition that no the creation of initial frame, just increase the SP. we not need 
+              // any MRAM store operation.
               DEBUG_PRINT("(%p) ", current_sp[me()]);
               if(i < params_count){
+              // the first m (m < total locals count, m = arguments count) locals are the arguments.
                   DEBUG_PRINT("(param) ");
               }
+
               DEBUG_PRINT("local %d = %d\n", i, *(u4 __mram_ptr*)current_sp[me()]);
               func_thunk.params += sizeof(uint8_t __mram_ptr*);
               
@@ -109,12 +138,33 @@ uint8_t __mram_ptr* create_new_vmframe(struct function_thunk func_thunk
               
               DEBUG_PRINT("local %d = %d (addr(p): 0x%08x)\n", i, *(u4 __mram_ptr*)func_thunk.params, func_thunk.params);
              
+              // push an argument to the stack
               *(uint8_t __mram_ptr* __mram_ptr*)current_sp[me()] = (uint8_t __mram_ptr*)*(uint32_t __mram_ptr*)func_thunk.params;
-              
               func_thunk.params += sizeof(uint8_t __mram_ptr*);
               INC_SP(sizeof(uint8_t __mram_ptr*))
        }
-     } 
+     }
+
+/*
+SP -> 
+      _____ operand stack[k] ______
+                 ....
+      _____ operand stack[0] ______
+      _____ pointer to bytecodes ______
+      _____ cp         ______
+      _____ class      ______
+      _____ method     ______
+      _____ return pc  ______
+      _____ old sp     ______
+FP -> _____ old fp     ______
+      _____ local m    ______
+               ....
+      _____ local 1    ______ (params 1)
+      _____ local 0    ______ (params 0)
+
+*/
+
+
      DEBUG_PRINT("-------> new current_sp = %p\n", current_sp[me()]);
    
      //old fp
@@ -128,7 +178,6 @@ uint8_t __mram_ptr* create_new_vmframe(struct function_thunk func_thunk
      *(uint32_t __mram_ptr*)current_sp[me()] = sp;
      DEBUG_PRINT("(%p) old-stack-pointer = %p \n", current_sp[me()], *(uint8_t __mram_ptr* __mram_ptr*)current_sp[me()]);
      INC_SP(sizeof(uint8_t __mram_ptr*))
-
 
      //return pc
      *(uint32_t __mram_ptr*)current_sp[me()] = (uint32_t)return_pc;
@@ -156,7 +205,7 @@ uint8_t __mram_ptr* create_new_vmframe(struct function_thunk func_thunk
      INC_SP(sizeof(uint8_t __mram_ptr*))
 
 
-     // operand stacks;
+     // operand stacks
      current_sp[me()] -= 4;
     
      DEBUG_PRINT("------------------------------ End Create Frame ------------------------------\n");
