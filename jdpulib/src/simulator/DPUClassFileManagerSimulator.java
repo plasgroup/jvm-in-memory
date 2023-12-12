@@ -11,12 +11,16 @@ import framework.pim.dpu.classloader.ClassFileAnalyzerConstants;
 import framework.pim.dpu.classloader.DPUClassFileManager;
 import framework.pim.dpu.java_strut.*;
 import framework.pim.utils.BytesUtils;
+import framework.pim.utils.StringUtils;
+import transplant.index.search.IndexTable;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Array;
 import java.rmi.RemoteException;
 import java.util.*;
 
+import static framework.pim.dpu.classloader.ClassFileAnalyzer.printEntryTable;
 import static framework.pim.dpu.classloader.ClassWriter.pushJClassToDPU;
 import static framework.pim.utils.ClassLoaderUtils.*;
 import static framework.pim.utils.ClassLoaderUtils.getMethodDescriptor;
@@ -46,7 +50,12 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
     private void recordMethodDistribution(Class c, DPUJClass jc, int classAddr) {
         for(int mIndex = 0; mIndex < jc.methodCount; mIndex++){
             String desc = getUTF8(jc,jc.methodTable[mIndex].descriptorIndex);
-            List<Class> classes = descriptorToClasses(desc.substring(1, desc.indexOf(')')));
+            List<Class> classes = null;
+            try {
+                classes = descriptorToClasses(desc.substring(1, desc.indexOf(')')));
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
             try {
                 int addr;
                 if(classes.size() == 0){
@@ -72,59 +81,103 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
     }
 
 
-    List<Class> descriptorToClasses(String desc){
+    List<Class> descriptorToClasses(String desc) throws ClassNotFoundException {
         System.out.println("parse " + desc);
         String matched = "";
         int state = 0;
+        int arrayDim = 0;
         List<Class> classes = new ArrayList<>();
         for(int ci = 0; ci < desc.length(); ci++){
             char ch = desc.charAt(ci);
             if(state == 0){
                 switch (ch){
                     case 'B':
-                        classes.add(byte.class);
+                        if(arrayDim != 0){
+                            classes.add(Class.forName("[".repeat(arrayDim) + "B"));
+                            arrayDim = 0;
+                        }else{
+                            classes.add(byte.class);
+                        }
                         break;
                     case 'C':
-                        classes.add(char.class);
+                        if(arrayDim != 0){
+                            classes.add(Class.forName("[".repeat(arrayDim) + "C"));
+                            arrayDim = 0;
+                        }else{
+                            classes.add(char.class);
+                        }
                         break;
                     case 'D':
-                        classes.add(double.class);
+                        if(arrayDim != 0){
+                            classes.add(Class.forName("[".repeat(arrayDim) + "D"));
+                            arrayDim = 0;
+                        }else{
+                            classes.add(double.class);
+                        }
                         break;
                     case 'F':
-                        classes.add(float.class);
+                        if(arrayDim != 0){
+                            classes.add(Class.forName("[".repeat(arrayDim) + "F"));
+                            arrayDim = 0;
+                        }else{
+                            classes.add(float.class);
+                        }
                         break;
                     case 'I':
-                        classes.add(int.class);
+                        if(arrayDim != 0){
+                            classes.add(Class.forName("[".repeat(arrayDim) + "I"));
+                            arrayDim = 0;
+                        }else{
+                            classes.add(int.class);
+                        }
                         break;
                     case 'J':
-                        classes.add(long.class);
+                        if(arrayDim != 0){
+                            classes.add(Class.forName("[".repeat(arrayDim) + "J"));
+                            arrayDim = 0;
+                        }else{
+                            classes.add(long.class);
+                        }
                         break;
                     case 'S':
-                        classes.add(short.class);
+                        if(arrayDim != 0){
+                            classes.add(Class.forName("[".repeat(arrayDim) + "S"));
+                            arrayDim = 0;
+                        }else{
+                            classes.add(short.class);
+                        }
                         break;
                     case 'Z':
-                        classes.add(boolean.class);
+                        if(arrayDim != 0){
+                            classes.add(Class.forName("[".repeat(arrayDim) + "S"));
+                            arrayDim = 0;
+                        }else{
+                            classes.add(boolean.class);
+                        }
                         break;
                     case 'L':
                         state = 1;
                         break;
 
                     case '[':
+                        arrayDim++;
                         break;
                 }
             }else if(state == 1){
                 if(ch != ';'){
                     matched += ch;
                 }else{
-
                     Class c = null;
-                    try {
-                        c = Class.forName(matched.replace("/", "."));
-                    } catch (ClassNotFoundException e) {
-                        throw new RuntimeException(e);
-                    }
-                    classes.add(c);
+                    if(arrayDim > 0){
+                        c = Class.forName("[".repeat(arrayDim) + "L".repeat(arrayDim) + matched.replace("/",
+                                ".") + ";");
+                        arrayDim = 0;
 
+                    }else{
+                        c = Class.forName(matched.replace("/", "."));
+                    }
+
+                    classes.add(c);
                     matched = "";
                     state = 0;
                 }
@@ -145,235 +198,229 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
     }
     Dictionary<String, Integer> globalVirtualTableIndexCache = new Hashtable<>();
 
-    private void createVirtualTable(DPUJClass jc, byte[] classBytes) {
-        /* iterate method table */
-        String thisClassName = getUTF8(jc, jc.thisClassNameIndex);
 
-        classfileLogger.logln("in java class = " + thisClassName);
-        VirtualTable thisClassVirtualTable = new VirtualTable();
-        jc.virtualTable = thisClassVirtualTable;
-        if(jc.superClass == 0){
-            // java/framework.lang/Object
+    static {
+        classfileLogger.setEnable(true);
+    }
 
-            /* iterate method table to put all methods to v_table */
-            thisClassVirtualTable.items.add(new VirtualTableItem("", ""));
-            for(int i = 0; i < jc.methodTable.length; i++){
-                DPUJMethod method = jc.methodTable[i];
-                String methodName = getUTF8(jc, method.nameIndex);
-                String methodDescriptor = getUTF8(jc, method.descriptorIndex);
-                String descriptor = methodName + ":" + methodDescriptor;
-                int index = thisClassVirtualTable.items.size();
-                thisClassVirtualTable.items.add(new VirtualTableItem(thisClassName, descriptor));
+    public DPUJClass loadClassesToDPUFromDescriptorSingle(String descriptor) throws ClassNotFoundException {
+        StringBuilder sb = new StringBuilder(descriptor);
+        int arrayDim = 0;
+        while(sb.length() > 0 && sb.charAt(0) == 'p'){
+            sb.deleteCharAt(0);
+        }
+        descriptor = sb.toString();
+        if("B".equals(descriptor)){
+            if(arrayDim != 0){
+                return loadClassToDPU(Class.forName("[".repeat(arrayDim) + "B"));
+            }else{
+                return loadClassToDPU(byte.class);
+            }
+        }else if("C".equals(descriptor)){
+            if(arrayDim != 0){
+                return loadClassToDPU(Class.forName("[".repeat(arrayDim) + "C"));
+            }else{
+                return loadClassToDPU(char.class);
+            }
+        }else if("D".equals(descriptor)){
+            if(arrayDim != 0){
+                return loadClassToDPU(Class.forName("[".repeat(arrayDim) + "D"));
+            }else{
+                return loadClassToDPU(double.class);
+            }
+        }else if("F".equals(descriptor)){
+            if(arrayDim != 0){
+                return loadClassToDPU(Class.forName("[".repeat(arrayDim) + "F"));
+            }else{
+                return loadClassToDPU(float.class);
+            }
+        }else if("I".equals(descriptor)){
+            if(arrayDim != 0){
+                return loadClassToDPU(Class.forName("[".repeat(arrayDim) + "I"));
+            }else{
+                return loadClassToDPU(int.class);
+            }
+        }else if("J".equals(descriptor)){
+            if(arrayDim != 0){
+                return loadClassToDPU(Class.forName("[".repeat(arrayDim) + "J"));
+            }else{
+                return loadClassToDPU(long.class);
+            }
+        }else if("Z".equals(descriptor)){
+            if(arrayDim != 0){
+                return loadClassToDPU(Class.forName("[".repeat(arrayDim) + "S"));
+            }else{
+                return loadClassToDPU(boolean.class);
+            }
+        }else if("S".equals(descriptor)){
+            if(arrayDim != 0){
+                return loadClassToDPU(Class.forName("[".repeat(arrayDim) + "S"));
+            }else{
+                return loadClassToDPU(short.class);
+            }
+        }else{
+            Class c = null;
+            if(arrayDim > 0){
+                c = Class.forName("[".repeat(arrayDim) +  descriptor.replace("/",
+                        ".") + ";");
+                arrayDim = 0;
 
-                classfileLogger.logf(" - Add method %s to Vtable of %s, className = %s, index = %d\n", descriptor, thisClassName, thisClassName, index);
-
-                globalVirtualTableIndexCache.put(thisClassName + "." + descriptor, index);
+            }else{
+                c = Class.forName(descriptor.replace('/', '.'));
             }
 
-            for(int i = 0; i < jc.entryItems.length; i++){
-                int tag = classBytes[jc.itemBytesEntries[i]];
-                if(tag == ClassFileAnalyzerConstants.CT_Methodref){
-                    String description = getMethodDescriptor(jc, classBytes, i);
-                    String className = description.split("\\.")[0];
-                    String descriptor = description.split("\\.")[1];
-                    classfileLogger.logln(" - #" + i + " is MethodRef, description = " + className + "." + descriptor);
-                    if(isClassLoaded(className)){
-                        classfileLogger.logln(className + " is loaded");
-                        int index = globalVirtualTableIndexCache.get(className + "." + descriptor);
-                        classfileLogger.logln(" - get method index = " + index);
-                        jc.entryItems[i] &= 0xFFFFFFFF00000000L;
-                        jc.entryItems[i] |= index;
-                    }else{
-                        classfileLogger.logln(className + " is not loaded, skip");
+            return loadClassToDPU(c);
+        }
+
+    }
+    public void loadClassesToDPUFromDescriptor(String descriptor) throws ClassNotFoundException {
+        if(descriptor.charAt(0) == '('){
+            descriptor = descriptor.split(":")[1];
+            int state = 0;
+            for(int ci = 0; ci < descriptor.length(); ci++){
+                char ch = descriptor.charAt(ci);
+                String matched = "";
+                if(state == 0){
+                    switch (ch){
+                        case 'B':
+                            loadClassesToDPUFromDescriptorSingle(matched + "B");
+                            break;
+                        case 'C':
+                            loadClassesToDPUFromDescriptorSingle(matched + "C");
+                            break;
+                        case 'D':
+                            loadClassesToDPUFromDescriptorSingle(matched + "D");
+                            break;
+                        case 'F':
+                            loadClassesToDPUFromDescriptorSingle(matched + "F");
+                            break;
+                        case 'I':
+                            loadClassesToDPUFromDescriptorSingle(matched + "I");
+                            break;
+                        case 'J':
+                            loadClassesToDPUFromDescriptorSingle(matched + "J");
+                            break;
+                        case 'S':
+                            loadClassesToDPUFromDescriptorSingle(matched + "S");
+                            break;
+                        case 'Z':
+                            loadClassesToDPUFromDescriptorSingle(matched + "Z");
+                            break;
+                        case 'L':
+                            state = 1;
+                            break;
+
+                        case '[':
+                            matched += "[";
+                            break;
                     }
+                }else if(state == 1){
+                    if(ch != ';'){
+                        matched += ch;
+                    }else{
+                        loadClassesToDPUFromDescriptorSingle(matched);
+                        matched = "";
+                        state = 0;
+                    }
+
+
                 }
             }
         }else{
-            // get super jc;
-            String superClassName = getUTF8(jc, jc.superClassNameIndex);
-            DPUJClass superClassJc = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getClassStrutCacheLine(superClassName).dpuClassStructure;
-            if(superClassJc == null) throw new RuntimeException("super class not loaded");
-
-            /* copy all methods from super */
-            VirtualTable superVirtualTable = superClassJc.virtualTable;
-            for(int i = 0; i < superVirtualTable.items.size(); i++){
-                VirtualTableItem item = superVirtualTable.items.get(i);
-                jc.virtualTable.items.add(new VirtualTableItem(item.className, item.descriptor));
-            }
-
-            /* append or rewrite virtual table item */
-            for(int i = 0; i < jc.methodTable.length; i++){
-                DPUJMethod method = jc.methodTable[i];
-                String methodName = getUTF8(jc, method.nameIndex);
-                String methodDescriptor = getUTF8(jc, method.descriptorIndex);
-                String descriptor = methodName + ":" + methodDescriptor;
-
-                /* find whether super classes/interfaces has the method with the same descriptor */
-                boolean written = false;
-                for(int j = 0; j < jc.virtualTable.items.size(); j++){
-                    String vClassName = jc.virtualTable.items.get(j).className;
-                    String vDescriptor = jc.virtualTable.items.get(j).descriptor;
-                    if(vDescriptor.startsWith("<init>")){
-                        continue;
-                    }
-                    if(vDescriptor.equals(descriptor)) {
-                        try {
-                            Class thisClass = Class.forName(thisClassName.replace("/", "."));
-                            Class vClass = Class.forName(vClassName.replace("/", "."));
-                            if (vClass.isAssignableFrom(thisClass)) {
-                                // rewrite
-                                jc.virtualTable.items.get(j).className = thisClassName;
-                                written = true;
-                                break;
-                            }
-                        } catch (ClassNotFoundException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                }
-                if(!written) {
-                    int index = jc.virtualTable.items.size();
-                    jc.virtualTable.items.add(new VirtualTableItem(thisClassName, descriptor));
-                    globalVirtualTableIndexCache.put(thisClassName + "." + descriptor, index);
-                }
-            }
-
-            /* set index in entry table */
-            for(int i = 0; i < jc.entryItems.length; i++){
-                int tag = classBytes[jc.itemBytesEntries[i]];
-                if(tag == ClassFileAnalyzerConstants.CT_Methodref){
-                    String description = getMethodDescriptor(jc, classBytes, i);
-                    String className = description.split("\\.")[0];
-                    String descriptor = description.split("\\.")[1];
-                    classfileLogger.logln(" - #" + i + " is MethodRef, description = " + className + "." + descriptor);
-                    while(!"".equals(className)){
-                        if(globalVirtualTableIndexCache.get(className + "." + descriptor) != null){
-                            Integer index = globalVirtualTableIndexCache.get(className + "." + descriptor);
-                            classfileLogger.logln("set #" + i + " " + className + "." + descriptor + " index " + index);
-                            jc.entryItems[i] &= 0xFFFFFFFF00000000L;
-                            jc.entryItems[i] |= index;
-                            break;
-                        }else{
-                            DPUJClass methodReferenceJc = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getClassStrutCacheLine(className).dpuClassStructure;
-                            
-                            if(methodReferenceJc.superClassNameIndex != 0){
-                                className = getUTF8(methodReferenceJc, methodReferenceJc.superClassNameIndex);
-                            }else{
-                                className = "";
-                            }
-
-                        }
-                    }
-                }
-            }
-
-            for(int j = 0; j < jc.virtualTable.items.size(); j++){
-                String vClassName = jc.virtualTable.items.get(j).className;
-                String vDescriptor = jc.virtualTable.items.get(j).descriptor;
-                classfileLogger.logln("vtable #" + j + " " + vClassName + "." + vDescriptor);
-            }
-
-
-            classfileLogger.logln("");
-            ClassFileAnalyzer.printEntryTable(jc);
+            loadClassesToDPUFromDescriptorSingle(descriptor);
         }
 
-
-        jc.totalSize = 48 + jc.cpItemCount * 8 + 8 +
-                Arrays.stream(jc.fields).map(e -> e.size).reduce((s1, s2) -> s1 + s2).orElse(0) +
-                Arrays.stream(jc.methodTable).map(e -> e.size).reduce((s1, s2) -> s1 + s2).orElse(0)
-                + ((jc.stringINTConstantPoolLength + 0b111) & (~0b111))
-                + ((8 * jc.virtualTable.items.size()) + 0b111 & (~0b111));
-        ;
     }
+    static   HashSet<String> ignoreSet = new HashSet<>();
 
     @Override
     public DPUJClass loadClassToDPU(Class c) {
         String className = formalClassName(c.getName());
+        byte[] classFileBytes;
+
         classfileLogger.logln(" ==========--> Try load class " + className + " to dpu#" + dpuID + " <--==========");
 
-        // query cache
+        /** query cache **/
         DPUClassFileCacheItem cl = getLoadedClassRecord(className);
-        if(cl != null){
+        if (cl != null) {
             classfileLogger.logln("- Class " + className + " already loaded in DPU#" + dpuID);
             return cl.dpuClassStructure;
         }
 
-        // get bytes of class file
-        InputStream is = c.getResourceAsStream((c.getSimpleName().split("\\$")[0] + ".class"));
-        if(is == null) {
+        /** get bytes of a class file **/
+        InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream((c.getName().replace('.','/') + ".class"));
+
+        if (is == null) {
             // TODO class name with form of "[....;" cannot be load
             try {
-                throw new IOException("cannot find class " + c.getSimpleName().split("\\$")[0] + ".class");
+
+                throw new IOException("class " + (c.getName().replace('.','/') + ".class"));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
-        byte[] classFileBytes = new byte[0];
+
+
         try {
             classFileBytes = is.readAllBytes();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        try {
             is.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        // preliminary analysis the Class
+
+        /**
+         *
+         *    preliminary analyze the class
+         *    place basis information to class structure
+         *    generate unresolved constant table and entry table
+         *    place constant data in the constant area of class structure
+         *    calculate size
+         *
+         * **/
         ClassFileAnalyzer classFileAnalyzer = ClassFileAnalyzer.fromClassBytes(classFileBytes);
         DPUJClass jc = classFileAnalyzer.preResolve();
 
-        // load super class recursively
+        printEntryTable(jc);
+
+        /** load super class **/
         String superClassName = jc.superClassNameIndex == 0 ? "" : getUTF8(jc, jc.superClassNameIndex);
         classfileLogger.logln("super class name = " + superClassName);
         className = formalClassName(superClassName);
-        if(!"".equals(className)) {
-            if(!isClassLoaded(superClassName)){
+        if (!"".equals(className)) {
+            if (!isClassLoaded(superClassName)) {
                 classfileLogger.logln(" ---- load super class " + className + ", index " + jc.superClassNameIndex);
                 loadClassToDPU(c.getSuperclass());
             }
-        }else{
+        } else {
+
+            /** it should be java/lang/Object **/
             classfileLogger.logln(" ---- No superclass ----");
             className = formalClassName(c.getName());
-            classfileLogger.logln(" - Push class " + className + " to DPU#" + dpuID);
+            classfileLogger.logln(" - push class " + className + " to DPU#" + dpuID);
 
             int classAddr = upmem.getDPUManager(dpuID).garbageCollector.allocate(DPUJVMMemSpaceKind.DPU_METASPACE, jc.totalSize);
 
             int metaspaceIndex;
             try {
-                  metaspaceIndex = dpujvmRemote.getMetaSpaceIndex();
+                metaspaceIndex = dpujvmRemote.getMetaSpaceIndex();
+                recordClass(className, jc, dpujvmRemote.pushToMetaSpace(c));
+
             } catch (RemoteException e) {
                 throw new RuntimeException();
             }
-            try {
-                recordClass(className, jc, dpujvmRemote.pushToMetaSpace(c));
-            } catch (RemoteException e) {
-                throw new RuntimeException(e);
-            }
+
+
             recordMethodDistribution(c, jc, metaspaceIndex);
             recordFieldDistribution(c, jc);
-            createVirtualTable(jc, classFileBytes);
+
+            // append virtual table's space (simulate)
             upmem.getDPUManager(dpuID).garbageCollector.allocate(DPUJVMMemSpaceKind.DPU_METASPACE,
-                    ((8 * jc.virtualTable.items.size()) + 0b111) & (~0b111));
-            for(int i = 0; i < jc.virtualTable.items.size(); i++){
-                String vClassName = jc.virtualTable.items.get(i).className;
-                String vDescriptor = jc.virtualTable.items.get(i).descriptor;
-                DPUCacheManager classCacheManager = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager;
-                classfileLogger.logln("" + classCacheManager);
-                DPUMethodCacheItem methodCacheItem =
-                        UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getMethodCacheItem(vClassName, vDescriptor);
-                if(methodCacheItem != null)
-                {
-                    jc.virtualTable.items.get(i).methodReferenceAddress = methodCacheItem.mramAddr;
-                    jc.virtualTable.items.get(i).classReferenceAddress = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getClassStrutCacheLine(vClassName).marmAddr;
-                }
-            }
+                    ((8 * jc.methodTable.length) + 0b111) & (~0b111));
+            jc.totalSize += 8 * jc.methodTable.length;
 
             try {
-                pushJClassToDPU(jc, classAddr , dpuID);
-
+                pushJClassToDPU(jc, classAddr, dpuID);
             } catch (DpuException e) {
                 throw new RuntimeException(e);
             }
@@ -390,42 +437,40 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
 
         try {
             metaspaceIndex = dpujvmRemote.getMetaSpaceIndex();
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
-
-        try {
             recordClass(formalClassName(c.getName()), jc, dpujvmRemote.pushToMetaSpace(c));
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
+
+
         recordMethodDistribution(c, jc, metaspaceIndex);
         recordFieldDistribution(c, jc);
-        createVirtualTable(jc, classFileBytes);
+
+        if (c.getName().equals("application.transplant.index.search.IndexTable")) {
+            System.out.println();
+        }
+
         upmem.getDPUManager(dpuID).garbageCollector.allocate(DPUJVMMemSpaceKind.DPU_METASPACE,
-                ((8 * jc.virtualTable.items.size()) + 0b111) & (~0b111));
+                ((8 * jc.methodTable.length) + 0b111) & (~0b111));
+        jc.totalSize += 8 * jc.methodTable.length;
 
+        /** resolve each entry item from preprocessed entry table. **/
 
-        classfileLogger.logln(" - In class " + c.getName() + " resolve unknow name");
-
-
-        // resolve each entry item from preprocessed entry table.
-
-        for(int i = 0; i < jc.cpItemCount; i++){
+        for (int i = 0; i < jc.cpItemCount; i++) {
             int tag = (int) ((jc.entryItems[i] >> 56) & 0xFF);
             int classIndex;
             int nameAndTypeIndex;
-            switch (tag){
+            switch (tag) {
                 case ClassFileAnalyzerConstants.CT_Class:
                     classfileLogger.logln("In #" + (i) + " ClassRef: ");
                     String classNameUTF8 = getUTF8(jc, (int) ((jc.entryItems[i]) & 0xFFFF));
                     classfileLogger.logln("className = " + classNameUTF8 + ", index = #" + (jc.entryItems[i] & 0xFFFF));
                     DPUClassFileCacheItem cacheLine =
                             upmem.getDPUManager(dpuID).classCacheManager.dpuClassCache.cache.get(classNameUTF8);
-                    if(cacheLine != null){
+                    if (cacheLine != null) {
                         classfileLogger.logf("class %s loaded, mram addr = 0x%x\n", classNameUTF8, cacheLine.marmAddr);
-                    }else{
-                        if(!"java/lang/System".equals(classNameUTF8)){
+                    } else {
+                        if (!ignoreSet.contains(classNameUTF8)) {
                             try {
                                 // TODO className$1 loading..
                                 loadClassToDPU(Class.forName(classNameUTF8.replace("/", ".")));
@@ -433,15 +478,12 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
                             } catch (ClassNotFoundException e) {
                                 classfileLogger.logln("cannot find class " + classNameUTF8);
                             }
-                        }else{
+                        } else {
                             classfileLogger.logln("ignore " + classNameUTF8);
                         }
                     }
 
-                    jc.entryItems[i] &= 0xFFFFFFFF00000000L;
-                    if(cacheLine != null){
-                        jc.entryItems[i] |= cacheLine.marmAddr;
-                    }
+
                     break;
                 case ClassFileAnalyzerConstants.CT_Fieldref:
                     classfileLogger.logln("In #" + (i) + " FieldRef: ");
@@ -449,78 +491,56 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
                     nameAndTypeIndex = (int) ((jc.entryItems[i]) & 0xFFFF);
                     classNameUTF8 = getUTF8(jc, (int) ((jc.entryItems[classIndex] >> 32) & 0xFFFF));
                     classfileLogger.logln("class name = " + classNameUTF8);
-                    cacheLine =
-                            upmem.getDPUManager(dpuID).classCacheManager.dpuClassCache.cache.get(classNameUTF8);
-                    if(cacheLine != null){
-                        classfileLogger.logf("class %s loaded, mram addr = 0x%x\n", classNameUTF8, cacheLine.marmAddr);
-                    } else{
-                        if("java/io/PrintStream".equals(classNameUTF8)){
-                            classfileLogger.logln("ignore " + classNameUTF8);
-                        }else{
-                            try {
-                                loadClassToDPU(Class.forName(classNameUTF8.replace("/", ".")));
-                            } catch (ClassNotFoundException e) {
-                                throw new RuntimeException(e);
-                            }
-                        }
+
+                    try {
+                        loadClassToDPU(Class.forName(classNameUTF8.replace("/", ".")));
+                    } catch (ClassNotFoundException e) {
+                        throw new RuntimeException(e);
                     }
 
-                    String fieldName = getUTF8(jc, (int) ((jc.entryItems[nameAndTypeIndex] >> 16) & 0xFFFF));
-                    classfileLogger.logln("fieldName = " + fieldName);
-                    DPUFieldCacheItem fieldCacheItem = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager
-                            .getFieldCacheItem(formalClassName(classNameUTF8), fieldName);
-                    jc.entryItems[i] &= 0xFFFFFFFFFFFF0000L;
-                    if(fieldCacheItem == null){
-                        // TODO, maybe static of final field
-                        //throw new RuntimeException("field analysis exception");
-                    }else{
-                        jc.entryItems[i] |= fieldCacheItem.indexInInstance;
+
+                    String fieldName = getUTF8(jc, (int) ((jc.entryItems[nameAndTypeIndex] >> 16) & 0xFF));
+                    String fieldType = getUTF8(jc, (int) ((jc.entryItems[nameAndTypeIndex]) & 0xFF));
+                    classfileLogger.logln("fieldName = " + fieldName + ", fieldType = " + fieldType);
+                    try {
+                        loadClassesToDPUFromDescriptor(fieldType);
+                    } catch (ClassNotFoundException e) {
+                        throw new RuntimeException(e);
                     }
+
+
                     break;
                 case ClassFileAnalyzerConstants.CT_Methodref:
                     classfileLogger.logln("In #" + (i) + " MethodRef: ");
+                    int classCPIndex = (int) ((jc.entryItems[i] >> 16) & 0xFF);
+                    int nameAndTypeCPIndex = (int) ((jc.entryItems[i]) & 0xFF);
+                    int nameCPIndex = (int) ((jc.entryItems[nameAndTypeCPIndex] >> 16) & 0xFF);
+                    int typeCPIndex = (int) ((jc.entryItems[nameAndTypeCPIndex]) & 0xFF);
+                    int classNameUTF8CPIndex = (int) ((jc.entryItems[classCPIndex]) & 0xFFFF);
+                    String methodClassNameUTF8 = getUTF8(jc, (int) (classNameUTF8CPIndex));
+                    String methodNameUTF8 = getUTF8(jc, (int) (nameCPIndex));
+                    String methodTypeUTF8 = getUTF8(jc, (int) (typeCPIndex));
 
-                    int methodTableIndex = (int) ((jc.entryItems[i]) & 0xFFFFFFFF);
-                    classfileLogger.logln("method Table Index = " + methodTableIndex);
 
-                    if(methodTableIndex == 0) continue;
-                    VirtualTableItem vItem = jc.virtualTable.items.get(methodTableIndex);
-                    classfileLogger.logln("description = " + vItem.className + "." + vItem.descriptor);
+                    System.out.println(c.getName());
 
+                    classfileLogger.logln("description = " + methodClassNameUTF8 + "." + methodNameUTF8 + ":" + methodTypeUTF8);
+                    String descriptor = methodNameUTF8 + ":" + methodTypeUTF8;
                     DPUMethodCacheItem methodCacheItem = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getMethodCacheItem(
-                            vItem.className, vItem.descriptor
+                            methodClassNameUTF8, descriptor
                     );
 
                     cacheLine =
-                            upmem.getDPUManager(dpuID).classCacheManager.dpuClassCache.cache.get(vItem.className);
-                    if(cacheLine != null){
-                        classfileLogger.logf("class %s loaded, mram addr = 0x%x\n", vItem.className, cacheLine.marmAddr);
-                    } else{
-                        if("java/io/PrintStream".equals(vItem.className)){
-                            classfileLogger.logln("ignore " + vItem.className);
-                        }else{
-                            try {
-                                // formalize class file name
-                                String cName = vItem.className.replace("/", ".");
-                                if(!"".equals(cName) && cName.charAt(0) == '['){
-                                    cName = cName.substring(1).replace(";", "");
-                                    if(cName.charAt(0) == 'L'){
-                                        loadClassToDPU(Class.forName(cName.substring(1)));
-                                    }
-                                }else{
-                                    loadClassToDPU(Class.forName(cName));
-                                }
-                            } catch (ClassNotFoundException e) {
-                                throw new RuntimeException(e);
-                            }
-                            methodCacheItem = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getMethodCacheItem(
-                                    vItem.className, vItem.descriptor
-                            );
-                        }
-                    }
-                    if(methodCacheItem == null) continue;
+                            upmem.getDPUManager(dpuID).classCacheManager.dpuClassCache.cache.get(methodClassNameUTF8);
 
-                    DPUJClass methodJc = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getClassStructure(vItem.className);
+                    DPUJClass dpujClass = null;
+                    try {
+                        dpujClass = loadClassesToDPUFromDescriptorSingle(methodClassNameUTF8);
+                    } catch (ClassNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
+                    if(dpujClass == null) continue;
+                    DPUJClass methodJc = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getClassStructure(methodClassNameUTF8);
                     String methodName = getUTF8(methodJc, methodCacheItem.dpujMethod.nameIndex);
                     classfileLogger.logln("methodName = " + methodName);
                     String TypeDesc = getUTF8(methodJc, methodCacheItem.dpujMethod.descriptorIndex);
@@ -530,103 +550,28 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
                     String paramsDesc = TypeDesc.substring(1).split("\\)")[0];
                     classfileLogger.logln("params desc = " + paramsDesc);
 
-                    if(returnVal.length() > 1 && returnVal.charAt(0) == 'L'){
-                        int returnTypeNameLen = returnVal.length();
-                        String returnTypeName = returnVal.substring(1, returnTypeNameLen - 1);
-                        if(upmem.getDPUManager(dpuID).classCacheManager.getClassStrutCacheLine(returnTypeName) == null){
-                            classfileLogger.logln("class " + returnVal + " unloaded");
-                            try {
-                                loadClassToDPU(Class.forName((returnVal.substring(1).replace("/", ".").replace(";", "")) ));
-                            } catch (ClassNotFoundException e) {
-                                throw new RuntimeException(e);
-                            }
-                        }else{
-                            classfileLogger.logln("class " + returnTypeName + " loaded");
+
+                    if (returnVal.length() > 1) {
+                        try {
+                            loadClassesToDPUFromDescriptor(returnVal);
+                        } catch (ClassNotFoundException e) {
+                            throw new RuntimeException(e);
                         }
                     }
 
-                    String matched = "";
-                    int state = 0;
-                    for(int ci = 0; ci < paramsDesc.length(); ci++){
-                        char ch = paramsDesc.charAt(ci);
-                        if(state == 0){
-                            switch (ch){
-                                case 'B':
-                                case 'C':
-                                case 'D':
-                                case 'F':
-                                case 'I':
-                                case 'J':
-                                case 'S':
-                                case 'Z':
-                                    break;
-                                case 'L':
-                                    state = 1;
-                                    break;
-                                case '[':
-                                    break;
-                            }
-                        }else if(state == 1){
-                            if(ch != ';'){
-                                matched += ch;
-                            }else{
-                                if(upmem.getDPUManager(dpuID).classCacheManager.getClassStrutCacheLine(matched) == null){
-                                    classfileLogger.logln("class " + matched + " unloaded");
-                                    if("java/lang/String".equals(matched)){
-                                        classfileLogger.logln("ignore class " + matched);
-                                    }else{
-                                        try {
-                                            loadClassToDPU(Class.forName(matched.replace("/", ".")));
-                                        } catch (ClassNotFoundException e) {
-                                            throw new RuntimeException(e);
-                                        }
-                                    }
-
-                                }else{
-                                    classfileLogger.logln("class " + matched + " loaded");
-                                }
-                                matched = "";
-                                state = 0;
-                            }
-                        }
-
-
-                    }
-
-                    // find cache
-                    jc.entryItems[i] = 0;
-                    jc.entryItems[i] |= ((long) BytesUtils.readU2BigEndian(classFileBytes, jc.itemBytesEntries[i] + 1) << 48) & 0xFFFF000000000000L;
-                    jc.entryItems[i] |= ((long)BytesUtils.readU2BigEndian(classFileBytes, jc.itemBytesEntries[i] + 3) << 32) & 0x0000FFFF00000000L;
-
-                    jc.entryItems[i] |=  methodTableIndex;
-                    classfileLogger.logf("%x\n", methodCacheItem.mramAddr);
-
-                    break;
             }
-        }
 
 
-
-        for(int i = 0; i < jc.virtualTable.items.size(); i++){
-            String vClassName = jc.virtualTable.items.get(i).className;
-            String vDescriptor = jc.virtualTable.items.get(i).descriptor;
-            DPUMethodCacheItem methodCacheItem =
-                    UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getMethodCacheItem(vClassName, vDescriptor);
-            if(methodCacheItem != null){
-                jc.virtualTable.items.get(i).methodReferenceAddress = methodCacheItem.mramAddr;
-                jc.virtualTable.items.get(i).classReferenceAddress = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getClassStrutCacheLine(vClassName).marmAddr;
+            DPUCacheManager classCacheManager = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager;
+            try {
+                pushJClassToDPU(jc, classAddr, dpuID);
+            } catch (DpuException e) {
+                throw new RuntimeException(e);
             }
-        }
-        UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getClassStructure(formalClassName(c.getName()))
-                .virtualTable = jc.virtualTable;
-        DPUCacheManager classCacheManager = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager;
-        try {
-            pushJClassToDPU(jc, classAddr, dpuID);
 
-        } catch (DpuException e) {
-            throw new RuntimeException(e);
         }
-
         return jc;
+
     }
+
 }

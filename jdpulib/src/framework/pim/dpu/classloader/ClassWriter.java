@@ -73,7 +73,7 @@ public class ClassWriter {
         constantAreaPointerPos = pos;
         pos += 4;
 
-        BytesUtils.writeU4LittleEndian(bs, ds.virtualTable.items.size(), pos);
+        BytesUtils.writeU4LittleEndian(bs, ds.methodTable.length, pos);
         pos += 4;
         int virtualTablePointerPos = pos;
         pos += 4;
@@ -146,10 +146,10 @@ public class ClassWriter {
         BytesUtils.writeU4LittleEndian(bs, virtualTablePointer, virtualTablePointerPos);
 
         // items
-        for(int i = 0; i < ds.virtualTable.items.size(); i++){
-            VirtualTableItem item = ds.virtualTable.items.get(i);
-            BytesUtils.writeU4LittleEndian(bs, item.classReferenceAddress , pos);
-            BytesUtils.writeU4LittleEndian(bs, item.methodReferenceAddress , pos + 4);
+        for(int i = 0; i < ds.methodTable.length; i++){
+//            VirtualTableItem item = ds.virtualTable.items.get(i);
+//            BytesUtils.writeU4LittleEndian(bs, item.classReferenceAddress , pos);
+//            BytesUtils.writeU4LittleEndian(bs, item.methodReferenceAddress , pos + 4);
             pos += 8;
         }
         pos = (pos + 0b111) & (~0b111);
