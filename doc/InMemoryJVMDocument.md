@@ -24,7 +24,7 @@
 
 
 
-##  II.2 Introductions of Files
+##  I.2 Introductions of Files
 
 1. `./rundpu.cpp`
 
@@ -119,5 +119,5 @@ $ make dpuslave
 
 ![image-20231212123304583](./images/image-20231212123304583.png)
 
-### III. Interpreter
+### III.3 Interpreter
 
