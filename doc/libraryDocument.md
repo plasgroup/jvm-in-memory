@@ -6,17 +6,27 @@
 
 ``` java
 ---------------------------------------------------------------------------------------------------
--- assembly
-|  // current is not used. It a folder for develop JIT compiler experimentally.
--- ir
-|  // intermediate language
--- utils
+-- src   // source code
 |
--- jdpulib
-|  // java PIM framework project
--- core
-|  // core src
--- 
+---- src/application // applications
+|
+------ src/application/bst // binary search tree applications
+|
+------ src/application/transplant // transplant applications
+|
+-------- src/application/transplant/index // index search application
+|
+-------- src/application/transplant/pimtree // pimtree application
+|
+---- src/dsl // domain specific languge
+|
+---- src/framework // framework source code
+|
+------ src/framework/lang // structures for language design
+|
+------ src/framework/pim  // library for UPMEM
+|
+---- src/simulator // DPU simulator
 ---------------------------------------------------------------------------------------------------
 ```
 

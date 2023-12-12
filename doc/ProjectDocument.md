@@ -1,6 +1,28 @@
 # Project Document
 
-## 1. Introduction
+## PART I. Project Structure and Introduction
+
+### I.1 Project Structure
+
+``` java
+---------------------------------------------------------------------------------------------------
+-- assembly
+|  // current is not used. It a folder for develop JIT compiler experimentally.
+-- ir
+|  // intermediate language
+-- utils
+|
+-- jdpulib
+|  // java PIM framework project
+-- core
+|  // core src
+-- 
+---------------------------------------------------------------------------------------------------
+```
+
+
+
+### I.2 Introduction
 
 + **Objectives:** Simply the development of a processing-in-memory instance - UPMEM。
 + **System Components** [for more details, see the correspondent documents]
@@ -37,10 +59,10 @@
 
 
 
-## 2.  **Java framework**
+### I.3  **Java framework**
 
 + Proxy type and its generator (incompleted)	
-  + A proxy class of class A is created by extends the class A, and override all class A's method that dispatch the method execution to a DPU
+  + A proxy class of class A is created by extending the class A, and overriding all class A's methods that dispatch the method execution to a DPU
 
 
 + Distributed Collections
@@ -48,7 +70,7 @@
 
 
 
-## 3.  **DPU JVM**
+### I.4  **DPU JVM**
 
 + An execution engine.
 + Use a switch loop-based interpretation of Java bytecode
