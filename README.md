@@ -377,15 +377,13 @@ bd.dispatchAll();
 
 
 
-
-
-
-
 ### Some Possible Directions
 
-1. Make use of scratchpad memory
+1. **Make use of scratchpad memory**
+
    + Make all in-memory JVM's **MRAM** access through the scratchpad memory
-2. Treat JVM as a distributed object-oriented database system and make an object query language for the system.
+2. **Treat JVM as a distributed object-oriented database system and make an object query language for the system.**
+
    + Easier and more effective parallelization
      + Could be **full-concurrency** as objects' are **storage-centric, not behavior-centric**., and rarely inter-object message passing inside a DPU.
 
@@ -399,7 +397,5 @@ bd.dispatchAll();
 
      + In-memory JVM module could be make easier, and make help resolving the space limitation problem.
 
-3. Make a JIT compiler
-
-
+3. **Make a JIT compiler**
 
