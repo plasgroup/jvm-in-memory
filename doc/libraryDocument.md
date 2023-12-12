@@ -29,12 +29,14 @@
 ---- src/simulator // DPU simulator
 |
 -- dpuslave // compiled dpu jvm binary
+|
+-- compile-lib.sh // script for compiling the project to jar file
 ---------------------------------------------------------------------------------------------------
 ```
 
 
 
-## PART II. Proxy Class
+## PART II. Proxy
 
 > [!NOTE]
 >
@@ -76,6 +78,43 @@ class AProxy extends A implements IDPUProxyObject{
 + Rest parameters are arguments for method execution.
 
 + It may need to notice the **2nd** parameter, as methods with the same descriptor may exist in the inherence chain. We need specific the class' should the library call.
+
+
+
+
+
+
+
+## PART III. Remote Procedure Call
+
+> [!NOTE]
+>
+> Currently, provides a generator for automatically generating proxy class. But it is untested.
+
+
+
+### I.1 Remote Create Object
+
+【Example】
+
+``` Java
+class Main(){
+    public static void main(String[] args){
+        UPMEM.initialize(
+            new UpmemConfigurator()
+               .setDpuInUseCount(64)
+               .setThreadPerDPU(1)
+               .setUseSimulator(false)
+        );
+        
+        DPUTreeNodeProxy proxy = (DPUTreeNodeProxy) UPMEM.getInstance().getDPUManager(i).createObject(DPUTreeNode.class, 0, 0);
+        
+        // dispatch
+        proxy.search(1234);
+        
+    }
+}
+```
 
 
 
