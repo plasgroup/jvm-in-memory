@@ -370,7 +370,12 @@ bd.dispatchAll();
 
 4. we may not be able to get particularly novel research topics from the extension of the library.
 5. Language design may be a good direction.
-6. The use of the in-memory JVM makes it difficult to work with process-intensive data structures such as arrays and matrices.
+6. Current design that use of the in-memory JVM and Proxy + RPC makes it low-performance work with process-intensive data structures such as arrays and matrices.
+   + It is better to use different strategies to process dense data structure.
+
+
+
+
 
 
 
