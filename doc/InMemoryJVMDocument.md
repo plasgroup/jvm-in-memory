@@ -107,8 +107,14 @@ $ make dpuslave
 
 ## PARTIII. Components
 
-### Frame
-
-
+### III.1 Frame
 
 ![image-20231212120938245](./images/image-20231212120938245.png)
+
+
+
+
+
+### III.2 Class and Method Structure
+
+![image-20231212123304583](C:\Users\Micro\AppData\Roaming\Typora\typora-user-images\image-20231212123304583.png)
