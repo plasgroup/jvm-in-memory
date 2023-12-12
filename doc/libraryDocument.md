@@ -2,6 +2,14 @@
 
 # I. Proxy Class
 
+> [!NOTE]
+>
+> Currently, provides a generator for automatically generating proxy class. But it is untested.
+
+
+
+
+
 ## Create A Proxy Class
 
 ``` Java
@@ -33,5 +41,9 @@ class AProxy extends A implements IDPUProxyObject{
   + For more information, please refer to the JVM specification.
     + https://docs.oracle.com/javase/specs/jvms/se8/jvms8.pdf section 4.4.
 
-+ rest parameters are arguments for method execution.
++ Rest parameters are arguments for method execution.
+
++ It may need to notice the **2nd** parameter, as methods with the same descriptor may exist in the inherence chain. We need specific the class' should the library call.
+
+
 
