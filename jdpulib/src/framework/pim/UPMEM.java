@@ -138,7 +138,7 @@ public class UPMEM {
         upmemLogger.logln("----> create proxy object of Class = " + objectClass + "ProxyAutoGen <----");
 
         try {
-            Class pClass = Class.forName( objectClass.getName() + "ProxyAutoGen");
+            Class pClass = Class.forName( objectClass.getName() + "Proxy");
             proxyObject = generateProxyObject(pClass, handler.dpuID, handler.address);
         } catch (ClassNotFoundException | InstantiationException | NoSuchFieldException e) {
             throw new RuntimeException(e);

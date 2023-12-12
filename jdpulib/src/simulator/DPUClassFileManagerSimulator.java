@@ -266,7 +266,12 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
                 arrayDim = 0;
 
             }else{
-                c = Class.forName(descriptor.replace('/', '.'));
+                if(descriptor.length() == 0) return null;
+                if(descriptor.charAt(0) == 'L'){
+                    c = Class.forName(descriptor.replace('/', '.').substring(1).replace(";",""));
+                }else{
+                    c = Class.forName(descriptor.replace('/', '.'));
+                }
             }
 
             return loadClassToDPU(c);
@@ -275,13 +280,16 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
     }
     public void loadClassesToDPUFromDescriptor(String descriptor) throws ClassNotFoundException {
         if(descriptor.charAt(0) == '('){
-            descriptor = descriptor.split(":")[1];
             int state = 0;
             for(int ci = 0; ci < descriptor.length(); ci++){
                 char ch = descriptor.charAt(ci);
                 String matched = "";
                 if(state == 0){
                     switch (ch){
+                        case '(':
+                            break;
+                        case 'V':
+                            break;
                         case 'B':
                             loadClassesToDPUFromDescriptorSingle(matched + "B");
                             break;
@@ -331,10 +339,18 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
         }
 
     }
-    static   HashSet<String> ignoreSet = new HashSet<>();
+    static HashSet<String> allowSet = new HashSet<>();
 
+    static {
+        allowSet.add("java.lang.Object");
+        allowSet.add("java.util.HashTable");
+        allowSet.add("application.transplant.index.search.IndexTable");
+    }
     @Override
     public DPUJClass loadClassToDPU(Class c) {
+        System.out.println(c.getName().replace("/","."));
+        if(!allowSet.contains(c.getName().replace("/",".")))
+            return null;
         String className = formalClassName(c.getName());
         byte[] classFileBytes;
 
@@ -352,12 +368,9 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
 
         if (is == null) {
             // TODO class name with form of "[....;" cannot be load
-            try {
 
-                throw new IOException("class " + (c.getName().replace('.','/') + ".class"));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+                System.err.println("class " + (c.getName().replace('.','/') + ".class not found"));
+                return null;
         }
 
 
@@ -470,7 +483,7 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
                     if (cacheLine != null) {
                         classfileLogger.logf("class %s loaded, mram addr = 0x%x\n", classNameUTF8, cacheLine.marmAddr);
                     } else {
-                        if (!ignoreSet.contains(classNameUTF8)) {
+                        if (allowSet.contains(classNameUTF8)) {
                             try {
                                 // TODO className$1 loading..
                                 loadClassToDPU(Class.forName(classNameUTF8.replace("/", ".")));
@@ -499,8 +512,8 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
                     }
 
 
-                    String fieldName = getUTF8(jc, (int) ((jc.entryItems[nameAndTypeIndex] >> 16) & 0xFF));
-                    String fieldType = getUTF8(jc, (int) ((jc.entryItems[nameAndTypeIndex]) & 0xFF));
+                    String fieldName = getUTF8(jc, (int) ((jc.entryItems[nameAndTypeIndex] >> 16) & 0xFFFF));
+                    String fieldType = getUTF8(jc, (int) ((jc.entryItems[nameAndTypeIndex]) & 0xFFFF));
                     classfileLogger.logln("fieldName = " + fieldName + ", fieldType = " + fieldType);
                     try {
                         loadClassesToDPUFromDescriptor(fieldType);
@@ -512,19 +525,18 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
                     break;
                 case ClassFileAnalyzerConstants.CT_Methodref:
                     classfileLogger.logln("In #" + (i) + " MethodRef: ");
-                    int classCPIndex = (int) ((jc.entryItems[i] >> 16) & 0xFF);
-                    int nameAndTypeCPIndex = (int) ((jc.entryItems[i]) & 0xFF);
-                    int nameCPIndex = (int) ((jc.entryItems[nameAndTypeCPIndex] >> 16) & 0xFF);
-                    int typeCPIndex = (int) ((jc.entryItems[nameAndTypeCPIndex]) & 0xFF);
+                    int classCPIndex = (int) ((jc.entryItems[i] >> 16) & 0xFFFF);
+                    int nameAndTypeCPIndex = (int) ((jc.entryItems[i]) & 0xFFFF);
+                    int nameCPIndex = (int) ((jc.entryItems[nameAndTypeCPIndex] >> 16) & 0xFFFF);
+                    int typeCPIndex = (int) ((jc.entryItems[nameAndTypeCPIndex]) & 0xFFFF);
                     int classNameUTF8CPIndex = (int) ((jc.entryItems[classCPIndex]) & 0xFFFF);
                     String methodClassNameUTF8 = getUTF8(jc, (int) (classNameUTF8CPIndex));
                     String methodNameUTF8 = getUTF8(jc, (int) (nameCPIndex));
                     String methodTypeUTF8 = getUTF8(jc, (int) (typeCPIndex));
 
 
-                    System.out.println(c.getName());
 
-                    classfileLogger.logln("description = " + methodClassNameUTF8 + "." + methodNameUTF8 + ":" + methodTypeUTF8);
+                    classfileLogger.logln("description = " + methodClassNameUTF8 + "." + methodNameUTF8 + ":" + methodTypeUTF8 + ":::" + c.getName());
                     String descriptor = methodNameUTF8 + ":" + methodTypeUTF8;
                     DPUMethodCacheItem methodCacheItem = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getMethodCacheItem(
                             methodClassNameUTF8, descriptor
@@ -537,10 +549,12 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
                     try {
                         dpujClass = loadClassesToDPUFromDescriptorSingle(methodClassNameUTF8);
                     } catch (ClassNotFoundException e) {
-                        throw new RuntimeException(e);
+                        continue;
                     }
                     if(dpujClass == null) continue;
                     DPUJClass methodJc = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getClassStructure(methodClassNameUTF8);
+                    if(methodCacheItem == null || methodJc == null) continue;
+
                     String methodName = getUTF8(methodJc, methodCacheItem.dpujMethod.nameIndex);
                     classfileLogger.logln("methodName = " + methodName);
                     String TypeDesc = getUTF8(methodJc, methodCacheItem.dpujMethod.descriptorIndex);
