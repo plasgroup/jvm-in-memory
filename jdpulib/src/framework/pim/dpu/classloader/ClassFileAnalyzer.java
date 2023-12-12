@@ -209,11 +209,14 @@ public class ClassFileAnalyzer {
         return pos - beginPos;
     }
 
+    static {
+        classfileAnalyzerLogger.setEnable(false);
+    }
     public static void printEntryTable(DPUJClass jc){
 
         for(int i = 1; i < jc.cpItemCount; i++){
             long iEntryVal = jc.entryItems[i];
-            classfileAnalyzerLogger.log(" - item " + i + " line = " + " ");
+            classfileAnalyzerLogger.logf(" - item " + i + " line = " + " ");
             classfileAnalyzerLogger.logf("%02x %02x %02x %02x|%02x %02x %02x %02x\n",
                     (iEntryVal & 0xFF00000000000000L) >> 56,
                     (iEntryVal & 0x00FF000000000000L) >> 48,
@@ -251,9 +254,9 @@ public class ClassFileAnalyzer {
         return (short) c;
     }
 
-    public int analysisMethodItem(int pos, DPUJClass jc, int i){
+    public int analysisMethodItem(int pos, DPUJClass jc, int i) {
         int beginPos = pos;
-        if(jc.superClassNameIndex == 0){
+        if (jc.superClassNameIndex == 0) {
             classfileAnalyzerLogger.logln("");
         }
         DPUJMethod dm = new DPUJMethod();
@@ -263,19 +266,19 @@ public class ClassFileAnalyzer {
         classfileAnalyzerLogger.logln("-------------------- Method " + i + " --------------------------");
 
 
-        int accFlag =  BytesUtils.readU2BigEndian(classFileBytes, pos);
+        int accFlag = BytesUtils.readU2BigEndian(classFileBytes, pos);
         pos += 2;
         classfileAnalyzerLogger.logln(" - acc flag = " + accFlag);
 
-        int nameIndex =  BytesUtils.readU2BigEndian(classFileBytes, pos);
+        int nameIndex = BytesUtils.readU2BigEndian(classFileBytes, pos);
         pos += 2;
         classfileAnalyzerLogger.logln(" - name_index = " + nameIndex);
 
-        int descIndex =  BytesUtils.readU2BigEndian(classFileBytes, pos);
+        int descIndex = BytesUtils.readU2BigEndian(classFileBytes, pos);
         pos += 2;
         classfileAnalyzerLogger.logln(" - desc_index = " + descIndex);
 
-        int attrCount =  BytesUtils.readU2BigEndian(classFileBytes, pos);
+        int attrCount = BytesUtils.readU2BigEndian(classFileBytes, pos);
         pos += 2;
         classfileAnalyzerLogger.logln(" - attr count = " + attrCount);
 
@@ -289,9 +292,9 @@ public class ClassFileAnalyzer {
         classfileAnalyzerLogger.logln("desc = " + desc);
         dm.paramCount = (short) (countTypeCountFromDescriptor(desc.substring(1, desc.indexOf(')'))) + 1);
         // parse attr
-        for(int j = 0; j < attrCount; j++){
+        for (int j = 0; j < attrCount; j++) {
             classfileAnalyzerLogger.logf("Attr From Addr: 0x%x / 0x%x\n", pos, classFileBytes.length);
-            int attrNameIndex =  BytesUtils.readU2BigEndian(classFileBytes, pos);
+            int attrNameIndex = BytesUtils.readU2BigEndian(classFileBytes, pos);
             pos += 2;
             String attrName = StringUtils.getStringFromBuffer(jc.constantBytes,
                     (int) (jc.entryItems[attrNameIndex] & 0xFFFF),
@@ -299,17 +302,17 @@ public class ClassFileAnalyzer {
             );
             classfileAnalyzerLogger.logln(" --- attr name in index " + attrNameIndex + " = " + attrName);
 
-            int attrLen =  BytesUtils.readU4BigEndian(classFileBytes, pos);
+            int attrLen = BytesUtils.readU4BigEndian(classFileBytes, pos);
             pos += 4;
-            classfileAnalyzerLogger.logf("Attribute len = %d (0x%x)\n" , attrLen, attrLen);
-            if(!"Code".equals(attrName)) {
+            classfileAnalyzerLogger.logf("Attribute len = %d (0x%x)\n", attrLen, attrLen);
+            if (!"Code".equals(attrName)) {
                 pos += attrLen;
                 continue;
             }
 
-            int maxStack =  BytesUtils.readU2BigEndian(classFileBytes, pos);
-            int maxLocals =  BytesUtils.readU2BigEndian(classFileBytes, pos + 2);
-            int codeLen =  BytesUtils.readU4BigEndian(classFileBytes, pos + 4);
+            int maxStack = BytesUtils.readU2BigEndian(classFileBytes, pos);
+            int maxLocals = BytesUtils.readU2BigEndian(classFileBytes, pos + 2);
+            int codeLen = BytesUtils.readU4BigEndian(classFileBytes, pos + 4);
 
 
             framework.pim.dpu.java_strut.jvmattr.MethodAttrCode mac = new framework.pim.dpu.java_strut.jvmattr.MethodAttrCode();
@@ -325,11 +328,11 @@ public class ClassFileAnalyzer {
             jc.methodTable[i] = dm;
 
             classfileAnalyzerLogger.logf("[Code maxStack = %d, maxLocals = %d, codeLen = %d, params_count = %d]\n",
-                    maxStack, maxLocals, (long)codeLen, dm.paramCount);
+                    maxStack, maxLocals, (long) codeLen, dm.paramCount);
 
             // print bytecodes
-            for(int block = 0; block < (int)Math.ceil(codeLen / 8.0); block ++){
-                for(int b = 0; b < 8 && block * 8 + b < codeLen; b++){
+            for (int block = 0; block < (int) Math.ceil(codeLen / 8.0); block++) {
+                for (int b = 0; b < 8 && block * 8 + b < codeLen; b++) {
                     classfileAnalyzerLogger.logf("%02x\t", classFileBytes[jc.bytecodeOffset[i] + block * 8 + b]);
                 }
                 classfileAnalyzerLogger.logln("");
@@ -338,17 +341,18 @@ public class ClassFileAnalyzer {
             dm.size = 24 + ((dm.methodAttrCode.codeLength + 0b111) & ~(0b111));
         }
 
-        if(jc.methodTable[i] == null) {
+        if (jc.methodTable[i] == null) {
             jc.methodTable[i] = new DPUJMethod();
         }
 
-        if(jc.methodTable[i].methodAttrCode == null) {
+        if (jc.methodTable[i].methodAttrCode == null) {
             jc.methodTable[i].methodAttrCode = new framework.pim.dpu.java_strut.jvmattr.MethodAttrCode();
             jc.methodTable[i].size = 24;
         }
         mOffset += jc.methodTable[i].size;
         return pos - beginPos;
     }
+
 
     public DPUJClass preResolve() {
         jc = new DPUJClass();
@@ -360,7 +364,6 @@ public class ClassFileAnalyzer {
         Tester.alert(classFileBytes[pos] == 0xca && classFileBytes[pos + 1] == 0xfe
                 && classFileBytes[pos + 2] == 0xba && classFileBytes[pos + 3] == 0xbe, "Magic number not match.");
         pos += 4;
-
         // skip version check
         pos += 4;
 
@@ -426,6 +429,10 @@ public class ClassFileAnalyzer {
         jc.constantBytes = new byte[constantAreaSize];
         jc.stringINTConstantPoolLength = constantAreaSize;
 
+        /**
+         * Analyze constant items in constant pool.
+         * The correspondent constant (e.g., int, double, long, utf-8 string) store in the constant area in the class structure
+         * For each constant item in the constant pool, place the constant offset in the constant area to the correspondent entry items' low 32 bit**/
         fillConstantArea();
         // Print Entry Table after resolution 2
         classfileAnalyzerLogger.logln("==== Entries Table After Resolution Phase 2 - fill constant value to constantDataArea ====\n");
@@ -435,12 +442,13 @@ public class ClassFileAnalyzer {
         constantAreaSize = 0;
 
 
-        /*
+        /**
             Now,
-                1. constants like string, double, long, int, .. should be already be written to constant Area
-                2. tag be marked to the highest 8bit of entry.
-                3. non-direct constant item be expended to subindexes, and is saved in low 32bit.
-        * */
+                1. constants like string, double, long, int, .. should be already be written to constant area
+                2. tag of each constant pool item be placed to the highest 8 bit of entry.
+                3. each entry items is 64 bits. The amount of entry items is equal to the amount of items in constants pool.
+                4. non-direct constant item be expended to address in constant pool, and is saved in low 32 bits.
+        **/
 
         // interface count
         int interfaceCount =  BytesUtils.readU2BigEndian(classFileBytes, pos);
@@ -480,8 +488,6 @@ public class ClassFileAnalyzer {
         }
 
         classfileAnalyzerLogger.logln("======================= End of Method Analysis ===========================");
-
-
         /* Calculate total size (bytes) of whole the whole class that need for transferring to DPU*/
         jc.totalSize =
                 48 + jc.cpItemCount * 8 + 8 +
