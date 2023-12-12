@@ -27,6 +27,8 @@
 ------ src/framework/pim  // library for UPMEM
 |
 ---- src/simulator // DPU simulator
+|
+-- dpuslave // compiled dpu jvm binary
 ---------------------------------------------------------------------------------------------------
 ```
 
