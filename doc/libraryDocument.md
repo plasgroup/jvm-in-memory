@@ -1,6 +1,28 @@
 # Library Documentation
 
-# I. Proxy Class
+## PART I. Project Structure and Files Introduction
+
+### I.1 Project Structure
+
+``` java
+---------------------------------------------------------------------------------------------------
+-- assembly
+|  // current is not used. It a folder for develop JIT compiler experimentally.
+-- ir
+|  // intermediate language
+-- utils
+|
+-- jdpulib
+|  // java PIM framework project
+-- core
+|  // core src
+-- 
+---------------------------------------------------------------------------------------------------
+```
+
+
+
+## PART II. Proxy Class
 
 > [!NOTE]
 >
@@ -8,9 +30,7 @@
 
 
 
-
-
-## Create A Proxy Class
+### II.1 Create A Proxy Class
 
 ``` Java
 class A {
@@ -34,7 +54,7 @@ class AProxy extends A implements IDPUProxyObject{
 
 
 
-### ProxyHelper.invokeMethod()
+### II.2 ProxyHelper.invokeMethod()
 
 + **1st** parameter is a class.
 + **2nd** parameter is a descriptor of the method.
