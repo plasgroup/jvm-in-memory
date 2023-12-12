@@ -1,12 +1,12 @@
-package application.transplant.index.search.proxy;
+package application.transplant.index.search;
 
 import framework.lang.struct.IDPUProxyObject;
 import framework.pim.dpu.RPCHelper;
 import application.transplant.index.search.IndexTable;
 
 public class IndexTableProxy extends IndexTable implements IDPUProxyObject {
-    int address;
-    int dpuID;
+    Integer address;
+    Integer dpuID;
     @Override
     public int getAddr() {
         return address;
