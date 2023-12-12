@@ -102,3 +102,13 @@ $ make dpuslave
 
 
  
+
+
+
+## PARTIII. Components
+
+### Frame
+
+
+
+![image-20231212120938245](./images/image-20231212120938245.png)
