@@ -2,18 +2,6 @@
 #include "memory.h"
 #include <stdio.h>
 
-
-
-/*
-
-
-
-
-
-
-*/
-
-
 // frame printer
 void print_frame(uint8_t __mram_ptr* fp, uint8_t __mram_ptr* sp) {
 
