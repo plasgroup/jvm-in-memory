@@ -47,14 +47,14 @@ public class DPUTreeNodeProxyAutoGen extends DPUTreeNode implements IDPUProxyObj
     public TreeNode getLeft() {
         getLeftDispatchCount++;
         invokeMethod(dpuID, address,"pim/algorithm/TreeNode", "getLeft:()Lpim/algorithm/TreeNode;");
-        return (TreeNode) getAReturnValue(dpuID);
+        return (TreeNode) getAReturnValue(dpuID, DPUTreeNodeProxyAutoGen.class);
     }
 
     @Override
     public TreeNode getRight() {
         getRightDispatchCount++;
         invokeMethod(dpuID, address, "pim/algorithm/TreeNode", "getRight:()Lpim/algorithm/TreeNode;");
-        return (TreeNode) getAReturnValue(dpuID);
+        return (TreeNode) getAReturnValue(dpuID, DPUTreeNodeProxyAutoGen.class);
     }
 
     @Override
@@ -91,7 +91,7 @@ public class DPUTreeNodeProxyAutoGen extends DPUTreeNode implements IDPUProxyObj
     public TreeNode createNode(int k, int v){
         createNodeDispatchCount++;
         invokeMethod(dpuID, address,"pim/algorithm/DPUTreeNode", "createNode:(II)Lpim/algorithm/TreeNode;", k, v);
-        return (TreeNode) getAReturnValue(dpuID);
+        return (TreeNode) getAReturnValue(dpuID, DPUTreeNodeProxyAutoGen.class);
     }
 
     @Override

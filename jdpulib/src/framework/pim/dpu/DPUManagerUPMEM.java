@@ -8,6 +8,7 @@ import framework.lang.struct.IDPUProxyObject;
 import framework.pim.dpu.cache.DPUMethodCacheItem;
 import framework.pim.utils.BytesUtils;
 
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Dictionary;
 import java.util.Enumeration;
@@ -106,6 +107,11 @@ public class DPUManagerUPMEM extends DPUManager{
         // call the init func
         callNonstaticMethod(classAddr, initMethodAddr, handler.address, params);
         return handler;
+    }
+
+    @Override
+    public <T> IDPUProxyObject createObjectSpecific(Class c, String descriptor, Object... params) throws IOException {
+        return null;
     }
 
     private boolean parseParameterList(String key, Object[] params) {

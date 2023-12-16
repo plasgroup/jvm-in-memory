@@ -213,7 +213,9 @@ public class DPUGarbageCollectorSimulator extends DPUGarbageCollector {
     @Override
     public int getReturnVal() {
         try {
-            return dpujvmRemote.getResultValue(0);
+            Object result = dpujvmRemote.getResultValue(0);
+            if(Boolean.class.isAssignableFrom(result.getClass())) return (boolean)result ? 0 : 1;
+            return (int) result;
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }

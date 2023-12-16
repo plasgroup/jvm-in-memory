@@ -345,6 +345,11 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
         allowSet.add("java.lang.Object");
         allowSet.add("java.util.HashTable");
         allowSet.add("application.transplant.index.search.IndexTable");
+        allowSet.add("application.transplant.index.search.Document");
+        allowSet.add("java.util.ArrayList");
+        allowSet.add("application.transplant.index.search.Searcher");
+        allowSet.add("application.transplant.index.search.pojo.SearchResult");
+
     }
     @Override
     public DPUJClass loadClassToDPU(Class c) {
