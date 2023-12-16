@@ -1,5 +1,6 @@
 package framework.pim;
 
+import application.transplant.index.search.Searcher;
 import framework.lang.struct.dist.DPUInt32ArrayHandler;
 import framework.pim.dpu.DPUManager;
 import framework.lang.struct.DPUObjectHandler;
@@ -11,6 +12,7 @@ import framework.pim.utils.BytesUtils;
 
 import simulator.PIMManagerSimulator;
 import sun.misc.Unsafe;
+import transplant.index.search.Document;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -103,6 +105,10 @@ public class UPMEM {
     }
 
 
+    public static void setPackageSearchPath(String packageSearchPath) {
+        UPMEM.packageSearchPath = packageSearchPath;
+    }
+
 
     public DPUManager getDPUManager(int dpuID){
         return pimManager.getDPUManager(dpuID);
@@ -121,24 +127,89 @@ public class UPMEM {
         return proxyObject;
     }
 
+
+    public static String packageSearchPath = "";
+
+
     /* Create a proxy object of a given class, by create a new object at the DPU side.
     *    - parameter 1: the dpu id that indicate in which dpu should the new object be created.
     *    - parameter 2: the class for which create a proxy object of it
     *    - parameter 3~: the arguments for initialization method call
     * */
-    public IDPUProxyObject createObject(int dpuID, Class objectClass, Object... arguments){
+    public IDPUProxyObject createObject(int dpuID, Class objectClass){
+
         IDPUProxyObject proxyObject;
         DPUObjectHandler handler;
         try {
-            handler = getDPUManager(dpuID).createObject(objectClass, arguments);
+                handler = getDPUManager(dpuID).createObject(objectClass);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        upmemLogger.logln("----> create proxy object of Class = " + objectClass + "ProxyAutoGen <----");
+        upmemLogger.logln("----> create proxy object of Class = " + objectClass + "Proxy <----");
 
         try {
-            Class pClass = Class.forName( objectClass.getName() + "Proxy");
+            Class pClass = Class.forName( packageSearchPath + objectClass.getSimpleName() + "Proxy");
+            proxyObject = generateProxyObject(pClass, handler.dpuID, handler.address);
+        } catch (ClassNotFoundException | InstantiationException | NoSuchFieldException e) {
+            throw new RuntimeException(e);
+        }
+        return proxyObject;
+    }
+    public IDPUProxyObject createObject(int dpuID, Class objectClass, Object arg0){
+
+        IDPUProxyObject proxyObject;
+        DPUObjectHandler handler;
+        try {
+            handler = getDPUManager(dpuID).createObject(objectClass, arg0);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        upmemLogger.logln("----> create proxy object of Class = " + objectClass + "Proxy <----");
+
+        try {
+            Class pClass = Class.forName( packageSearchPath + objectClass.getSimpleName() + "Proxy");
+            proxyObject = generateProxyObject(pClass, handler.dpuID, handler.address);
+        } catch (ClassNotFoundException | InstantiationException | NoSuchFieldException e) {
+            throw new RuntimeException(e);
+        }
+        return proxyObject;
+    }
+    public IDPUProxyObject createObject(int dpuID, Class objectClass, Object arg0, Object arg1){
+
+        IDPUProxyObject proxyObject;
+        DPUObjectHandler handler;
+        try {
+            handler = getDPUManager(dpuID).createObject(objectClass, arg0, arg1);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        upmemLogger.logln("----> create proxy object of Class = " + objectClass + "Proxy <----");
+
+        try {
+            Class pClass = Class.forName( packageSearchPath + objectClass.getSimpleName() + "Proxy");
+            proxyObject = generateProxyObject(pClass, handler.dpuID, handler.address);
+        } catch (ClassNotFoundException | InstantiationException | NoSuchFieldException e) {
+            throw new RuntimeException(e);
+        }
+        return proxyObject;
+    }
+    public IDPUProxyObject createObject(int dpuID, Class objectClass, Object arg0, Object arg1, Object arg2){
+
+        IDPUProxyObject proxyObject;
+        DPUObjectHandler handler;
+        try {
+            handler = getDPUManager(dpuID).createObject(objectClass, arg0, arg1, arg2);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        upmemLogger.logln("----> create proxy object of Class = " + objectClass + "Proxy <----");
+
+        try {
+            Class pClass = Class.forName( packageSearchPath + objectClass.getSimpleName() + "Proxy");
             proxyObject = generateProxyObject(pClass, handler.dpuID, handler.address);
         } catch (ClassNotFoundException | InstantiationException | NoSuchFieldException e) {
             throw new RuntimeException(e);
@@ -146,6 +217,27 @@ public class UPMEM {
         return proxyObject;
     }
 
+
+    public IDPUProxyObject createObject(int dpuID, Class objectClass, Object arg0, Object arg1, Object arg2, Object arg3){
+
+        IDPUProxyObject proxyObject;
+        DPUObjectHandler handler;
+        try {
+            handler = getDPUManager(dpuID).createObject(objectClass, arg0, arg1, arg2);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        upmemLogger.logln("----> create proxy object of Class = " + objectClass + "Proxy <----");
+
+        try {
+            Class pClass = Class.forName( packageSearchPath + objectClass.getSimpleName() + "Proxy");
+            proxyObject = generateProxyObject(pClass, handler.dpuID, handler.address);
+        } catch (ClassNotFoundException | InstantiationException | NoSuchFieldException e) {
+            throw new RuntimeException(e);
+        }
+        return proxyObject;
+    }
 
 
     public static UPMEM initialize(UPMEMConfigurator configurator){
@@ -156,6 +248,7 @@ public class UPMEM {
                     instance.configurator = configurator;
                     UPMEM.dpuInUse = configurator.getDpuInUseCount();
                     UPMEM.perDPUThreadsInUse = configurator.getThreadPerDPU();
+                    UPMEM.packageSearchPath = configurator.getPackageSearchPath();
                 }
 
                 if(!configurator.isUseSimulator()){
@@ -192,5 +285,9 @@ public class UPMEM {
         BytesUtils.writeU4LittleEndian(lenBytes, len ,0);
         UPMEM.getInstance().getDPUManager(dpuID).garbageCollector.transfer(DPUJVMMemSpaceKind.DPU_HEAPSPACE, lenBytes, addr);
         return new DPUInt32ArrayHandler(dpuID, addr, len);
+    }
+
+    public Object createObjectSpecific(int dpuID, String descriptor, Object... params) {
+        return null;
     }
 }

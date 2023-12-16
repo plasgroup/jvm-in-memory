@@ -10,6 +10,7 @@ public class UPMEMConfigurator {
     private int threadPerDPU = UPMEM.TOTAL_HARDWARE_THREADS_COUNT;
     private boolean useSimulator = false;
 
+    private String packageSearchPath = "";
     public boolean isUseSimulator() {
         return useSimulator;
     }
@@ -34,5 +35,14 @@ public class UPMEMConfigurator {
     public UPMEMConfigurator setThreadPerDPU(int threadPerDPU){
         this.threadPerDPU = threadPerDPU;
         return this;
+    }
+
+    public UPMEMConfigurator setPackageSearchPath(String packageSearchPath) {
+        this.packageSearchPath = packageSearchPath;
+        return this;
+    }
+
+    public String getPackageSearchPath() {
+        return packageSearchPath;
     }
 }
