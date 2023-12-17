@@ -46,6 +46,11 @@ public class task_union {
     public static class insert_operation extends task{
         long key;
         long value;
+
+        public insert_operation(int key, int value) {
+            this.key = key;
+            this.value = value;
+        }
     }
     public static class remove_operation extends task{
         long key;

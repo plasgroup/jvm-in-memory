@@ -201,7 +201,7 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
 
 
     static {
-        classfileLogger.setEnable(true);
+        classfileLogger.setEnable(false);
     }
 
     public DPUJClass loadClassesToDPUFromDescriptorSingle(String descriptor) throws ClassNotFoundException {

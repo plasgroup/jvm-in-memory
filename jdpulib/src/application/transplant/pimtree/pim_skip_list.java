@@ -4,7 +4,10 @@ import framework.pim.BatchDispatcher;
 import framework.pim.UPMEM;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
+import static application.transplant.pimtree.PIMTreeCore.executors;
+import static application.transplant.pimtree.ProgramArgs.scan;
 import static java.util.stream.Collectors.toCollection;
 import static application.transplant.pimtree.PIMTreeCore.make_slice;
 import static application.transplant.pimtree.ProgramArgs.L2_SIZE;
@@ -14,7 +17,9 @@ public class pim_skip_list {
     public int push_pull_limit_dynamic = L2_SIZE;
     private int length;
     public int BATCH_SIZE = (2100000);
-    private Pair<Integer, Long>[] keys_with_offset_sorted = new Pair[BATCH_SIZE];
+    key_value[] kv_input = new key_value[BATCH_SIZE];
+    private Pair<Integer, Integer>[] keys_with_offset_sorted = new Pair[BATCH_SIZE];
+
     private Long[] i64_input = new Long[BATCH_SIZE];
     private Integer[] back_trace_offset = new Integer[BATCH_SIZE];
     public static final int nr_of_dpus = 4;
@@ -22,7 +27,33 @@ public class pim_skip_list {
     public void init() {
 
     }
+    public void insert_load(List<key_value> kvs) {
+        int n = kvs.size();
+        length = n;
+        Collections.sort(kvs, new Comparator<key_value>() {
+            @Override
+            public int compare(key_value t1, key_value t2) {
+                return (int) (t1.key - t2.key);
+            }
 
+        });
+        //List<key_value> kv_input_slice = make_slice(Arrays.stream(kv_input).limit(length).collect(Collectors.toList()));
+        n = 0;
+        for(int i = 0; i < length; i++){
+            if((i == 0) || (kvs.get(i).key != kvs.get(i - 1).key)){
+                kv_input[n++] = kvs.get(i);
+            }
+        }
+        length = n;
+//        n = length = parlay::pack_into(
+//                kvs,
+//                parlay::make_slice(parlay::delayed_seq<bool>(
+//                n,
+//                [&](size_t i) {
+//            return (i == 0) || (kvs[i].key != kvs[i - 1].key);
+//        })),
+//        kv_input_slice);
+    }
     public void get_load(List<task_union.get_operation> keys) {
         int n = keys.size();
         length = n;
@@ -36,17 +67,17 @@ public class pim_skip_list {
             keys_with_offset_sorted[i] = make_pair(i, keys.get(i).key);
         }
 
-        List<Pair<Integer, Long>> kwos_slice =
+        List<Pair<Integer, Integer>> kwos_slice =
                 make_slice(Arrays.stream(keys_with_offset_sorted).toList().subList(0, n).stream().collect(toCollection(ArrayList::new)));
 
 
 //                parlay::make_slice(keys_with_offset_sorted,
 //                keys_with_offset_sorted + n);
 
-        Collections.sort(kwos_slice, new Comparator<Pair<Integer, Long>>() {
+        Collections.sort(kwos_slice, new Comparator<Pair<Integer, Integer>>() {
             @Override
-            public int compare(Pair<Integer, Long> t1, Pair<Integer, Long> t2) {
-                return (int) (t2.right - t1.right);
+            public int compare(Pair<Integer, Integer> t1, Pair<Integer, Integer> t2) {
+                return (t2.right.compareTo(t1.right));
             }
 
         });
@@ -60,7 +91,7 @@ public class pim_skip_list {
 //        });
 
         for(int i = 0; i < n; i++){
-            i64_input[i] = kwos_slice.get(i).right;
+            i64_input[i] = Long.valueOf(kwos_slice.get(i).right);
             back_trace_offset[i] = kwos_slice.get(i).left;
         }
 //        parlay::parallel_for(0, n, [&](size_t i) {
@@ -70,8 +101,8 @@ public class pim_skip_list {
     }
 
 
-    private Pair<Integer, Long> make_pair(int i, long key) {
-        return new Pair<Integer, Long>(i, key);
+    private Pair<Integer, Integer> make_pair(int i, long key) {
+        return new Pair<Integer, Integer>(i, (int) key);
     }
 
     public void get() {
@@ -95,13 +126,17 @@ public class pim_skip_list {
         /** Dispatching **/
 
 
-        BatchDispatcher bd = new BatchDispatcher();
+//        BatchDispatcher bd = new BatchDispatcher();
 
-        UPMEM.beginRecordBatchDispatching(bd);
+//        UPMEM.beginRecordBatchDispatching(bd);
         for(int i = 0; i < llen; i++){
             int targetDPUID = hash_to_dpu(keys_sorted[ll.get(i)], 0, nr_of_dpus);
+            System.out.println("key = " + keys_sorted[ll.get(i)] + " dispatch to DPU " + targetDPUID);
+            pptr pptr = executors[targetDPUID].p_get(Math.toIntExact(keys_sorted[ll.get(i)]));
+            // dispatching to DPU
+
         }
-        UPMEM.endRecordBatchDispatching();
+//        UPMEM.endRecordBatchDispatching();
 
 
 //
@@ -158,18 +193,18 @@ public class pim_skip_list {
         // return result;
     }
 
-    private int hash_to_dpu(Long key, int height, int M) {
+    public static int hash_to_dpu(Long key, int height, int M) {
         return hh(key, height, M);
     }
 
-    private int hh(Long key, int height, int M) {
+    private static int hh(Long key, int height, int M) {
         long v = hash64((long)key) + height;
         v = hash64(v);
 
         return Math.abs((int) (v % M));
     }
 
-    private long hash64(long u) {
+    private static long hash64(long u) {
         long v = u * 3935559000370003845L + 2691343689449507681L;
         v ^= v >> 21;
         v ^= v << 37;
@@ -188,6 +223,11 @@ public class pim_skip_list {
         }
         return result;
     }
+
+    public void insert() {
+
+    }
+
 
     public class dpu_memory_regions {
         public int bbuffer_start;
