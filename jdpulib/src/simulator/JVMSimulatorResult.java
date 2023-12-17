@@ -1,9 +1,11 @@
 package simulator;
 
-public class JVMSimulatorResult {
+import java.io.Serializable;
+
+public class JVMSimulatorResult implements Serializable {
     public int taskID;
-    public int value;
-    public JVMSimulatorResult(int tid, int val){
+    public Object value;
+    public JVMSimulatorResult(int tid, Object val){
         this.taskID = tid;
         this.value = val;
     }

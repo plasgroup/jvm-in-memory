@@ -27,6 +27,7 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
     public int[] parameterQueue;
     public Object[] metaSpace;
     public Object[] resultQueue;
+    public Integer resultQueuePointer = 0;
     int metaSpaceIndex = 0;
     int heapSpaceIndex = 0;
     int[] taskletParameterTop;
@@ -113,22 +114,29 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
                 System.out.println("method =  " + m);
                 Object ret = m.invoke(instance, params);
                 System.out.println(" get result " + ret);
-                if(ret == null){
-                    resultQueue[0] = 0;
-                }else{
-
-                    if(!m.getReturnType().isPrimitive()){
-                        int addr = -1;
-                        synchronized (heap){
-                            addr = ++heapSpaceIndex;
-                            heap[addr] = ret;
-                            resultQueue[0] = addr;
-                            System.out.println("write reference of " + ret.getClass() + " to addr: " + addr);
-                        }
+                synchronized (resultQueuePointer){
+                    System.out.println(" set taskid = " + taskId + " to result area index = " + resultQueuePointer);
+                    resultQueue[resultQueuePointer] = taskId;
+                    resultQueuePointer++;
+                    if(ret == null){
+                        resultQueue[resultQueuePointer] = 0;
                     }else{
-                        resultQueue[0] = ret;
+
+                        if(!m.getReturnType().isPrimitive()){
+                            int addr = -1;
+                            synchronized (heap){
+                                addr = ++heapSpaceIndex;
+                                heap[addr] = ret;
+                                resultQueue[resultQueuePointer] = addr;
+                                System.out.println("write reference of " + ret.getClass() + " to addr: " + addr);
+                            }
+                        }else{
+                            resultQueue[resultQueuePointer] = ret;
+                        }
                     }
+                    resultQueuePointer++;
                 }
+
 
             } catch (IllegalAccessException | InvocationTargetException e) {
                 throw new RuntimeException(e);
@@ -138,6 +146,7 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
             // System.out.println("reset taskletParameterTop of " + threadID + "to" + taskletParameterTop[threadID]);
             countDownLatch.countDown();
             System.out.println(" > thread " + threadID + " finish.");
+            resultQueuePointer = 0;
         }
     }
     public DPUJVMRemoteImpl(int id, int threadCount) throws RemoteException {
@@ -298,18 +307,17 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
     public JVMSimulatorResult getResult(int resultIndex) throws RemoteException {
         int taskID = (int) resultQueue[resultIndex];
         Object result = resultQueue[resultIndex + 1];
-        int val = -1;
         if(result == null){
             return new JVMSimulatorResult(taskID,0);
         }
-        if(Boolean.class.isAssignableFrom(result.getClass())){
-            val =  (boolean) result ? 1 : 0;
-        }else if(result.getClass().isPrimitive()){
-            val = (int) result;
-        }else{
-            return new JVMSimulatorResult(taskID, val);
-        }
-        return new JVMSimulatorResult(taskID, val);
+//        if(Boolean.class.isAssignableFrom(result.getClass())){
+//            val =  (boolean) result ? 1 : 0;
+//        }else if(result.getClass().isPrimitive()){
+//            val = (int) result;
+//        }else{
+//            return new JVMSimulatorResult(taskID, val);
+//        }
+        return new JVMSimulatorResult(taskID, result);
     }
 
     @Override
