@@ -1,5 +1,7 @@
 package simulator;
 
+import framework.pim.UPMEM;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -19,7 +21,7 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
     public int currentHeapSize = 0;
     public int maxHeapSize = PIMRemoteJVMConfiguration.heapSize;
     public int[] currentParamPointer;
-    public int maxParamSize = PIMRemoteJVMConfiguration.maxParameterSpaceSize;
+    public int maxParamSize = DPUGarbageCollectorSimulator.parameterBufferSize;
     public int currentMetaspaceSize = 0;
     public int maxMetaspaceSize = PIMRemoteJVMConfiguration.maxMetaspaceSize;
     public int[] parameterQueue;
@@ -178,10 +180,16 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
     }
 
     @Override
-    public void setParameter(int pos, int value, int tasklet) throws RemoteException {
+    public void setParameterRelative(int pos, int value, int tasklet) throws RemoteException {
         currentParamPointer[tasklet] += 4;
-        parameterQueue[pos] = value;
+        parameterQueue[tasklet * perThreadParameterQueueLength + pos] = value;
         if(currentParamPointer[tasklet] + perThreadParameterQueueSize > maxParamSize) throw new RuntimeException("parameter buffer overflow");
+    }
+
+    @Override
+    public void setParameterAbsolutely(int pos, int value) throws RemoteException {
+        System.out.println("set parameter buffer slot " + pos + " with val = " + value);
+        parameterQueue[pos] = value;
     }
 
     @Override
@@ -248,6 +256,7 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
 
     @Override
     public void setParamsBufferPointer(int p, int tasklet) throws RemoteException {
+        System.out.println("set tasklet " + tasklet + "'s parameter buffer pointer = " + p);
         currentParamPointer[tasklet] = p;
     }
 
@@ -280,16 +289,27 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
 
     @Override
     public void setParamsBufferIndex(int p, int tasklet) throws RemoteException {
+        System.out.println("set tasklet " + tasklet + "'s parameter buffer pointer = " + p);
+
         this.taskletParameterTop[tasklet] = p;
     }
 
     @Override
-    public int getResultValue(int taskID) throws RemoteException {
-        Object result = resultQueue[taskID];
-        if(Boolean.class.isAssignableFrom(result.getClass())){
-            return (boolean) result ? 1 : 0;
+    public JVMSimulatorResult getResult(int resultIndex) throws RemoteException {
+        int taskID = (int) resultQueue[resultIndex];
+        Object result = resultQueue[resultIndex + 1];
+        int val = -1;
+        if(result == null){
+            return new JVMSimulatorResult(taskID,0);
         }
-        return (int) result;
+        if(Boolean.class.isAssignableFrom(result.getClass())){
+            val =  (boolean) result ? 1 : 0;
+        }else if(result.getClass().isPrimitive()){
+            val = (int) result;
+        }else{
+            return new JVMSimulatorResult(taskID, val);
+        }
+        return new JVMSimulatorResult(taskID, val);
     }
 
     @Override
@@ -307,6 +327,8 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
 
     @Override
     public int pushArguments(int[] params, int tasklet) throws RemoteException {
+        System.out.printf("taskletParameterTop[tasklet] = %d, " +
+                "params length = %d, perThreadParameterQueueLength = %d \n", taskletParameterTop[tasklet], params.length, perThreadParameterQueueLength);
         if(taskletParameterTop[tasklet] + params.length >= perThreadParameterQueueLength * tasklet + perThreadParameterQueueLength)
             throw new RuntimeException("parameter buffer overflow");
         for(int i = 0; i < params.length; i++){

@@ -26,7 +26,7 @@ public class DPUGarbageCollectorUPMEM extends DPUGarbageCollector {
         byte[] bufferPointers = new byte[24 * 4];
         /** each tasklet of a DPU manage part of the parameter buffer. This loop init the beginning address of i-th tasklet's parameter buffer **/
         for(int i = 0; i < 24; i++){
-            BytesUtils.writeU4LittleEndian(bufferPointers, parameterBufferBeginAddr + i * perDPUBufferSize, i * 4);
+            BytesUtils.writeU4LittleEndian(bufferPointers, parameterBufferBeginAddr + i * perTaskletParameterBufferSize, i * 4);
         }
         if(!ExperimentConfigurator.useSimulator)
             dpu.copy("params_buffer_pt", bufferPointers, 0);
@@ -77,7 +77,7 @@ public class DPUGarbageCollectorUPMEM extends DPUGarbageCollector {
 
         transfer(DPUJVMMemSpaceKind.DPU_PARAMETER_BUFFER, data, addr);
         byte[] ptBytes = new byte[4];
-        BytesUtils.writeU4LittleEndian(ptBytes, parameterBufferBeginAddr + tasklet * perDPUBufferSize + size, 0);
+        BytesUtils.writeU4LittleEndian(ptBytes, parameterBufferBeginAddr + tasklet * perTaskletParameterBufferSize + size, 0);
         try {
             dpu.copy("params_buffer_pt", ptBytes , 4 * tasklet);
         } catch (DpuException e) {

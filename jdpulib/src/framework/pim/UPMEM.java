@@ -31,7 +31,7 @@ public class UPMEM {
     public static final int TOTAL_DPU_COUNT = 1024; // Total DPUs
     public static final int TOTAL_HARDWARE_THREADS_COUNT = 24; // hardware thread used in each DPU
     public static int dpuInUse = 1024; // DPUs in using
-    public static int perDPUThreadsInUse = TOTAL_HARDWARE_THREADS_COUNT;
+    public static int perDPUThreadsInUse = 1;
 
     /* Facade Class for PIM management */
     private static PIMManager pimManager;
@@ -307,5 +307,13 @@ public class UPMEM {
 
     public Object createObjectSpecific(int dpuID, String descriptor, Object... params) {
         return null;
+    }
+
+    public Object getDpu(int i) {
+        if(configurator.isUseSimulator()){
+            return pimManager.getDPUManager(i).dpuJVM;
+        }else{
+            return pimManager.getDPUManager(i).dpu;
+        }
     }
 }

@@ -19,8 +19,7 @@ import java.rmi.registry.LocateRegistry;
 import java.util.Dictionary;
 import java.util.Enumeration;
 
-import static framework.pim.UPMEM.generateProxyObject;
-import static framework.pim.UPMEM.packageSearchPath;
+import static framework.pim.UPMEM.*;
 import static framework.pim.dpu.java_strut.DPUJVMMemSpaceKind.DPU_HEAPSPACE;
 
 public class DPUManagerSimulator extends DPUManager {
@@ -29,6 +28,7 @@ public class DPUManagerSimulator extends DPUManager {
     public DPUManagerSimulator(int dpuID) {
         System.out.println("Init DPU " +  dpuID + "'s JVM");
         this.dpuID = dpuID;
+
         try {
             this.dpujvmRemote = (DPUJVMRemote) LocateRegistry.getRegistry("localhost", 9239 + dpuID).lookup("DPUJVM" + dpuID);
         } catch (RemoteException | NotBoundException e) {
@@ -52,17 +52,19 @@ public class DPUManagerSimulator extends DPUManager {
     public void callNonstaticMethod(int classPt, int methodPt, int instanceAddress, Object... params) {
         if(UPMEM.batchDispatchingRecording) {
             int lastTaskletId = UPMEM.batchDispatcher.taskletPosition[dpuID];
-            int taskletId = (lastTaskletId + 1) % 24;
+            int taskletId = (lastTaskletId + 1) % UPMEM.perDPUThreadsInUse;
             int size = (((1 + 2 + 1 + params.length) * 4) + 0b111) & (~0b111);
             BatchDispatcher bd = UPMEM.batchDispatcher;
             if(UPMEM.isSpecifyTasklet(dpuID)){
                 taskletId = UPMEM.getSpecifiedTaskletAndCancel(dpuID);
             }else{
-                while(taskletId != lastTaskletId){
-                    if(bd.paramsBufferPointer[dpuID][taskletId] + size < PIMRemoteJVMConfiguration.heapSize){
+                while(taskletId != lastTaskletId || perDPUThreadsInUse == 1){
+                    if(bd.paramsBufferPointer[dpuID][taskletId] + size < DPUGarbageCollector.perTaskletParameterBufferSize){
+                        System.out.println("in tasklet " + taskletId + " of DPU#" + dpuID +
+                                ", paramsBufferPointer = " + bd.paramsBufferPointer[dpuID][taskletId] + ", current need size = " + size + ", max size = " + DPUGarbageCollector.perTaskletParameterBufferSize);
                         break;
                     }
-                    taskletId = (taskletId + 1) % 24;
+                    taskletId = (taskletId + 1) % perDPUThreadsInUse;
                     try {
                         bd.dispatchAll();
                     } catch (DpuException e) {
@@ -74,13 +76,18 @@ public class DPUManagerSimulator extends DPUManager {
 
 
             bd.taskletPosition[dpuID] = taskletId; // next time from t2 to find a proper tasklet
+            int from = bd.paramsBufferPointer[dpuID][taskletId] + DPUGarbageCollector.perTaskletParameterBufferSize * taskletId;
 
-            int[] paramPrepared = new int[params.length + 4];
-            paramPrepared[0] = bd.recordedCount[dpuID]++;
-            paramPrepared[1] = classPt;
-            paramPrepared[2] = methodPt;
-            paramPrepared[3] = instanceAddress;
-            int offset = 4;
+            // id
+            BytesUtils.writeU4LittleEndian(UPMEM.batchDispatcher.paramsBuffer[dpuID], bd.recordedCount[dpuID]++, from);
+            // class address
+            BytesUtils.writeU4LittleEndian(UPMEM.batchDispatcher.paramsBuffer[dpuID], classPt, from + 4);
+            // method address
+            BytesUtils.writeU4LittleEndian(UPMEM.batchDispatcher.paramsBuffer[dpuID], methodPt, from + 8);
+            // instance address
+            BytesUtils.writeU4LittleEndian(UPMEM.batchDispatcher.paramsBuffer[dpuID], instanceAddress, from + 12);
+            int offset = 16;
+
             for(Object obj : params){
                 int v;
                 if(obj instanceof Integer){
@@ -96,16 +103,13 @@ public class DPUManagerSimulator extends DPUManager {
                 }else{
                     throw new RuntimeException("can not send CPU object to DPU");
                 }
-                paramPrepared[offset] = v;
-                offset++;
+                BytesUtils.writeU4LittleEndian(UPMEM.batchDispatcher.paramsBuffer[dpuID], v, from + offset);
+
+                offset += 4;
             }
             bd.paramsBufferPointer[dpuID][taskletId] += size;
             bd.dpusInUse.add(dpuID);
-            try {
-                dpujvmRemote.pushArguments(paramPrepared, taskletId);
-            } catch (RemoteException e) {
-                throw new RuntimeException(e);
-            }
+
             return;
         }
 

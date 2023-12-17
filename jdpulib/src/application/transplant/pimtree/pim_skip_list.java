@@ -1,16 +1,15 @@
 package application.transplant.pimtree;
 
+import com.upmem.dpu.DpuException;
 import framework.pim.BatchDispatcher;
 import framework.pim.UPMEM;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static application.transplant.pimtree.PIMTreeCore.executors;
-import static application.transplant.pimtree.ProgramArgs.scan;
-import static java.util.stream.Collectors.toCollection;
 import static application.transplant.pimtree.PIMTreeCore.make_slice;
 import static application.transplant.pimtree.ProgramArgs.L2_SIZE;
+import static java.util.stream.Collectors.toCollection;
 
 public class pim_skip_list {
     public static dpu_memory_regions dmr;
@@ -126,9 +125,9 @@ public class pim_skip_list {
         /** Dispatching **/
 
 
-//        BatchDispatcher bd = new BatchDispatcher();
+        BatchDispatcher bd = new BatchDispatcher();
 
-//        UPMEM.beginRecordBatchDispatching(bd);
+        UPMEM.beginRecordBatchDispatching(bd);
         for(int i = 0; i < llen; i++){
             int targetDPUID = hash_to_dpu(keys_sorted[ll.get(i)], 0, nr_of_dpus);
             System.out.println("key = " + keys_sorted[ll.get(i)] + " dispatch to DPU " + targetDPUID);
@@ -136,7 +135,14 @@ public class pim_skip_list {
             // dispatching to DPU
 
         }
-//        UPMEM.endRecordBatchDispatching();
+        try {
+            bd.dispatchAll();
+        } catch (DpuException e) {
+            throw new RuntimeException(e);
+        }
+
+        // TODO: should force dispatching all before batchdispatcher be disposed.
+        UPMEM.endRecordBatchDispatching();
 
 
 //
