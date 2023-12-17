@@ -16,6 +16,7 @@ import transplant.index.search.Document;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.HashSet;
 
 
 /** UPMEM class
@@ -45,7 +46,7 @@ public class UPMEM {
 
     /* Unsafe class. It will be used to create a proxy class instance without initialize it */
     static Unsafe unsafe;
-
+    public static boolean useAllowSet;
 
 
     static {
@@ -176,6 +177,20 @@ public class UPMEM {
         }
         return proxyObject;
     }
+    public static HashSet<String> allowSet = new HashSet<>();
+
+    static {
+        allowSet.add("java.lang.Object");
+        allowSet.add("java.util.HashTable");
+        allowSet.add("application.transplant.index.search.IndexTable");
+        allowSet.add("application.transplant.index.search.Document");
+        allowSet.add("java.util.ArrayList");
+        allowSet.add("application.transplant.index.search.Searcher");
+        allowSet.add("application.transplant.index.search.pojo.SearchResult");
+    }
+
+
+
     public IDPUProxyObject createObject(int dpuID, Class objectClass, Object arg0, Object arg1){
 
         IDPUProxyObject proxyObject;
@@ -249,6 +264,9 @@ public class UPMEM {
                     UPMEM.dpuInUse = configurator.getDpuInUseCount();
                     UPMEM.perDPUThreadsInUse = configurator.getThreadPerDPU();
                     UPMEM.packageSearchPath = configurator.getPackageSearchPath();
+                    UPMEM.useAllowSet = configurator.isUseAllowSet();
+                    allowSet.clear();
+                    allowSet = configurator.getAllowSet();
                 }
 
                 if(!configurator.isUseSimulator()){
