@@ -156,6 +156,11 @@ public class DPUManagerSimulator extends DPUManager {
             }
             i++;
         }
+        try {
+            dpujvmRemote.setParamsBufferPointer(paramsConverted.length * 4,0);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
 
 
         try {
