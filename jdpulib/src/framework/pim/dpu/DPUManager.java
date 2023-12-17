@@ -8,6 +8,7 @@ import framework.pim.dpu.classloader.DPUClassFileManager;
 import framework.pim.logger.Logger;
 import framework.pim.logger.PIMLoggers;
 import framework.lang.struct.DPUObjectHandler;
+import simulator.DPUJVMRemoteImpl;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -19,6 +20,7 @@ public abstract class DPUManager {
     public DPUCacheManager classCacheManager;
 
     public Dpu dpu;
+    public DPUJVMRemoteImpl dpuJVM;
 
     public byte[] dispatchingBuffer = new byte[1024];
 

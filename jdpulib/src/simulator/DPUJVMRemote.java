@@ -8,7 +8,9 @@ public interface DPUJVMRemote extends Remote {
     /* boot */
     void start() throws RemoteException;
     /* memory space operation */
-    void setParameter(int pos, int value, int tasklet) throws RemoteException;
+    void setParameterRelative(int pos, int value, int tasklet) throws RemoteException;
+    void setParameterAbsolutely(int pos, int value) throws RemoteException;
+
     int pushToMetaSpace(Class c) throws RemoteException;
     int pushToMetaSpace(Class c, String methodName, Class<?>... params)  throws RemoteException;
     void pushObject(int pos, Object obj) throws RemoteException;
@@ -34,7 +36,7 @@ public interface DPUJVMRemote extends Remote {
 
     void setParamsBufferIndex(int p, int tasklet) throws RemoteException;
 
-    int getResultValue(int taskID) throws RemoteException;
+    JVMSimulatorResult getResult(int resultIndex) throws RemoteException;
 
     int getHeapLength() throws RemoteException;
 
