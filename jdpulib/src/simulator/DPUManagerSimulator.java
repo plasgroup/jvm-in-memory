@@ -85,6 +85,9 @@ public class DPUManagerSimulator extends DPUManager {
                 int v;
                 if(obj instanceof Integer){
                     v = (int) obj;
+                }else if(obj instanceof Long){
+                    // TODO: currently not directly support long.
+                    throw new RuntimeException("");
                 }else if(obj instanceof IDPUProxyObject){
                     v = ((IDPUProxyObject)obj).getAddr();
                     if(((IDPUProxyObject)obj).getDpuID() != dpuID){
@@ -93,7 +96,7 @@ public class DPUManagerSimulator extends DPUManager {
                 }else{
                     throw new RuntimeException("can not send CPU object to DPU");
                 }
-                params[offset] = v;
+                paramPrepared[offset] = v;
                 offset++;
             }
             bd.paramsBufferPointer[dpuID][taskletId] += size;
