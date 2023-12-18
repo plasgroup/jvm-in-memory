@@ -25,6 +25,11 @@ import static framework.pim.dpu.java_strut.DPUJVMMemSpaceKind.DPU_HEAPSPACE;
 public class DPUManagerSimulator extends DPUManager {
 
     private DPUJVMRemote dpujvmRemote;
+
+    public DPUJVMRemote getDpujvmRemote() {
+        return dpujvmRemote;
+    }
+
     public DPUManagerSimulator(int dpuID) {
         System.out.println("Init DPU " +  dpuID + "'s JVM");
         this.dpuID = dpuID;

@@ -80,7 +80,7 @@ public class DPUGarbageCollectorSimulator extends DPUGarbageCollector {
                 case DPU_PARAMETER_BUFFER:
                     pt -= parameterBufferBeginAddr;
                     pt /= 4;
-                    for(int i = 0; i < data.length / 4; i += 4, pt++){
+                    for(int i = 0; i < data.length; i += 4, pt++){
                         int val = BytesUtils.readU4LittleEndian(data, i);
                         System.out.printf(" set to param index = %d, data = %d\n", pt, BytesUtils.readU4LittleEndian(data, i));
                         dpujvmRemote.setParameterAbsolutely(pt, val);

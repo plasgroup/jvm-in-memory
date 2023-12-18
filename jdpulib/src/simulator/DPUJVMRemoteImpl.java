@@ -40,14 +40,16 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
 
         @Override
         public void run() {
-
+            System.out.println("===================== Run !!!!=-------------");
             int pt = threadID * perThreadParameterQueueLength;
             int dest = currentParamPointer[threadID] / 4;
 
             while(pt < dest){
                 System.out.println("pt = " + pt + " dest = " + dest);
                 int taskId =  parameterQueue[pt];
+                System.out.println(" -- get task id = " + taskId);
                 Class c = (Class) metaSpace[parameterQueue[pt + 1]];
+                System.out.println(" -- get class = " + c);
 
                 if(metaSpace[parameterQueue[pt + 2]] instanceof Constructor){
                     Constructor constructor = (Constructor) metaSpace[parameterQueue[pt + 2]];
@@ -93,8 +95,14 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
                     System.out.println(" > thread " + threadID + " finish.");
                     return;
                 }
+                System.out.println("   ---- normal method ----");
+                System.out.println(metaSpace[parameterQueue[pt + 2]]);
+                if(metaSpace[parameterQueue[pt + 2]] instanceof Class<?>){
+                    System.out.println(">>>");
+                }
                 Method m = (Method) metaSpace[parameterQueue[pt + 2]];
-//
+                System.out.println(m);
+                System.out.println(m.getName());
                 System.out.println("class = " + c.getSimpleName());
                 System.out.println("method = " + m.getName());
                 System.out.println("instance pos = " + parameterQueue[pt + 3]);
@@ -113,13 +121,16 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
                     System.out.println(" --- param " + i + " " + params[i]);
 
                 }
+                if(((params.length * 4 + 16) % 8 != 0)){
+                    pt++;
+                }
                 System.out.println(" -- read params finished.");
                 try {
                     System.out.println("method =  " + m);
                     Object ret = m.invoke(instance, params);
                     System.out.println(" get result " + ret);
                     synchronized (resultQueuePointer){
-                        System.out.println(" set taskid = " + taskId + " to result area index = " + resultQueuePointer);
+                        System.out.println(" set taskid = " + taskId + " to result area index = " + resultQueuePointer + " max length = " + resultQueue.length);
                         resultQueue[resultQueuePointer] = taskId;
                         resultQueuePointer++;
                         if(ret == null){
@@ -132,7 +143,7 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
                                     addr = ++heapSpaceIndex;
                                     heap[addr] = ret;
                                     resultQueue[resultQueuePointer] = addr;
-                                    System.out.println("write reference of " + ret.getClass() + " to addr: " + addr);
+                                    System.out.println("write reference of " + ret.getClass() + " = addr: " + addr + " to result queue index = " + resultQueuePointer);
                                 }
                             }else{
                                 resultQueue[resultQueuePointer] = ret;
@@ -312,8 +323,8 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
 
     @Override
     public JVMSimulatorResult getResult(int resultIndex) throws RemoteException {
-        int taskID = (int) resultQueue[resultIndex];
-        Object result = resultQueue[resultIndex + 1];
+        int taskID = (int) resultQueue[resultIndex * 2];
+        Object result = resultQueue[resultIndex * 2 + 1];
         if(result == null){
             return new JVMSimulatorResult(taskID,0);
         }
