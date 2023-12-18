@@ -22,7 +22,7 @@ public class PIMTreeMain {
     public static void main(String[] args) throws IOException {
         PIMRemoteJVMConfiguration.JVMCount = nr_of_dpus;
         UPMEM.initialize(new UPMEMConfigurator().setThreadPerDPU(1).setDpuInUseCount(64).setUseSimulator(true)
-                .setUseAllowSet(true)
+                .setUseAllowSet(true).setDpuInUseCount(4)
                 .addClassesAllow("application.transplant.pimtree.PIMTreeCore", "application.transplant.pimtree.PIMExecutorComputationContext")
                 .setPackageSearchPath("application.transplant.pimtree.")
         );

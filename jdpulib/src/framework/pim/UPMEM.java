@@ -10,6 +10,8 @@ import framework.pim.logger.Logger;
 import framework.lang.struct.IDPUProxyObject;
 import framework.pim.utils.BytesUtils;
 
+import simulator.DPUJVMRemote;
+import simulator.DPUManagerSimulator;
 import simulator.PIMManagerSimulator;
 import sun.misc.Unsafe;
 import transplant.index.search.Document;
@@ -311,7 +313,7 @@ public class UPMEM {
 
     public Object getDpu(int i) {
         if(configurator.isUseSimulator()){
-            return pimManager.getDPUManager(i).dpuJVM;
+            return ((DPUManagerSimulator)pimManager.getDPUManager(i)).getDpujvmRemote();
         }else{
             return pimManager.getDPUManager(i).dpu;
         }

@@ -8,6 +8,7 @@ import framework.pim.dpu.classloader.DPUClassFileManager;
 import framework.pim.logger.Logger;
 import framework.pim.logger.PIMLoggers;
 import framework.lang.struct.DPUObjectHandler;
+import simulator.DPUJVMRemote;
 import simulator.DPUJVMRemoteImpl;
 
 import java.io.IOException;

@@ -6,6 +6,7 @@ import framework.pim.dpu.java_strut.DPUJVMMemSpaceKind;
 import framework.pim.logger.Logger;
 import framework.pim.logger.PIMLoggers;
 import framework.pim.utils.BytesUtils;
+import simulator.DPUJVMRemote;
 import simulator.DPUJVMRemoteImpl;
 import simulator.JVMSimulatorResult;
 
@@ -35,6 +36,9 @@ public class BatchDispatcher {
     UPMEM upmem = UPMEM.getInstance();
 
 
+    {
+        dispatchLogger.setEnable(true);
+    }
     /** DPU task structure **/
     class DPUExecutionTask implements Runnable{
         private int id;
@@ -44,13 +48,13 @@ public class BatchDispatcher {
         }
         public void run(){
             try {
-                System.out.println("DPU#" + id + "dispatched");
+                System.out.println("DPU#" + id + "dispatched, " + recordedCount[id] +" tasks. pointer = " + paramsBufferPointer[id]);
                 upmem.getDPUManager(id).dpuExecute(null);
             } catch (DpuException e) {
                 throw new RuntimeException(e);
             }
 
-            System.out.println("retrive result (DPU#" + id + ")");
+            System.out.println("retrieve result (DPU#" + id + ")");
             /** result retrieving **/
 
             if(!UPMEM.getConfigurator().isUseSimulator()){
@@ -73,10 +77,11 @@ public class BatchDispatcher {
                         result[taskID + dispatchedCount] = res;
                     }
                 }else{
-                    Object dpu = UPMEM.getInstance().getDpu(i);
-                    DPUJVMRemoteImpl backend = (DPUJVMRemoteImpl) dpu;
+                    Object dpu = UPMEM.getInstance().getDpu(id);
+                    DPUJVMRemote backend = (DPUJVMRemote) dpu;
                     try {
                         JVMSimulatorResult result = backend.getResult(i);
+                        System.out.println("task id = " + result.taskID);
                         BytesUtils.writeU4LittleEndian(resultBytes, (Integer) result.value, 4 * result.taskID);
                     } catch (RemoteException e) {
                         throw new RuntimeException(e);
@@ -86,7 +91,7 @@ public class BatchDispatcher {
 
             }
 
-            dispatchLogger.logln("dpu#" + id + " finished");
+            System.out.println("dpu#" + id + " finished");
 
             latch.countDown();
 
@@ -131,25 +136,27 @@ public class BatchDispatcher {
 
         System.out.println("=== dispatch all ====");
 
-        latch = new CountDownLatch(dpusInUse.size());
+        latch = new CountDownLatch(UPMEM.dpuInUse);
 
         for(int dpuID : dpusInUse){
-            executorService.submit(new DPUExecutionTask(dpuID));
+            new DPUExecutionTask(dpuID).run();
+            //executorService.submit(new DPUExecutionTask(dpuID));
         }
 
-        try {
-            latch.await();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+//        try {
+//            latch.await();
+//        } catch (InterruptedException e) {
+//            throw new RuntimeException(e);
+//        }
+
         for(int dpuID : dpusInUse){
             recordedCount[dpuID] = 0;
             Arrays.fill(paramsBufferPointer[dpuID], 0);
             Arrays.fill(paramsBuffer[dpuID], (byte)0);
         }
-
+        dispatchLogger.setEnable(true);
         dpusInUse.clear();
-        dispatchLogger.logln("all dispatched");
+        dispatchLogger.logln("All dispatched");
         dispatchedCount += count;
 
         dispatchLogger.logln("current total count == " + dispatchedCount);
