@@ -1,7 +1,8 @@
 package framework.lang.struct.dist.redis;
 
-import pim.BatchDispatcher;
-import pim.UPMEM;
+
+import framework.pim.BatchDispatcher;
+import framework.pim.UPMEM;
 
 import java.util.Hashtable;
 
