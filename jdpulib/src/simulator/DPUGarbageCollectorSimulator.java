@@ -82,18 +82,18 @@ public class DPUGarbageCollectorSimulator extends DPUGarbageCollector {
                     pt /= 4;
                     for(int i = 0; i < data.length; i += 4, pt++){
                         int val = BytesUtils.readU4LittleEndian(data, i);
-                        System.out.printf(" set to param index = %d, data = %d\n", pt, BytesUtils.readU4LittleEndian(data, i));
+                        // System.out.printf(" set to param index = %d, data = %d\n", pt, BytesUtils.readU4LittleEndian(data, i));
                         dpujvmRemote.setParameterAbsolutely(pt, val);
                     }
                     break;
                 case DPU_PARAMETER_BUFFER_POINTERS:
                     pt /= 4; // get slot index
                     int val = BytesUtils.readU4LittleEndian(data, 0);
-                    System.out.println("transfer param buffer pinter to index " + pt + "("  + pt + "-th tasklet's "
-                            + ") with pointer = "
-                            + val
-                            + " slot index = "
-                            + val / 4);
+//                    System.out.println("transfer param buffer pinter to index " + pt + "("  + pt + "-th tasklet's "
+//                            + ") with pointer = "
+//                            + val
+//                            + " slot index = "
+//                            + val / 4);
 
                     // val is a parameter buffer slot index value. In simulator, a slot have 4 bytes. So when setting pointer
                     // this value should * 4.

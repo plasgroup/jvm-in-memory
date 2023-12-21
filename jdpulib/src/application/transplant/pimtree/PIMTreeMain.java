@@ -42,7 +42,6 @@ public class PIMTreeMain {
 
         frontend_by_generation frontend = new frontend_by_generation(20000, 100, pos, 0, 20, 20);
         run(frontend, 200, 100);
-
     }
 
     static void run(frontend f, int init_batch_size, int test_batch_size) {

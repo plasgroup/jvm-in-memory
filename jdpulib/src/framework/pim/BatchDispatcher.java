@@ -81,7 +81,7 @@ public class BatchDispatcher {
                     DPUJVMRemote backend = (DPUJVMRemote) dpu;
                     try {
                         JVMSimulatorResult result = backend.getResult(i);
-                        System.out.println("task id = " + result.taskID);
+                        // System.out.println("task id = " + result.taskID);
                         BytesUtils.writeU4LittleEndian(resultBytes, (Integer) result.value, 4 * result.taskID);
                     } catch (RemoteException e) {
                         throw new RuntimeException(e);
