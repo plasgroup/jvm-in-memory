@@ -200,10 +200,13 @@ end:
 
    Insert follow code
 
-   ```java
-   public void copy(String dpuDstSymbol, byte[] dstBuffer, int offset) throws DpuException {
-           this.copy(dpuDstSymbol, new byte[][]{dstBuffer}, new int[]{offset});
-   }
+   ``` java
+    public void copy(String dpuDstSymbol, byte[] dstBuffer, int offset) throws DpuException {
+        this.copy(dpuDstSymbol, new byte[][]{dstBuffer}, new int[]{offset});
+    }
+    public void copy(byte[] dstBuffer, String dpuSrcSymbol, int offset) throws DpuException {
+        this.copy(new byte[][]{dstBuffer}, dpuSrcSymbol, new int[]{offset});
+    }
    ```
 
    + In the file `~/upmem-2023.1.0-Linux-x86_64/src/backends/java/src/main/java/com/upmem/dpu/DpuSet.java`, 
@@ -212,6 +215,7 @@ end:
 
    ``` java
    void copy(String dpuDstSymbol, byte[][] dstBuffer, int[] offset) throws DpuException;
+   void copy(byte[][] dstBuffer, String dpuSrcSymbol, int[] offset) throws DpuException;
    ```
 
    + In the file `~/upmem-2023.1.0-Linux-x86_64/src/backends/java/src/main/java/com/upmem/dpu/DpuSetBase.java`
@@ -219,9 +223,14 @@ end:
    Insert follow code
 
    ``` java
-   public void copy(String dpuDstSymbol, byte[][] dstBuffer, int[] offset) throws DpuException{
-        this.set.copy(dpuDstSymbol, dstBuffer, offset);
-   }
+    public void copy(String dpuDstSymbol, byte[][] dstBuffer, int[] offset) throws DpuException{
+     this.set.copy(dpuDstSymbol, dstBuffer, offset, true, false);
+    }
+
+    public void copy(byte[][] dstBuffer, String dpuSrcSymbol, int[] offset) throws DpuException{
+     this.set.copy(dpuSrcSymbol, dstBuffer, offset, false, false);
+    }
+
    ```
 
    + In the file `~/upmem-2023.1.0-Linux-x86_64/src/backends/java/src/main/java/com/upmem/dpu/NativeDpuSet.java`
@@ -229,7 +238,8 @@ end:
    Insert follow code
 
    ``` java
-   native void copy(String dpuDstSymbol, byte[][] dstBuffer, int[] offset) throws DpuException;
+    native void copy(String dpuSymbol, byte[][] hostBuffer, int[] offset, boolean toDpu, boolean isAsync) throws DpuException;
+    native void copy(DpuSymbol dpuSymbol, byte[][] hostBuffers, int[] offset, boolean toDpu, boolean isAsync) throws DpuException;
    ```
 
    compile
@@ -237,7 +247,8 @@ end:
    ``` bash
    $ cd ~/upmem-2023.1.0-Linux-x86_64/src/backends/java/src/main/java/com/upmem/dpu/
    $ javac *.java
-   $ jar cf dpu.jar *.class 
+   $ cd ~/upmem-2023.1.0-Linux-x86_64/src/backends/java/src/main/java/
+   $ jar cvf dpu.jar -C */*/*/*.class
    ```
 
    

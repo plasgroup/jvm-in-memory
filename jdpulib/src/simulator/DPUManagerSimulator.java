@@ -162,17 +162,17 @@ public class DPUManagerSimulator extends DPUManager {
         byte[] objectDataStream = new byte[(instanceSize + 7) & ~7];
         int classAddr;
         int initMethodAddr;
-        if(classCacheManager.getClassStrutCacheLine(c.getName().replace(".","/")) == null){
+        if(classCacheManager.getClassLookupTableItem(c.getName().replace(".","/")) == null){
             dpuClassFileManager.loadClassToDPU(c);
         }
 
         System.out.println(c.getName().replace(".","/"));
-        classAddr = classCacheManager.getClassStrutCacheLine(c.getName().replace(".","/")).marmAddr;
+        classAddr = classCacheManager.getClassLookupTableItem(c.getName().replace(".","/")).marmAddr;
         dpuManagerLogger.logln(" * Get Class Addr = " + classAddr);
         String initMethodDesc = generateInitializationDescriptor(params);
 
         initMethodAddr = classCacheManager
-                    .getMethodCacheItem(c.getName().replace(".", "/"), initMethodDesc).mramAddr;
+                    .getMethodLookupTableItem(c.getName().replace(".", "/"), initMethodDesc).mramAddr;
 
         BytesUtils.writeU4LittleEndian(objectDataStream, classAddr, 4);
 

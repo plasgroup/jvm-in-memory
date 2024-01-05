@@ -33,8 +33,8 @@ public class ProxyHelper {
 
     public static void invokeMethod(int dpuID, int address, String className, String methodDescriptor, Object... params){
         DPUCacheManager cm = upmem.getDPUManager(dpuID).classCacheManager;
-        int methodMRAMAddr = cm.getMethodCacheItem(className, methodDescriptor).mramAddr;
-        int classMRAMAddr = cm.getClassStrutCacheLine(className).marmAddr;
+        int methodMRAMAddr = cm.getMethodLookupTableItem(className, methodDescriptor).mramAddr;
+        int classMRAMAddr = cm.getClassLookupTableItem(className).marmAddr;
         // pimProxy.logf("pim:proxy: class mram addr = 0x%x, method mram addr = 0x%x, instance addr = 0x%x\n", classMRAMAddr, methodMRAMAddr, objectHandler.address);
         upmem.getDPUManager(dpuID).callNonstaticMethod(classMRAMAddr, methodMRAMAddr, address, params);
     }
