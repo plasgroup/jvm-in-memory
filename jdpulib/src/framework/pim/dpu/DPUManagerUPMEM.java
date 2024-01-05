@@ -241,7 +241,7 @@ public class DPUManagerUPMEM extends DPUManager{
         this.dpu = upmemdpu;
         garbageCollector = new DPUGarbageCollectorUPMEM(dpuID, dpu);
         dpuClassFileManager = new DPUClassFileManagerUPMEM(dpuID, dpu);
-        classCacheManager = new DPUCacheManagerUPMEM(dpuID, dpu);
+        classCacheManager = new DPULookupTableManagerUPMEM(dpuID, dpu);
     }
 
     @Override

@@ -29,7 +29,7 @@ public class DPUManagerSimulator extends DPUManager {
         }
         garbageCollector = new DPUGarbageCollectorSimulator(dpuID, dpujvmRemote);
         dpuClassFileManager = new DPUClassFileManagerSimulator(dpuID, dpujvmRemote);
-        classCacheManager = new DPUCacheManagerSimulator(dpuID, dpujvmRemote);
+        classCacheManager = new DPULookupTableManagerSimulator(dpuID, dpujvmRemote);
     }
 
     @Override

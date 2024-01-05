@@ -5,7 +5,7 @@ import java.rmi.RemoteException;
 
 
 
-/** This file define the facade for accessing remote services. **/
+/** This interface define the facade for accessing remote services. **/
 public interface DPUJVMRemote extends Remote {
     int getID() throws RemoteException; /** get "DPU" ID **/
     void start() throws RemoteException; /** boot **/

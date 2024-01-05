@@ -2,7 +2,7 @@ package framework.pim.dpu;
 import com.upmem.dpu.Dpu;
 import com.upmem.dpu.DpuException;
 import framework.pim.UPMEM;
-import framework.pim.dpu.cache.DPUCacheManager;
+import framework.pim.dpu.cache.DPULookupTableManager;
 import framework.pim.dpu.classloader.DPUClassFileManager;
 import framework.pim.logger.Logger;
 import framework.pim.logger.PIMLoggers;
@@ -15,7 +15,7 @@ public abstract class DPUManager {
     public int dpuID;
     public DPUGarbageCollector garbageCollector;
     public DPUClassFileManager dpuClassFileManager;
-    public DPUCacheManager classCacheManager;
+    public DPULookupTableManager classCacheManager;
 
     public Dpu dpu;
 

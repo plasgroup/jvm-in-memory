@@ -1,5 +1,7 @@
 package simulator;
 
+import framework.pim.UPMEM;
+
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -23,10 +25,14 @@ public class SimulatorServer {
     }
 
 
+
+    /** Simulator Main **/
     public static void main(String[] args) throws RemoteException {
         parseParameters(args);
-
+        UPMEM.perDPUThreadsInUse = PIMRemoteJVMConfiguration.threadCount;
+        UPMEM.dpuInUse = PIMRemoteJVMConfiguration.JVMCount;
         String deviceName = "DPU";
+        /* Bind DPU#i at localhost with port of (9239 + i) */
         for(int i = 0; i < PIMRemoteJVMConfiguration.JVMCount; i++){
             DPUJVMRemoteImpl jvmRemote = new DPUJVMRemoteImpl(i, PIMRemoteJVMConfiguration.threadCount);
             System.out.println("[device:" + deviceName + "(" + i +")] bind server at port = " + (9239 + i));

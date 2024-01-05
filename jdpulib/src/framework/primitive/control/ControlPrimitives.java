@@ -3,7 +3,7 @@ package framework.primitive.control;
 import framework.pim.ProxyHelper;
 import framework.pim.UPMEM;
 import framework.pim.dpu.DPUGarbageCollector;
-import framework.pim.dpu.cache.DPUCacheManager;
+import framework.pim.dpu.cache.DPULookupTableManager;
 import framework.pim.dpu.cache.DPUClassFileLookupTableItem;
 import framework.pim.dpu.classloader.ClassWriter;
 import framework.pim.dpu.classloader.DPUClassFileManager;
@@ -17,7 +17,7 @@ public class ControlPrimitives {
 
         DPUGarbageCollector garbageCollector = UPMEM.getInstance().getDPUManager(dpuID).garbageCollector;
         DPUClassFileManager classFileManager = UPMEM.getInstance().getDPUManager(dpuID).dpuClassFileManager;
-        DPUCacheManager cacheManager = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager;
+        DPULookupTableManager cacheManager = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager;
 
         // get real class
         anomyousClass = anomyousClass.getInterfaces().length == 0 ? anomyousClass.getSuperclass() : anomyousClass.getInterfaces()[0];

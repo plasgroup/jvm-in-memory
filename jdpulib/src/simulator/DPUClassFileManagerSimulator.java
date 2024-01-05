@@ -2,7 +2,7 @@ package simulator;
 
 import com.upmem.dpu.DpuException;
 import framework.pim.UPMEM;
-import framework.pim.dpu.cache.DPUCacheManager;
+import framework.pim.dpu.cache.DPULookupTableManager;
 import framework.pim.dpu.cache.DPUClassFileLookupTableItem;
 import framework.pim.dpu.cache.DPUMethodLookupTableItem;
 import framework.pim.dpu.classloader.ClassFileAnalyzer;
@@ -570,7 +570,7 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
             }
 
 
-            DPUCacheManager classCacheManager = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager;
+            DPULookupTableManager classCacheManager = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager;
             try {
                 pushJClassToDPU(jc, classAddr, dpuID);
             } catch (DpuException e) {

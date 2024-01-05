@@ -2,7 +2,7 @@ package application.bst;
 
 import framework.lang.struct.IDPUProxyObject;
 import framework.pim.UPMEM;
-import framework.pim.dpu.cache.DPUCacheManager;
+import framework.pim.dpu.cache.DPULookupTableManager;
 import framework.pim.logger.Logger;
 import framework.pim.logger.PIMLoggers;
 
@@ -105,7 +105,7 @@ public class DPUTreeNodeProxyAutoGen extends DPUTreeNode implements IDPUProxyObj
     @Override
     public void insert(int k, int v) {
         insertDispatchCount++;
-        DPUCacheManager classCacheManager1 = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager;
+        DPULookupTableManager classCacheManager1 = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager;
         invokeMethod(dpuID, address,"pim/algorithm/TreeNode", "insert:(II)V", k, v);
     }
 

@@ -5,6 +5,8 @@ import framework.pim.dpu.java_strut.DPUJVMMemSpaceKind;
 
 import java.rmi.RemoteException;
 
+
+/** implementation of DPUGarbageCollector (Simulator) **/
 public class DPUGarbageCollectorSimulator extends DPUGarbageCollector {
     DPUJVMRemote dpujvmRemote;
 
