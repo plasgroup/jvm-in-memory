@@ -7,10 +7,10 @@ import framework.pim.UPMEMConfigurator;
 import java.io.*;
 
 public class IndexSearchMain {
-    public static void main(String[] args){
+    public static void main(String[] args) throws ClassNotFoundException {
         IndexSearchDatabaseBuilder dm = new IndexSearchDatabaseBuilder();
 
-        UPMEM.initialize(new UPMEMConfigurator().setThreadPerDPU(1).setDpuInUseCount(64).setUseSimulator(false));
+        UPMEM.initialize(new UPMEMConfigurator().setThreadPerDPU(1).setDpuInUseCount(64).setUseSimulator(true));
         try {
             String basePath = (System.getProperty("user.dir"));
 

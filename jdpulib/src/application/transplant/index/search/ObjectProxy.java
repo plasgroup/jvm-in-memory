@@ -1,4 +1,4 @@
-package application.transplant.index.search.proxy;
+package application.transplant.index.search;
 
 import framework.lang.struct.IDPUProxyObject;
 

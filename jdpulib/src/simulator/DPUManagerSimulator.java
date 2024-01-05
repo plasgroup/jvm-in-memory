@@ -166,6 +166,7 @@ public class DPUManagerSimulator extends DPUManager {
             dpuClassFileManager.loadClassToDPU(c);
         }
 
+        System.out.println(c.getName().replace(".","/"));
         classAddr = classCacheManager.getClassStrutCacheLine(c.getName().replace(".","/")).marmAddr;
         dpuManagerLogger.logln(" * Get Class Addr = " + classAddr);
         String initMethodDesc = generateInitializationDescriptor(params);
