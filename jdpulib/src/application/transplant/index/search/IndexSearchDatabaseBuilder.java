@@ -36,12 +36,13 @@ public class IndexSearchDatabaseBuilder {
         return database;
     }
 
+
     public IndexSearchDatabaseBuilder buildIndexes(String docPath) throws IOException{
 
         tables = new IndexTable[dpuInUse];
 
         for(int i = 0; i < dpuInUse; i++){
-            tables[i] = (IndexTable) UPMEM.getInstance().createObject(i, IndexTable.class);
+            tables[i] = (IndexTable) (IDPUProxyObject) UPMEM.getInstance().createObject(i, IndexTable.class);
         }
 
         File f = new File(docPath);

@@ -260,7 +260,7 @@ public class DPUClassFileManagerUPMEM extends DPUClassFileManager {
             throw new RuntimeException(e);
         }
 
-        // preliminary analysis the Class
+        // preliminary analyze the class
         ClassFileAnalyzer classFileAnalyzer = ClassFileAnalyzer.fromClassBytes(classFileBytes);
         DPUJClass jc = classFileAnalyzer.preResolve();
 

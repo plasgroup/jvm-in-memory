@@ -162,8 +162,11 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
     public int pushToMetaSpace(Class c, String methodName, Class<?>... params) throws RemoteException {
         if(metaSpaceIndex > metaSpace.length) throw new RuntimeException("metaspace overflow");
         try {
-            if("<init>".equals(methodName)){
+
+            if("<init>".equals(methodName) || "<clinit>".equals(methodName)){
+                c.getConstructor(params);
                 Constructor constructor = c.getDeclaredConstructor(params);
+
                 metaSpace[metaSpaceIndex] = constructor;
             }else{
 
@@ -171,7 +174,7 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
                 metaSpace[metaSpaceIndex] = m;
             }
         } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
+            return -1;
         }
         return metaSpaceIndex++;
     }
