@@ -2,7 +2,7 @@ package framework.pim;
 
 import com.upmem.dpu.Dpu;
 import com.upmem.dpu.DpuException;
-import framework.pim.dpu.cache.DPUCacheManager;
+import framework.pim.dpu.cache.DPULookupTableManager;
 import framework.pim.dpu.cache.DPUClassFileLookupTableItem;
 import framework.pim.dpu.cache.DPUFieldLookupTableItem;
 import framework.pim.dpu.cache.DPUMethodLookupTableItem;
@@ -295,7 +295,7 @@ public class DPUClassFileManagerUPMEM extends DPUClassFileManager {
             for(int i = 0; i < jc.virtualTable.items.size(); i++){
                 String vClassName = jc.virtualTable.items.get(i).className;
                 String vDescriptor = jc.virtualTable.items.get(i).descriptor;
-                DPUCacheManager classCacheManager = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager;
+                DPULookupTableManager classCacheManager = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager;
                 classfileLogger.logln("" + classCacheManager);
                 DPUMethodLookupTableItem methodCacheItem =
                         UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getMethodLookupTableItem(vClassName, vDescriptor);
@@ -549,7 +549,7 @@ public class DPUClassFileManagerUPMEM extends DPUClassFileManager {
 
         UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getClassStructure(formalClassName(c.getName()))
                 .virtualTable = jc.virtualTable;
-        DPUCacheManager classCacheManager = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager;
+        DPULookupTableManager classCacheManager = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager;
         try {
             pushJClassToDPU(jc, classAddr, dpuID);
         } catch (DpuException e) {

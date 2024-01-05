@@ -3,7 +3,7 @@ package framework.pim.dpu;
 import framework.lang.struct.IDPUProxyObject;
 import framework.pim.UPMEM;
 import application.bst.DPUTreeNodeProxyAutoGen;
-import framework.pim.dpu.cache.DPUCacheManager;
+import framework.pim.dpu.cache.DPULookupTableManager;
 import framework.pim.logger.Logger;
 import framework.pim.logger.PIMLoggers;
 
@@ -47,7 +47,7 @@ public class RPCHelper {
     /** invoke method **/
 
     public static void invokeMethod(int dpuID, int address, String className, String methodDescriptor, Object... params){
-        DPUCacheManager cm = upmem.getDPUManager(dpuID).classCacheManager;
+        DPULookupTableManager cm = upmem.getDPUManager(dpuID).classCacheManager;
         int methodMRAMAddr = cm.getMethodLookupTableItem(className, methodDescriptor).mramAddr;
         int classMRAMAddr = cm.getClassLookupTableItem(className).marmAddr;
         // pimProxy.logf("framework.pim:proxy: class mram addr = 0x%x, method mram addr = 0x%x, instance addr = 0x%x\n", classMRAMAddr, methodMRAMAddr, objectHandler.address);
