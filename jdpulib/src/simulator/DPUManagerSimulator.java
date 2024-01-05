@@ -41,7 +41,7 @@ public class DPUManagerSimulator extends DPUManager {
         }
         garbageCollector = new DPUGarbageCollectorSimulator(dpuID, dpujvmRemote);
         dpuClassFileManager = new DPUClassFileManagerSimulator(dpuID, dpujvmRemote);
-        classCacheManager = new DPUCacheManagerSimulator(dpuID, dpujvmRemote);
+        classCacheManager = new DPULookupTableManagerSimulator(dpuID, dpujvmRemote);
     }
 
     @Override
@@ -256,7 +256,7 @@ public class DPUManagerSimulator extends DPUManager {
         }
 
         System.out.println(c.getName().replace(".","/"));
-        classAddr = classCacheManager.getClassStrutCacheLine(c.getName().replace(".","/")).marmAddr;
+        classAddr = classCacheManager.getClassLookupTableItem(c.getName().replace(".","/")).marmAddr;
         dpuManagerLogger.logln(" * Get Class Addr = " + classAddr);
         String initMethodDesc = generateInitializationDescriptor(params);
 

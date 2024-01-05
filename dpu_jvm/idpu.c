@@ -5,10 +5,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>
-#include "vm_shared_src/frame_helper.h"
-#include "vm_shared_src/function.h"
-#include "vm_shared_src/memory.h"
-#include "vm_shared_src/vm_loop.h"
+#include "core/frame_helper.h"
+#include "core/function.h"
+#include "core/memory.h"
+#include "core/vm_loop.h"
 #include "sample_ils/test_cases_gen.h"
 #include "host_vm/dpu_com.h"
 

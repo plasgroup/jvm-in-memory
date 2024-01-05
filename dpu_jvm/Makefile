@@ -21,11 +21,11 @@ DEPS := \
 	utils/jstruct_printer.h
 	
 
-DPU_DEPS := vm_shared_src/memory.h \
-	vm_shared_src/vm_loop.h \
-	vm_shared_src/frame_helper.h \
-	vm_shared_src/method.h \
-	vm_shared_src/jclass.h \
+DPU_DEPS := core/memory.h \
+	core/vm_loop.h \
+	core/frame_helper.h \
+	core/method.h \
+	core/jclass.h \
 
 CFILES := \
 	dpu_rt.c \
@@ -40,22 +40,22 @@ CFILES := \
 	utils/memory_read_helper.c \
 
 DPU_CILES := \
-	vm_shared_src/frame_helper.c \
-	vm_shared_src/vm_loop.c \
-	vm_shared_src/memory.c \
+	core/frame_helper.c \
+	core/vm_loop.c \
+	core/memory.c \
 	
-SHARD_CFILES += vm_shared_src/memory.c \
-		  vm_shared_src/frame_helper.c \
-          vm_shared_src/vm_loop.c \
+SHARD_CFILES += core/memory.c \
+		  core/frame_helper.c \
+          core/vm_loop.c \
 		  utils/jstruct_printer.c \
           sample_ils/test_cases_gen.c \
 				
 SHARD_DEPS += ir/opcode.h \
 	   ir/bytecode.h \
-	   vm_shared_src/frame_helper.h \
-       vm_shared_src/method.h \
-       vm_shared_src/memory.h \
-       vm_shared_src/vm_loop.h \
+	   core/frame_helper.h \
+       core/method.h \
+       core/memory.h \
+       core/vm_loop.h \
        sample_ils/test_cases_gen.h \
 
 DPU_SLAVE_CFILES += dpuslave.c \
@@ -76,8 +76,8 @@ dpu_rt: $(DEPS)
 dpuslave: $(DPU_DEPS)
 	$(CC) $(DPU_CFLAGE) -w -o dpuslave $(DPU_SLAVE_CFILES)
 
-test: vm_shared_src/memory.h
-	$(CC) -DINMEMORY test.c vm_shared_src/memory.c -o test
+test: core/memory.h
+	$(CC) -DINMEMORY test.c core/memory.c -o test
 
 
 dpuslave_assembly: $(DPU_DEPS)

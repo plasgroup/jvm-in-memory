@@ -5,7 +5,7 @@ import com.upmem.dpu.DpuException;
 import framework.pim.*;
 import framework.lang.struct.DPUObjectHandler;
 import framework.lang.struct.IDPUProxyObject;
-import framework.pim.dpu.cache.DPUMethodCacheItem;
+import framework.pim.dpu.cache.DPUMethodLookupTableItem;
 import framework.pim.utils.BytesUtils;
 
 import java.io.IOException;
@@ -25,15 +25,15 @@ public class DPUManagerUPMEM extends DPUManager{
             byte[] objectDataStream = new byte[(instanceSize + 7) & ~7];
             int classAddr;
             int initMethodAddr;
-            if(classCacheManager.getClassStrutCacheLine(c.getName().replace(".","/")) == null){
+            if(classCacheManager.getClassLookupTableItem(c.getName().replace(".","/")) == null){
                 dpuClassFileManager.loadClassToDPU(c);
             }
-            classAddr = classCacheManager.getClassStrutCacheLine(c.getName().replace(".","/")).marmAddr;
+            classAddr = classCacheManager.getClassLookupTableItem(c.getName().replace(".","/")).marmAddr;
             dpuManagerLogger.logln(" * Get Class Addr = " + classAddr);
             String initMethodDesc = generateInitializationDescriptor(params);
 
             initMethodAddr = classCacheManager
-                    .getMethodCacheItem(c.getName().replace(".", "/"), initMethodDesc).mramAddr;
+                    .getMethodLookupTableItem(c.getName().replace(".", "/"), initMethodDesc).mramAddr;
 
             BytesUtils.writeU4LittleEndian(objectDataStream, classAddr, 4);
 
@@ -57,10 +57,10 @@ public class DPUManagerUPMEM extends DPUManager{
         byte[] objectDataStream = new byte[(instanceSize + 7) & ~7];
         int classAddr;
         int initMethodAddr = 0;
-        if(classCacheManager.getClassStrutCacheLine(c.getName().replace(".","/")) == null){
+        if(classCacheManager.getClassLookupTableItem(c.getName().replace(".","/")) == null){
             dpuClassFileManager.loadClassToDPU(c);
         }
-        classAddr = classCacheManager.getClassStrutCacheLine(c.getName().replace(".","/")).marmAddr;
+        classAddr = classCacheManager.getClassLookupTableItem(c.getName().replace(".","/")).marmAddr;
         dpuManagerLogger.logln(" * Get Class Addr = " + classAddr);
         String initMethodDesc = generateInitializationDescriptor(params);
 
@@ -71,12 +71,12 @@ public class DPUManagerUPMEM extends DPUManager{
         //       same name of the method we want to call with a parameter list that each parameter is assignable
         //       from the correspondent given argument.
         if(classCacheManager
-                .getMethodCacheItem(c.getName().replace(".", "/"), initMethodDesc) != null){
+                .getMethodLookupTableItem(c.getName().replace(".", "/"), initMethodDesc) != null){
 
             initMethodAddr = classCacheManager
-                    .getMethodCacheItem(c.getName().replace(".", "/"), initMethodDesc).mramAddr;
+                    .getMethodLookupTableItem(c.getName().replace(".", "/"), initMethodDesc).mramAddr;
         }else{
-            Dictionary<String, DPUMethodCacheItem> stringDPUMethodCacheItemDictionary = classCacheManager.methodCache.cache.get(c.getName().replace(".", "/"));
+            Dictionary<String, DPUMethodLookupTableItem> stringDPUMethodCacheItemDictionary = classCacheManager.methodCache.cache.get(c.getName().replace(".", "/"));
             System.out.println(c.getName().replace(".", "/"));
             System.out.println(c.getName());
             System.out.println(classCacheManager.methodCache.cache);
@@ -247,7 +247,7 @@ public class DPUManagerUPMEM extends DPUManager{
         this.dpu = upmemdpu;
         garbageCollector = new DPUGarbageCollectorUPMEM(dpuID, dpu);
         dpuClassFileManager = new DPUClassFileManagerUPMEM(dpuID, dpu);
-        classCacheManager = new DPUCacheManagerUPMEM(dpuID, dpu);
+        classCacheManager = new DPULookupTableManagerUPMEM(dpuID, dpu);
     }
 
     @Override
