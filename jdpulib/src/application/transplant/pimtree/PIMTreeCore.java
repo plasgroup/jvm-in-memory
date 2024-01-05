@@ -5,9 +5,13 @@ import framework.pim.UPMEM;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.stream.Collectors;
+
+import static application.transplant.pimtree.PIMExecutorDataContext.LX_HASHTABLE_SIZE;
 
 
 public class PIMTreeCore {
@@ -38,7 +42,7 @@ public class PIMTreeCore {
     private static int T, n, rounds;
     private static int l;
     public static final int nr_of_dpus = 4;
-    public static PIMTreeExecutor[] executors = new PIMTreeExecutor[UPMEM.dpuInUse];
+    public static PIMExecutorComputationContext[] executors = new PIMExecutorComputationContext[UPMEM.dpuInUse];
 
     
 
@@ -48,6 +52,9 @@ public class PIMTreeCore {
                 ops.size(),
                 load_batch_size,
                 execute_batch_size);
+
+
+
         assert (threads <= num_top_level_threads);
         for(int i = 0; i < op_count.length; i++){
             op_count[i] = 0;
@@ -197,8 +204,40 @@ public class PIMTreeCore {
     private static void remove(List<task_union.remove_operation> removeOperations, Lock mut, int tid) {
     }
 
-    private static void insert(List<task_union.insert_operation> insertOperations, Lock mut, int tid) {
+    private static void insert(List<task_union.insert_operation> ops, Lock mut, int tid) {
+        List<key_value> ops_sequence = new ArrayList<>();
+        int n = ops.size();
+        pim_skip_list ds = pim_skip_list_drivers[tid];
+        {
+
+            List<task_union.insert_operation> ops2 = make_slice(ops);
+            ds.insert_load(ops2.stream().map(e -> new key_value(e.key, e.value)).collect(Collectors.toList()));
+
+            mut.unlock();
+        }
+        {
+            Lock rLock = new ReentrantLock();
+            rLock.lock();
+            System.out.printf("(%d) func void insert(List<task_union.insert_operation> ops, Lock mut, int tid) tid = %d\n",
+                    batch_number.getAndIncrement(), tid
+            );
+            ds.insert();
+
+        }
     }
+    public static void generateData(int size){
+        Random r = new Random();
+        int htLength = LX_HASHTABLE_SIZE;
+        for(int i = 0; i < size; i++){
+            int randomKey = r.nextInt(0, Integer.MAX_VALUE);
+            int randomValue = r.nextInt(0, Integer.MAX_VALUE);
+            int dpuID = pim_skip_list.hash_to_dpu(Long.valueOf(randomKey), 0, nr_of_dpus);
+            System.out.println("insert key = " + randomKey +" value = " + randomValue + " to dpu " + dpuID);
+            PIMTreeCore.executors[dpuID].insertKeyValue(randomKey, randomValue);
+        }
+    }
+
+
 
     private static void scan(List<task_union.scan_operation> scanOperations, Lock mut, int tid) {
     }
@@ -279,6 +318,7 @@ public class PIMTreeCore {
 
 
         // get a block\
+        System.out.printf("get ops from index %d to index %d\n", l, r);
         List<operation> mixed_op_batch = ops.subList(l, r);
 
 

@@ -5,6 +5,7 @@ package application.transplant.pimtree;
 import framework.pim.UPMEM;
 
 import java.util.List;
+import java.util.Random;
 import java.util.function.BiFunction;
 
 import  application.transplant.pimtree.PIMExecutorDataContext.*;
@@ -14,14 +15,36 @@ import static application.transplant.pimtree.PIMExecutorDataContext.*;
 //import  pimtree.PIMTreeExecutor.alloc_db;
 
 public class PIMExecutorComputationContext{
-    ht_slot[] ht;
+    ht_slot[] ht = new ht_slot[LX_HASHTABLE_SIZE];
+
+    public void insertKeyValue(int key, int value){
+        int htLength = ht.length;
+        int addr = hash_to_addr(key, LX_HASHTABLE_SIZE);
+        for(int j = addr; j < htLength; j = (j + 1) % htLength){
+            if(ht[j].v == null){
+                ht[j] = new ht_slot(addr, new Pnode(key, value));
+                break;
+            }
+        }
+    }
+
+
+    public PIMExecutorComputationContext(){
+        for(int i = 0; i < ht.length; i++){
+            ht[i] = new ht_slot(0, null);
+        }
+
+    }
+
+
+
 
     /*
     * 初始化L3
     * 设置Bn, 初始化up, right
     *
     * */
-    public  void L3_init(pptr down){
+    public void L3_init(pptr down){
         assert (l3bcnt == 1);
         L3Bnode bn = new L3Bnode();
         l3b_node_init(bn, 0, null, null);
@@ -45,7 +68,7 @@ public class PIMExecutorComputationContext{
     }
 
 
-    public void b_newnode(Bnode newnode, mdbptr keys, mdbptr addrs, mdbptr caddrs, Long height) {
+    public void b_newnode(Bnode newnode, mdbptr keys, mdbptr addrs, mdbptr caddrs, long height) {
         // IN_DPU_ASSERT(bcnt == 1, "bi! l1cnt\n");
         // IN_DPU_ASSERT((sizeof(Bnode) & 7) == 0, "bn! invlen\n");
         Bnode nn = newnode;
@@ -101,6 +124,10 @@ public class PIMExecutorComputationContext{
         }
     }
 
+
+
+
+
     private int hash_to_addr(long key, long M) {
         return hh_dpu(key, M);
     }
@@ -119,7 +146,8 @@ public class PIMExecutorComputationContext{
         }
         return 0;
     }
-    public pptr p_get(Long key) {
+
+    public pptr p_get(int key) {
         Object htv = ht_search(ht, key, (_v, _key) -> {
             if (_v.v == null) {
                 return -1;
@@ -130,7 +158,7 @@ public class PIMExecutorComputationContext{
             }
             return 0;
         });
-        if (htv == INVALID_DPU_ADDR) {
+        if (htv == INVALID_DPU_ADDR || htv == null) {
             return new pptr(INVALID_DPU_ID, INVALID_DPU_ADDR);
         } else {
             return new pptr(DPU_ID, htv);

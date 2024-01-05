@@ -6,16 +6,19 @@ import framework.pim.dpu.java_strut.DPUJVMMemSpaceKind;
 import framework.pim.logger.Logger;
 import framework.pim.logger.PIMLoggers;
 import framework.pim.utils.BytesUtils;
+import simulator.DPUJVMRemote;
+import simulator.DPUJVMRemoteImpl;
+import simulator.JVMSimulatorResult;
 
+import java.rmi.RemoteException;
 import java.util.*;
 import java.util.concurrent.*;
 
-import static framework.pim.dpu.DPUGarbageCollector.parameterBufferBeginAddr;
-import static framework.pim.dpu.DPUGarbageCollector.perDPUBufferSize;
+import static framework.pim.dpu.DPUGarbageCollector.*;
 
 public class BatchDispatcher {
-    public byte[][] paramsBuffer = new byte[UPMEM.dpuInUse][24 * perDPUBufferSize];
-    public int[][] paramsBufferPointer = new int[UPMEM.dpuInUse][24];
+    public byte[][] paramsBuffer = new byte[UPMEM.dpuInUse][perTaskletParameterBufferSize];
+    public int[][] paramsBufferPointer = new int[UPMEM.dpuInUse][UPMEM.perDPUThreadsInUse];
     public int[] taskletPosition = new int[UPMEM.dpuInUse]; // use for Round-robin scheduling
 
     Logger dispatchLogger = PIMLoggers.batchDispatchLogger;
@@ -33,6 +36,9 @@ public class BatchDispatcher {
     UPMEM upmem = UPMEM.getInstance();
 
 
+    {
+        dispatchLogger.setEnable(true);
+    }
     /** DPU task structure **/
     class DPUExecutionTask implements Runnable{
         private int id;
@@ -42,32 +48,50 @@ public class BatchDispatcher {
         }
         public void run(){
             try {
-              //  System.out.println("DPU#" + id + "dispatched");
+                System.out.println("DPU#" + id + "dispatched, " + recordedCount[id] +" tasks. pointer = " + paramsBufferPointer[id]);
                 upmem.getDPUManager(id).dpuExecute(null);
             } catch (DpuException e) {
                 throw new RuntimeException(e);
             }
 
+            System.out.println("retrieve result (DPU#" + id + ")");
             /** result retrieving **/
 
-            try {
-                synchronized (resultBytes){
-                    UPMEM.getInstance().getDPUManager(id).dpu.copy(resultBytes, "return_values");
+            if(!UPMEM.getConfigurator().isUseSimulator()){
+                try {
+                    synchronized (resultBytes){
+                        UPMEM.getInstance().getDPUManager(id).dpu.copy(resultBytes, "return_values");
+                    }
+                } catch (DpuException e) {
+                    throw new RuntimeException(e);
                 }
-            } catch (DpuException e) {
-                throw new RuntimeException(e);
             }
+
 
             for(int i = 0; i < recordedCount[id]; i++){
-                synchronized (resultBytes){
-                    /** | task ID (4 bytes) | value (4 bytes) | task ID (4 bytes) | value (4 bytes) | ... **/
-                    int taskID = BytesUtils.readU4LittleEndian(resultBytes, i * 8);
-                    int res = BytesUtils.readU4LittleEndian(resultBytes, i * 8 + 4);
-                    result[taskID + dispatchedCount] = res;
+                if(!UPMEM.getConfigurator().isUseSimulator()){
+                    synchronized (resultBytes){
+                        /** | task ID (4 bytes) | value (4 bytes) | task ID (4 bytes) | value (4 bytes) | ... **/
+                        int taskID = BytesUtils.readU4LittleEndian(resultBytes, i * 8);
+                        int res = BytesUtils.readU4LittleEndian(resultBytes, i * 8 + 4);
+                        result[taskID + dispatchedCount] = res;
+                    }
+                }else{
+                    Object dpu = UPMEM.getInstance().getDpu(id);
+                    DPUJVMRemote backend = (DPUJVMRemote) dpu;
+                    try {
+                        JVMSimulatorResult result = backend.getResult(i);
+                        // System.out.println("task id = " + result.taskID);
+                        BytesUtils.writeU4LittleEndian(resultBytes, (Integer) result.value, 4 * result.taskID);
+                    } catch (RemoteException e) {
+                        throw new RuntimeException(e);
+                    }
+
                 }
+
             }
 
-            dispatchLogger.logln("dpu#" + id + " finished");
+            System.out.println("dpu#" + id + " finished");
 
             latch.countDown();
 
@@ -86,20 +110,21 @@ public class BatchDispatcher {
             byte[] ptBytes = new byte[4];
 
             // for each tasklet of a DPU
-            for(int i = 0; i < 24; i++){
+            for(int i = 0; i < UPMEM.perDPUThreadsInUse; i++){
                 int pbp = paramsBufferPointer[dpuID][i];
                 if(pbp == 0) continue;
 
                 dispatchLogger.logln("dpu id = " + dpuID + " tasklet " + i + ":");
                 dispatchLogger.logln("parameters buffer pointer = " + pbp);
                 // pbp is relative offset of a tasklet, so, the i'th tasklet's  params_buffer_pt[i] should be parameterBufferBeginAddr + i * perDPUBufferSize + pbp
-                BytesUtils.writeU4LittleEndian(ptBytes, parameterBufferBeginAddr + i * perDPUBufferSize + pbp,0);
+                // BytesUtils.writeU4LittleEndian(ptBytes, parameterBufferBeginAddr + i * perTaskletParameterBufferSize + pbp,0);
                 // write pointer to params_buffer_pt[i]
-                UPMEM.getInstance().getDPUManager(dpuID).dpu.copy("params_buffer_pt", ptBytes , 4 * i);
+                BytesUtils.writeU4LittleEndian(ptBytes, i * perTaskletParameterBufferSize + pbp,0);
+                UPMEM.getInstance().getDPUManager(dpuID).garbageCollector.transfer(DPUJVMMemSpaceKind.DPU_PARAMETER_BUFFER_POINTERS, ptBytes , + 4 * i);
             }
 
             // transfer the DPU#i's params buffer
-            UPMEM.getInstance().getDPUManager(dpuID).garbageCollector.transfer(DPUJVMMemSpaceKind.DPU_PARAMETER_BUFFER,paramsBuffer[dpuID], parameterBufferBeginAddr);
+            UPMEM.getInstance().getDPUManager(dpuID).garbageCollector.transfer(DPUJVMMemSpaceKind.DPU_PARAMETER_BUFFER, paramsBuffer[dpuID], parameterBufferBeginAddr);
         }
 
         int count = 0;
@@ -111,25 +136,27 @@ public class BatchDispatcher {
 
         System.out.println("=== dispatch all ====");
 
-        latch = new CountDownLatch(dpusInUse.size());
+        latch = new CountDownLatch(UPMEM.dpuInUse);
 
         for(int dpuID : dpusInUse){
-            executorService.submit(new DPUExecutionTask(dpuID));
+            new DPUExecutionTask(dpuID).run();
+            //executorService.submit(new DPUExecutionTask(dpuID));
         }
 
-        try {
-            latch.await();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+//        try {
+//            latch.await();
+//        } catch (InterruptedException e) {
+//            throw new RuntimeException(e);
+//        }
+
         for(int dpuID : dpusInUse){
             recordedCount[dpuID] = 0;
             Arrays.fill(paramsBufferPointer[dpuID], 0);
             Arrays.fill(paramsBuffer[dpuID], (byte)0);
         }
-
+        dispatchLogger.setEnable(true);
         dpusInUse.clear();
-        dispatchLogger.logln("all dispatched");
+        dispatchLogger.logln("All dispatched");
         dispatchedCount += count;
 
         dispatchLogger.logln("current total count == " + dispatchedCount);

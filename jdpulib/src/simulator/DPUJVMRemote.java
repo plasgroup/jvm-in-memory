@@ -11,7 +11,9 @@ public interface DPUJVMRemote extends Remote {
     void start() throws RemoteException; /** boot **/
 
     /** set parameter value at tasklet's parameter buffer's pos-th slot **/
-    void setParameter(int pos, int value, int tasklet) throws RemoteException;
+    void setParameterRelative(int pos, int value, int tasklet) throws RemoteException;
+    void setParameterAbsolutely(int pos, int value) throws RemoteException;
+
 
     /** push a class to meta space **/
     int pushToMetaSpace(Class c) throws RemoteException;
@@ -46,7 +48,7 @@ public interface DPUJVMRemote extends Remote {
 
     void setParamsBufferIndex(int p, int tasklet) throws RemoteException;
 
-    int getResultValue(int taskID) throws RemoteException;
+    JVMSimulatorResult getResult(int resultIndex) throws RemoteException;
 
     /** get the heap's length, in an unit of 4 bytes. **/
     int getHeapLength() throws RemoteException;

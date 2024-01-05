@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.rmi.RemoteException;
 import java.util.*;
 
+import static framework.pim.UPMEM.allowSet;
 import static framework.pim.dpu.classloader.ClassFileAnalyzer.printEntryTable;
 import static framework.pim.dpu.classloader.ClassWriter.pushJClassToDPU;
 import static framework.pim.utils.ClassLoaderUtils.*;
@@ -194,7 +195,7 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
 
 
     static {
-        classfileLogger.setEnable(true);
+        classfileLogger.setEnable(false);
     }
 
     public DPUJClass loadClassesToDPUFromDescriptorSingle(String descriptor) throws ClassNotFoundException {
@@ -333,13 +334,7 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
         }
 
     }
-    static HashSet<String> allowSet = new HashSet<>();
 
-    static {
-        allowSet.add("java.lang.Object");
-        allowSet.add("java.util.HashTable");
-        allowSet.add("application.transplant.index.search.IndexTable");
-    }
     @Override
     public DPUJClass loadClassToDPU(Class c) {
         System.out.println(c.getName().replace("/","."));
@@ -477,7 +472,7 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
                     if (cacheLine != null) {
                         classfileLogger.logf("class %s loaded, mram addr = 0x%x\n", classNameUTF8, cacheLine.marmAddr);
                     } else {
-                        if (allowSet.contains(classNameUTF8)) {
+                        if (allowSet.contains(classNameUTF8) || !UPMEM.useAllowSet) {
                             try {
                                 // TODO className$1 loading..
                                 loadClassToDPU(Class.forName(classNameUTF8.replace("/", ".")));
