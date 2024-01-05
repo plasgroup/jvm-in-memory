@@ -20,8 +20,17 @@ import static application.bst.BSTTester.readIntergerArrayList;
 import static application.bst.TreeWriter.writeDPUImages;
 
 
+
+/** =======================================================================
+ * This is a program for evaluating Binary Search Tree (BST) application
+ ** =======================================================================
+ **/
+
+
 public class Main {
     public static UPMEMConfigurator upmemConfigurator = new UPMEMConfigurator();
+
+    /* Parse parameter for BST Experiment */
     public static void parseParameters(String[] args){
         for(int i = 0; i < args.length; i++){
             String arg = args[i];
@@ -29,51 +38,52 @@ public class Main {
             String argumentName = items[0];
             System.out.println(argumentName + " " + args[i]);
             if("NO_SEARCH".equals(argumentName)){
+                // not perform any search operation after building tree
                 noSearch = true;
                 if(items.length > 1) noSearch = Integer.parseInt(items[1]) != 0;
-            }else if("BUILD_FROM_IMG".equals(argumentName)){
+            }else if("BUILD_FROM_IMG".equals(argumentName)){ // build PIM Tree from serialized data
                 buildFromSerializedData = false;
                 if(items.length > 1) buildFromSerializedData = Integer.parseInt(items[1]) != 0;
-            }else if("SERIALIZE_TREE".equals(argumentName)){
+            }else if("SERIALIZE_TREE".equals(argumentName)){ // serialize tree to files
                 serializeToFile = true;
                 if(items.length > 1) serializeToFile = Integer.parseInt(items[1]) != 0;
-            }else if("TYPE".equals(argumentName)){
+            }else if("TYPE".equals(argumentName)){ // could be "CPU" (experiment with CPU tree) or "PIM" (experiment with PIM tree)
                 experimentType = items[1];
-            }else if("QUERIES".equals(argumentName)){
+            }else if("QUERIES".equals(argumentName)){ // queries count
                 queryCount = Integer.parseInt(items[1]);
-            }else if("CPU_LAYER_COUNT".equals(argumentName)){
+            }else if("CPU_LAYER_COUNT".equals(argumentName)){ // CPU layer count
                 cpuLayerCount = Integer.parseInt(items[1]);
-            }else if("DPU_COUNT".equals(argumentName)){
+            }else if("DPU_COUNT".equals(argumentName)){ // DPU count
                 dpuInUse = Integer.parseInt(items[1]);
-            }else if("NODES".equals(argumentName)){
+            }else if("NODES".equals(argumentName)){ // nodes count
                 totalNodeCount = Integer.parseInt(items[1]);
-            }else if("IMG_PATH".equals(argumentName)){
+            }else if("IMG_PATH".equals(argumentName)){ // path for saving images
                 imagesPath = Arrays.stream(items).skip(1).reduce((s1,s2) -> s1+s2).get().replace("\"", "");
-            }else if("WRITE_KV".equals(argumentName)){
+            }else if("WRITE_KV".equals(argumentName)){ // whether generate key values pairs and write to key-values files
                 writeKeyValue = true;
                 writeKeyValueCount = Integer.parseInt(items[1]);
-            }else if("PERF_MODE".equals(argumentName)){
+            }else if("PERF_MODE".equals(argumentName)){ // performance mode. In this mode, the execution time would ne measured.
                 performanceEvaluationMode = true;
                 if(items.length > 1) performanceEvaluationMode = Integer.parseInt(items[1]) != 0;
-            }else if("CPU_PERF_REPEAT".equals(argumentName)){
+            }else if("CPU_PERF_REPEAT".equals(argumentName)){ // CPU Tree repeat measure times
                 cpuPerformanceEvaluationRepeatTime = Integer.parseInt(items[1]);
-            }else if("PIM_PERF_REPEAT".equals(argumentName)){
+            }else if("PIM_PERF_REPEAT".equals(argumentName)){ // PIM Tree repeat measure times
                 pimPerformanceEvaluationRepeatTime = Integer.parseInt(items[1]);
-            }else if("EVAL_CPU_PERF".equals(argumentName)){
+            }else if("EVAL_CPU_PERF".equals(argumentName)){ // whether evaluate CPU tree preformance
                 cpuPerformanceEvaluation = true;
                 if(items.length > 1) cpuPerformanceEvaluation = Integer.parseInt(items[1]) != 0;
-            }else if("EVAL_PIM_PERF".equals(argumentName)){
+            }else if("EVAL_PIM_PERF".equals(argumentName)){ // whether evaluate PIM tree preformance
                 pimPerformanceEvaluation = true;
                 if(items.length > 1) pimPerformanceEvaluation = Integer.parseInt(items[1]) != 0;
-            }else if("EVAL_NODES".equals(argumentName)){
+            }else if("EVAL_NODES".equals(argumentName)){ // nodes count
                 performanceEvaluationNodeCount = Integer.parseInt(items[1]);
-            }else if("BATCH_DISPATCH".equals(argumentName)){
+            }else if("BATCH_DISPATCH".equals(argumentName)){ // whether use batch dispatching
                 performanceEvaluationEnableBatchDispatch = true;
                 if(items.length > 1) performanceEvaluationEnableBatchDispatch = Integer.parseInt(items[1]) != 0;
-            }else if("JVM_SIMULATOR".equals(argumentName)){
-	        ExperimentConfigurator.useSimulator = true;
-		    if(items.length > 1) ExperimentConfigurator.useSimulator = Integer.parseInt(items[1]) != 0;
-	    }
+            }else if("JVM_SIMULATOR".equals(argumentName)){ // use simulator
+	            ExperimentConfigurator.useSimulator = true;
+		        if(items.length > 1) ExperimentConfigurator.useSimulator = Integer.parseInt(items[1]) != 0;
+	        }
 
         }
     }
@@ -157,7 +167,8 @@ public class Main {
 
     public static void main(String[] args) throws RemoteException {
 
-        parseParameters(args);
+       // parse arguments
+       parseParameters(args);
 
        upmemConfigurator.setDpuInUseCount(dpuInUse);
 
@@ -172,29 +183,33 @@ public class Main {
            BSTTester.writeKV(writeKeyValueCount, "key_values-" + writeKeyValueCount + ".txt");
        }
 
-
+       // UPMEM configurator
        upmemConfigurator
                .setDpuInUseCount(dpuInUse)
                .setThreadPerDPU(UPMEM.perDPUThreadsInUse)
                .setUseSimulator(useSimulator);
 
+       // UPMEM initialization
        UPMEM.initialize(upmemConfigurator);
 
-       performanceEvaluationMode = true;
-       nodes = 100000000;
-       performanceEvaluationNodeCount = 100000000;
+    //    performanceEvaluationMode = true;
+    //    nodes = 100000000;
+    //    performanceEvaluationNodeCount = 100000000;
 
+       // Evaluate performance. In performance evaluation mode, the execution time would be measured.
        if(performanceEvaluationMode) {
            performanceEvaluation();
            return;
        }
 
 
+       // default
        if(args.length == 0){
            BSTTester.evaluatePIMBST(totalNodeCount, ExperimentConfigurator.queryCount,  ExperimentConfigurator.cpuLayerCount);
            return;
        }
 
+       // evaluate CPU Tree or PIM Tree
        if("CPU".equals(experimentType)){
            BSTTester.evaluateCPU(totalNodeCount, queryCount);
        }else if("PIM".equals(experimentType)){

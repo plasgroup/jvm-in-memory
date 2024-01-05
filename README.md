@@ -1,16 +1,85 @@
-# 1. Prepare Environment
+# Part I Documents
 
-## 1.1 UPMEM SDK
+## I.1 Documentations
 
-## 1.2 Compile Extended UPMEM Java Library
+1. [Project Documents](./doc/ProjectDocument.md)
+2. [Library Documents](./doc/libraryDocument.md)
 
-1.  Download UPMEM SDK Source code
-2. Insert new JNI code in the file `src/backends/api/src/api/dpu_jni.c`
+3. [In Memory JVM Documents](./doc/InMemoryJVMDocument.md)
 
-> It is a JNI method that can transfer data to a given DPU variable (name is given by `jsymbol`) from a specific offset of this variable's memory.
 
-``` c
 
+## I.2 Repository Structure
+
+``` java
+---------------------------------------------------------------------------------------------------
+-- classloader
+|  // A java class parser write in C (It is not used in experiment. But may be useful as an util)
+-- doc
+|  // Documents
+-- dpu_jvm
+|  // in-memory jvm project
+-- jdpulib
+|  // java PIM framework project
+-- lib
+|  // libs that required by java framework
+---------------------------------------------------------------------------------------------------
+```
+
+
+
+# Part II Compilation
+
+> [!CAUTION]
+> This part is in preparing.... More specific version can currently refer to repository [paper-jssst2023-huang](https://github.com/plasgroup/paper-jssst2023-huang)
+
+
+
+## II.1 Prepare Environment
+
+### II.1.1 Compile Extended UPMEM Java Library
+
+1. Download UPMEM SDK (**2023.1.0 version**)
+
+   > It may need change the url. It may refer to https://sdk.upmem.com/ find the version that fit to the target system.
+
+   In `workspace`
+
+   ``` bash
+   #$ curl http://sdk-releases.upmem.com/2023.1.0/debian_10/upmem-2023.1.0-Linux-x86_64.tar.gz -o upmem-2023.1.0-Linux-x86_64.tar.gz
+   
+   # ubuntu 18.04
+   $ curl http://sdk-releases.upmem.com/2023.1.0/ubuntu_18.04/upmem-2023.1.0-Linux-x86_64.tar.gz -o ~/upmem-2023.1.0-Linux-x86_64.tar.gz
+   $ cd ~
+   $ tar -xvf ~/upmem-2023.1.0-Linux-x86_64.tar.gz
+   # Some problems may happen if upmem not unzip to  ~/
+   ```
+
+2. Download UPMEM src (**2023.1.0 version**)
+
+   > It may need change the url. It can refer to https://sdk.upmem.com/ find the version that fit to the target system.
+
+   In workspace
+
+   ``` bash
+   $ curl http://sdk-releases.upmem.com/2023.1.0/upmem-src-2023.1.0-Linux-x86_64.tar.gz -o ~/upmem-src-2023.1.0-Linux-x86_64.tar.gz
+   $ cd ~
+   $ tar -xvf ~/upmem-src-2023.1.0-Linux-x86_64.tar.gz
+   ```
+
+
+3. Insert new code in the file `~/upmem-2023.1.0-Linux-x86_64/src/backends/api/src/api/dpu_jni.c`
+
+   ``` bash
+   $ vi ~/upmem-2023.1.0-Linux-x86_64/src/backends/api/src/api/dpu_jni.c
+   ...
+   ```
+
+> It is a JNI method that can transfer data to a given DPU variable (name is given by `jsymbol`) with a specific offset of this variable's memory.
+
++ Place it **523 th** line of the `dpu_jni.c` file (523 line should be an empty line)
+
+```
 JNIEXPORT void JNICALL
 Java_com_upmem_dpu_NativeDpuSet_copy__Ljava_lang_String_2_3_3B_3IZZ(JNIEnv *env,
     jobject this,
@@ -51,8 +120,6 @@ Java_com_upmem_dpu_NativeDpuSet_copy__Ljava_lang_String_2_3_3B_3IZZ(JNIEnv *env,
         arrays[each_buffer] = jarray;
         buffers[each_buffer] = jbuffer;
         offset =  (*env)->GetIntArrayElements(env, offsets, 0);
-        printf("* transit data to offset %d, symbol = %s\n",
-         offset[each_buffer], symbol);
     }
 
     bool length_initialized = false;
@@ -103,32 +170,173 @@ end:
     }
 ```
 
-3. In the root of `./backend`
+1. Make UPMEM library
 
-   + `cmake .`
-   + `make`
-
-   > Some errors may happen
-
-4. Replace the generated `.so` files and `.so.xx` files to UPMEM SDK
-
-5. In the java library of UPMEM's `Dpu.java`
-
-   Insert
-
-   ``` java
-   public void copy(String dpuDstSymbol, byte[] dstBuffer, int offset) throws DpuException {
-           this.copy(dpuDstSymbol, new byte[][]{dstBuffer}, new int[]{offset});
-   }
+   ``` bash
+   $ cd ~/upmem-2023.1.0-Linux-x86_64/src/backends
+   $ cmake .
+   $ make
    ```
 
-6. compiler the java project and get a `Dpu.jar`
+   > Some errors may happen according the platform. But in UPMEM, it should success without any errors.
+   >
+   > It may need some effort to solve errors, if in other hardware platform.
 
-7. copy the `Dpu.jar` to `./lib/` of this repository
+2. Copy the generated `.so` files and `.so.xx` files to UPMEM SDK
+
+   ``` bash
+   $ cp api/libdpu.so ~/upmem-2023.1.0-Linux-x86_64/lib/libdpu.so
+   $ cp api/libdpu.so.0.0 ~/upmem-2023.1.0-Linux-x86_64/lib/libdpu.so.0.0
+   $ cp api/libdpu.so.0.0 ~/upmem-2023.1.0-Linux-x86_64/lib/libdpu.so.2023.1
+   $ cp api/libdpujni.so ~/upmem-2023.1.0-Linux-x86_64/lib/libdpujni.so
+   $ cp api/libdpujni.so.0.0 ~/upmem-2023.1.0-Linux-x86_64/lib/libdpujni.so.0.0
+   $ cp api/libdpujni.so.0.0 ~/upmem-2023.1.0-Linux-x86_64/lib/libdpujni.so.2023.1
+   
+   ```
+
+3. Compile DPU Java API Library (This step could be ignored; we provide a pre-compiled `Dpu.jar` file in the root of `jvm-in-memory`)
+
+   + In the file `~/upmem-2023.1.0-Linux-x86_64/src/backends/java/src/main/java/com/upmem/dpu/Dpu.java`, 
+
+   Insert follow code
+
+   ``` java
+    public void copy(String dpuDstSymbol, byte[] dstBuffer, int offset) throws DpuException {
+        this.copy(dpuDstSymbol, new byte[][]{dstBuffer}, new int[]{offset});
+    }
+    public void copy(byte[] dstBuffer, String dpuSrcSymbol, int offset) throws DpuException {
+        this.copy(new byte[][]{dstBuffer}, dpuSrcSymbol, new int[]{offset});
+    }
+   ```
+
+   + In the file `~/upmem-2023.1.0-Linux-x86_64/src/backends/java/src/main/java/com/upmem/dpu/DpuSet.java`, 
+
+   Insert follow code
+
+   ``` java
+   void copy(String dpuDstSymbol, byte[][] dstBuffer, int[] offset) throws DpuException;
+   void copy(byte[][] dstBuffer, String dpuSrcSymbol, int[] offset) throws DpuException;
+   ```
+
+   + In the file `~/upmem-2023.1.0-Linux-x86_64/src/backends/java/src/main/java/com/upmem/dpu/DpuSetBase.java`
+
+   Insert follow code
+
+   ``` java
+    public void copy(String dpuDstSymbol, byte[][] dstBuffer, int[] offset) throws DpuException{
+     this.set.copy(dpuDstSymbol, dstBuffer, offset, true, false);
+    }
+
+    public void copy(byte[][] dstBuffer, String dpuSrcSymbol, int[] offset) throws DpuException{
+     this.set.copy(dpuSrcSymbol, dstBuffer, offset, false, false);
+    }
+
+   ```
+
+   + In the file `~/upmem-2023.1.0-Linux-x86_64/src/backends/java/src/main/java/com/upmem/dpu/NativeDpuSet.java`
+
+   Insert follow code
+
+   ``` java
+    native void copy(String dpuSymbol, byte[][] hostBuffer, int[] offset, boolean toDpu, boolean isAsync) throws DpuException;
+    native void copy(DpuSymbol dpuSymbol, byte[][] hostBuffers, int[] offset, boolean toDpu, boolean isAsync) throws DpuException;
+   ```
+
+   compile
+
+   ``` bash
+   $ cd ~/upmem-2023.1.0-Linux-x86_64/src/backends/java/src/main/java/com/upmem/dpu/
+   $ javac *.java
+   $ cd ~/upmem-2023.1.0-Linux-x86_64/src/backends/java/src/main/java/
+   $ jar cvf dpu.jar -C */*/*/*.class
+   ```
+
+   
+
+4. compiler the UPMEM java API project and get a `dpu.jar`, and copy to evaluation folder
+
+   ``` bash
+   # copy to jvm-in-memory
+   $ mkdir -p <path-to-workspace>/jvm-in-memory/evaluation
+   $ cp <path-to-dpu.jar> ~/upmem-2023.1.0-Linux-x86_64/share/java/dpu.jar
+   
+   # It can also use the dpu.jar provided in the repository
+   $ cp <path-to-jvm-in-memory>/dpu.jar ~/upmem-2023.1.0-Linux-x86_64/share/java/dpu.jar
+   ```
+
+   
+
+## II.1.3 Compile DPU JVM
+
+1. Set up the environment for UPMEM
+
+   - This can be done by `source ~/upmem-2023.1.0-Linux-x86_64/upmem_env.sh`
+
+   - A more convenient way is add these codes to the `~/.bashrc`
+
+     ```
+     export UPMEM_HOME="<path-to-upmem-sdk>"
+     export LD_LIBRARY_PATH="${UPMEM_HOME}/lib${LD_LIBRARY_PATH+:$LD_LIBRARY_PATH}"
+     export PATH="${UPMEM_HOME}/bin:${PATH}"
+     ```
+
+2. It may need install clang and related libraries
+
+   ``` bash
+   $ sudo apt-get install clang
+   $ sudo apt install libncurses5
+   ```
+
+3. In  `/jvm-in-memory/dpu_jvm`
+
+   - `rm dpuslave; make dpuslave;`
+
+4. Copy the `dpuslave` binary to the root of `evaluation`
+
+``` bash
+$ cp dpuslave <path-to-workspace>/jvm-in-memory/evaluation/
+```
+
+5. Compile the `Main.java` to `bst-latest.jar` (the jvm-in-memory folder also provided a pre-compiled jar. This step can be ignored if use the jar provided.)
+
+   **Note that, JDK version should >= 17**
+
+   ``` bash
+   $ cp ~/upmem-2023.1.0-Linux-x86_64/share/java/dpu.jar <path-to-workspace>/jvm-in-memory/jdpulib/src
+   $ javac -sourcepath ./src -d ./out2 ./src/Main.java -classpath ./src/dpu.jar
+   $ cd out2
+   $ cp ../src/META-INF/MANIFEST.MF ./
+   $ cp <path-to-workspace>/jvm-in-memory/jdpulib/src/dpu.jar ./
+   $ jar cvfm bst-latest.jar MANIFEST.MF . 
+   
+   ```
+
+   
+
+6. Copy generated jar to evaluation folder
+
+   ``` bash
+   $ cp <path-to-bst-latest-jar> <path-to-evaluation-folder>
+   
+   ## or use pre-compiled version
+   $ cp <path-to-jvm-in-memory>/bst-latest.jar <path-to-jvm-in-memory>/evaluation
+   ```
 
 
 
-## 1.3 Compile DPU JVM
+### II.1.4 Prepare JDK 17
+
++ In the UPMEM computer, the system version may cannot install openjdk17 by `apt-get` directly. It may need download from internet manually
+
+  ``` bash
+  $ curl https://download.java.net/java/GA/jdk17/0d483333a00540d886896bac774ff48b/35/GPL/openjdk-17_linux-x64_bin.tar.gz -o ~/jdk-17.0.1.tar.gz
+  $ cd ~/
+  $ tar -xvf jdk-17.0.1.tar.gz
+  ```
+
+
+
+## II.2 Compile DPU JVM
 
 1. It need set up the environment for UPMEM
 
@@ -148,5 +356,57 @@ end:
 
 
 
+# PART III Some Future Directions
 
+### Situation Analysis
+
+1. **The JVM is very slow.** The slowness comes from, but is not limited to
+   + (1) non-JIT execution engines
+   + (2) failure to optimize the number of MRAM accesses
+   + (3) failure to utilize Scratchpad memory.
+2. **Limitations in In-memory JVM functionality.**
+   + Due to the limited code space of DPU. The current JVM faces the complexity of adding new features.
+3. **Difficult to utilize parallelism well.** 
+   + Current parallelism is similar to **manual parallelization**. The use of `BatchDispatcher` :
+
+``` java
+BatchDispatcher bd = new BatchDispatcher();
+UPMEM.beginRecordBatchDispatching(bd); // begin record remote procedure call
+
+/* codes of proxy instance's method's dispatching */
+
+UPMEM.endRecordBatchDispatching(); // end record remote procedure call
+bd.dispatchAll();
+```
+
+4. we may not be able to get particularly novel research topics from the extension of the library.
+5. Language design may be a good direction.
+6. Current design that use of the in-memory JVM and Proxy + RPC makes it low-performance work with process-intensive data structures such as arrays and matrices.
+   + It is better to use different strategies to process dense data structure.
+
+
+
+
+
+### Some Possible Directions
+
+1. **Make use of scratchpad memory**
+
+   + Make all in-memory JVM's **MRAM** access through the scratchpad memory
+2. **Treat JVM as a distributed object-oriented database system and make an object query language for the system.**
+
+   + Easier and more effective parallelization
+     + Could be **full-concurrency** as objects' are **storage-centric, not behavior-centric**., and rarely inter-object message passing inside a DPU.
+
+     + Should be fast, as there are less method call inside the JVM, which save the cost in costing table look up/class structure obtaining when calling a method.
+
+     + Can make JVM instruction more compact.
+
+     + Can welly utilize scratchpad memory, as many operation can be done serialized.
+
+     + Can realize automatic parallelization by utilizing the designed language.
+
+     + In-memory JVM module could be make easier, and make help resolving the space limitation problem.
+
+3. **Make a JIT compiler**
 

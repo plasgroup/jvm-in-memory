@@ -1,33 +1,14 @@
 package framework.primitive.control;
 
-import com.upmem.dpu.DpuException;
 import framework.pim.ProxyHelper;
 import framework.pim.UPMEM;
 import framework.pim.dpu.DPUGarbageCollector;
-import framework.pim.dpu.cache.DPUCacheManager;
-import framework.pim.dpu.cache.DPUClassFileCacheItem;
-import framework.pim.dpu.cache.DPUFieldCacheItem;
-import framework.pim.dpu.cache.DPUMethodCacheItem;
-import framework.pim.dpu.classloader.ClassFileAnalyzer;
-import framework.pim.dpu.classloader.ClassFileAnalyzerConstants;
+import framework.pim.dpu.cache.DPULookupTableManager;
+import framework.pim.dpu.cache.DPUClassFileLookupTableItem;
 import framework.pim.dpu.classloader.ClassWriter;
 import framework.pim.dpu.classloader.DPUClassFileManager;
 import framework.pim.dpu.java_strut.DPUJClass;
 import framework.pim.dpu.java_strut.DPUJVMMemSpaceKind;
-import framework.pim.dpu.java_strut.VirtualTableItem;
-import framework.pim.utils.BytesUtils;
-import framework.pim.utils.ClassLoaderUtils;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.rmi.RemoteException;
-
-import static framework.pim.ProxyHelper.invokeMethod;
-import static framework.pim.ProxyHelper.upmem;
-import static framework.pim.dpu.classloader.ClassWriter.pushJClassToDPU;
-import static framework.pim.logger.PIMLoggers.classfileLogger;
-import static framework.pim.utils.ClassLoaderUtils.formalClassName;
-import static framework.pim.utils.ClassLoaderUtils.getUTF8;
 
 public class ControlPrimitives {
 
@@ -36,7 +17,7 @@ public class ControlPrimitives {
 
         DPUGarbageCollector garbageCollector = UPMEM.getInstance().getDPUManager(dpuID).garbageCollector;
         DPUClassFileManager classFileManager = UPMEM.getInstance().getDPUManager(dpuID).dpuClassFileManager;
-        DPUCacheManager cacheManager = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager;
+        DPULookupTableManager cacheManager = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager;
 
         // get real class
         anomyousClass = anomyousClass.getInterfaces().length == 0 ? anomyousClass.getSuperclass() : anomyousClass.getInterfaces()[0];
@@ -61,11 +42,11 @@ public class ControlPrimitives {
 
         // clear
         garbageCollector.freeFromBack(DPUJVMMemSpaceKind.DPU_METASPACE, dpuJClass.totalSize);
-        DPUClassFileCacheItem dpuClassFileCacheItem = cacheManager.dpuClassCache.cache.get(cName);
+        DPUClassFileLookupTableItem dpuClassFileLookupTableItem = cacheManager.dpuClassLookupTable.cache.get(cName);
 
         // clear structure storage in lookup table
-        cacheManager.dpuClassCache.cache.remove(cName);
-        cacheManager.dpuClassCache.dpuClassFileCacheItemList.remove(dpuClassFileCacheItem);
+        cacheManager.dpuClassLookupTable.cache.remove(cName);
+        cacheManager.dpuClassLookupTable.dpuClassFileLookupTableItemList.remove(dpuClassFileLookupTableItem);
         cacheManager.methodCache.cache.remove(cName);
 
         throw new RuntimeException("");

@@ -6,6 +6,8 @@ import framework.pim.utils.BytesUtils;
 
 import java.rmi.RemoteException;
 
+
+/** implementation of DPUGarbageCollector (Simulator) **/
 public class DPUGarbageCollectorSimulator extends DPUGarbageCollector {
     DPUJVMRemote dpujvmRemote;
 
