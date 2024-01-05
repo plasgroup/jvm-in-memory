@@ -20,6 +20,13 @@ import static application.bst.BSTTester.readIntergerArrayList;
 import static application.bst.TreeWriter.writeDPUImages;
 
 
+
+/** =======================================================================
+ * This is a program for evaluating Binary Search Tree (BST) application
+ ** =======================================================================
+ **/
+
+
 public class Main {
     public static UPMEMConfigurator upmemConfigurator = new UPMEMConfigurator();
 
@@ -30,7 +37,8 @@ public class Main {
             String[] items = arg.split("=");
             String argumentName = items[0];
             System.out.println(argumentName + " " + args[i]);
-            if("NO_SEARCH".equals(argumentName)){  // not perform any search operation after building tree
+            if("NO_SEARCH".equals(argumentName)){
+                // not perform any search operation after building tree
                 noSearch = true;
                 if(items.length > 1) noSearch = Integer.parseInt(items[1]) != 0;
             }else if("BUILD_FROM_IMG".equals(argumentName)){ // build PIM Tree from serialized data
