@@ -32,6 +32,9 @@ public class DistributedInt32Array{
     public DistributedInt32Array(int len, int partitionCount) {
         this(len, partitionCount, BLOCK);
     }
+
+
+
     int get(int i){
         if(strategy == BLOCK){
             int p = i / partitionCount;

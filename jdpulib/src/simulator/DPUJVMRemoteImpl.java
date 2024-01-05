@@ -1,5 +1,7 @@
 package simulator;
 
+import framework.pim.UPMEM;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -19,12 +21,13 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
     public int currentHeapSize = 0;
     public int maxHeapSize = PIMRemoteJVMConfiguration.heapSize;
     public int[] currentParamPointer;
-    public int maxParamSize = PIMRemoteJVMConfiguration.maxParameterSpaceSize;
+    public int maxParamSize = DPUGarbageCollectorSimulator.parameterBufferSize;
     public int currentMetaspaceSize = 0;
     public int maxMetaspaceSize = PIMRemoteJVMConfiguration.maxMetaspaceSize;
     public int[] parameterQueue;
     public Object[] metaSpace;
     public Object[] resultQueue;
+    public Integer resultQueuePointer = 0;
     int metaSpaceIndex = 0;
     int heapSpaceIndex = 0;
     int[] taskletParameterTop;
@@ -37,71 +40,131 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
 
         @Override
         public void run() {
-            //System.out.println("run thread, ID = " + threadID);
-            for(int i = 0; i < 10; i++){
-                //System.out.println("param queue " + i + ":" + parameterQueue[i]);
-            }
+            System.out.println("===================== Run !!!!=-------------");
             int pt = threadID * perThreadParameterQueueLength;
-            int taskId =  parameterQueue[pt];
-            Class c = (Class) metaSpace[parameterQueue[pt + 1]];
+            int dest = currentParamPointer[threadID] / 4;
 
-            if(metaSpace[parameterQueue[pt + 2]] instanceof Constructor){
-                Constructor constructor = (Constructor) metaSpace[parameterQueue[pt + 2]];
-                int instanceIndex = parameterQueue[pt + 3];
-                int paramCount =  constructor.getParameterCount();
-                //System.out.println("constructor param count = " + paramCount);
-                if(paramCount == 0){
-                    try {
-                        heap[instanceIndex] = constructor.newInstance();
-                    } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-                        throw new RuntimeException(e);
+            while(pt < dest){
+                System.out.println("pt = " + pt + " dest = " + dest);
+                int taskId =  parameterQueue[pt];
+                System.out.println(" -- get task id = " + taskId);
+                Class c = (Class) metaSpace[parameterQueue[pt + 1]];
+                System.out.println(" -- get class = " + c);
+
+                if(metaSpace[parameterQueue[pt + 2]] instanceof Constructor){
+                    Constructor constructor = (Constructor) metaSpace[parameterQueue[pt + 2]];
+                    int instanceIndex = parameterQueue[pt + 3];
+                    int paramCount =  constructor.getParameterCount();
+                    System.out.println("constructor param count = " + paramCount + ", constructor = " + constructor);
+
+                    if(paramCount == 0){
+                        try {
+                            heap[instanceIndex] = constructor.newInstance();
+                            System.out.println(" > call " + constructor);
+
+                        } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }else{
+                        Object[] params = new Object[paramCount];
+                        pt += 4;
+                        for(int i = 0; i < paramCount; i++){
+                            Class parameterType = constructor.getParameterTypes()[i];
+                            System.out.println("try read argument " + i + " = " + parameterQueue[i] + ", " + parameterType);
+                            if(Integer.class.isAssignableFrom(parameterType) || "int".equals("" + parameterType)){
+                                params[i] = parameterQueue[pt];
+                                System.out.println(" -- set arg " + i + " = (int) " + parameterQueue[pt]);
+                                pt++;
+                            }else{
+                                params[i] = heap[parameterQueue[pt]];
+                                System.out.println(" -- set arg " + i + " = (ref type) " + heap[parameterQueue[pt]]);
+                                pt++;
+                            }
+                        }
+                        try {
+                            heap[instanceIndex] = constructor.newInstance(params);
+                            System.out.println(" > call " + constructor);
+
+                        } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
-                }else{
-                    Object[] params = new Object[paramCount];
-                    pt += 4;
-                    for(int i = 0; i < paramCount; i++){
+                    taskletParameterTop[threadID] = perThreadParameterQueueLength * threadID;
+                    currentParamPointer[threadID] = perThreadParameterQueueSize * threadID;
+                    countDownLatch.countDown();
+                    System.out.println(" > thread " + threadID + " finish.");
+                    return;
+                }
+                System.out.println("   ---- normal method ----");
+                System.out.println(metaSpace[parameterQueue[pt + 2]]);
+                if(metaSpace[parameterQueue[pt + 2]] instanceof Class<?>){
+                    System.out.println(">>>");
+                }
+                Method m = (Method) metaSpace[parameterQueue[pt + 2]];
+                System.out.println(m);
+                System.out.println(m.getName());
+                System.out.println("class = " + c.getSimpleName());
+                System.out.println("method = " + m.getName());
+                System.out.println("instance pos = " + parameterQueue[pt + 3]);
+                System.out.println("method params count = " + m.getParameterCount());
+                Object instance =  heap[parameterQueue[pt + 3]];
+                System.out.println(" -- instance = " + instance);
+                pt += 4;
+                Object[] params = new Object[m.getParameterCount()];
+                for(int i = 0; i < params.length; i++){
+                    if(m.getParameterTypes()[0].isPrimitive()){
                         params[i] = parameterQueue[pt++];
+                    }else{
+                        System.out.println(" is (reference)");
+                        params[i] = heap[parameterQueue[pt++]];
                     }
-                    try {
-                        heap[instanceIndex] = constructor.newInstance(params);
-                    } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-                        throw new RuntimeException(e);
+                    System.out.println(" --- param " + i + " " + params[i]);
+
+                }
+                if(((params.length * 4 + 16) % 8 != 0)){
+                    pt++;
+                }
+                System.out.println(" -- read params finished.");
+                try {
+                    System.out.println("method =  " + m);
+                    Object ret = m.invoke(instance, params);
+                    System.out.println(" get result " + ret);
+                    synchronized (resultQueuePointer){
+                        System.out.println(" set taskid = " + taskId + " to result area index = " + resultQueuePointer + " max length = " + resultQueue.length);
+                        resultQueue[resultQueuePointer] = taskId;
+                        resultQueuePointer++;
+                        if(ret == null){
+                            resultQueue[resultQueuePointer] = 0;
+                        }else{
+
+                            if(!m.getReturnType().isPrimitive()){
+                                int addr = -1;
+                                synchronized (heap){
+                                    addr = ++heapSpaceIndex;
+                                    heap[addr] = ret;
+                                    resultQueue[resultQueuePointer] = addr;
+                                    System.out.println("write reference of " + ret.getClass() + " = addr: " + addr + " to result queue index = " + resultQueuePointer);
+                                }
+                            }else{
+                                resultQueue[resultQueuePointer] = ret;
+                            }
+                        }
+                        resultQueuePointer++;
                     }
-                }
-                taskletParameterTop[threadID] = perThreadParameterQueueLength * threadID;
-                currentParamPointer[threadID] = perThreadParameterQueueSize * threadID;
-                countDownLatch.countDown();
-                return;
-            }
-            Method m = (Method) metaSpace[parameterQueue[pt + 2]];
-//
-//            System.out.println("class = " + c.getSimpleName());
-//            System.out.println("method = " + m.getName());
-//            System.out.println("instance pos = " + parameterQueue[pt + 3]);
-//            System.out.println("method params count = " + m.getParameterCount());
-            Object instance =  heap[parameterQueue[pt + 3]];
-            pt += 4;
-            Object[] params = new Object[m.getParameterCount()];
-            for(int i = 0; i < params.length; i++){
-                if(m.getParameterTypes()[0].isPrimitive()){
-                    params[i] = parameterQueue[pt++];
-                }else{
-                    params[i] = heap[parameterQueue[pt++]];
-                }
 
+
+                } catch (IllegalAccessException | InvocationTargetException e) {
+                    throw new RuntimeException(e);
+                }
             }
 
-            try {
-                Object ret = m.invoke(instance, params);
-                // System.out.println("ret = " + ret);
-                resultQueue[0] = ret;
-            } catch (IllegalAccessException | InvocationTargetException e) {
-                throw new RuntimeException(e);
-            }
+            // clear
             taskletParameterTop[threadID] = perThreadParameterQueueLength * threadID;
             currentParamPointer[threadID] = perThreadParameterQueueSize * threadID;
             // System.out.println("reset taskletParameterTop of " + threadID + "to" + taskletParameterTop[threadID]);
             countDownLatch.countDown();
+            System.out.println(" > thread " + threadID + " finish.");
+            resultQueuePointer = 0;
         }
     }
     public DPUJVMRemoteImpl(int id, int threadCount) throws RemoteException {
@@ -128,8 +191,10 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
 
     @Override
     public void start() throws RemoteException{
+        System.out.println("remote JVM start...");
         countDownLatch = new CountDownLatch(threadCount);
         for(int i = 0; i < threadCount; i++){
+            System.out.println("> start thread " + i);
             service.submit(threads[i]);
         }
         try {
@@ -137,15 +202,21 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        System.out.println("Finish");
+        System.out.println("remote JVM finish...");
 
     }
 
     @Override
-    public void setParameter(int pos, int value, int tasklet) throws RemoteException {
+    public void setParameterRelative(int pos, int value, int tasklet) throws RemoteException {
         currentParamPointer[tasklet] += 4;
-        parameterQueue[pos] = value;
+        parameterQueue[tasklet * perThreadParameterQueueLength + pos] = value;
         if(currentParamPointer[tasklet] + perThreadParameterQueueSize > maxParamSize) throw new RuntimeException("parameter buffer overflow");
+    }
+
+    @Override
+    public void setParameterAbsolutely(int pos, int value) throws RemoteException {
+        System.out.println("set parameter buffer slot " + pos + " with val = " + value);
+        parameterQueue[pos] = value;
     }
 
     @Override
@@ -212,6 +283,7 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
 
     @Override
     public void setParamsBufferPointer(int p, int tasklet) throws RemoteException {
+        System.out.println("set tasklet " + tasklet + "'s parameter buffer pointer = " + p);
         currentParamPointer[tasklet] = p;
     }
 
@@ -244,12 +316,26 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
 
     @Override
     public void setParamsBufferIndex(int p, int tasklet) throws RemoteException {
+        System.out.println("set tasklet " + tasklet + "'s parameter buffer pointer = " + p);
+
         this.taskletParameterTop[tasklet] = p;
     }
 
     @Override
-    public int getResultValue(int taskID) throws RemoteException {
-        return (int) resultQueue[taskID];
+    public JVMSimulatorResult getResult(int resultIndex) throws RemoteException {
+        int taskID = (int) resultQueue[resultIndex * 2];
+        Object result = resultQueue[resultIndex * 2 + 1];
+        if(result == null){
+            return new JVMSimulatorResult(taskID,0);
+        }
+//        if(Boolean.class.isAssignableFrom(result.getClass())){
+//            val =  (boolean) result ? 1 : 0;
+//        }else if(result.getClass().isPrimitive()){
+//            val = (int) result;
+//        }else{
+//            return new JVMSimulatorResult(taskID, val);
+//        }
+        return new JVMSimulatorResult(taskID, result);
     }
 
     @Override
@@ -267,6 +353,8 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
 
     @Override
     public int pushArguments(int[] params, int tasklet) throws RemoteException {
+        System.out.printf("taskletParameterTop[tasklet] = %d, " +
+                "params length = %d, perThreadParameterQueueLength = %d \n", taskletParameterTop[tasklet], params.length, perThreadParameterQueueLength);
         if(taskletParameterTop[tasklet] + params.length >= perThreadParameterQueueLength * tasklet + perThreadParameterQueueLength)
             throw new RuntimeException("parameter buffer overflow");
         for(int i = 0; i < params.length; i++){
