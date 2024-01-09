@@ -1,6 +1,7 @@
 package framework.pim.dpu;
 
 import com.upmem.dpu.Dpu;
+import framework.pim.UPMEM;
 import framework.pim.dpu.java_strut.DPUJVMMemSpaceKind;
 import framework.pim.logger.Logger;
 import framework.pim.logger.PIMLoggers;
@@ -15,7 +16,7 @@ public abstract class DPUGarbageCollector {
     public final static int metaSpaceBeginAddr = 0x3090000;
     public final static int parameterBufferBeginAddr = 0x3890000;
     public final static int parameterBufferSize = 6 * 1024;
-    public final static int perDPUBufferSize = 6 * 1024 / 24;
+    public final static int perTaskletParameterBufferSize = parameterBufferSize / UPMEM.perDPUThreadsInUse;
     public final static int heapSpaceSize = 48 * 1024 * 1024;
     public final static int metaSpaceSize = 16 * 1024 * 1024;
 

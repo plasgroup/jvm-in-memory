@@ -11,16 +11,16 @@ import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
 public class ArrayListProxy extends ArrayList implements IDPUProxyObject {
-    int address;
-    int dpuID;
+    public Integer address;
+    public Integer dpuID;
     @Override
     public int getAddr() {
-        return 0;
+        return address;
     }
 
     @Override
     public int getDpuID() {
-        return 0;
+        return dpuID;
     }
 
     public ArrayListProxy(int initialCapacity) {
@@ -37,141 +37,153 @@ public class ArrayListProxy extends ArrayList implements IDPUProxyObject {
 
     @Override
     public void trimToSize() {
-       RPCHelper.invokeMethod(dpuID,  address,"ArrayList", "trimToSize():V");
+       RPCHelper.invokeMethod(dpuID,  address,"java/util/ArrayList", "trimToSize:()V");
     }
 
     @Override
     public void ensureCapacity(int minCapacity) {
-        RPCHelper.invokeMethod(dpuID, address, "ArrayList","ensureCapacity():V");
+        RPCHelper.invokeMethod(dpuID, address, "java/util/ArrayList","ensureCapacity:()V", minCapacity);
     }
 
     @Override
     public int size() {
-        RPCHelper.invokeMethod(dpuID, address, "ArrayList","size():I");
+        RPCHelper.invokeMethod(dpuID, address, "java/util/ArrayList","size:()I");
         return RPCHelper.getIReturnValue(dpuID);
     }
 
     @Override
     public boolean isEmpty() {
-        RPCHelper.invokeMethod(dpuID, address, "ArrayList","isEmpty():Z");
+        RPCHelper.invokeMethod(dpuID, address, "java/util/ArrayList","isEmpty:()Z");
         return RPCHelper.getBooleanReturnValue(dpuID);
     }
 
     @Override
     public boolean contains(Object o) {
-        RPCHelper.invokeMethod(dpuID, address, "ArrayList","contains():Z");
+        RPCHelper.invokeMethod(dpuID, address, "java/util/ArrayList","contains:()Z", o);
         return RPCHelper.getBooleanReturnValue(dpuID);
     }
 
     @Override
     public int indexOf(Object o) {
-        RPCHelper.invokeMethod(dpuID, address, "ArrayList","indexOf():I");
+        RPCHelper.invokeMethod(dpuID, address, "java/util/ArrayList","indexOf:()I", o);
         return RPCHelper.getIReturnValue(dpuID);
     }
 
     @Override
     public int lastIndexOf(Object o) {
-        RPCHelper.invokeMethod(dpuID, address, "ArrayList","lastIndexOf(Ljava/framework.lang/Object;):I");
+        RPCHelper.invokeMethod(dpuID, address, "java/util/ArrayList","lastIndexOf:(Ljava/lang/Object;)I", o);
         return RPCHelper.getIReturnValue(dpuID);
     }
 
     @Override
     public Object clone() {
-        RPCHelper.invokeMethod(dpuID, address, "ArrayList","clone():Ljava/framework.lang/Object;");
-        return RPCHelper.getAReturnValue(dpuID);
+        RPCHelper.invokeMethod(dpuID, address, "java/util/ArrayList","clone:()Ljava/lang/Object;");
+        return RPCHelper.getAReturnValue(dpuID, ArrayListProxy.class);
     }
 
     @Override
     public Object[] toArray() {
-//        ProxyHelper.invokeMethod(dpuID, address, "ArrayList","clone():Ljava/framework.lang/Object;");
-//        return ProxyHelper.getAReturnValue(dpuID);
-        throw new RuntimeException();
+//        RPCHelper.invokeMethod(dpuID, address, "ArrayList","clone():Ljava/lang/Object;");
+//        return RPCHelper.ArrayHandlerFromAddress(RPCHelper.getAReturnValue(dpuID));
+        throw new RuntimeException("Unsupport Operation");
     }
 
     @Override
     public Object[] toArray(Object[] a) {
-        throw new RuntimeException();
+        throw new RuntimeException("Unsupport Operation");
     }
 
     @Override
     public Object get(int index) {
-        RPCHelper.invokeMethod(dpuID, address, "ArrayList","get(I):Ljava/framework.lang/Object;");
+        RPCHelper.invokeMethod(dpuID, address, "java/util/ArrayList","get:(I)Ljava/lang/Object;", index);
         return RPCHelper.getAReturnValue(dpuID);
     }
 
     @Override
     public Object set(int index, Object element) {
-        return super.set(index, element);
+        RPCHelper.invokeMethod(dpuID, address, "java/util/ArrayList","set:(ILjava/lang/Object;)Ljava/lang/Object;", index, element);
+        return RPCHelper.getAReturnValue(dpuID);
     }
 
     @Override
     public boolean add(Object o) {
-        return super.add(o);
+        RPCHelper.invokeMethod(dpuID, address, "java/util/ArrayList","add:(Ljava/lang/Object;)Z", o);
+        return RPCHelper.getBooleanReturnValue(dpuID);
     }
 
     @Override
     public void add(int index, Object element) {
-        super.add(index, element);
+        RPCHelper.invokeMethod(dpuID, address, "java/util/ArrayList","add:(ILjava/lang/Object;)V", index, element);
     }
 
     @Override
     public Object remove(int index) {
-        return super.remove(index);
+        RPCHelper.invokeMethod(dpuID, address, "java/util/ArrayList","remove:(I)Ljava/lang/Object;", index);
+        return RPCHelper.getAReturnValue(dpuID);
     }
 
     @Override
     public boolean equals(Object o) {
-        return super.equals(o);
+        RPCHelper.invokeMethod(dpuID, address, "java/util/ArrayList","equals:(Ljava/lang/Object;)Z", o);
+        return RPCHelper.getBooleanReturnValue(dpuID);
     }
 
     @Override
     public int hashCode() {
-        return super.hashCode();
+        RPCHelper.invokeMethod(dpuID, address, "java/util/ArrayList","hashCode:()I");
+        return RPCHelper.getIReturnValue(dpuID);
     }
 
     @Override
     public boolean remove(Object o) {
-        return super.remove(o);
+        RPCHelper.invokeMethod(dpuID, address, "java/util/ArrayList","remove:(Ljava/lang/Object;)Z", o);
+        return RPCHelper.getBooleanReturnValue(dpuID);
     }
 
     @Override
     public void clear() {
-        super.clear();
+        RPCHelper.invokeMethod(dpuID, address, "java/util/ArrayList","clear:()V");
     }
 
     @Override
     public boolean addAll(Collection c) {
-        return super.addAll(c);
+        RPCHelper.invokeMethod(dpuID, address, "java/util/ArrayList","addAll:(Ljava.util.Collection;)Z", c);
+        return RPCHelper.getBooleanReturnValue(dpuID);
     }
 
     @Override
     public boolean addAll(int index, Collection c) {
-        return super.addAll(index, c);
+        RPCHelper.invokeMethod(dpuID, address, "java/util/ArrayList","addAll:(ILjava.util.Collection;)Z", index, c);
+        return RPCHelper.getBooleanReturnValue(dpuID);
     }
 
     @Override
     protected void removeRange(int fromIndex, int toIndex) {
-        super.removeRange(fromIndex, toIndex);
+        RPCHelper.invokeMethod(dpuID, address, "java/util/ArrayList","removeRange:(II)V", fromIndex, toIndex);
     }
 
     @Override
     public boolean removeAll(Collection c) {
-        return super.removeAll(c);
+        RPCHelper.invokeMethod(dpuID, address, "java/util/ArrayList","removeAll:(Ljava.util.Collection;)Z", c);
+        return RPCHelper.getBooleanReturnValue(dpuID);
     }
 
     @Override
     public boolean retainAll(Collection c) {
-        return super.retainAll(c);
+        RPCHelper.invokeMethod(dpuID, address, "java/util/ArrayList","retainAll:(Ljava.util.Collection;)Z", c);
+        return RPCHelper.getBooleanReturnValue(dpuID);
     }
 
     @Override
     public ListIterator listIterator(int index) {
-        return super.listIterator(index);
+//        RPCHelper.invokeMethod(dpuID, address, "ArrayList","listIterator:(I)Z");
+//        return RPCHelper.getAReturnValue(dpuID);
+        throw new RuntimeException("Unsupport Operation");
     }
 
     @Override
     public ListIterator listIterator() {
-        return super.listIterator();
+        throw new RuntimeException("Unsupport Operation");
     }
 
     @Override

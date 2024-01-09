@@ -44,6 +44,17 @@ public class test_generator {
         return op;
     }
 
+    private operation buildInsertOperation(int key, int value) {
+        operation op = new operation();
+        op.type = operation_t.insert_t;
+        op.tsk = new task_union();
+        op.tsk.t = new task_union.insert_operation(key, value);
+
+        op.tsk.key = key;
+        op.tsk.value = value;
+        return op;
+    }
+
 
     public void fill_with_biased_ops(Object o, boolean b, double v, int bias, batch_parallel_oracle oracle, int testBatchSize) {
     }

@@ -16,8 +16,9 @@ public class IndexTable {
         List<Match> matched = mappingTable.get(wordID);
         if (matched == null) {
             matched = new ArrayList<>();
-            matched.add(new Match(documentId, location));
+            mappingTable.put(wordID, matched);
         }
+        matched.add(new Match(documentId, location));
         recordCount++;
     }
 
