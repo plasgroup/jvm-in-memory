@@ -24,13 +24,27 @@ public class DPUGarbageCollectorUPMEM extends DPUGarbageCollector {
         if(!ExperimentConfigurator.useSimulator)
             dpu.copy("mram_heap_pt", ptBytes, 0);
         byte[] bufferPointers = new byte[24 * 4];
-        /** each tasklet of a DPU manage part of the parameter buffer. This loop init the beginning address of i-th tasklet's parameter buffer **/
+
+        /**
+         * Each tasklet of a DPU manage part of the parameter buffer.
+         * This loop init the beginning address of i-th tasklet's parameter buffer
+         * **/
         for(int i = 0; i < 24; i++){
             BytesUtils.writeU4LittleEndian(bufferPointers, parameterBufferBeginAddr + i * perTaskletParameterBufferSize, i * 4);
         }
         if(!ExperimentConfigurator.useSimulator)
             dpu.copy("params_buffer_pt", bufferPointers, 0);
 
+    }
+
+    @Override
+    public int getHeapSpacePt() {
+        return heapSpacePt;
+    }
+
+    @Override
+    public int getMetaSpacePt() {
+        return metaSpacePt;
     }
 
     @Override
@@ -125,7 +139,7 @@ public class DPUGarbageCollectorUPMEM extends DPUGarbageCollector {
             beginAddr = parameterBufferBeginAddr;
         }
 
-        if(!"".equals(spaceVarName) && beginAddr != -1){
+        if(!spaceVarName.isEmpty()){
             gcLogger.logf("copy %d bytes to MRAM, pt = 0x%x" + " [%s]", data.length, pt, spaceVarName);
             if(!ExperimentConfigurator.useSimulator) {
                 try {

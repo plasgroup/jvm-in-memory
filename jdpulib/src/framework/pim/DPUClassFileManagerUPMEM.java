@@ -137,7 +137,7 @@ public class DPUClassFileManagerUPMEM extends DPUClassFileManager {
                             jc.entryItems[i] |= index;
                             break;
                         }else{
-                            System.out.println("try get " + className);
+                            classfileLogger.logln("try get " + className);
                             DPUClassFileLookupTableItem methodReferenceJc = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getClassLookupTableItem(className);
                             if(methodReferenceJc == null){
                                 break;

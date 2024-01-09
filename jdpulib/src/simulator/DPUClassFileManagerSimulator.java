@@ -20,7 +20,6 @@ import static framework.pim.dpu.classloader.ClassFileAnalyzer.printEntryTable;
 import static framework.pim.dpu.classloader.ClassWriter.pushJClassToDPU;
 import static framework.pim.utils.ClassLoaderUtils.*;
 
-
 public class DPUClassFileManagerSimulator extends DPUClassFileManager {
     private final DPUJVMRemote dpujvmRemote;
     public DPUClassFileManagerSimulator(int dpuID, simulator.DPUJVMRemote dpujvmRemote) {
@@ -30,7 +29,7 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
 
     @Override
     public void recordClass(String className, DPUJClass jc, int classMramAddr) {
-        System.out.println("record " + className + ":" + classMramAddr);
+        classfileLogger.logln("record " + className + ":" + classMramAddr);
         upmem.getDPUManager(dpuID).classCacheManager.setClassStructure(className, jc, classMramAddr);
     }
     private DPUClassFileLookupTableItem getLoadedClassRecord(String className){
@@ -77,7 +76,7 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
 
 
     List<Class> descriptorToClasses(String desc) throws ClassNotFoundException {
-        System.out.println("parse " + desc);
+        classfileLogger.logln("parse " + desc);
         String matched = "";
         int state = 0;
         int arrayDim = 0;
@@ -337,7 +336,7 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
 
     @Override
     public DPUJClass loadClassToDPU(Class c) {
-        System.out.println(c.getName().replace("/","."));
+        classfileLogger.logln(c.getName().replace("/","."));
         if(!allowSet.contains(c.getName().replace("/",".")))
             return null;
         String className = formalClassName(c.getName());
@@ -448,9 +447,7 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
         recordMethodDistribution(c, jc, metaspaceIndex);
         recordFieldDistribution(c, jc);
 
-        if (c.getName().equals("application.transplant.index.search.IndexTable")) {
-            System.out.println();
-        }
+
 
         upmem.getDPUManager(dpuID).garbageCollector.allocate(DPUJVMMemSpaceKind.DPU_METASPACE,
                 ((8 * jc.methodTable.length) + 0b111) & (~0b111));
@@ -523,8 +520,6 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
                     String methodNameUTF8 = getUTF8(jc, (int) (nameCPIndex));
                     String methodTypeUTF8 = getUTF8(jc, (int) (typeCPIndex));
 
-
-
                     classfileLogger.logln("description = " + methodClassNameUTF8 + "." + methodNameUTF8 + ":" + methodTypeUTF8 + ":::" + c.getName());
                     String descriptor = methodNameUTF8 + ":" + methodTypeUTF8;
                     DPUMethodLookupTableItem methodCacheItem = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getMethodLookupTableItem(
@@ -563,7 +558,6 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
                     }
 
             }
-
 
             DPULookupTableManager classCacheManager = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager;
             try {

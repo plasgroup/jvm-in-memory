@@ -19,6 +19,16 @@ public class DPUGarbageCollectorSimulator extends DPUGarbageCollector {
     }
 
     @Override
+    public int getHeapSpacePt() {
+        return heapSpacePt;
+    }
+
+    @Override
+    public int getMetaSpacePt() {
+        return metaSpacePt;
+    }
+
+    @Override
     public void updateHeapPointerToDPU() {
         try {
             dpujvmRemote.setHeapPointer(heapSpacePt);

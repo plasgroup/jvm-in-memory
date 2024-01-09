@@ -2,9 +2,9 @@ package framework.primitive;
 
 import com.upmem.dpu.DpuException;
 import framework.RemainTest;
-import framework.pim.BatchDispatcher;
+import framework.lang.struct.DummyProxy;
 import framework.lang.struct.IDPUProxyObject;
-import framework.pim.ProxyHelper;
+import framework.pim.BatchDispatcher;
 import framework.pim.UPMEM;
 import framework.pim.dpu.RPCHelper;
 import framework.pim.dpu.java_strut.DPUJVMMemSpaceKind;
@@ -18,7 +18,7 @@ public class Primitives {
     BatchDispatcher bd = new BatchDispatcher();
 
     @RemainTest
-    public IDPUProxyObject deploy(Object o, int partition){
+    public IDPUProxyObject deploy(Object o, int partition) throws DeployNoEnoughHeapSpaceException {
         if(o == null) return null;
         int limitSize = UPMEM.getInstance().getDPUManager(partition).garbageCollector.getRemainHeapMemory();
         return deployHelper(o, partition, 0, limitSize).result;
@@ -27,11 +27,14 @@ public class Primitives {
     class DeployIntermediateRecord{
         int size;
         IDPUProxyObject result;
-        public DeployIntermediateRecord(){
-
+        public DeployIntermediateRecord(int size, IDPUProxyObject result){
+            this.size = size;
+            this.result = result;
         }
     }
-    private DeployIntermediateRecord deployHelper(Object o, int partition, int currentSize, int limitSize) throws DeployNoEnoughHeapSpaceException {
+
+    private DeployIntermediateRecord deployHelper(Object o, int partition, int currentSize, int limitSize)
+            throws DeployNoEnoughHeapSpaceException {
         if(o == null) return null;
         Field[] declaredFields = o.getClass().getDeclaredFields();
         int size = 8 + declaredFields.length * 4;
@@ -40,7 +43,8 @@ public class Primitives {
 
         byte[] instance = new byte[size];
         int fieldPos = 0;
-        int currentHeapBegin = UPMEM.getInstance().getDPUManager(partition).garbageCollector.getHeapSpacePt();
+        int currentHeapBegin = UPMEM.getInstance().getDPUManager(partition)
+                .garbageCollector.getHeapSpacePt();
         int pt = currentHeapBegin;
         for(Field f : declaredFields){
             f.setAccessible(true);
@@ -70,15 +74,14 @@ public class Primitives {
         }
         UPMEM.getInstance().getDPUManager(partition).garbageCollector
                 .transfer(DPUJVMMemSpaceKind.DPU_HEAPSPACE, instance, currentHeapBegin);
-        return RPCHelper.getAReturnValue(DummyProxy.class, partition, currentHeapBegin);
-
+        return new DeployIntermediateRecord(pt - currentHeapBegin, RPCHelper.getAReturnValue(partition, DummyProxy.class));
     }
 
     public IDPUProxyObject deployNewObject(Class c, int partition, Object[] params){
         return UPMEM.getInstance().createObject(partition, c, params);
     }
 
-    public List<IDPUProxyObject> broadcast(Object o){
+    public List<IDPUProxyObject> broadcast(Object o) throws DeployNoEnoughHeapSpaceException {
         // TODO: parallel for
         List<IDPUProxyObject> result = new ArrayList<>();
         for(int i = 0; i < UPMEM.dpuInUse; i++){

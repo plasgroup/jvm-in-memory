@@ -42,7 +42,7 @@ public class DPUManagerUPMEM extends DPUManager{
             garbageCollector.transfer(DPU_HEAPSPACE, objectDataStream, objAddr);
             DPUObjectHandler handler = garbageCollector.dpuAddress2ObjHandler(objAddr, dpuID);
             dpuManagerLogger.logln("---> Object Create Finish, handler = " + " (addr: " + handler.address + "," + "dpu: " + handler.dpuID + ") <---");
-            System.out.println("addr " + objAddr);
+            dpuManagerLogger.logln("addr " + objAddr);
 
             // VirtualTable virtualTable = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getClassStructure("framework.pim/algorithm/DPUTreeNode").virtualTable;
 
@@ -77,15 +77,14 @@ public class DPUManagerUPMEM extends DPUManager{
                     .getMethodLookupTableItem(c.getName().replace(".", "/"), initMethodDesc).mramAddr;
         }else{
             Dictionary<String, DPUMethodLookupTableItem> stringDPUMethodCacheItemDictionary = classCacheManager.methodCache.cache.get(c.getName().replace(".", "/"));
-            System.out.println(c.getName().replace(".", "/"));
-            System.out.println(c.getName());
-            System.out.println(classCacheManager.methodCache.cache);
+            dpuManagerLogger.logln(c.getName().replace(".", "/"));
+            dpuManagerLogger.logln(c.getName());
+            dpuManagerLogger.logln(classCacheManager.methodCache.cache);
             Enumeration<String> keys = stringDPUMethodCacheItemDictionary.keys();
             while(keys.hasMoreElements()){
                 String key = keys.nextElement();
                 if(parseParameterList(key, params)){
                     initMethodAddr = stringDPUMethodCacheItemDictionary.get(key).mramAddr;
-
                 }
             }
             throw new RuntimeException("No appropriate method is found.");

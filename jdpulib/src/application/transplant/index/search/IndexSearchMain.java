@@ -26,13 +26,7 @@ public class IndexSearchMain {
             IndexSearchDatabase indexSearchDatabase = dm.initialize().buildDictionary(basePath + "/src/application/transplant/index/search/database/dict.txt")
                     .buildIndexes(basePath + "/src/application/transplant/index/search/database/files").buildDatabase();
 
-
             indexSearchDatabase.search("document", "in");
-
-//            IndexSearchDatabase indexSearchDatabase =
-//                    dm.buildDictionary("./database/dict.txt")
-//                        .buildIndexes("./database/files/")
-//                        .buildDatabase();
 
         } catch (IOException e) {
             throw new RuntimeException(e);

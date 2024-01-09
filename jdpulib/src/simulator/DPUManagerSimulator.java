@@ -8,7 +8,7 @@ import framework.pim.UPMEM;
 import framework.pim.dpu.DPUGarbageCollector;
 import framework.pim.dpu.DPUManager;
 import framework.lang.struct.DPUObjectHandler;
-import framework.pim.dpu.cache.DPUMethodCacheItem;
+import framework.pim.dpu.cache.DPUMethodLookupTableItem;
 import framework.pim.utils.BytesUtils;
 
 import java.io.IOException;
@@ -147,7 +147,7 @@ public class DPUManagerSimulator extends DPUManager {
         paramsConverted[3] = instanceAddress; // instance address
 
         int i = 4;
-        System.out.println("push params...");
+        dpuManagerLogger.logln("push params...");
 
         for (int j = 0; j < params.length; j++){
             Object obj = params[j];
@@ -187,16 +187,16 @@ public class DPUManagerSimulator extends DPUManager {
         int classAddr;
         int initMethodAddr = -1;
         String className = c.getName().replace(".", "/");
-        if(classCacheManager.getClassStrutCacheLine(className) == null){
+        if(classCacheManager.getClassLookupTableItem(className) == null){
             dpuClassFileManager.loadClassToDPU(c);
         }
 
-        System.out.println(c.getName().replace(".","/"));
-        classAddr = classCacheManager.getClassStrutCacheLine(c.getName().replace(".","/")).marmAddr;
+        dpuManagerLogger.logln(c.getName().replace(".","/"));
+        classAddr = classCacheManager.getClassLookupTableItem(c.getName().replace(".","/")).marmAddr;
         dpuManagerLogger.logln(" * Get Class Addr = " + classAddr);
 
-        DPUMethodCacheItem methodCacheItem = classCacheManager
-                .getMethodCacheItem(className, descriptor);
+        DPUMethodLookupTableItem methodCacheItem = classCacheManager
+                .getMethodLookupTableItem(className, descriptor);
         if(methodCacheItem != null){
             initMethodAddr = methodCacheItem.mramAddr;
         }else{
@@ -216,7 +216,7 @@ public class DPUManagerSimulator extends DPUManager {
         garbageCollector.transfer(DPU_HEAPSPACE, objectDataStream, objAddr);
         DPUObjectHandler handler = DPUGarbageCollector.dpuAddress2ObjHandler(objAddr, dpuID);
         dpuManagerLogger.logln("---> Object Create Finish, handler = " + " (addr: " + handler.address + "," + "dpu: " + handler.dpuID + ") <---");
-        System.out.println("get obj addr = " + objAddr);
+        dpuManagerLogger.logln("get obj addr = " + objAddr);
 
 
         // call the init func
@@ -251,21 +251,21 @@ public class DPUManagerSimulator extends DPUManager {
         int classAddr;
         int initMethodAddr = -1;
         String className = c.getName().replace(".", "/");
-        if(classCacheManager.getClassStrutCacheLine(className) == null){
+        if(classCacheManager.getClassLookupTableItem(className) == null){
             dpuClassFileManager.loadClassToDPU(c);
         }
 
-        System.out.println(c.getName().replace(".","/"));
+        dpuManagerLogger.logln(c.getName().replace(".","/"));
         classAddr = classCacheManager.getClassLookupTableItem(c.getName().replace(".","/")).marmAddr;
         dpuManagerLogger.logln(" * Get Class Addr = " + classAddr);
         String initMethodDesc = generateInitializationDescriptor(params);
 
-        DPUMethodCacheItem methodCacheItem = classCacheManager
-                .getMethodCacheItem(className, initMethodDesc);
+        DPUMethodLookupTableItem methodCacheItem = classCacheManager
+                .getMethodLookupTableItem(className, initMethodDesc);
         if(methodCacheItem != null){
             initMethodAddr = methodCacheItem.mramAddr;
         }else {
-            Dictionary<String, DPUMethodCacheItem> stringDPUMethodCacheItemDictionary = classCacheManager.methodCache.cache.get(c.getName().replace(".", "/"));
+            Dictionary<String, DPUMethodLookupTableItem> stringDPUMethodCacheItemDictionary = classCacheManager.methodCache.cache.get(c.getName().replace(".", "/"));
             boolean found = false;
             Enumeration<String> keys = stringDPUMethodCacheItemDictionary.keys();
             while(keys.hasMoreElements()){
@@ -293,7 +293,7 @@ public class DPUManagerSimulator extends DPUManager {
         garbageCollector.transfer(DPU_HEAPSPACE, objectDataStream, objAddr);
         DPUObjectHandler handler = DPUGarbageCollector.dpuAddress2ObjHandler(objAddr, dpuID);
         dpuManagerLogger.logln("---> Object Create Finish, handler = " + " (addr: " + handler.address + "," + "dpu: " + handler.dpuID + ") <---");
-        System.out.println("get obj addr = " + objAddr);
+        dpuManagerLogger.logln("get obj addr = " + objAddr);
 
 
         // call the init func
