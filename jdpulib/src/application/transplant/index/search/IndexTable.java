@@ -22,7 +22,6 @@ public class IndexTable {
         recordCount++;
     }
 
-
     public Dictionary<Integer, List<Match>> getMappingTable() {
         return mappingTable;
     }

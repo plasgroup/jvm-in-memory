@@ -14,10 +14,10 @@ public class SimulatorServer {
             String argumentName = items[0];
             System.out.println(argumentName + " " + args[i]);
             if("DPU_COUNT".equals(argumentName)){
-                System.out.println("set DPU count = " + items[1]);
+                // System.out.println("set DPU count = " + items[1]);
                 PIMRemoteJVMConfiguration.JVMCount = Integer.parseInt(items[1]) ;
             }else if("THREAD_PER_DPU".equals(argumentName)){
-                System.out.println("set threads per dpu = " + items[1]);
+                // System.out.println("set threads per dpu = " + items[1]);
                 PIMRemoteJVMConfiguration.threadCount = Integer.parseInt(items[1]);
             }
 

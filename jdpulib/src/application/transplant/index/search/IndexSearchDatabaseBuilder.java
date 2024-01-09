@@ -35,18 +35,19 @@ public class IndexSearchDatabaseBuilder {
         database.dpuSearchers = dpuSearchers;
         return database;
     }
+    public IndexSearchDatabaseBuilder buildIndexes(String docPath) throws IOException {
+        return buildIndexes(docPath,  Integer.MAX_VALUE);
+    }
 
-
-    public IndexSearchDatabaseBuilder buildIndexes(String docPath) throws IOException{
-
-
+    public IndexSearchDatabaseBuilder buildIndexes(String docPath, int limitation) throws IOException{
+        
         File f = new File(docPath);
         if (!f.exists() || f.isFile()) return this;
         File[] fs = f.listFiles();
         int did = 1;
         int lastDPU = 0;
 
-        for (int i = 0; i < fs.length; i++) {
+        for (int i = 0; i < limitation && i < fs.length; i++) {
             File file = fs[i];
             BufferedInputStream fis = new BufferedInputStream(new FileInputStream(file));
             String content = new String(fis.readAllBytes());
@@ -64,7 +65,6 @@ public class IndexSearchDatabaseBuilder {
             documentIDMap.put(did, f.getPath());
             insertDocument(dpuID, doc);
 
-
             String[] words = content.split(" ");
 
             int location = 0;
@@ -73,6 +73,7 @@ public class IndexSearchDatabaseBuilder {
             }
 
             did++;
+            System.out.printf("load %d/%d...\n", i, fs.length);
         }
         return this;
     }

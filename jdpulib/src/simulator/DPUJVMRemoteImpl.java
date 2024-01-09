@@ -45,22 +45,22 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
             int dest = currentParamPointer[threadID] / 4;
 
             while(pt < dest){
-                System.out.println("pt = " + pt + " dest = " + dest);
+                // System.out.println("pt = " + pt + " dest = " + dest);
                 int taskId =  parameterQueue[pt];
-                System.out.println(" -- get task id = " + taskId);
+                // System.out.println(" -- get task id = " + taskId);
                 Class c = (Class) metaSpace[parameterQueue[pt + 1]];
-                System.out.println(" -- get class = " + c);
+                // System.out.println(" -- get class = " + c);
 
                 if(metaSpace[parameterQueue[pt + 2]] instanceof Constructor){
                     Constructor constructor = (Constructor) metaSpace[parameterQueue[pt + 2]];
                     int instanceIndex = parameterQueue[pt + 3];
                     int paramCount =  constructor.getParameterCount();
-                    System.out.println("constructor param count = " + paramCount + ", constructor = " + constructor);
+                    // System.out.println("constructor param count = " + paramCount + ", constructor = " + constructor);
 
                     if(paramCount == 0){
                         try {
                             heap[instanceIndex] = constructor.newInstance();
-                            System.out.println(" > call " + constructor);
+                            // System.out.println(" > call " + constructor);
 
                         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
                             throw new RuntimeException(e);
@@ -124,13 +124,13 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
                 if(((params.length * 4 + 16) % 8 != 0)){
                     pt++;
                 }
-                System.out.println(" -- read params finished.");
+                // System.out.println(" -- read params finished.");
                 try {
-                    System.out.println("method =  " + m);
+                    // System.out.println("method =  " + m);
                     Object ret = m.invoke(instance, params);
-                    System.out.println(" get result " + ret);
+                    // System.out.println(" get result " + ret);
                     synchronized (resultQueuePointer){
-                        System.out.println(" set taskid = " + taskId + " to result area index = " + resultQueuePointer + " max length = " + resultQueue.length);
+                        // System.out.println(" set taskid = " + taskId + " to result area index = " + resultQueuePointer + " max length = " + resultQueue.length);
                         resultQueue[resultQueuePointer] = taskId;
                         resultQueuePointer++;
                         if(ret == null){
@@ -143,7 +143,7 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
                                     addr = ++heapSpaceIndex;
                                     heap[addr] = ret;
                                     resultQueue[resultQueuePointer] = addr;
-                                    System.out.println("write reference of " + ret.getClass() + " = addr: " + addr + " to result queue index = " + resultQueuePointer);
+                                    // System.out.println("write reference of " + ret.getClass() + " = addr: " + addr + " to result queue index = " + resultQueuePointer);
                                 }
                             }else{
                                 resultQueue[resultQueuePointer] = ret;
@@ -163,7 +163,7 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
             currentParamPointer[threadID] = perThreadParameterQueueSize * threadID;
             // System.out.println("reset taskletParameterTop of " + threadID + "to" + taskletParameterTop[threadID]);
             countDownLatch.countDown();
-            System.out.println(" > thread " + threadID + " finish.");
+            // System.out.println(" > thread " + threadID + " finish.");
             resultQueuePointer = 0;
         }
     }
@@ -215,7 +215,7 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
 
     @Override
     public void setParameterAbsolutely(int pos, int value) throws RemoteException {
-        System.out.println("set parameter buffer slot " + pos + " with val = " + value);
+        // System.out.println("set parameter buffer slot " + pos + " with val = " + value);
         parameterQueue[pos] = value;
     }
 

@@ -1,13 +1,12 @@
 package simulator;
 
 import com.upmem.dpu.DpuException;
-import framework.pim.BatchDispatcher;
+import framework.lang.struct.DPUObjectHandler;
 import framework.lang.struct.IDPUProxyObject;
-import framework.pim.ProxyHelper;
+import framework.pim.BatchDispatcher;
 import framework.pim.UPMEM;
 import framework.pim.dpu.DPUGarbageCollector;
 import framework.pim.dpu.DPUManager;
-import framework.lang.struct.DPUObjectHandler;
 import framework.pim.dpu.cache.DPUMethodLookupTableItem;
 import framework.pim.utils.BytesUtils;
 
@@ -24,7 +23,7 @@ import static framework.pim.dpu.java_strut.DPUJVMMemSpaceKind.DPU_HEAPSPACE;
 
 public class DPUManagerSimulator extends DPUManager {
 
-    private DPUJVMRemote dpujvmRemote;
+    private final DPUJVMRemote dpujvmRemote;
 
     public DPUJVMRemote getDpujvmRemote() {
         return dpujvmRemote;

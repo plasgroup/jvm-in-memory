@@ -1,2 +1,0 @@
-This is the document in the file one.
-But it is directly follow by a second segment.

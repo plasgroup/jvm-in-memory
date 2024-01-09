@@ -38,14 +38,14 @@ public class SearcherProxy extends Searcher implements IDPUProxyObject {
     public SearchResult searchDocumentIds(int... keywordIDs) {
 
         RPCHelper.invokeMethod(dpuID, address, "application/transplant/index/search/Searcher", "searchDocumentIds:([I)Lapplication/transplant/index/search/pojo/SearchResult;");
-        IDPUProxyObject proxy = RPCHelper.getAReturnValue(dpuID, SearcherProxy.class);
+        IDPUProxyObject proxy = RPCHelper.getAReturnValue(dpuID, SearchResultProxy.class);
         return (SearchResult) proxy;
     }
 
     @Override
     public SearchResult search(int w0) {
         RPCHelper.invokeMethod(dpuID, address, "application/transplant/index/search/Searcher", "search:(I)Lapplication/transplant/index/search/pojo/SearchResult;", w0);
-        IDPUProxyObject proxy = RPCHelper.getAReturnValue(dpuID, SearcherProxy.class);
+        IDPUProxyObject proxy = RPCHelper.getAReturnValue(dpuID, SearchResultProxy.class);
         return (SearchResult) proxy;
     }
 
@@ -59,21 +59,21 @@ public class SearcherProxy extends Searcher implements IDPUProxyObject {
     @Override
     public SearchResult search(int w0, int w1, int w2) {
         RPCHelper.invokeMethod(dpuID, address, "application/transplant/index/search/Searcher", "search:(III)Lapplication/transplant/index/search/pojo/SearchResult;", w0, w1, w2);
-        IDPUProxyObject proxy = RPCHelper.getAReturnValue(dpuID, SearcherProxy.class);
+        IDPUProxyObject proxy = RPCHelper.getAReturnValue(dpuID, SearchResultProxy.class);
         return (SearchResult) proxy;
     }
 
     @Override
     public SearchResult search(int w0, int w1, int w2, int w3) {
         RPCHelper.invokeMethod(dpuID, address, "application/transplant/index/search/Searcher", "search:(IIII)Lapplication/transplant/index/search/pojo/SearchResult;", w0, w1, w2, w3);
-        IDPUProxyObject proxy = RPCHelper.getAReturnValue(dpuID, SearcherProxy.class);
+        IDPUProxyObject proxy = RPCHelper.getAReturnValue(dpuID, SearchResultProxy.class);
         return (SearchResult) proxy;
     }
 
     @Override
     public SearchResult search(int w0, int w1, int w2, int w3, int w4) {
         RPCHelper.invokeMethod(dpuID, address, "application/transplant/index/search/Searcher", "search:(IIIII)Lapplication/transplant/index/search/pojo/SearchResult;", w0, w1, w2, w3, w4);
-        IDPUProxyObject proxy = RPCHelper.getAReturnValue(dpuID, SearcherProxy.class);
+        IDPUProxyObject proxy = RPCHelper.getAReturnValue(dpuID, SearchResultProxy.class);
         return (SearchResult) proxy;
     }
 }
