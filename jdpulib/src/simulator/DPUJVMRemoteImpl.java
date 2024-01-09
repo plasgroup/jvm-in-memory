@@ -1,6 +1,8 @@
 package simulator;
 
 import framework.pim.UPMEM;
+import framework.pim.logger.Logger;
+import framework.pim.logger.PIMLoggers;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -31,6 +33,10 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
     int metaSpaceIndex = 0;
     int heapSpaceIndex = 0;
     int[] taskletParameterTop;
+    static Logger jvmLogger = PIMLoggers.jvmSimulatorLogger;
+    static {
+        jvmLogger.setEnable(false);
+    }
 
     class ProcessorBinary implements Runnable {
         int threadID;
@@ -70,20 +76,20 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
                         pt += 4;
                         for(int i = 0; i < paramCount; i++){
                             Class parameterType = constructor.getParameterTypes()[i];
-                            System.out.println("try read argument " + i + " = " + parameterQueue[i] + ", " + parameterType);
+                            // System.out.println("try read argument " + i + " = " + parameterQueue[i] + ", " + parameterType);
                             if(Integer.class.isAssignableFrom(parameterType) || "int".equals("" + parameterType)){
                                 params[i] = parameterQueue[pt];
-                                System.out.println(" -- set arg " + i + " = (int) " + parameterQueue[pt]);
+                                jvmLogger.logln(" -- set arg " + i + " = (int) " + parameterQueue[pt]);
                                 pt++;
                             }else{
                                 params[i] = heap[parameterQueue[pt]];
-                                System.out.println(" -- set arg " + i + " = (ref type) " + heap[parameterQueue[pt]]);
+                                jvmLogger.logln(" -- set arg " + i + " = (ref type) " + heap[parameterQueue[pt]]);
                                 pt++;
                             }
                         }
                         try {
                             heap[instanceIndex] = constructor.newInstance(params);
-                            System.out.println(" > call " + constructor);
+                            jvmLogger.logln(" > call " + constructor);
 
                         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
                             throw new RuntimeException(e);
@@ -92,33 +98,33 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
                     taskletParameterTop[threadID] = perThreadParameterQueueLength * threadID;
                     currentParamPointer[threadID] = perThreadParameterQueueSize * threadID;
                     countDownLatch.countDown();
-                    System.out.println(" > thread " + threadID + " finish.");
+                    jvmLogger.logln(" > thread " + threadID + " finish.");
                     return;
                 }
-                System.out.println("   ---- normal method ----");
-                System.out.println(metaSpace[parameterQueue[pt + 2]]);
+                jvmLogger.logln("   ---- normal method ----");
+                jvmLogger.logln(metaSpace[parameterQueue[pt + 2]]);
                 if(metaSpace[parameterQueue[pt + 2]] instanceof Class<?>){
-                    System.out.println(">>>");
+                    jvmLogger.logln(">>>");
                 }
                 Method m = (Method) metaSpace[parameterQueue[pt + 2]];
-                System.out.println(m);
-                System.out.println(m.getName());
-                System.out.println("class = " + c.getSimpleName());
-                System.out.println("method = " + m.getName());
-                System.out.println("instance pos = " + parameterQueue[pt + 3]);
-                System.out.println("method params count = " + m.getParameterCount());
+                jvmLogger.logln(m);
+                jvmLogger.logln(m.getName());
+                jvmLogger.logln("class = " + c.getSimpleName());
+                jvmLogger.logln("method = " + m.getName());
+                jvmLogger.logln("instance pos = " + parameterQueue[pt + 3]);
+                jvmLogger.logln("method params count = " + m.getParameterCount());
                 Object instance =  heap[parameterQueue[pt + 3]];
-                System.out.println(" -- instance = " + instance);
+                jvmLogger.logln(" -- instance = " + instance);
                 pt += 4;
                 Object[] params = new Object[m.getParameterCount()];
                 for(int i = 0; i < params.length; i++){
                     if(m.getParameterTypes()[0].isPrimitive()){
                         params[i] = parameterQueue[pt++];
                     }else{
-                        System.out.println(" is (reference)");
+                        jvmLogger.logln(" is (reference)");
                         params[i] = heap[parameterQueue[pt++]];
                     }
-                    System.out.println(" --- param " + i + " " + params[i]);
+                    jvmLogger.logln(" --- param " + i + " " + params[i]);
 
                 }
                 if(((params.length * 4 + 16) % 8 != 0)){

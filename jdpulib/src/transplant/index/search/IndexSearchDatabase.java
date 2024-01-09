@@ -26,8 +26,6 @@ public class IndexSearchDatabase {
         }
     }
 
-
-
     public void insertDocument(int dpuID, Document doc) {
         documents[dpuID].add(doc);
     }

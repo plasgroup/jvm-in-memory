@@ -3,6 +3,7 @@ package framework.primitive.control;
 import framework.pim.ProxyHelper;
 import framework.pim.UPMEM;
 import framework.pim.dpu.DPUGarbageCollector;
+import framework.pim.dpu.RPCHelper;
 import framework.pim.dpu.cache.DPULookupTableManager;
 import framework.pim.dpu.cache.DPUClassFileLookupTableItem;
 import framework.pim.dpu.classloader.ClassWriter;
@@ -38,7 +39,7 @@ public class ControlPrimitives {
         sb.append("Ljava/lang/Object;".repeat(params.length));
         sb.append(")Ljava/lang/Object;");
 
-        ProxyHelper.invokeMethod(dpuID, -1, cName, String.valueOf(sb), params);
+        RPCHelper.invokeMethod(dpuID, -1, cName, String.valueOf(sb), params);
 
         // clear
         garbageCollector.freeFromBack(DPUJVMMemSpaceKind.DPU_METASPACE, dpuJClass.totalSize);

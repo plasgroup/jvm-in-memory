@@ -35,7 +35,16 @@ public class IndexSearchDatabase {
     }
 
     public void search(String... words) {
-        int[] collect = Arrays.stream(words).map(s -> dictionary.get(s.replace(".", "").toLowerCase())).mapToInt(e -> e).toArray();
+        List<Integer> collectA = Arrays.stream(words)
+                .map(s -> dictionary.get(s.replace(".", "").toLowerCase())).collect(Collectors.toList());
+
+        if(collectA.stream().anyMatch(Objects::isNull)){
+            throw new RuntimeException();
+        }
+        int[] collect = Arrays.stream(words)
+                .map(s -> dictionary.get(s.replace(".", "").toLowerCase()))
+                .mapToInt(e -> e).toArray();
+
         int totalMatch = 0;
         int firstMatchLocation = -1;
 
@@ -63,7 +72,10 @@ public class IndexSearchDatabase {
                 firstMatchLocation = searchResult.getFirstMatchedLocations();
             }
         }
-        System.out.println("search finish.., total matched = " + totalMatch + ", first matched did = " + firstMatchDocumentID
+
+        System.out.println("search finish.., total matched = "
+                + totalMatch
+                + ", first matched did = " + firstMatchDocumentID
                 + ", first matched location = " + firstMatchLocation);
 
     }

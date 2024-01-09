@@ -4,6 +4,7 @@ import application.transplant.index.search.IndexSearchDatabase;
 
 import java.io.*;
 import java.util.*;
+import java.util.stream.Stream;
 
 public class Proprocessing {
     static String dictionaryFilePath =
@@ -39,10 +40,12 @@ public class Proprocessing {
                 System.out.println("Process " + f.getPath());
                 FileInputStream fis = new FileInputStream(f);
                 String s = new String(fis.readAllBytes()).replaceAll("[^a-zA-Z]", " ");
-                String reduce = Arrays.stream(s.split(" ")).map(word -> word.strip().toLowerCase())
+                String reduce = Arrays.stream(s.split(" "))
+                        .map(word -> word.strip().toLowerCase())
                         .filter(w -> wordsSet.contains(w))
-                        .reduce((a, b) -> (a + " " + b)).get();
-                System.out.println(reduce);
+                        .reduce((a, b) -> (a + " " + b))
+                        .get();
+
                 fis.close();
 
                 FileOutputStream fos = new FileOutputStream(f);
@@ -57,6 +60,7 @@ public class Proprocessing {
             File requestFile =
                     new File(basePath +
                             "/src/application/transplant/index/search/database/request" + count + ".txt");
+            HashSet<String> wordsSet = buildDictionary();
 
             Random r = new Random();
 
@@ -67,10 +71,9 @@ public class Proprocessing {
             int filesCount = files.length;
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(requestFile));
             int generatedCount = 0;
-            int generateEnsuredSequenceCount = count / 2;
+            int generateEnsuredSequenceCount = count;
             while(generatedCount < generateEnsuredSequenceCount){
-                String s =
-                        new String(new FileInputStream(files[r.nextInt(0, filesCount)])
+                String s = new String(new FileInputStream(files[r.nextInt(0, filesCount)])
                                 .readAllBytes());
                 int takes = r.nextInt(1, 6);
 
@@ -78,12 +81,11 @@ public class Proprocessing {
                 int skipatable = words.length - takes;
                 if(skipatable < 2) continue;
 
-                String requestLine =
-                        Arrays.stream(words)
-                                .skip(r.nextInt(1, skipatable))
-                                .limit(takes)
-                                .reduce((w1, w2) -> w1 + " " + w2)
-                                .get();
+                String requestLine = Arrays.stream(words)
+                        .skip(r.nextInt(1, skipatable))
+                        .filter(p -> wordsSet.contains(p))
+                        .reduce((w1, w2) -> w1 + " " + w2)
+                        .get();
 
                 bufferedWriter.append(requestLine);
                 bufferedWriter.newLine();
@@ -91,8 +93,5 @@ public class Proprocessing {
             }
             bufferedWriter.close();
         }
-
-
-
     }
 }

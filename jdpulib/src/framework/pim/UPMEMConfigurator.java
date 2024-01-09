@@ -15,7 +15,7 @@ public class UPMEMConfigurator {
     private String packageSearchPath = "";
     private HashSet<String> allowSet = new HashSet<>();
     private boolean useAllowSet;
-
+    private boolean enableProfilingRPCDataMovement = false;
     public boolean isUseSimulator() {
         return useSimulator;
     }
@@ -67,5 +67,14 @@ public class UPMEMConfigurator {
 
     public boolean isUseAllowSet() {
         return useAllowSet;
+    }
+
+    public boolean isEnableProfilingRPCDataMovement() {
+        return enableProfilingRPCDataMovement;
+    }
+
+    public UPMEMConfigurator setEnableProfilingRPCDataMovement(boolean enableProfilingRPCDataMovement) {
+        this.enableProfilingRPCDataMovement = enableProfilingRPCDataMovement;
+        return this;
     }
 }

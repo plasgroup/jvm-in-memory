@@ -20,7 +20,8 @@ public class IndexSearchMain {
                         "application.transplant.index.search.Document",
                         "java.util.ArrayList",
                         "application.transplant.index.search.Searcher",
-                        "application.transplant.index.search.pojo.SearchResult"));
+                        "application.transplant.index.search.pojo.SearchResult")
+                .setEnableProfilingRPCDataMovement(true));
 
         int requestCount = 1000000;
 
@@ -30,7 +31,7 @@ public class IndexSearchMain {
             IndexSearchDatabase indexSearchDatabase =
                     dm.initialize()
                             .buildDictionary(basePath + "/src/application/transplant/index/search/database/dict.txt")
-                            .buildIndexes(basePath + "/src/application/transplant/index/search/database/files", 100)
+                            .buildIndexes(basePath + "/src/application/transplant/index/search/database/files", 200)
                             .buildDatabase();
 
             System.out.println("build database Finished");
@@ -59,7 +60,7 @@ public class IndexSearchMain {
                         indexSearchDatabase.search(words[0], words[1], words[2], words[3]);
                         break;
                     case 5:
-                        indexSearchDatabase.search(words[0], words[1], words[2], words[3]);
+                        indexSearchDatabase.search(words[0], words[1], words[2], words[3], words[4]);
                         break;
                 }
             }

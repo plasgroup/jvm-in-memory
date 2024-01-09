@@ -49,7 +49,7 @@ public class UPMEM {
     /* Unsafe class. It will be used to create a proxy class instance without initialize it */
     static Unsafe unsafe;
     public static boolean useAllowSet;
-
+    public static PIMProfiler profiler = new PIMProfiler();
 
     static {
         try {

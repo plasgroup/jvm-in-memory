@@ -2,6 +2,7 @@ package transplant.index.search.proxy;
 
 import framework.lang.struct.IDPUProxyObject;
 import framework.pim.ProxyHelper;
+import framework.pim.dpu.RPCHelper;
 import transplant.index.search.IndexTable;
 import transplant.index.search.Searcher;
 import transplant.index.search.pojo.SearchResult;
@@ -28,15 +29,15 @@ public class SearcherProxy extends Searcher implements IDPUProxyObject {
 
     @Override
     public IndexTable getTable() {
-        ProxyHelper.invokeMethod(dpuID, address, "package transplant.index.search.Searcher", "getTable():Ltransplant.index.search.IndexTable;\n");
-        IDPUProxyObject proxy = ProxyHelper.getAReturnValue(dpuID);
+        RPCHelper.invokeMethod(dpuID, address, "package transplant.index.search.Searcher", "getTable():Ltransplant.index.search.IndexTable;\n");
+        IDPUProxyObject proxy = RPCHelper.getAReturnValue(dpuID);
         return (IndexTable) proxy;
     }
 
     @Override
     public SearchResult searchDocumentIds(int[] keywordIDs) {
-        ProxyHelper.invokeMethod(dpuID, address, "package transplant.index.search.Searcher", "getTable():Ltransplant.index.search.IndexTable;\n");
-        IDPUProxyObject proxy = ProxyHelper.getAReturnValue(dpuID);
+        RPCHelper.invokeMethod(dpuID, address, "package transplant.index.search.Searcher", "getTable():Ltransplant.index.search.IndexTable;\n");
+        IDPUProxyObject proxy = RPCHelper.getAReturnValue(dpuID);
         return (SearchResult) proxy;
     }
 }
