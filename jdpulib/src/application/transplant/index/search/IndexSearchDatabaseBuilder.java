@@ -2,18 +2,17 @@ package application.transplant.index.search;
 
 import framework.lang.struct.IDPUProxyObject;
 import framework.pim.UPMEM;
-import application.transplant.index.search.pojo.Word;
+import simulator.PIMRemoteJVMConfiguration;
 
 import java.io.*;
-import java.util.Dictionary;
-import java.util.Hashtable;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 public class IndexSearchDatabaseBuilder {
-    final static int dpuInUse = 64;
+    final static int dpuInUse = 4;
     IndexTable[] tables;
-    Dictionary<Word, Integer> dictionary;
+    Dictionary<String, Integer> dictionary;
     Dictionary<Integer, String> documentIDMap;
     List<Document>[] documents;
     Searcher[] dpuSearchers;
@@ -28,22 +27,18 @@ public class IndexSearchDatabaseBuilder {
     }
 
     public IndexSearchDatabase buildDatabase(){
-        IndexSearchDatabase database = new IndexSearchDatabase(dpuInUse);
+        IndexSearchDatabase database = new IndexSearchDatabase();
         database.tables = tables;
         database.dictionary = dictionary;
         database.documentIDMap = documentIDMap;
         database.documents = documents;
+        database.dpuSearchers = dpuSearchers;
         return database;
     }
 
 
     public IndexSearchDatabaseBuilder buildIndexes(String docPath) throws IOException{
 
-        tables = new IndexTable[dpuInUse];
-
-        for(int i = 0; i < dpuInUse; i++){
-            tables[i] = (IndexTable) (IDPUProxyObject) UPMEM.getInstance().createObject(i, IndexTable.class);
-        }
 
         File f = new File(docPath);
         if (!f.exists() || f.isFile()) return this;
@@ -60,25 +55,37 @@ public class IndexSearchDatabaseBuilder {
                 dpuID = ++lastDPU;
             }
 
-            Document doc = (Document) UPMEM.getInstance().createObject(dpuID, Document.class, did, content);
+            Document doc = (Document) UPMEM.getInstance().createObject(dpuID, Document.class, did);
+
+            // insert words to doc
+            List<Integer> splitedContent = Arrays.stream(content.split(System.lineSeparator())).map(e -> e.split(" ")).map(e -> Arrays.stream(e).map(w -> dictionary.get(w.replace(".","").toLowerCase())).collect(Collectors.toList())).collect(Collectors.toList()).stream().flatMap(List::stream).collect(Collectors.toList());
+            pushContent(doc, splitedContent);
+
             documentIDMap.put(did, f.getPath());
             insertDocument(dpuID, doc);
 
-            String[] words = content.split(" ");
-            if (dpuSearchers[dpuID] == null)
-                dpuSearchers[dpuID] =
-                        (Searcher) UPMEM.getInstance()
-                                .createObject(i, Searcher.class, ((IDPUProxyObject)tables[i]).getAddr(),
-                                        ((IDPUProxyObject)documents[i]).getAddr());
 
-            int location = 1;
-            for (String w : words) {
-                insertWordIndexRecord(dpuID, getWordID(w), did, location++);
+            String[] words = content.split(" ");
+
+            int location = 0;
+            for (int wid : splitedContent) {
+                insertWordIndexRecord(dpuID, wid, did, location++);
             }
 
             did++;
         }
         return this;
+    }
+
+    private String formalWord(String w) {
+        return w.replace(";","").toLowerCase();
+    }
+
+    private void pushContent(Document doc, List<Integer> splitedContent) {
+
+        for(Integer wordID : splitedContent){
+               doc.pushWord(wordID);
+        }
     }
 
     public void insertDocument(int dpuID, Document doc) {
@@ -89,8 +96,14 @@ public class IndexSearchDatabaseBuilder {
         tables[dpuID].insert(wordID, did, i);
     }
 
+    static int sizes[] = new int[dpuInUse];
     private int getSize(int dpuID) {
-        return tables[dpuID].getSize() * 4 + documents[dpuID].stream().map(e -> e.context.size() * 4 + 4).reduce(0, Integer::sum);
+        int s = 0;
+        for (int i = 0; i < dpuInUse; i++) {
+            s += sizes[i];
+        }
+
+        return tables[dpuID].getSize() * 4 + s;
 
     }
 
@@ -109,12 +122,35 @@ public class IndexSearchDatabaseBuilder {
         if(dictionary == null) dictionary = new Hashtable<>();
         while((line = br.readLine()) != null){
             if("".equals(line)) continue;
-            Word w = new Word(wid, line);
-            dictionary.put(w, wid);
+            //Word w = new Word(wid, line);
+            dictionary.put(line, wid);
             wid++;
         }
         return this;
     }
 
 
+    public IndexSearchDatabaseBuilder initialize() throws IOException {
+        documents = new List[PIMRemoteJVMConfiguration.JVMCount];
+        dpuSearchers = new Searcher[PIMRemoteJVMConfiguration.JVMCount];
+        tables = new IndexTable[PIMRemoteJVMConfiguration.JVMCount];
+
+        for(int i = 0; i < PIMRemoteJVMConfiguration.JVMCount; i++){
+            tables[i] = (IndexTable) (IDPUProxyObject) UPMEM.getInstance().createObject(i, IndexTable.class);
+            documents[i] = (List<Document>) UPMEM.getInstance().createObject(i, ArrayList.class);
+            String descriptor = "<init>:(Lapplication/transplant/index/search/IndexTable;Ljava/util/List;)V";
+            if (dpuSearchers[i] == null)
+                dpuSearchers[i] =
+                        (Searcher) UPMEM.getInstance().getDPUManager(i).
+                                createObjectSpecific(
+                                        Searcher.class,
+                                        descriptor,
+                                        ((IDPUProxyObject)tables[i]).getAddr(),
+                                        ((IDPUProxyObject)documents[i]).getAddr());
+
+        }
+
+        documentIDMap = new Hashtable<>();
+        return this;
+    }
 }

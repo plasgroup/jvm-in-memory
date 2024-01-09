@@ -2,6 +2,7 @@ package simulator;
 
 import framework.pim.dpu.DPUGarbageCollector;
 import framework.pim.dpu.java_strut.DPUJVMMemSpaceKind;
+import framework.pim.utils.BytesUtils;
 
 import java.rmi.RemoteException;
 
@@ -72,11 +73,37 @@ public class DPUGarbageCollectorSimulator extends DPUGarbageCollector {
         try {
             switch (spaceKind){
                 case DPU_HEAPSPACE:
-                    dpujvmRemote.setHeapPointer(dpujvmRemote.getHeapPointer() + data.length);
+                    // dpujvmRemote.setHeapPointer(dpujvmRemote.getHeapPointer() + data.length);
+
                     break;
                 case DPU_METASPACE:
-                    dpujvmRemote.setMetaSpacePointer(dpujvmRemote.getMetaSpacePointer() + data.length);
+                    //dpujvmRemote.setMetaSpacePointer(dpujvmRemote.getMetaSpacePointer() + data.length);
                     break;
+                case DPU_PARAMETER_BUFFER:
+                    pt -= parameterBufferBeginAddr;
+                    pt /= 4;
+                    for(int i = 0; i < data.length; i += 4, pt++){
+                        int val = BytesUtils.readU4LittleEndian(data, i);
+                        // System.out.printf(" set to param index = %d, data = %d\n", pt, BytesUtils.readU4LittleEndian(data, i));
+                        dpujvmRemote.setParameterAbsolutely(pt, val);
+                    }
+                    break;
+                case DPU_PARAMETER_BUFFER_POINTERS:
+                    pt /= 4; // get slot index
+                    int val = BytesUtils.readU4LittleEndian(data, 0);
+//                    System.out.println("transfer param buffer pinter to index " + pt + "("  + pt + "-th tasklet's "
+//                            + ") with pointer = "
+//                            + val
+//                            + " slot index = "
+//                            + val / 4);
+
+                    // val is a parameter buffer slot index value. In simulator, a slot have 4 bytes. So when setting pointer
+                    // this value should * 4.
+                    dpujvmRemote.setParamsBufferPointer(val, pt);
+                    dpujvmRemote.setParamsBufferIndex(val / 4, pt);
+                    break;
+
+
             }
         }catch (RemoteException ignored){
 
@@ -215,7 +242,9 @@ public class DPUGarbageCollectorSimulator extends DPUGarbageCollector {
     @Override
     public int getReturnVal() {
         try {
-            return dpujvmRemote.getResultValue(0);
+            Object result = dpujvmRemote.getResult(0).value;
+            if(Boolean.class.isAssignableFrom(result.getClass())) return (boolean)result ? 0 : 1;
+            return (int) result;
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }

@@ -8,6 +8,7 @@ import framework.lang.struct.IDPUProxyObject;
 import framework.pim.dpu.cache.DPUMethodLookupTableItem;
 import framework.pim.utils.BytesUtils;
 
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Dictionary;
 import java.util.Enumeration;
@@ -106,6 +107,11 @@ public class DPUManagerUPMEM extends DPUManager{
         // call the init func
         callNonstaticMethod(classAddr, initMethodAddr, handler.address, params);
         return handler;
+    }
+
+    @Override
+    public <T> IDPUProxyObject createObjectSpecific(Class c, String descriptor, Object... params) throws IOException {
+        return null;
     }
 
     private boolean parseParameterList(String key, Object[] params) {
@@ -278,13 +284,14 @@ public class DPUManagerUPMEM extends DPUManager{
                 t2 = UPMEM.getSpecifiedTaskletAndCancel(dpuID);
             }else{
                 while(t2 != t){
-                    if(bd.paramsBufferPointer[dpuID][t2] + size < DPUGarbageCollector.perDPUBufferSize){
+                    if(bd.paramsBufferPointer[dpuID][t2] + size < DPUGarbageCollector.perTaskletParameterBufferSize){
                         break;
                     }
                     t2 = (t2 + 1) % 24;
                     try {
                         bd.dispatchAll();
-                    } catch (DpuException e) {
+                    }
+                    catch (DpuException e) {
                         throw new RuntimeException(e);
                     }
                 }
@@ -292,7 +299,7 @@ public class DPUManagerUPMEM extends DPUManager{
 
             bd.taskletPosition[dpuID] = t2; // next time from t2 to find a proper tasklet
             // beginning of params_buffer[t2]
-            int from = bd.paramsBufferPointer[dpuID][t2] + DPUGarbageCollector.perDPUBufferSize * t2;
+            int from = bd.paramsBufferPointer[dpuID][t2] + DPUGarbageCollector.perTaskletParameterBufferSize * t2;
             // id
             BytesUtils.writeU4LittleEndian(UPMEM.batchDispatcher.paramsBuffer[dpuID], bd.recordedCount[dpuID]++, from);
             // class address

@@ -5,8 +5,8 @@ import framework.pim.dpu.RPCHelper;
 import application.transplant.index.search.IndexTable;
 
 public class IndexTableProxy extends IndexTable implements IDPUProxyObject {
-    Integer address;
-    Integer dpuID;
+    public Integer address;
+    public Integer dpuID;
     @Override
     public int getAddr() {
         return address;
@@ -19,13 +19,13 @@ public class IndexTableProxy extends IndexTable implements IDPUProxyObject {
 
     @Override
     public int getSize() {
-        RPCHelper.invokeMethod(dpuID, address, "IndexTable", "getSize():I");
+        RPCHelper.invokeMethod(dpuID, address, "application/transplant/index/search/IndexTable", "getSize:()I");
         return RPCHelper.getIReturnValue(dpuID);
     }
 
     @Override
     public void insert(int wordID, int documentId, int location){
-        RPCHelper.invokeMethod(dpuID, address, "IndexTable", "insert(III):V");
+        RPCHelper.invokeMethod(dpuID, address, "application/transplant/index/search/IndexTable", "insert:(III)V", wordID, documentId, location);
     }
 
 }
