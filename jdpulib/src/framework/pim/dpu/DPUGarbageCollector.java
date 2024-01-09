@@ -24,7 +24,8 @@ public abstract class DPUGarbageCollector {
 
 
 
-
+    public abstract int getHeapSpacePt();
+    public abstract int getMetaSpacePt();
     public abstract void updateHeapPointerToDPU();
 
     public abstract void updateMetaSpacePointerToDPU();
