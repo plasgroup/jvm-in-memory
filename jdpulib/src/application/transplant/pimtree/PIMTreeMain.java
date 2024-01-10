@@ -18,15 +18,14 @@ public class PIMTreeMain {
     public static int OPERATION_NR_ITEMS = 7;
     public static PIMTreeCore[] cores = new PIMTreeCore[nr_of_dpus];
 
-
     public static void main(String[] args) throws IOException {
         PIMRemoteJVMConfiguration.JVMCount = nr_of_dpus;
         UPMEM.initialize(new UPMEMConfigurator().setThreadPerDPU(1).setDpuInUseCount(64).setUseSimulator(true)
                 .setUseAllowSet(true).setDpuInUseCount(4)
-                .addClassesAllow("application.transplant.pimtree.PIMTreeCore", "application.transplant.pimtree.PIMExecutorComputationContext")
+                .addClassesAllow("application.transplant.pimtree.PIMTreeCore",
+                        "application.transplant.pimtree.PIMExecutorComputationContext")
                 .setPackageSearchPath("application.transplant.pimtree.")
         );
-
 
         List<Double> pos = new ArrayList<>(OPERATION_NR_ITEMS);
         for(int i = 0; i < OPERATION_NR_ITEMS; i++)
@@ -40,15 +39,16 @@ public class PIMTreeMain {
         pos.set(4, 50.0);
         pos.set(5, 60.0);
 
-        frontend_by_generation frontend = new frontend_by_generation(20000, 100, pos, 0, 20, 20);
+        frontend_by_generation frontend =
+                new frontend_by_generation(200000, 100, pos, 0,
+                        20, 20);
         run(frontend, 200, 100);
     }
 
     static void run(frontend f, int init_batch_size, int test_batch_size) {
+
         // top-level threads, which is host << -
-
         pim_skip_list_drivers = new pim_skip_list[PIMTreeCore.num_top_level_threads];
-
 
         // each host thread hold a pim_skip_list
         // in core::execute(). each core load batch
@@ -62,7 +62,9 @@ public class PIMTreeMain {
         }
 
         for(int i = 0; i < nr_of_dpus; i++){
-            executors[i] = (PIMExecutorComputationContext) UPMEM.getInstance().createObject(i, PIMExecutorComputationContext.class);
+            executors[i] = (PIMExecutorComputationContext)
+                    UPMEM.getInstance()
+                            .createObject(i, PIMExecutorComputationContext.class);
         }
 
         PIMTreeCore.generateData(2000);
@@ -81,14 +83,8 @@ public class PIMTreeMain {
         }
 
         {
-
-
             List<operation> test_ops = f.test_tasks();
-
-
             PIMTreeCore.execute(make_slice(test_ops), test_batch_size, test_batch_size, PIMTreeCore.num_top_level_threads);
-
-
         }
 
     }
