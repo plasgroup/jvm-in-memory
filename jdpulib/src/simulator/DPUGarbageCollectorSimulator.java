@@ -33,7 +33,7 @@ public class DPUGarbageCollectorSimulator extends DPUGarbageCollector {
     public void updateHeapPointerToDPU() {
         try {
             if(UPMEM.getConfigurator().isEnableProfilingRPCDataMovement()){
-                UPMEM.profiler.transferredBytes += 32;
+                UPMEM.profiler.transferredBytes += 4 * 64;
             }
             dpujvmRemote.setHeapPointer(heapSpacePt);
         } catch (RemoteException e) {
@@ -165,9 +165,7 @@ public class DPUGarbageCollectorSimulator extends DPUGarbageCollector {
         int addr;
         int ptBytes = -1;
 
-
         // copy latest pointer from DPU
-
         switch (pointerVarName){
             case "meta_space_pt":
                 try {
@@ -183,7 +181,6 @@ public class DPUGarbageCollectorSimulator extends DPUGarbageCollector {
                     throw new RuntimeException(e);
                 }
                 break;
-
         }
 
         // update latest pointer temporary
