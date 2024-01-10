@@ -84,8 +84,14 @@ public class PIMTreeMain {
 
         {
             List<operation> test_ops = f.test_tasks();
-            PIMTreeCore.execute(make_slice(test_ops), test_batch_size, test_batch_size, PIMTreeCore.num_top_level_threads);
+            PIMTreeCore.execute(
+                            make_slice(test_ops),
+                            test_batch_size,
+                            test_batch_size,
+                            PIMTreeCore.num_top_level_threads
+                    );
         }
+
 
     }
 
