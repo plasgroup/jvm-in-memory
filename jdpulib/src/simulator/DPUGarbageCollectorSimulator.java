@@ -45,7 +45,7 @@ public class DPUGarbageCollectorSimulator extends DPUGarbageCollector {
     public void updateMetaSpacePointerToDPU() {
         try {
             if(UPMEM.getConfigurator().isEnableProfilingRPCDataMovement()){
-                UPMEM.profiler.transferredBytes += 32;
+                UPMEM.profiler.transferredBytes += 4 * 64;
             }
             dpujvmRemote.setMetaSpacePointer(metaSpacePt);
         } catch (RemoteException e) {
@@ -56,17 +56,16 @@ public class DPUGarbageCollectorSimulator extends DPUGarbageCollector {
     @Override
     public int pushParameters(int[] params) {
         if(UPMEM.getConfigurator().isEnableProfilingRPCDataMovement()){
-            UPMEM.profiler.transferredBytes += (params.length * 4 + 0b11111) & ~(0b11111);
+            UPMEM.profiler.transferredBytes += params.length * 4 * 64;
         }
         return pushParameters(params,0);
     }
 
     @Override
     public int pushParameters(int[] params, int tasklet)       {
-
         try {
             if(UPMEM.getConfigurator().isEnableProfilingRPCDataMovement()){
-                UPMEM.profiler.transferredBytes +=  (params.length * 4 + 0b11111) & ~(0b11111);
+                UPMEM.profiler.transferredBytes +=  params.length * 4 * 64;
             }
             return dpujvmRemote.pushArguments(params, tasklet);
         } catch (RemoteException e) {
@@ -78,7 +77,7 @@ public class DPUGarbageCollectorSimulator extends DPUGarbageCollector {
     public void readBackHeapSpacePt() {
         try {
             if(UPMEM.getConfigurator().isEnableProfilingRPCDataMovement()){
-                UPMEM.profiler.transferredBytes +=  32;
+                UPMEM.profiler.transferredBytes +=  4 * 64;
             }
             heapSpacePt = dpujvmRemote.getHeapPointer();
         } catch (RemoteException e) {
@@ -90,7 +89,7 @@ public class DPUGarbageCollectorSimulator extends DPUGarbageCollector {
     public void readBackMetaSpacePt() {
         try {
             if(UPMEM.getConfigurator().isEnableProfilingRPCDataMovement()){
-                UPMEM.profiler.transferredBytes += 32;
+                UPMEM.profiler.transferredBytes += 4 * 64;
             }
             metaSpacePt = dpujvmRemote.getHeapPointer();
         } catch (RemoteException e) {
@@ -101,8 +100,9 @@ public class DPUGarbageCollectorSimulator extends DPUGarbageCollector {
     @Override
     public void transfer(DPUJVMMemSpaceKind spaceKind, byte[] data, int pt) {
         if(UPMEM.getConfigurator().isEnableProfilingRPCDataMovement()){
-            UPMEM.profiler.transferredBytes +=  (data.length * 4 + 0b11111) & ~(0b11111);
+            UPMEM.profiler.transferredBytes +=  (data.length * 64);
         }
+
         try {
             switch (spaceKind){
                 case DPU_HEAPSPACE:
@@ -134,8 +134,6 @@ public class DPUGarbageCollectorSimulator extends DPUGarbageCollector {
                     dpujvmRemote.setParamsBufferPointer(val, pt);
                     dpujvmRemote.setParamsBufferIndex(val / 4, pt);
                     break;
-
-
             }
         }catch (RemoteException ignored){
 
@@ -156,8 +154,9 @@ public class DPUGarbageCollectorSimulator extends DPUGarbageCollector {
         alignmentMask = 0b111;
         size = (size + alignmentMask) & ~alignmentMask;
         if(UPMEM.getConfigurator().isEnableProfilingRPCDataMovement()){
-            UPMEM.profiler.transferredBytes +=  (size * 4 + 0b11111) & ~(0b11111);
+            UPMEM.profiler.transferredBytes +=  (size * 64);
         }
+
         // list contains values for selection, according to the spaceKind
         int[] sourceMemoryPointers = new int[]{metaSpacePt, heapSpacePt};
         String[] pointerVarNames = new String[]{"meta_space_pt",  "mram_heap_pt", "params_buffer_pt"};
@@ -194,7 +193,6 @@ public class DPUGarbageCollectorSimulator extends DPUGarbageCollector {
         heapSpacePt = sourceMemoryPointers[1];
 
         gcLogger.logf("new %s = 0x%x\n", pointerVarName, addr + size);
-
 
         // write new pointer value to DPU
         switch (pointerVarName){
@@ -273,7 +271,7 @@ public class DPUGarbageCollectorSimulator extends DPUGarbageCollector {
     @Override
     public int getReturnVal() {
         if(UPMEM.getConfigurator().isEnableProfilingRPCDataMovement()){
-            UPMEM.profiler.transferredBytes +=  32;
+            UPMEM.profiler.transferredBytes +=  4 * 64;
         }
         try {
             Object result = dpujvmRemote.getResult(0).value;
@@ -288,7 +286,7 @@ public class DPUGarbageCollectorSimulator extends DPUGarbageCollector {
     public int getInt32(int i) {
         try {
             if(UPMEM.getConfigurator().isEnableProfilingRPCDataMovement()){
-                UPMEM.profiler.transferredBytes +=  32;
+                UPMEM.profiler.transferredBytes += 4 * 64;
             }
             return dpujvmRemote.getInt32(i);
         } catch (RemoteException e) {

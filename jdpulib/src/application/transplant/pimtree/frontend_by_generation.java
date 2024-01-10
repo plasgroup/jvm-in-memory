@@ -21,7 +21,6 @@ public class frontend_by_generation implements frontend {
         this.bias = _bias;
         this.pos = _pos;
         this.test_n = _test_n;
-
     }
 
     @Override

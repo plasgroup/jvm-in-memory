@@ -307,6 +307,11 @@ public class UPMEM {
         return new DPUInt32ArrayHandler(dpuID, addr, len);
     }
 
+
+    public static void reportProfiling(){
+        if(!getConfigurator().isEnableProfilingRPCDataMovement()) return;
+        profiler.reportProfiledData();
+    }
     public Object createObjectSpecific(int dpuID, String descriptor, Object... params) {
         return null;
     }

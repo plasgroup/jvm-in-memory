@@ -1,10 +1,13 @@
 package transplant.index.search;
 
+import framework.pim.UPMEM;
+
 import java.io.*;
 
 public class IndexSearchMain {
     public static void main(String[] args){
         IndexSearchDatabaseBuilder dm = new IndexSearchDatabaseBuilder();
+
         try {
             IndexSearchDatabase indexSearchDatabase =
                     dm.buildDictionary("./database/dict.txt")

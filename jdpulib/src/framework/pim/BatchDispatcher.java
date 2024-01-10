@@ -39,6 +39,11 @@ public class BatchDispatcher {
     {
         dispatchLogger.setEnable(true);
     }
+
+    public int getResult(int tid) {
+        return result[tid];
+    }
+
     /** DPU task structure **/
     class DPUExecutionTask implements Runnable{
         private int id;
@@ -48,13 +53,13 @@ public class BatchDispatcher {
         }
         public void run(){
             try {
-                System.out.println("DPU#" + id + "dispatched, " + recordedCount[id] +" tasks. pointer = " + paramsBufferPointer[id]);
+                dispatchLogger.logln("DPU#" + id + "dispatched, " + recordedCount[id] +" tasks. pointer = " + paramsBufferPointer[id]);
                 upmem.getDPUManager(id).dpuExecute(null);
             } catch (DpuException e) {
                 throw new RuntimeException(e);
             }
 
-            System.out.println("retrieve result (DPU#" + id + ")");
+            dispatchLogger.logln("retrieve result (DPU#" + id + ")");
             /** result retrieving **/
 
             if(!UPMEM.getConfigurator().isUseSimulator()){
@@ -91,12 +96,13 @@ public class BatchDispatcher {
 
             }
 
-            System.out.println("dpu#" + id + " finished");
+            dispatchLogger.logln("dpu#" + id + " finished");
 
             latch.countDown();
 
         }
     }
+
 
     {
         dispatchLogger.setEnable(false);
@@ -134,7 +140,7 @@ public class BatchDispatcher {
           count += recordedCount[dpuID];
         }
 
-        System.out.println("=== dispatch all ====");
+        dispatchLogger.logln("=== dispatch all ====");
 
         latch = new CountDownLatch(UPMEM.dpuInUse);
 

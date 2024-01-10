@@ -16,9 +16,6 @@ import static application.transplant.pimtree.PIMExecutorDataContext.LX_HASHTABLE
 
 public class PIMTreeCore {
     public static int OPERATION_NR_ITEMS = 7;
-
-
-
     public static int push_pull_limit_dynamic;
     public static int num_wait_microsecond;
     public static pim_skip_list[] pim_skip_list_drivers;
@@ -42,9 +39,9 @@ public class PIMTreeCore {
     private static int T, n, rounds;
     private static int l;
     public static final int nr_of_dpus = 4;
-    public static PIMExecutorComputationContext[] executors = new PIMExecutorComputationContext[UPMEM.dpuInUse];
 
-    
+    public static PIMExecutorComputationContext[] executors =
+            new PIMExecutorComputationContext[UPMEM.dpuInUse];
 
     public static void execute(List<operation> ops, int load_batch_size,
                                int execute_batch_size, int threads)  {
@@ -225,19 +222,20 @@ public class PIMTreeCore {
 
         }
     }
+
     public static void generateData(int size){
+        System.out.println("Generate key-value paris, and send to PIM device, size = " + size);
         Random r = new Random();
         int htLength = LX_HASHTABLE_SIZE;
         for(int i = 0; i < size; i++){
             int randomKey = r.nextInt(0, Integer.MAX_VALUE);
             int randomValue = r.nextInt(0, Integer.MAX_VALUE);
             int dpuID = pim_skip_list.hash_to_dpu(Long.valueOf(randomKey), 0, nr_of_dpus);
-            System.out.println("insert key = " + randomKey +" value = " + randomValue + " to dpu " + dpuID);
+            // System.out.println("insert key = " + randomKey +" value = " + randomValue + " to dpu " + dpuID);
             PIMTreeCore.executors[dpuID].insertKeyValue(randomKey, randomValue);
         }
+        System.out.println("Generate keys finished...");
     }
-
-
 
     private static void scan(List<task_union.scan_operation> scanOperations, Lock mut, int tid) {
     }

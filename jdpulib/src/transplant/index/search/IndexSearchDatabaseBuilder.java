@@ -36,15 +36,16 @@ public class IndexSearchDatabaseBuilder {
     }
 
     public IndexSearchDatabaseBuilder buildIndexes(String docPath) throws IOException{
-
         tables = new IndexTable[dpuInUse];
 
         for(int i = 0; i < dpuInUse; i++){
-            tables[i] = (IndexTable) UPMEM.getInstance().createObject(i, IndexTable.class);
+            tables[i] =
+                    (IndexTable) UPMEM.getInstance().createObject(i, IndexTable.class);
         }
 
         File f = new File(docPath);
-        if (!f.exists() || f.isFile()) return this;
+        if (!f.exists() || f.isFile())
+            return this;
         File[] fs = f.listFiles();
         int did = 1;
         int lastDPU = 0;
@@ -88,7 +89,8 @@ public class IndexSearchDatabaseBuilder {
     }
 
     private int getSize(int dpuID) {
-        return tables[dpuID].getSize() * 4 + documents[dpuID].stream().map(e -> e.context.size() * 4 + 4).reduce(0, Integer::sum);
+        return tables[dpuID].getSize() * 4 +
+                documents[dpuID].stream().map(e -> e.context.size() * 4 + 4).reduce(0, Integer::sum);
 
     }
 
@@ -112,6 +114,4 @@ public class IndexSearchDatabaseBuilder {
         }
         return this;
     }
-
-
 }

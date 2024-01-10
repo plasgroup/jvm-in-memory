@@ -30,7 +30,7 @@ public class DPUManagerSimulator extends DPUManager {
     }
 
     public DPUManagerSimulator(int dpuID) {
-        System.out.println("Init DPU " +  dpuID + "'s JVM");
+        dpuManagerLogger.logln("Init DPU " +  dpuID + "'s JVM");
         this.dpuID = dpuID;
 
         try {
@@ -64,7 +64,7 @@ public class DPUManagerSimulator extends DPUManager {
             }else{
                 while(taskletId != lastTaskletId || perDPUThreadsInUse == 1){
                     if(bd.paramsBufferPointer[dpuID][taskletId] + size < DPUGarbageCollector.perTaskletParameterBufferSize){
-                        System.out.println("in tasklet " + taskletId + " of DPU#" + dpuID +
+                        dpuManagerLogger.logln("in tasklet " + taskletId + " of DPU#" + dpuID +
                                 ", paramsBufferPointer = " + bd.paramsBufferPointer[dpuID][taskletId] + ", current need size = " + size + ", max size = " + DPUGarbageCollector.perTaskletParameterBufferSize);
                         break;
                     }

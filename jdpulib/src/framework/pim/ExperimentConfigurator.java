@@ -21,4 +21,5 @@ public class ExperimentConfigurator {
     public static boolean pimPerformanceEvaluation = false;
     public static boolean performanceEvaluationEnableBatchDispatch = false;
     public static boolean useSimulator = false;
+    public static boolean profiling = true;
 }
