@@ -1,0 +1,3 @@
+DPUCOUNT=8
+THREADS_PER_DPU=1
+~/jdk-17/bin/java -jar simulator-server.jar DPU_COUNT=$DPUCOUNT THREAD_PER_DPU=$THREADS_PER_DPU
