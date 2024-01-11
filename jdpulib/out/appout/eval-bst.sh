@@ -7,6 +7,7 @@ QUERY_COUNTS=[200000 500000 1000000]
 LAYERS=[17 18 19 20]
 JAVA=~/jdk-17/bin/java
 
+### PIM Version
 for NODES_COUNT in $NODES_COUNTS do;
 	for DPU_COUNT in $DPU_COUNTS do;
 		for QUERY_COUNT in $QUERY_COUNTS do;
@@ -16,6 +17,20 @@ for NODES_COUNT in $NODES_COUNTS do;
 		done
 	done
 done
+
+
+### CPU-ONLY Version
+
+for NODES_COUNT in $NODES_COUNTS do;
+        for DPU_COUNT in $DPU_COUNTS do;
+                for QUERY_COUNT in $QUERY_COUNTS do;
+                        for LAYER in $LAYERS do;
+                                # ....
+                        done
+                done
+        done
+done
+
 
 ## stat mode
 echo "profile status CPU-Full"
