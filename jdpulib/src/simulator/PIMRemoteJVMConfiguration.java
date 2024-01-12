@@ -1,7 +1,7 @@
 package simulator;
 
 public class PIMRemoteJVMConfiguration {
-    public static int threadCount = 1;
+    public static int threadCount = 24;
     public static int JVMCount = 4;
 
     final public static int heapSize = 48 * 1024 * 1024;

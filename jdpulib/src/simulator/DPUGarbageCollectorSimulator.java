@@ -293,4 +293,17 @@ public class DPUGarbageCollectorSimulator extends DPUGarbageCollector {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public void setInt32(int index, int val) {
+        try {
+            if(UPMEM.getConfigurator().isEnableProfilingRPCDataMovement()){
+                UPMEM.profiler.transferredBytes += 4 * 64;
+            }
+            dpujvmRemote.setInt32(index, val);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
+

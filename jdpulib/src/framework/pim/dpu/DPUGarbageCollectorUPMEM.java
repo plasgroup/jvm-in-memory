@@ -271,4 +271,15 @@ public class DPUGarbageCollectorUPMEM extends DPUGarbageCollector {
         }
         return BytesUtils.readU4LittleEndian(returnValBytes, 0);
     }
+
+    @Override
+    public void setInt32(int addr, int val) {
+        byte[] valBytes = new byte[4];
+        BytesUtils.writeU4LittleEndian(valBytes, val, 0);
+        try {
+            dpu.copy(valBytes, "mram_heap_pt", addr);
+        } catch (DpuException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

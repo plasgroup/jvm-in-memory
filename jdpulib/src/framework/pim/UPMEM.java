@@ -18,7 +18,10 @@ import transplant.index.search.Document;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 
 /** UPMEM class
@@ -32,7 +35,7 @@ public class UPMEM {
     /* Configurations Fields */
     public static final int TOTAL_DPU_COUNT = 1024; // Total DPUs
     public static final int TOTAL_HARDWARE_THREADS_COUNT = 24; // hardware thread used in each DPU
-    public static int dpuInUse = 1024; // DPUs in using
+    public static int dpuInUse = 4; // DPUs in using
     public static int perDPUThreadsInUse = 1;
 
     /* Facade Class for PIM management */
@@ -159,6 +162,7 @@ public class UPMEM {
         }
         return proxyObject;
     }
+
     public IDPUProxyObject createObject(int dpuID, Class objectClass, Object arg0){
 
         IDPUProxyObject proxyObject;
@@ -179,6 +183,7 @@ public class UPMEM {
         }
         return proxyObject;
     }
+
     public static HashSet<String> allowSet = new HashSet<>();
 
     static {
@@ -194,9 +199,9 @@ public class UPMEM {
 
 
     public IDPUProxyObject createObject(int dpuID, Class objectClass, Object arg0, Object arg1){
-
         IDPUProxyObject proxyObject;
         DPUObjectHandler handler;
+
         try {
             handler = getDPUManager(dpuID).createObject(objectClass, arg0, arg1);
         } catch (IOException e) {
@@ -213,6 +218,7 @@ public class UPMEM {
         }
         return proxyObject;
     }
+
     public IDPUProxyObject createObject(int dpuID, Class objectClass, Object arg0, Object arg1, Object arg2){
 
         IDPUProxyObject proxyObject;
@@ -298,20 +304,27 @@ public class UPMEM {
         return getDPUManager(dpuID).garbageCollector.getRemainMetaMemory();
     }
 
-    public <T> DPUInt32ArrayHandler createArray(int dpuID, int len) {
+    public <T> DPUInt32ArrayHandler createArray(int dpuID, int len) throws RemoteException {
         // must 1 + 4 * a bit
-        int addr = UPMEM.getInstance().getDPUManager(dpuID).garbageCollector.allocate(DPUJVMMemSpaceKind.DPU_HEAPSPACE, len * 4 + 4);
-        byte[] lenBytes = new byte[4];
-        BytesUtils.writeU4LittleEndian(lenBytes, len ,0);
-        UPMEM.getInstance().getDPUManager(dpuID).garbageCollector.transfer(DPUJVMMemSpaceKind.DPU_HEAPSPACE, lenBytes, addr);
-        return new DPUInt32ArrayHandler(dpuID, addr, len);
-    }
 
+        if(!configurator.isUseSimulator()){
+            int addr = UPMEM.getInstance().getDPUManager(dpuID).garbageCollector.allocate(DPUJVMMemSpaceKind.DPU_HEAPSPACE, len * 4 + 4);
+            byte[] lenBytes = new byte[len * 4 + 4];
+            BytesUtils.writeU4LittleEndian(lenBytes, len ,0);
+            UPMEM.getInstance().getDPUManager(dpuID)
+                    .garbageCollector.transfer(DPUJVMMemSpaceKind.DPU_HEAPSPACE, lenBytes, addr);
+            return new DPUInt32ArrayHandler(dpuID, addr, len);
+        }else{
+            int addr = ((DPUManagerSimulator)UPMEM.getInstance().getDPUManager(dpuID)).getDpujvmRemote().createArray(len);
+            return new DPUInt32ArrayHandler(dpuID, addr, len);
+        }
+    }
 
     public static void reportProfiling(){
         if(!getConfigurator().isEnableProfilingRPCDataMovement()) return;
         profiler.reportProfiledData();
     }
+
     public Object createObjectSpecific(int dpuID, String descriptor, Object... params) {
         return null;
     }
@@ -322,5 +335,18 @@ public class UPMEM {
         }else{
             return pimManager.getDPUManager(i).dpu;
         }
+    }
+
+    public ArrayList<Integer> creatInt32List(int dpuID, int size) {
+        if(configurator.isUseSimulator()){
+            try {
+                return ((DPUManagerSimulator)UPMEM.getInstance().getDPUManager(dpuID))
+                        .getDpujvmRemote().createInt32List(size);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+
+        }
+        return null;
     }
 }

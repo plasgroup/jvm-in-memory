@@ -1,4 +1,4 @@
-package application.transplant.sparsep.spmv.one.computation;
+package application.transplant.sparsep.spmv.one.types.data.share;
 
 import application.transplant.sparsep.spmv.one.bcooblock.Main;
 import sparsep.spmv.one.types.data.share.Bind;
