@@ -11,14 +11,11 @@ for cnt_nodes in ${NODES_COUNTS[@]}; do
 	for cnt_reqs in ${REQ_COUNT[@]}; do
 		for cnt_threads in ${THREADS[@]}; do
 			for cnt_dpus in ${DPUS[@]}; do
-				pkill -f '*.simulator.*'
-				(ps aux | grep -v -e 'grep ' | grep simulator | tr -s " " | cut -d " " -f 2 | xargs kill -9 ) || true
 				echo "NODES=$cnt_nodes, REQUEST=$cnt_reqs, THREADS=$cnt_threads, DPUS=$cnt_dpus"
 			        sh start_simulator_server.sh &
 				$JAVA -cp pimtree.jar:dpu.jar application.transplant.pimtree.PIMTreeMain KEYS_COUNT=$cnt_nodes TSK_N=$cnt_reqs
 			        kill %1 2> /dev/null && wait $1 2> dev/null
-				pkill -f '*.simulator.*'
-				(ps aux | grep -v -e 'grep ' | grep simulator | tr -s " " | cut -d " " -f 2 | xargs kill -9 ) || true
+				bash ./kill_all_defunct.sh
 			done
 		done
 	done
