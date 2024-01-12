@@ -1,16 +1,24 @@
+#!/bin/bash
 JAVA=~/jdk-17/bin/java
 EVENT_LIST="LLC-load-misses,LLC-store-misses"
 VM_OPTIONS="-XX:+UnlockDiagnosticVMOptions -XX:+PreserveFramePointer -XX:+DumpPerfMapAtExit -Xmx131072m"
-NODES_COUNTS=[500000 1000000 2000000 5000000 10000000 20000000 50000000]
-REQ_COUNT=[200000 500000 1000000 2000000 5000000 10000000]
-THREADS=[1 2 4 8 16 24]
-DPUS=[4 8 16 32 64]
+declare -a NODES_COUNTS=(500000 1000000 2000000 5000000 10000000 20000000 50000000)
+declare -a REQ_COUNT=(200000 500000 1000000 2000000 5000000 10000000)
+declare -a THREADS=(1 2 4 8 16 24)
+declare -a DPUS=(4 8 16 32 64)
 # PIM Version
-for cnt_nodes in $NODES_COUNTS do;
-	for cnt_reqs in $REQ_COUNT do;
-		for cnt_threads in $THREADS do;
-			for cnt_dpus in $DPUS do;
-				...
+for cnt_nodes in ${NODES_COUNTS[@]}; do
+	for cnt_reqs in ${REQ_COUNT[@]}; do
+		for cnt_threads in ${THREADS[@]}; do
+			for cnt_dpus in ${DPUS[@]}; do
+				pkill -f '*.simulator.*'
+				(ps aux | grep -v -e 'grep ' | grep simulator | tr -s " " | cut -d " " -f 2 | xargs kill -9 ) || true
+				echo "NODES=$cnt_nodes, REQUEST=$cnt_reqs, THREADS=$cnt_threads, DPUS=$cnt_dpus"
+			        sh start_simulator_server.sh &
+				$JAVA -cp pimtree.jar:dpu.jar application.transplant.pimtree.PIMTreeMain KEYS_COUNT=$cnt_nodes TSK_N=$cnt_reqs
+			        kill %1 2> /dev/null && wait $1 2> dev/null
+				pkill -f '*.simulator.*'
+				(ps aux | grep -v -e 'grep ' | grep simulator | tr -s " " | cut -d " " -f 2 | xargs kill -9 ) || true
 			done
 		done
 	done
@@ -26,7 +34,5 @@ for NODES_COUNT in $NODES_COUNTS do;
                 done
         done
 done
-
-
 
 $JAVA -cp pimtree.jar:dpu.jar application.transplant.pimtree.PIMTreeMain
