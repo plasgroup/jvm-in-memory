@@ -17,7 +17,7 @@ import java.util.concurrent.*;
 import static framework.pim.dpu.DPUGarbageCollector.*;
 
 public class BatchDispatcher {
-    public byte[][] paramsBuffer = new byte[UPMEM.dpuInUse][perTaskletParameterBufferSize];
+    public byte[][] paramsBuffer = new byte[UPMEM.dpuInUse][perTaskletParameterBufferSize * UPMEM.perDPUThreadsInUse];
     public int[][] paramsBufferPointer = new int[UPMEM.dpuInUse][UPMEM.perDPUThreadsInUse];
     public int[] taskletPosition = new int[UPMEM.dpuInUse]; // use for Round-robin scheduling
 
@@ -25,7 +25,7 @@ public class BatchDispatcher {
     ExecutorService executorService = Executors.newCachedThreadPool();
     int maxResult = 1000000;
     int[] result;
-    byte[] resultBytes = new byte[4 * 1024];
+    byte[] resultBytes = new byte[maxResult * 4];
     public int[] recordedCount = new int[UPMEM.dpuInUse];
     public HashSet<Integer> dpusInUse = new HashSet<>(); // record the dpu that has more than 1 tasks in record list.
     int dispatchedCount = 0;
@@ -160,7 +160,7 @@ public class BatchDispatcher {
             Arrays.fill(paramsBufferPointer[dpuID], 0);
             Arrays.fill(paramsBuffer[dpuID], (byte)0);
         }
-        dispatchLogger.setEnable(true);
+        dispatchLogger.setEnable(false);
         dpusInUse.clear();
         dispatchLogger.logln("All dispatched");
         dispatchedCount += count;

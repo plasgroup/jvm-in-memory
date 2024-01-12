@@ -2,7 +2,7 @@ package simulator;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-
+import java.util.ArrayList;
 
 
 /** This interface define the facade for accessing remote services. **/
@@ -62,4 +62,10 @@ public interface DPUJVMRemote extends Remote {
     int getInt32(int addr) throws RemoteException;
 
     int getMetaSpaceLength() throws RemoteException;
+
+    void setInt32(int index, int val) throws RemoteException;
+
+    int createArray(int len) throws RemoteException;
+
+    ArrayList createInt32List(int size) throws RemoteException;
 }

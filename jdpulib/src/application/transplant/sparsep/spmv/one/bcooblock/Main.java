@@ -1,7 +1,7 @@
 package application.transplant.sparsep.spmv.one.bcooblock;
 
 import application.transplant.index.search.ArrayListProxy;
-import application.transplant.sparsep.spmv.one.computation.DPUExecutor;
+import application.transplant.sparsep.spmv.one.types.data.share.DPUExecutor;
 import application.transplant.sparsep.spmv.one.types.comm.DPUArguments;
 import application.transplant.sparsep.spmv.one.types.comm.DPUInfo;
 import com.upmem.dpu.DpuException;
@@ -9,10 +9,14 @@ import framework.pim.BatchDispatcher;
 import framework.pim.UPMEM;
 import framework.pim.UPMEMConfigurator;
 import framework.pim.dpu.DPUGarbageCollector;
+import sparsep.spmv.one.types.data.share.Bind;
+import sparsep.spmv.one.types.data.share.COOMatrix;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static framework.pim.UPMEM.batchDispatcher;
 import static framework.pim.UPMEM.dpuInUse;
 
 public class Main {
@@ -23,13 +27,18 @@ public class Main {
     static sparsep.spmv.one.types.data.share.BCOOMatrix A;
     static sparsep.spmv.one.types.comm.PartitionInfo partInfo;
     private static boolean check_correct = false;
-    private static List<Integer>[] x; // in-dpu... proxy
+    private static ArrayList[] x; // in-dpu... proxy
     private static int[] y;
     private static boolean blncTakltBlock = true;
     static DPUInfo[] dpu_info;
-    static void initVector(List<Integer> vec, int ncols_pad) {
-        for(int i = 0; i < vec.size(); ++i) {
+    static void initVector(ArrayList vec, int ncols_pad) {
+        for(int i = 0; i < ncols_pad; ++i) {
             vec.set(i, i % 4 + 1);
+        }
+        try {
+            bd.dispatchAll();
+        } catch (DpuException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -49,12 +58,12 @@ public class Main {
     }
 
     public static class Params{
-        public int fileName;
+        public String fileName;
         public int row_blsize;
         public int col_blsize;
     }
 
-    static BatchDispatcher bd = new BatchDispatcher();
+    static BatchDispatcher bd;
 
     public static void partition_tsklt_by_block(sparsep.spmv.one.types.data.share.BCOOMatrix bcooMtx, sparsep.spmv.one.types.comm.PartitionInfo part_info, int dpu) {
         int block_offset = dpu * (UPMEM.perDPUThreadsInUse + 2);
@@ -95,14 +104,26 @@ public class Main {
         assert(total_blocks == (part_info.block_split[dpu+1] - part_info.block_split[dpu]));
     }
 
-    public static void Main(String[] args) throws DpuException, NoSuchFieldException, InstantiationException {
+    public static void main(String[] args) throws DpuException, NoSuchFieldException, InstantiationException, IOException {
         Params p = inputParams(args);
+        UPMEM.initialize(new UPMEMConfigurator().setEnableProfilingRPCDataMovement(true)
+                .setThreadPerDPU(24).setDpuInUseCount(4).setUseSimulator(true).setUseAllowSet(true)
+                .addClassesAllow("sparsep.spmv.one.types.data.share.Bind", "java.util.ArrayList",
+                        "application.transplant.sparsep.spmv.one.types.data.share.DPUExecutor")
+                .setPackageSearchPath("application.transplant.sparsep.spmv.one.types.data.share.")
+        );
         UPMEMConfigurator configurator = new UPMEMConfigurator();
         UPMEM.initialize(configurator);
+        bd = new BatchDispatcher();
         UPMEM.beginRecordBatchDispatching(bd);
 
         long i;
         int NR_TASKLETS = UPMEM.perDPUThreadsInUse;
+        String basePath = (System.getProperty("user.dir"));
+
+        p.fileName = basePath + "/src/application/transplant/sparsep/SparseP/inputs/af_shell1.mtx";
+        p.col_blsize = 16;
+        p.row_blsize = 16;
 
         // Initialize input data
         D = readCOOMatrix(p.fileName);
@@ -119,7 +140,7 @@ public class Main {
         partInfo = partition_init();
 
         // Load-balance blocks across DPUs
-        partition_by_blocks(A, partInfo);
+        partition_by_blocks(A, partInfo); // PIM
 
         // Initialize help data with padding if needed
         int ncols_pad = (int) (A.num_block_cols * A.col_block_size);
@@ -132,18 +153,31 @@ public class Main {
             nrows_pad += ((8 / byte_dt) - (A.nrows % (8 / byte_dt)));
 
         // Allocate input vector
+        x = new ArrayList[dpuInUse];
         for(int dpuID = 0; dpuID < dpuInUse; dpuID++){
-            x[dpuID] = (List<Integer>) UPMEM.getInstance().createObject(dpuID, ArrayList.class, ncols_pad);
+            // x[dpuID] = (List<Integer>) UPMEM.getInstance().createObject(dpuID, ArrayList.class, ncols_pad);
+            x[dpuID] = UPMEM.getInstance().creatInt32List(dpuID, ncols_pad); // PIm
+
         }
+
+        System.out.println("Finish allocate input vector");
 
         // Initialize input vector with arbitrary data
         for(int dpuID = 0; dpuID < dpuInUse; dpuID++)
-            initVector(x[dpuID], ncols_pad);
+            initVector(x[dpuID], ncols_pad);  // PIM
         // now x in all DPU, and be initialized
+
+        System.out.println("Finish init input vector");
 
         // Initialize help data
         dpu_info = new DPUInfo[dpuInUse];
+
         DPUArguments[] input_args = new DPUArguments[dpuInUse];
+        for(int eachDpu = 0; eachDpu < dpuInUse; eachDpu++){
+            input_args[eachDpu] = new DPUArguments();
+            dpu_info[eachDpu] = new DPUInfo();
+        }
+        System.out.println("Finish init dpu Info");
 
         // Max limits for parallel transfers
         long max_block_rows_per_dpu = 0;
@@ -151,6 +185,8 @@ public class Main {
 
         int prev_block_row = 0;
         i = 0;
+
+
 
         // Find padding for block-rows and non-zero elements needed for CPU-DPU transfers
         for(i = 0; i < dpuInUse; i++){
@@ -168,12 +204,17 @@ public class Main {
             if (block_rows_dpu > max_block_rows_per_dpu)
                 max_block_rows_per_dpu = block_rows_dpu;
 
+
             // Keep information per DPU
             dpu_info[(int) i].block_rows_per_dpu = block_rows_dpu;
             dpu_info[(int) i].start_block_row_dpu = prev_block_row;
             dpu_info[(int) i].start_block_dpu = partInfo.block_split[(int) i];
             dpu_info[(int) i].blocks = blocks;
             dpu_info[(int) i].blocks_pad = blocks_pad;
+            bd.dispatchAll();
+
+            UPMEM.endRecordBatchDispatching();
+            System.out.println("end batch dispatching...");
             if (i == 0)
                 dpu_info[(int) i].merge = 0;
             else if (A.bind[partInfo.block_split[(int) i]].getRowind() == A.bind[partInfo.block_split[(int) i]-1].getColind())
@@ -188,7 +229,10 @@ public class Main {
             input_args[(int) i].row_block_size = (int) A.row_block_size;
             input_args[(int) i].col_block_size = (int) A.col_block_size;
 
+
             // Compute prev_block_row (previous block row) for the next DPU
+
+            UPMEM.endRecordBatchDispatching();
             if (i != dpuInUse) {
                 if (A.bind[partInfo.block_split[(int) (i+1)]].getRowind() == A.bind[partInfo.block_split[(int) (i+1)] - 1].getRowind())
                     prev_block_row = A.bind[partInfo.block_split[(int) (i+1)] - 1].getRowind();
@@ -198,19 +242,22 @@ public class Main {
                 prev_block_row = (int) A.num_block_rows;
             }
 
+
+
             if(blncTakltBlock)
                 // load-balance rows across tasklets
                 partition_tsklt_by_block(A, partInfo, (int) i);
             else {
-                // load-balance nnz across tasklets
+                // load-balance npackage sparnz across tasklets
                 partition_tsklt_by_nnz(A, partInfo, (int) i);
             }
+            System.out.println("Finish partition");
 
             int t;
             for (t = 0; t < NR_TASKLETS; t++) {
                 // Find input arguments per DPU
-                input_args[(int) i].start_block[t] = partInfo.block_split_tasklet[(int) (i * (NR_TASKLETS+2) + t)];
-                input_args[(int) i].blocks_per_tasklet[t] = partInfo.block_split_tasklet[(int) (i * (NR_TASKLETS+2) + (t+1))] - partInfo.block_split_tasklet[(int) (i * (NR_TASKLETS+2) + t)];
+                input_args[(int) i].start_block[t] = partInfo.block_split_tasklet[(int) (i * (NR_TASKLETS + 2) + t)];
+                input_args[(int) i].blocks_per_tasklet[t] = partInfo.block_split_tasklet[(int) (i * (NR_TASKLETS + 2) + (t + 1))] - partInfo.block_split_tasklet[(int) (i * (NR_TASKLETS + 2) + t)];
             }
         }
 
@@ -225,7 +272,7 @@ public class Main {
         // Re-allocations for padding needed
         // A.bind = (struct bind_t *) realloc(A.bind, (max_blocks_per_dpu * nr_of_dpus * sizeof(struct bind_t)));
         // A.bval = (val_dt *) realloc(A.bval, (max_blocks_per_dpu * A.row_block_size * A.col_block_size * nr_of_dpus * sizeof(val_dt)));
-        y = new int[(int) ((long) dpuInUse * (long) max_block_rows_per_dpu * A.row_block_size)];
+        y = new int[(int) ((long) dpuInUse * max_block_rows_per_dpu * A.row_block_size)];
 
         // size calculation probem
         // Count total number of bytes to be transfered in MRAM of DPU
@@ -238,6 +285,9 @@ public class Main {
         /** This will be done by proxy dispatching **/
         i = 0;
 
+
+
+        UPMEM.beginRecordBatchDispatching(bd);
         DPUExecutor[] dpuExecutors = new DPUExecutor[dpuInUse];
         for(i = 0; i < dpuInUse; i++) {
             input_args[(int) i].max_block_rows = (int) max_block_rows_per_dpu;
@@ -247,6 +297,9 @@ public class Main {
             // TODO need transfer to DPU input_args[i] -> dpu#i
             // DPU_ASSERT(dpu_prepare_xfer(dpu, input_args + i));
         }
+        bd.dispatchAll();
+
+
 
         // Copy Rowind + Colind
         /** this done by partitioning **/
@@ -256,22 +309,30 @@ public class Main {
 
         List<Integer>[] distributedBValues = new List[dpuInUse];
         for(i = 0; i < dpuInUse; i++) {
-            //DPU_ASSERT(dpu_prepare_xfer(dpu, A -> bval + (((uint64_t) part_info -> block_split[i]) * A -> row_block_size * A -> col_block_size)));
+            // DPU_ASSERT(dpu_prepare_xfer(dpu, A -> bval + (((uint64_t) part_info -> block_split[i]) * A -> row_block_size * A -> col_block_size)));
             int size = (int) (max_blocks_per_dpu * A.row_block_size * A.col_block_size);
             int begin = (int) (((long) partInfo.block_split[(int) i]) * A.row_block_size * A.col_block_size);
-            List<Integer> list = (List<Integer>) UPMEM.getInstance().createObject((int)i, ArrayList.class, size);
+            List<Integer> list = UPMEM.getInstance().creatInt32List((int)i,  size);
             for(int index = 0; index < size; index++){
                 list.set(index, A.bval[begin + index]);
             }
+            bd.dispatchAll();
+
             distributedBValues[(int) i] = list;
             List<sparsep.spmv.one.types.data.share.Bind> dpuBinds =
-                    (List<sparsep.spmv.one.types.data.share.Bind>) UPMEM.getInstance().createObject((int) i, ArrayList.class);
+                    (List<sparsep.spmv.one.types.data.share.Bind>) UPMEM.getInstance().
+                            createObject((int) i, ArrayList.class);
+
             for(int bindIndex = partInfo.block_split[(int) i]; bindIndex < partInfo.block_split[(int) (i + 1)]; bindIndex++){
                 dpuBinds.add(A.bind[bindIndex]);
+                if(bindIndex == 233){
+                    System.out.println();
+                }
             }
 
-            Main.Arguments arguments = (Main.Arguments) UPMEM.getInstance().createObject((int) i, Arguments.class);
-            dpuExecutors[(int) i].calculate(list, x[(int) i], dpuBinds, arguments);
+            batchDispatcher.dispatchAll();
+            Main.Arguments arguments =
+                    (Main.Arguments) UPMEM.getInstance().createObject((int) i, Arguments.class);
         }
 
         // Copy input vector to DPUs
@@ -315,36 +376,36 @@ public class Main {
             n++;
         }
 
-        if(check_correct){
-            // Check output
-            int[] y_host = new int[(int) nrows_pad];
-            spmv_host(y_host, A, x[0]);
-
-            boolean status = true;
-            i = 0;
-            int j,r;
-            for (n = 0; n < dpuInUse; n++) {
-                long actual_block_rows = dpu_info[(int) n].block_rows_per_dpu;
-                for (j = 0; j < actual_block_rows; j++) {
-                    if(j == 0 && dpu_info[(int) n].merge == 1) {
-                        continue;
-                    }
-                    for (r = 0; r < A.row_block_size; r++) {
-                        if(y_host[(int) i] != y[(int) (n * max_block_rows_per_dpu * A.row_block_size
-                                + j * A.row_block_size + r)] && i < A.nrows) {
-                            status = false;
-                        }
-                        i++;
-                    }
-                }
-            }
-            if (status) {
-                System.out.println("["  + "OK" + "] Outputs are equal\n");
-            } else {
-                System.out.println("[" + "ERROR" + "] Outputs differ!\n");
-            }
-
-        }
+//        if(check_correct){
+//            // Check output
+//            int[] y_host = new int[(int) nrows_pad];
+//            spmv_host(y_host, A, x[0]);
+//
+//            boolean status = true;
+//            i = 0;
+//            int j,r;
+//            for (n = 0; n < dpuInUse; n++) {
+//                long actual_block_rows = dpu_info[(int) n].block_rows_per_dpu;
+//                for (j = 0; j < actual_block_rows; j++) {
+//                    if(j == 0 && dpu_info[(int) n].merge == 1) {
+//                        continue;
+//                    }
+//                    for (r = 0; r < A.row_block_size; r++) {
+//                        if(y_host[(int) i] != y[(int) (n * max_block_rows_per_dpu * A.row_block_size
+//                                + j * A.row_block_size + r)] && i < A.nrows) {
+//                            status = false;
+//                        }
+//                        i++;
+//                    }
+//                }
+//            }
+//            if (status) {
+//                System.out.println("["  + "OK" + "] Outputs are equal\n");
+//            } else {
+//                System.out.println("[" + "ERROR" + "] Outputs differ!\n");
+//            }
+//
+//        }
 
     }
 
@@ -389,10 +450,11 @@ public class Main {
         bcooMtx.row_block_size = bcsrMtx.row_block_size;
         bcooMtx.col_block_size = bcsrMtx.col_block_size;
 
-        bcooMtx.bind = new sparsep.spmv.one.types.data.share.Bind[bcooMtx.num_blocks];
+        bcooMtx.bind = new sparsep.spmv.one.types.data.share.Bind[bcooMtx.num_blocks + 1];
         bcooMtx.bval = new int[(int) ((bcooMtx.num_blocks + 1) * bcooMtx.row_block_size * bcooMtx.col_block_size)];
         bcooMtx.nnz_per_block = new int[bcooMtx.num_blocks];
 
+        bcooMtx.bind[bcooMtx.bind.length - 1] = new Bind(0, 0);
         for(long n = 0; n < bcsrMtx.num_block_rows; n++) {
             for(long i = bcsrMtx.browptr[(int) n]; i < bcsrMtx.browptr[(int) (n + 1)]; i++){
                 // !important
@@ -509,11 +571,26 @@ public class Main {
             /** migrate to DPU **/
 
             partInfo.block_split[i+1] = partInfo.block_split[i] + blocks_per_dpu;
+            try {
+                bd.dispatchAll();
+            } catch (DpuException e) {
+                throw new RuntimeException(e);
+            }
+            UPMEM.endRecordBatchDispatching();
             for(j = partInfo.block_split[i]; j < partInfo.block_split[i+1]; j++) {
                 A.bind[j] = (sparsep.spmv.one.types.data.share.Bind)
-                        UPMEM.getInstance().createObject(i, sparsep.spmv.one.types.data.share.Bind.class, A.bind[j].rowind, A.bind[j].colind);
+                        UPMEM.getInstance()
+                                .createObject(i
+                                        , sparsep.spmv.one.types.data.share.Bind.class
+                                        , A.bind[j].rowind
+                                        , A.bind[j].colind);
                 partInfo.nnzs_dpu[i] += bcooMtx.nnz_per_block[j];
             }
+
+
+
+            UPMEM.beginRecordBatchDispatching(bd);
+
         }
 
         // Sanity Check
@@ -563,8 +640,8 @@ public class Main {
         //Phase I: Count the exact number of new blocks to create.
         bAp[0] = 0;
         if(num_rows_left == 0) {
-            for(I=0; I<num_block_rows; I++) {
-                for(i=I * row_block_size; i < (I+1) * row_block_size; i++) {
+            for(I=0; I < num_block_rows; I++) {
+                for(i = I * row_block_size; i < (I + 1) * row_block_size; i++) {
                     for(k = csrMtx.rowptr[(int) i]; k < csrMtx.rowptr[(int) (i+1)]; k++) {
                         j = csrMtx.colind[(int) k];
                         J = j/col_block_size;
@@ -775,8 +852,48 @@ public class Main {
         return csrMtx;
     }
 
-    private static sparsep.spmv.one.types.data.share.COOMatrix readCOOMatrix(Object fileName) {
-        return null;
+    private static sparsep.spmv.one.types.data.share.COOMatrix readCOOMatrix(String fileName) throws IOException {
+        COOMatrix cooMtx;
+        cooMtx = new COOMatrix();
+        File fp = new File(fileName);
+        int rowindx, colindx;
+        int val;
+        String line;
+        String[] token;
+        boolean done = false;
+        int i = 0;
+        FileReader fileReader = new FileReader(fp);
+        BufferedReader br = new BufferedReader(fileReader);
+        while ((line = br.readLine()) != null){
+
+            if(line.charAt(0) == '%'){
+                ;
+            } else if (done == false) {
+                token = line.split(" ");
+                cooMtx.nrows = Integer.parseInt(token[0]);
+                cooMtx.ncols = Integer.parseInt(token[1]);
+                cooMtx.nnz = Integer.parseInt(token[2]);
+                System.out.printf("[INFO] %s: %d Rows, %d Cols, %d NNZs\n", fileName, cooMtx.nrows, cooMtx.ncols, cooMtx.nnz);
+                cooMtx.rowindx = new int[cooMtx.nnz];
+                cooMtx.colind = new long[cooMtx.nnz];
+                cooMtx.values = new int[cooMtx.nnz];
+                done = true;
+            } else {
+                token = line.split(" ");
+                rowindx = Integer.parseInt(token[0]);
+                colindx = Integer.parseInt(token[1]);
+                val = (int) Double.parseDouble(token[2]);
+
+                cooMtx.rowindx[i] = rowindx - 1; // Convert indexes to start at 0
+                cooMtx.colind[i] = colindx - 1; // Convert indexes to start at 0
+                cooMtx.values[i] = val;
+                i++;
+            }
+        }
+
+        fileReader.close();
+        br.close();
+        return cooMtx;
     }
 
     private static Params inputParams(String[] args) {

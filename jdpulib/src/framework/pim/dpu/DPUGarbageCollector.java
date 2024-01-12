@@ -53,4 +53,6 @@ public abstract class DPUGarbageCollector {
     public abstract int getReturnVal();
 
     public abstract int getInt32(int i);
+
+    public abstract void setInt32(int index, int val);
 }

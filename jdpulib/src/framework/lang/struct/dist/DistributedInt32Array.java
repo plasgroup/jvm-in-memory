@@ -2,6 +2,8 @@ package framework.lang.struct.dist;
 
 import framework.pim.UPMEM;
 
+import java.rmi.RemoteException;
+
 import static framework.lang.struct.dist.ArrayDistributedStrategy.BLOCK;
 
 
@@ -22,10 +24,14 @@ public class DistributedInt32Array{
         if(strategy == BLOCK){
             int averageLength = length / this.partitionCount;
             int remain = length % this.partitionCount;
-            for(int i = 0; i < partitionCount - 1; i++){
-                handler[i] = UPMEM.getInstance().createArray(i, averageLength);
+            try{
+                for(int i = 0; i < partitionCount - 1; i++){
+                        handler[i] = UPMEM.getInstance().createArray(i, averageLength);
+                }
+                handler[partitionCount - 1] = UPMEM.getInstance().createArray(partitionCount - 1, averageLength + remain);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
             }
-            handler[partitionCount - 1] = UPMEM.getInstance().createArray(partitionCount - 1, averageLength + remain);
         }
     }
 

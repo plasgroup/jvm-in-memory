@@ -1,6 +1,8 @@
 package sparsep.spmv.one.types.data.share;
 
-public class Bind {
+import java.io.Serializable;
+
+public class Bind implements Serializable {
     public int rowind;
     public int colind;
 

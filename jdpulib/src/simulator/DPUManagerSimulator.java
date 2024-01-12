@@ -34,7 +34,9 @@ public class DPUManagerSimulator extends DPUManager {
         this.dpuID = dpuID;
 
         try {
-            this.dpujvmRemote = (DPUJVMRemote) LocateRegistry.getRegistry("localhost", 9239 + dpuID).lookup("DPUJVM" + dpuID);
+            this.dpujvmRemote = (DPUJVMRemote) LocateRegistry
+                    .getRegistry("localhost", 9239 + dpuID)
+                    .lookup("DPUJVM" + dpuID);
         } catch (RemoteException | NotBoundException e) {
             throw new RuntimeException(e);
         }
@@ -80,7 +82,9 @@ public class DPUManagerSimulator extends DPUManager {
 
 
             bd.taskletPosition[dpuID] = taskletId; // next time from t2 to find a proper tasklet
-            int from = bd.paramsBufferPointer[dpuID][taskletId] + DPUGarbageCollector.perTaskletParameterBufferSize * taskletId;
+            int from =
+                    bd.paramsBufferPointer[dpuID][taskletId]
+                            + DPUGarbageCollector.perTaskletParameterBufferSize * taskletId;
 
             // id
             BytesUtils.writeU4LittleEndian(UPMEM.batchDispatcher.paramsBuffer[dpuID], bd.recordedCount[dpuID]++, from);
@@ -111,12 +115,12 @@ public class DPUManagerSimulator extends DPUManager {
 
                 offset += 4;
             }
+
             bd.paramsBufferPointer[dpuID][taskletId] += size;
             bd.dpusInUse.add(dpuID);
 
             return;
         }
-
 
         // choose a tasklet
         int tasklet;

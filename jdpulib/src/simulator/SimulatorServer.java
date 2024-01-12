@@ -30,7 +30,6 @@ public class SimulatorServer {
         UPMEM.perDPUThreadsInUse = PIMRemoteJVMConfiguration.threadCount;
         UPMEM.dpuInUse = PIMRemoteJVMConfiguration.JVMCount;
         String deviceName = "DPU";
-
         /* Bind DPU#i at localhost with port of (9239 + i) */
         for(int i = 0; i < PIMRemoteJVMConfiguration.JVMCount; i++){
             DPUJVMRemoteImpl jvmRemote = new DPUJVMRemoteImpl(i, PIMRemoteJVMConfiguration.threadCount);
