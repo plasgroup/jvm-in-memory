@@ -21,7 +21,7 @@ for cnt_doc in ${DOC_COUNTS[@]}; do
                                   echo "NODES=$cnt_nodes, REQUEST=$cnt_reqs, THREADS=$cnt_threads, DPUS=$cnt_dpus"
                                   sh start_simulator_server.sh $cnt_dpus $cnt_threads &
                                   perf record -e $EVENT_LIST $JAVA $VM_OPTIONS -cp index-search.jar:dpu.jar application.transplant.index.search.IndexSearchMain DOC_COUNT=$cnt_doc TSK_N=$cnt_reqs DPU_COUNT=$cnt_dpus THREADS=$cnt_threads PROF_CPUDPU_DM DICT_PATH=$DICT_PATH FILE_PATH=$FILES_PATH REQ_FILE=$REQ_BASE_PATH 
-				  #> ./record-indexsearch/mov-n${cnt_nodes}-r${cnt_reqs}-t${cnt_threads}-d${cnt_dpus}.txt
+				  # ./record-indexsearch/mov-n${cnt_nodes}-r${cnt_reqs}-t${cnt_threads}-d${cnt_dpus}.txt
                                   perf report --stdio > ./record-indexsearch/n${cnt_nodes}-r${cnt_reqs}-t${cnt_threads}-d${cnt_dpus}.txt
                                   kill %1 2> /dev/null && wait $1 2> dev/null
                                   bash ./kill_all_defunct.sh
@@ -40,7 +40,7 @@ for cnt_doc in ${NODES_COUNTS[@]}; do
                                   bash ./kill_all_defunct.sh
                                   echo "NODES=$cnt_nodes, REQUEST=$cnt_reqs, THREADS=$cnt_threads, DPUS=$cnt_dpus"
                                   sh start_simulator_server.sh $cnt_dpus $cnt_threads &
-                                  perf record -e $EVENT_LIST $JAVA $VM_OPTIONS -cp index-search.jar:dpu.jar application.transplant.index.search.IndexSearchMain DOC_COUNT=$cnt_nodes TSK_N=$cnt_reqs DPU_COUNT=$cnt_dpus THREADS=$cnt_threads PROF_CPUDPU_DM > ./record-indexsearch/cpu-only-mov-n${cnt_nodes}-r${cnt_reqs}-t${cnt_threads}-d${cnt_dpus}.txt
+                                  perf record -e $EVENT_LIST $JAVA $VM_OPTIONS -cp index-search.jar:dpu.jar application.transplant.index.search.IndexSearchMain DOC_COUNT=$cnt_nodes TSK_N=$cnt_reqs DPU_COUNT=$cnt_dpus THREADS=$cnt_threads PROF_CPUDPU_DM CPU_ONLY > ./record-indexsearch/cpu-only-mov-n${cnt_nodes}-r${cnt_reqs}-t${cnt_threads}-d${cnt_dpus}.txt
                                   perf report --stdio > ./record-indexsearch/cpu-only-n${cnt_nodes}-r${cnt_reqs}-t${cnt_threads}-d${cnt_dpus}.txt
                                   kill %1 2> /dev/null && wait $1 2> dev/null
                                   bash ./kill_all_defunct.sh
