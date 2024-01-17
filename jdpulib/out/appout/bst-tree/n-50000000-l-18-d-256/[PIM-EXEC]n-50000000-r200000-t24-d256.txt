@@ -1,0 +1,60 @@
+BUILD_FROM_IMG BUILD_FROM_IMG=1
+TYPE TYPE=PIM
+NODES NODES=50000000
+QUERIES QUERIES=200000
+DPU_COUNT DPU_COUNT=256
+CPU_LAYER_COUNT CPU_LAYER_COUNT=18
+THREADS THREADS=24
+PROF_CPUDPU_DM PROF_CPUDPU_DM
+SERIALIZE_TREE SERIALIZE_TREE=0
+IMG_PATH IMG_PATH=./bst-tree/n-50000000-l-18-d-256/
+BATCH_DISPATCH BATCH_DISPATCH
+PROFILE_QUERY_TIME PROFILE_QUERY_TIME=1
+NO_SEARCH NO_SEARCH=0
+dpu in use = 256
+PIM mode, nodes count = 50000000 query count = 200000
+cpu tree layer count = 18
+build tree from images, path = ./bst-tree/n-50000000-l-18-d-256/
+Build Tree From Images
+init DPUs
+load image to DPU#0 from file ./bst-tree/n-50000000-l-18-d-256/[50000000]DPU#0.img
+load image to DPU#1 from file ./bst-tree/n-50000000-l-18-d-256/[50000000]DPU#1.img
+load image to DPU#2 from file ./bst-tree/n-50000000-l-18-d-256/[50000000]DPU#2.img
+load image to DPU#3 from file ./bst-tree/n-50000000-l-18-d-256/[50000000]DPU#3.img
+load image to DPU#4 from file ./bst-tree/n-50000000-l-18-d-256/[50000000]DPU#4.img
+load image to DPU#5 from file ./bst-tree/n-50000000-l-18-d-256/[50000000]DPU#5.img
+load image to DPU#6 from file ./bst-tree/n-50000000-l-18-d-256/[50000000]DPU#6.img
+load image to DPU#7 from file ./bst-tree/n-50000000-l-18-d-256/[50000000]DPU#7.img
+load image to DPU#8 from file ./bst-tree/n-50000000-l-18-d-256/[50000000]DPU#8.img
+load image to DPU#9 from file ./bst-tree/n-50000000-l-18-d-256/[50000000]DPU#9.img
+load image to DPU#10 from file ./bst-tree/n-50000000-l-18-d-256/[50000000]DPU#10.img
+load image to DPU#11 from file ./bst-tree/n-50000000-l-18-d-256/[50000000]DPU#11.img
+load image to DPU#12 from file ./bst-tree/n-50000000-l-18-d-256/[50000000]DPU#12.img
+load image to DPU#13 from file ./bst-tree/n-50000000-l-18-d-256/[50000000]DPU#13.img
+load image to DPU#14 from file ./bst-tree/n-50000000-l-18-d-256/[50000000]DPU#14.img
+load image to DPU#15 from file ./bst-tree/n-50000000-l-18-d-256/[50000000]DPU#15.img
+load image to DPU#16 from file ./bst-tree/n-50000000-l-18-d-256/[50000000]DPU#16.img
+load image to DPU#17 from file ./bst-tree/n-50000000-l-18-d-256/[50000000]DPU#17.img
+load image to DPU#18 from file ./bst-tree/n-50000000-l-18-d-256/[50000000]DPU#18.img
+load image to DPU#19 from file ./bst-tree/n-50000000-l-18-d-256/[50000000]DPU#19.img
+load image to DPU#20 from file ./bst-tree/n-50000000-l-18-d-256/[50000000]DPU#20.img
+load image to DPU#21 from file ./bst-tree/n-50000000-l-18-d-256/[50000000]DPU#21.img
+load image to DPU#22 from file ./bst-tree/n-50000000-l-18-d-256/[50000000]DPU#22.img
+load image to DPU#23 from file ./bst-tree/n-50000000-l-18-d-256/[50000000]DPU#23.img
+load image to DPU#24 from file ./bst-tree/n-50000000-l-18-d-256/[50000000]DPU#24.img
+load image to DPU#25 from file ./bst-tree/n-50000000-l-18-d-256/[50000000]DPU#25.img
+load image to DPU#26 from file ./bst-tree/n-50000000-l-18-d-256/[50000000]DPU#26.img
+load image to DPU#27 from file ./bst-tree/n-50000000-l-18-d-256/[50000000]DPU#27.img
+load image to DPU#28 from file ./bst-tree/n-50000000-l-18-d-256/[50000000]DPU#28.img
+load image to DPU#29 from file ./bst-tree/n-50000000-l-18-d-256/[50000000]DPU#29.img
+load image to DPU#30 from file ./bst-tree/n-50000000-l-18-d-256/[50000000]DPU#30.img
+load image to DPU#31 from file ./bst-tree/n-50000000-l-18-d-256/[50000000]DPU#31.img
+load image to DPU#32 from file ./bst-tree/n-50000000-l-18-d-256/[50000000]DPU#32.img
+load image to DPU#33 from file ./bst-tree/n-50000000-l-18-d-256/[50000000]DPU#33.img
+load image to DPU#34 from file ./bst-tree/n-50000000-l-18-d-256/[50000000]DPU#34.img
+load CPU part tree
+load CPU part tree finished
+begin query..
+avg query time = 61988 ns
+proxy search count = 199839
+Simulated data transfer between CPU and DPUs: 0 bytes
