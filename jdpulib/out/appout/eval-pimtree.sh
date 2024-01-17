@@ -14,13 +14,25 @@ for cnt_nodes in ${NODES_COUNTS[@]}; do
 		for cnt_threads in ${THREADS[@]}; do
 			for cnt_dpus in ${DPUS[@]}; do
 				for cnt_batch_size in ${BATCH[@]}; do
+				  # PIM
 				  bash ./kill_all_defunct.sh
 				  echo "NODES=$cnt_nodes, REQUEST=$cnt_reqs, THREADS=$cnt_threads, DPUS=$cnt_dpus"
 			          sh start_simulator_server.sh $cnt_dpus $cnt_threads &
-				  perf record -e $EVENT_LIST $JAVA $VM_OPTIONS -cp pimtree.jar:dpu.jar application.transplant.pimtree.PIMTreeMain KEYS_COUNT=$cnt_nodes TSK_N=$cnt_reqs DPU_COUNT=$cnt_dpus THREADS=$cnt_threads LOAD_BATCH=$cnt_batch_size EXEC_BATCH=$cnt_batch_size PROF_CPUDPU_DM KEY_VALUE_PATH=./pimtree-keyvalues/ > ./record-pimtree/mov-n${cnt_nodes}-r${cnt_reqs}-t${cnt_threads}-d${cnt_dpus}-b${cnt_batch_size}.txt
+				  perf record -e $EVENT_LIST $JAVA $VM_OPTIONS -cp pimtree.jar:dpu.jar application.transplant.pimtree.PIMTreeMain KEYS_COUNT=$cnt_nodes TSK_N=$cnt_reqs DPU_COUNT=$cnt_dpus THREADS=$cnt_threads LOAD_BATCH=$cnt_batch_size EXEC_BATCH=$cnt_batch_size PROF_CPUDPU_DM KEY_VALUE_PATH=./pimtree-keyvalues/ > ./record-pimtree/[PIM]mov-n${cnt_nodes}-r${cnt_reqs}-t${cnt_threads}-d${cnt_dpus}-b${cnt_batch_size}.txt
 				  perf report --stdio > ./record-pimtree/n${cnt_nodes}-r${cnt_reqs}-t${cnt_threads}-d${cnt_dpus}-b${cnt_batch_size}.txt
 			          kill %1 2> /dev/null && wait $1 2> dev/null
 				  bash ./kill_all_defunct.sh
+
+
+				  # CPU Only
+				  bash ./kill_all_defunct.sh
+                                  echo "NODES=$cnt_nodes, REQUEST=$cnt_reqs, THREADS=$cnt_threads, DPUS=$cnt_dpus"
+                                  sh start_simulator_server.sh $cnt_dpus $cnt_threads &
+                                  perf record -e $EVENT_LIST $JAVA $VM_OPTIONS -cp pimtree.jar:dpu.jar application.transplant.pimtree.PIMTreeMain KEYS_COUNT=$cnt_nodes TSK_N=$cnt_reqs DPU_COUNT=$cnt_dpus THREADS=$cnt_threads LOAD_BATCH=$cnt_batch_size EXEC_BATCH=$cnt_batch_size PROF_CPUDPU_DM KEY_VALUE_PATH=./pimtree-keyvalues/ CPU_ONLY > ./record-pimtree/[CPU]mov-n${cnt_nodes}-r${cnt_reqs}-t${cnt_threads}-d${cnt_dpus}-b${cnt_batch_size}.txt
+                                  perf report --stdio > ./record-pimtree/n${cnt_nodes}-r${cnt_reqs}-t${cnt_threads}-d${cnt_dpus}-b${cnt_batch_size}.txt
+                                  kill %1 2> /dev/null && wait $1 2> dev/null
+                                  bash ./kill_all_defunct.sh
+
 				done
 			done
 		done
