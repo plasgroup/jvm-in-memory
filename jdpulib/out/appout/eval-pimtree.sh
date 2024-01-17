@@ -3,8 +3,8 @@ JAVA=/home/huang/jdk-17/bin/java
 EVENT_LIST="LLC-load-misses,LLC-store-misses"
 VM_OPTIONS="-XX:+UnlockDiagnosticVMOptions -XX:+PreserveFramePointer -XX:+DumpPerfMapAtExit -Xmx131072m"
 declare -a NODES_COUNTS=(500 500000 1000000 2000000 5000000 10000000 20000000 50000000)
-declare -a REQ_COUNT=(200 200000 500000 1000000 2000000 5000000 10000000)
-declare -a THREADS=(1 2 4 8 16 24)
+declare -a REQ_COUNT=(200 200000 500000 1000000 2000000)
+declare -a THREADS=(1) # 2 4 8 16 24)
 declare -a DPUS=(64) #(4 8 16 32 64)
 declare -a BATCH=( 200)
 mkdir record-pimtree
