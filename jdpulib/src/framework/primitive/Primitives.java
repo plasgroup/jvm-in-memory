@@ -77,7 +77,7 @@ public class Primitives {
         return new DeployIntermediateRecord(pt - currentHeapBegin, RPCHelper.getAReturnValue(partition, DummyProxy.class));
     }
 
-    public IDPUProxyObject deployNewObject(Class c, int partition, Object[] params){
+    public Object deployNewObject(Class c, int partition, Object[] params){
         return UPMEM.getInstance().createObject(partition, c, params);
     }
 

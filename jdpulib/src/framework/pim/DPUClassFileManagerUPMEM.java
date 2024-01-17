@@ -171,7 +171,6 @@ public class DPUClassFileManagerUPMEM extends DPUClassFileManager {
                 Arrays.stream(jc.methodTable).map(e -> e.size).reduce(Integer::sum).orElseGet(()->0)
                 + ((jc.stringINTConstantPoolLength + 0b111) & (~0b111))
                 + ((8 * jc.virtualTable.items.size()) + 0b111 & (~0b111));
-        ;
     }
 
     private void recordFieldDistribution(Class c, DPUJClass jc) {
@@ -222,7 +221,7 @@ public class DPUClassFileManagerUPMEM extends DPUClassFileManager {
     }
 
     static {
-        classfileLogger.setEnable(true);
+        classfileLogger.setEnable(false);
     }
     @Override
     public DPUJClass loadClassToDPU(Class c) {
@@ -277,7 +276,7 @@ public class DPUClassFileManagerUPMEM extends DPUClassFileManager {
                     loadClassToDPU(c.getSuperclass());
                 }
             }
-            System.out.println("================= End of load super object ================");
+            classfileLogger.logln("================= End of load super object ================");
         }else{
             classfileLogger.logln(" ---- No superclass ----");
             className = formalClassName(c.getName());
@@ -292,6 +291,7 @@ public class DPUClassFileManagerUPMEM extends DPUClassFileManager {
             createVirtualTable(jc, classFileBytes);
             upmem.getDPUManager(dpuID).garbageCollector.allocate(DPUJVMMemSpaceKind.DPU_METASPACE,
                     ((8 * jc.virtualTable.items.size()) + 0b111) & (~0b111));
+
             for(int i = 0; i < jc.virtualTable.items.size(); i++){
                 String vClassName = jc.virtualTable.items.get(i).className;
                 String vDescriptor = jc.virtualTable.items.get(i).descriptor;

@@ -20,7 +20,8 @@ public class ClassWriter {
     public static void pushJClassToDPU(DPUJClass jc, int addr, int dpuID) throws DpuException {
 
         byte[] classBytes = cvtDPUClassStrut2Bytes(jc, addr);
-        upmem.getDPUManager(dpuID).garbageCollector.transfer(DPUJVMMemSpaceKind.DPU_METASPACE, classBytes, addr);
+        upmem.getDPUManager(dpuID).garbageCollector
+                .transfer(DPUJVMMemSpaceKind.DPU_METASPACE, classBytes, addr);
     }
 
     /** encoding DPUJClass to bytes that prepared to be pushed to DPUs **/
@@ -146,17 +147,28 @@ public class ClassWriter {
         BytesUtils.writeU4LittleEndian(bs, virtualTablePointer, virtualTablePointerPos);
 
         // items
-        for(int i = 0; i < ds.methodTable.length; i++){
-//            VirtualTableItem item = ds.virtualTable.items.get(i);
-//            BytesUtils.writeU4LittleEndian(bs, item.classReferenceAddress , pos);
-//            BytesUtils.writeU4LittleEndian(bs, item.methodReferenceAddress , pos + 4);
+        for(int i = 0; i < ds.virtualTable.items.size(); i++){
+            if(!UPMEM.getConfigurator().isUseSimulator()){
+                VirtualTableItem item = ds.virtualTable.items.get(i);
+                BytesUtils.writeU4LittleEndian(bs, item.classReferenceAddress , pos);
+                BytesUtils.writeU4LittleEndian(bs, item.methodReferenceAddress , pos + 4);
+            }
             pos += 8;
         }
         pos = (pos + 0b111) & (~0b111);
 
 
         classfileLogger.logf("=============== !Alert pos = %d === total-size = %d ================\n", pos, ds.totalSize);
-        if(pos != ds.totalSize) throw new RuntimeException();
+
+        if(pos != ds.totalSize)
+        {
+            System.out.println(48 + "jc.cpItemCount = " + ds.cpItemCount  + "* 8 " +
+                    "filed size = " + Arrays.stream(ds.fields).map(e -> e.size).reduce(Integer::sum).orElseGet(()->0)+
+                    "stringINTConstantPoolLength = " + ((ds.stringINTConstantPoolLength)) + " round = " + ((ds.stringINTConstantPoolLength + 0b111) & (~0b111))
+                    + "method_table length = " + ds.methodTable.length
+            );
+            throw new RuntimeException();
+        }
         return bs;
     }
 }

@@ -11,6 +11,7 @@ public class SimulatorServer {
         for(int i = 0; i < args.length; i++){
             String arg = args[i];
             String[] items = arg.split("=");
+            System.out.println(arg);
             String argumentName = items[0];
             System.out.println(argumentName + " " + args[i]);
             if("DPU_COUNT".equals(argumentName)){

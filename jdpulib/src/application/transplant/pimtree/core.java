@@ -13,6 +13,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import static application.transplant.pimtree.PIMTreeCore.make_slice;
 import static application.transplant.pimtree.PIMTreeCore.pim_skip_list_drivers;
 import static application.transplant.pimtree.PIMTreeMain.OPERATION_NR_ITEMS;
+import static framework.pim.logger.PIMLoggers.pimTreeLogger;
 
 
 public class core {
@@ -223,7 +224,7 @@ public class core {
         {
             Lock rLock = new ReentrantLock();
             rLock.lock();
-            System.out.printf("(%d) func void get(List<task_union.get_operation> ops, Lock mut, int tid) tid = %d\n",
+            pimTreeLogger.logf("(%d) func void get(List<task_union.get_operation> ops, Lock mut, int tid) tid = %d\n",
                     batch_number.getAndIncrement(), tid
             );
             //cout << (batch_number++) << " " << __FUNCTION__ << " " << tid << endl;

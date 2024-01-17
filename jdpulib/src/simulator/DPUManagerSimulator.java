@@ -2,6 +2,7 @@ package simulator;
 
 import com.upmem.dpu.DpuException;
 import framework.lang.struct.DPUObjectHandler;
+import framework.lang.struct.DummyProxy;
 import framework.lang.struct.IDPUProxyObject;
 import framework.pim.BatchDispatcher;
 import framework.pim.UPMEM;
@@ -10,8 +11,8 @@ import framework.pim.dpu.DPUManager;
 import framework.pim.dpu.cache.DPUMethodLookupTableItem;
 import framework.pim.utils.BytesUtils;
 
-import java.io.IOException;
 import java.io.PrintStream;
+import java.lang.reflect.InvocationTargetException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -22,8 +23,7 @@ import static framework.pim.UPMEM.*;
 import static framework.pim.dpu.java_strut.DPUJVMMemSpaceKind.DPU_HEAPSPACE;
 
 public class DPUManagerSimulator extends DPUManager {
-
-    private final DPUJVMRemote dpujvmRemote;
+    private DPUJVMRemote dpujvmRemote;
 
     public DPUJVMRemote getDpujvmRemote() {
         return dpujvmRemote;
@@ -32,14 +32,16 @@ public class DPUManagerSimulator extends DPUManager {
     public DPUManagerSimulator(int dpuID) {
         dpuManagerLogger.logln("Init DPU " +  dpuID + "'s JVM");
         this.dpuID = dpuID;
-
-        try {
-            this.dpujvmRemote = (DPUJVMRemote) LocateRegistry
-                    .getRegistry("localhost", 9239 + dpuID)
-                    .lookup("DPUJVM" + dpuID);
-        } catch (RemoteException | NotBoundException e) {
-            throw new RuntimeException(e);
+        while(true){
+            try {
+                this.dpujvmRemote = (DPUJVMRemote) LocateRegistry
+                        .getRegistry("localhost", 9239 + dpuID)
+                        .lookup("DPUJVM" + dpuID);
+                break;
+            } catch (RemoteException | NotBoundException ignored) {
+            }
         }
+
         garbageCollector = new DPUGarbageCollectorSimulator(dpuID, dpujvmRemote);
         dpuClassFileManager = new DPUClassFileManagerSimulator(dpuID, dpujvmRemote);
         classCacheManager = new DPULookupTableManagerSimulator(dpuID, dpujvmRemote);
@@ -122,6 +124,7 @@ public class DPUManagerSimulator extends DPUManager {
             return;
         }
 
+
         // choose a tasklet
         int tasklet;
         if(UPMEM.isSpecifyTasklet(dpuID)){
@@ -138,7 +141,7 @@ public class DPUManagerSimulator extends DPUManager {
                         }
                     }
                 }else{
-                    tasklet = (tasklet + 1) % PIMRemoteJVMConfiguration.threadCount;
+                    tasklet = (tasklet + 1) % perDPUThreadsInUse;
                 }
             }
         }
@@ -165,7 +168,7 @@ public class DPUManagerSimulator extends DPUManager {
             i++;
         }
         try {
-            dpujvmRemote.setParamsBufferPointer(paramsConverted.length * 4,0);
+            dpujvmRemote.setParamsBufferPointer(paramsConverted.length * 4, tasklet);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
@@ -179,11 +182,25 @@ public class DPUManagerSimulator extends DPUManager {
         }
 
         taskletSemaphore[tasklet] = 0;
-        currentTasklet = (currentTasklet + 1) % PIMRemoteJVMConfiguration.threadCount;
+        currentTasklet = (currentTasklet + 1) % perDPUThreadsInUse;
     }
 
     @Override
-    public <T> IDPUProxyObject createObjectSpecific(Class c, String descriptor, Object... params) throws IOException {
+    public <T> Object createObjectSpecific(Class c, String descriptor, Object... params) {
+        if(UPMEM.getConfigurator().isCPUOnly()){
+            try {
+                return c.getConstructor().newInstance(params);
+            } catch (InstantiationException e) {
+                throw new RuntimeException(e);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            } catch (InvocationTargetException e) {
+                throw new RuntimeException(e);
+            } catch (NoSuchMethodException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
         int fieldCount = calcFieldCount(c);
         int instanceSize = 8 + fieldCount * 4;
         byte[] objectDataStream = new byte[(instanceSize + 7) & ~7];
@@ -243,7 +260,20 @@ public class DPUManagerSimulator extends DPUManager {
     }
 
     @Override
-    public DPUObjectHandler createObject(Class c, Object... params) {
+    public DummyProxy createObject(Class c, Object... params) {
+        if(UPMEM.getConfigurator().isCPUOnly()){
+            try {
+                return new DummyProxy(c.getConstructor().newInstance(params));
+            } catch (InstantiationException e) {
+                throw new RuntimeException(e);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            } catch (InvocationTargetException e) {
+                throw new RuntimeException(e);
+            } catch (NoSuchMethodException e) {
+                throw new RuntimeException(e);
+            }
+        }
         // TODO: simplify the createObject in Simulator. (it not need fully simulate the class loading process of DPU JVM,
         //       because in simulator, the format of the same class is the same in each processor. However, in a real
         //       DPU JVM, the JVM use a representation of java class that differ to the host JVM.
@@ -312,8 +342,7 @@ public class DPUManagerSimulator extends DPUManager {
             callNonstaticMethod(classAddr, initMethodAddr, handler.address, params[0], params[1], params[2], params[3]);
         }
 
-        return handler;
-
+        return new DummyProxy(handler.dpuID, handler.address);
     }
 
     private boolean parseParameterList(String key, Object[] params) {

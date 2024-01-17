@@ -36,6 +36,7 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
     int heapSpaceIndex = 0;
     int[] taskletParameterTop;
     static Logger jvmLogger = PIMLoggers.jvmSimulatorLogger;
+
     static {
         jvmLogger.setEnable(false);
     }
@@ -53,32 +54,33 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
             int dest = currentParamPointer[threadID] / 4;
 
             while(pt < dest){
-                // System.out.println("pt = " + pt + " dest = " + dest);
+                jvmLogger.logln("pt = " + pt + " dest = " + dest);
                 int taskId =  parameterQueue[pt];
-                // System.out.println(" -- get task id = " + taskId);
+                jvmLogger.logln(" -- get task id = " + taskId);
                 Class c = (Class) metaSpace[parameterQueue[pt + 1]];
-                // System.out.println(" -- get class = " + c);
+                jvmLogger.logln(" -- get class = " + c);
 
                 if(metaSpace[parameterQueue[pt + 2]] instanceof Constructor){
                     Constructor constructor = (Constructor) metaSpace[parameterQueue[pt + 2]];
                     int instanceIndex = parameterQueue[pt + 3];
                     int paramCount =  constructor.getParameterCount();
-                    // System.out.println("constructor param count = " + paramCount + ", constructor = " + constructor);
+                    jvmLogger.logln("constructor param count = " + paramCount + ", constructor = " + constructor);
 
                     if(paramCount == 0){
                         try {
                             heap[instanceIndex] = constructor.newInstance();
-                            // System.out.println(" > call " + constructor);
+                            jvmLogger.logln(" > call " + constructor);
 
                         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
                             throw new RuntimeException(e);
                         }
+                        pt += 4;
                     }else{
                         Object[] params = new Object[paramCount];
                         pt += 4;
                         for(int i = 0; i < paramCount; i++){
                             Class parameterType = constructor.getParameterTypes()[i];
-                            // System.out.println("try read argument " + i + " = " + parameterQueue[i] + ", " + parameterType);
+                            jvmLogger.logln("try read argument " + i + " = " + parameterQueue[i] + ", " + parameterType);
                             if(Integer.class.isAssignableFrom(parameterType) || "int".equals("" + parameterType)){
                                 params[i] = parameterQueue[pt];
                                 jvmLogger.logln(" -- set arg " + i + " = (int) " + parameterQueue[pt]);
@@ -138,26 +140,25 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
                 if(((params.length * 4 + 16) % 8 != 0)){
                     pt++;
                 }
-                // System.out.println(" -- read params finished.");
+                jvmLogger.logln(" -- read params finished.");
                 try {
-                    // System.out.println("method =  " + m);
+                    jvmLogger.logln("method =  " + m);
                     Object ret = m.invoke(instance, params);
-                    // System.out.println(" get result " + ret);
+                    jvmLogger.logln(" get result " + ret);
                     synchronized (resultQueuePointer){
-                        // System.out.println(" set taskid = " + taskId + " to result area index = " + resultQueuePointer + " max length = " + resultQueue.length);
+                        jvmLogger.logln(" set taskid = " + taskId + " to result area index = " + resultQueuePointer + " max length = " + resultQueue.length);
                         resultQueue[resultQueuePointer] = taskId;
                         resultQueuePointer++;
                         if(ret == null){
                             resultQueue[resultQueuePointer] = 0;
                         }else{
-
                             if(!m.getReturnType().isPrimitive()){
                                 int addr = -1;
                                 synchronized (heap){
                                     addr = ++heapSpaceIndex;
                                     heap[addr] = ret;
                                     resultQueue[resultQueuePointer] = addr;
-                                    // System.out.println("write reference of " + ret.getClass() + " = addr: " + addr + " to result queue index = " + resultQueuePointer);
+                                    jvmLogger.logln("write reference of " + ret.getClass() + " = addr: " + addr + " to result queue index = " + resultQueuePointer);
                                 }
                             }else{
                                 resultQueue[resultQueuePointer] = ret;

@@ -35,15 +35,19 @@ public class IndexSearchDatabase {
     }
 
     public void search(String... words) {
-        List<Integer> collectA = Arrays.stream(words)
-                .map(s -> dictionary.get(s.replace(".", "").toLowerCase())).collect(Collectors.toList());
-
-        if(collectA.stream().anyMatch(Objects::isNull)){
-            throw new RuntimeException();
-        }
+//        List<Integer> collectA = Arrays.stream(words)
+//                .map(s -> dictionary.get(s.replace(".", "").toLowerCase()))
+//                .filter(Objects::nonNull).collect(Collectors.toList());
+//
+//        if(collectA.stream().anyMatch(Objects::isNull)){
+//            throw new RuntimeException();
+//        }
         int[] collect = Arrays.stream(words)
                 .map(s -> dictionary.get(s.replace(".", "").toLowerCase()))
+                .filter(Objects::nonNull)
                 .mapToInt(e -> e).toArray();
+        if(collect.length == 0) return;
+
 
         int totalMatch = 0;
         int firstMatchLocation = -1;

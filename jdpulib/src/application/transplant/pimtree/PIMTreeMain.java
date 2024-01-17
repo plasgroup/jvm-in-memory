@@ -17,15 +17,21 @@ public class PIMTreeMain {
     public static PIMTreeCore[] cores = new PIMTreeCore[nr_of_dpus];
 
     public static void main(String[] args) throws IOException {
-        int keyCount = 2000000;
-        int initN = 2000000;
+        int keyCount = 2000;
+        int initN = 2000;
         int testN = 1000;
         int loadBatchSize = 200;
         int executeBatchSize = 200;
+        int dpuCount = 4;
+        boolean  profileCPUDPUDataMovement = true;
+        int threads = 1;
 
         if(args.length != 0){
             for(int i = 0; i < args.length; i++){
-                String[] argItem = args[i].split(" ");
+                String[] argItem = args[i].split("=");
+                System.out.println(args[i]);
+//                System.out.println("parse arg:" + (argItem.length > 0 ?  argItem[0] : "")
+//                        + " = " + (argItem.length > 1 ? argItem[1] : ""));
                 if ("KEYS_COUNT".equals(argItem[0].strip().toUpperCase())){
                     keyCount = Integer.parseInt(argItem[1].strip());
                 } else if("TSK_N".equals(argItem[0].strip().toUpperCase())){
@@ -34,18 +40,24 @@ public class PIMTreeMain {
                     loadBatchSize = Integer.parseInt(argItem[1].strip());
                 } else if("EXEC_BATCH".equals(argItem[0].strip().toUpperCase())){
                     executeBatchSize = Integer.parseInt(argItem[1].strip());
+                } else if("DPU_COUNT".equals(argItem[0].strip().toUpperCase())){
+                    dpuCount = Integer.parseInt(argItem[1].strip());
+                } else if("PROF_CPUDPU_DM".equals(argItem[0].strip().toUpperCase())){
+                    profileCPUDPUDataMovement = true;
+                } else if("THREADS".equals(argItem[0].strip().toUpperCase())){
+                    threads = Integer.parseInt(argItem[1].strip());
                 }
             }
         }
 
         PIMRemoteJVMConfiguration.JVMCount = nr_of_dpus;
-        UPMEM.initialize(new UPMEMConfigurator().setThreadPerDPU(1
-                        ).setDpuInUseCount(64).setUseSimulator(true)
-                .setUseAllowSet(true).setDpuInUseCount(4)
+        UPMEM.initialize(new UPMEMConfigurator().setThreadPerDPU(threads
+                        ).setUseSimulator(true)
+                .setUseAllowSet(true).setDpuInUseCount(dpuCount)
                 .addClassesAllow("application.transplant.pimtree.PIMTreeCore",
                         "application.transplant.pimtree.PIMExecutorComputationContext")
                 .setPackageSearchPath("application.transplant.pimtree.")
-                .setEnableProfilingRPCDataMovement(true)
+                .setEnableProfilingRPCDataMovement(profileCPUDPUDataMovement)
         );
 
         List<Double> pos = new ArrayList<>(OPERATION_NR_ITEMS);
@@ -63,15 +75,18 @@ public class PIMTreeMain {
         pos.set(5, 60.0);
 
 
-        System.out.println("Begin PiM-Tree application, key = " + keyCount
-                + ", task count = " + initN + " execution batch size = " + executeBatchSize);
+        System.out.println("Begin PIM-Tree application, key = " + keyCount
+                + ", task count = " + initN + " execution batch size = " + executeBatchSize + " threads = " +
+                threads + " dpus = " + dpuCount);
 
         frontend_by_generation frontend =
                 new frontend_by_generation(initN,  testN, pos, 0,
                         loadBatchSize, executeBatchSize);
 
         run(frontend, loadBatchSize, executeBatchSize, keyCount);
-        UPMEM.reportProfiling();
+        if(profileCPUDPUDataMovement){
+            System.out.println("Simulated data transfer between CPU and DPUs:" + UPMEM.profiler.transferredBytes);
+        }
     }
 
     static void run(frontend f, int init_batch_size, int test_batch_size, int keyCount) {
@@ -115,17 +130,6 @@ public class PIMTreeMain {
         for (int i = 0; i < PIMTreeCore.num_top_level_threads; i ++) {
             pim_skip_list_drivers[i].push_pull_limit_dynamic = PIMTreeCore.push_pull_limit_dynamic;
         }
-
-
-//        {
-//            List<operation> test_ops = f.test_tasks();
-//            PIMTreeCore.execute(
-//                            make_slice(test_ops),
-//                            init_batch_size,
-//                            test_batch_size,
-//                            PIMTreeCore.num_top_level_threads
-//            );
-//        }
 
 
     }

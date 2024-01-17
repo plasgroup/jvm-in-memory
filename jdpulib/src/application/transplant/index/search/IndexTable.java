@@ -7,7 +7,6 @@ import java.util.*;
 
 public class IndexTable {
     Dictionary<Integer, List<Match>> mappingTable = new Hashtable<>();
-
     private int recordCount = 0;
     public int getSize(){
         return mappingTable.size() + recordCount;

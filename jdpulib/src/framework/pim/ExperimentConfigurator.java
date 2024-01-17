@@ -22,4 +22,9 @@ public class ExperimentConfigurator {
     public static boolean performanceEvaluationEnableBatchDispatch = false;
     public static boolean useSimulator = false;
     public static boolean profiling = true;
+
+    public static boolean writeKeyValueOnly = false;
+
+    public static int tasklets = 1;
+    public static boolean profileQueryTime = true;
 }

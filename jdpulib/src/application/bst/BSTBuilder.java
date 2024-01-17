@@ -9,8 +9,8 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import static framework.pim.ExperimentConfigurator.totalNodeCount;
 import static application.bst.TreeWriter.convertCPUTreeToPIMTree;
+import static framework.pim.ExperimentConfigurator.*;
 
 public class BSTBuilder {
     static Logger bstBuildingLogger = PIMLoggers.bstBuildingLogger;
@@ -283,13 +283,15 @@ public class BSTBuilder {
 
     /** build PIM BST from file, distributing cpuLayerCount layers in CPU side at most **/
     public static TreeNode buildPIMTree(String filePath, int cpuLayerCount){
-        for(int i = 0; i < UPMEM.dpuInUse; i++){
-            UPMEM.getInstance().getDPUManager(i).dpuClassFileManager.loadClassToDPU(DPUTreeNode.class);
-        }
+            for(int i = 0; i < UPMEM.dpuInUse; i++){
+                UPMEM.getInstance().getDPUManager(i).dpuClassFileManager.loadClassToDPU(DPUTreeNode.class);
+            }
 
+        System.out.println("build CPU Tree.....");
         TreeNode root = BSTBuilder.buildCPUTree(filePath);
+        System.out.println("Serialize tree to files");
         if(ExperimentConfigurator.serializeToFile){
-            serializeTreeToFile(root, "CPU_TREE_" + totalNodeCount + ".txt");
+            serializeTreeToFile(root, imagesPath + "CPU_TREE_" + totalNodeCount + ".txt");
         }
         convertCPUTreeToPIMTree(root, cpuLayerCount);
 

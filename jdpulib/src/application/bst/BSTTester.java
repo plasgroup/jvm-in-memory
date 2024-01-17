@@ -9,9 +9,9 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static framework.pim.ExperimentConfigurator.noSearch;
 import static application.bst.BSTBuilder.*;
 import static application.bst.TreeWriter.*;
+import static framework.pim.ExperimentConfigurator.*;
 
 public class BSTTester {
     static List<Integer> keys = readIntergerArrayList("keys_random.txt");
@@ -84,7 +84,7 @@ public class BSTTester {
         TreeNode root;
         if(ExperimentConfigurator.buildFromSerializedData){
             try{
-                root = buildCpuPartTreeFromFile("CPU_TREE_" + totalNodeCount + ".txt");
+                root = buildCpuPartTreeFromFile(imagesPath + "CPU_TREE_" + totalNodeCount + ".txt");
             }catch (IOException e){
                  throw new RuntimeException(e);
             }
@@ -94,7 +94,7 @@ public class BSTTester {
 
 
         if(ExperimentConfigurator.serializeToFile)
-            serializeTreeToFile(root, "CPU_TREE_" + totalNodeCount + ".txt");
+            serializeTreeToFile(root, imagesPath+ "CPU_TREE_" + totalNodeCount + ".txt");
         return queryInTree(queriesCount, root);
     }
 
@@ -104,7 +104,9 @@ public class BSTTester {
             System.out.println("Build Tree From Images");
             try {
                 for(int i = 0; i < UPMEM.dpuInUse; i++){
+                    System.out.println("init DPU " + i);
                     UPMEM.getInstance().getDPUManager(i).createObject(DPUTreeNode.class, new Object[]{0, 0});
+                    System.out.println("init DPU " + i + " finished");
                 }
                 writeDPUImages(totalNodeCount, ExperimentConfigurator.imagesPath);
 
@@ -121,7 +123,7 @@ public class BSTTester {
 
         if(ExperimentConfigurator.serializeToFile){
             System.out.println("Serialize Tree");
-            serializeTreeToFile(root, "PIM_TREE_" + totalNodeCount + ".txt");
+            serializeTreeToFile(root,  imagesPath + "PIM_TREE_" + totalNodeCount + ".txt");
             System.out.println("Serialize Tree Finish");
         }
 
@@ -134,12 +136,20 @@ public class BSTTester {
         int i = 0;
         int s = 0;
         if(noSearch) return -1;
+        long startTime = 0;
+        long endTime = 0;
+
+        startTime = System.nanoTime();
+
         while(i < queryCount){
             int qk = keys.get(i);
             int v = root.search(qk);
             s += v;
             i++;
         }
+        endTime = System.nanoTime();
+        System.out.println("avg query time = " + (endTime - startTime) / 1000000 + " ms");
+
         return s;
     }
 

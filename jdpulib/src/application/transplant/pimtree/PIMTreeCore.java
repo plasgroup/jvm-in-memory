@@ -12,6 +12,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
 import static application.transplant.pimtree.PIMExecutorDataContext.LX_HASHTABLE_SIZE;
+import static framework.pim.logger.PIMLoggers.pimTreeLogger;
 
 
 public class PIMTreeCore {
@@ -215,7 +216,7 @@ public class PIMTreeCore {
         {
             Lock rLock = new ReentrantLock();
             rLock.lock();
-            System.out.printf("(%d) func void insert(List<task_union.insert_operation> ops, Lock mut, int tid) tid = %d\n",
+            pimTreeLogger.logf("(%d) func void insert(List<task_union.insert_operation> ops, Lock mut, int tid) tid = %d\n",
                     batch_number.getAndIncrement(), tid
             );
             ds.insert();
@@ -224,7 +225,7 @@ public class PIMTreeCore {
     }
 
     public static void generateData(int size){
-        System.out.println("Generate key-value paris, and send to PIM device, size = " + size);
+        //System.out.println("Generate key-value paris, and send to PIM device, size = " + size);
         Random r = new Random();
         int htLength = LX_HASHTABLE_SIZE;
         for(int i = 0; i < size; i++){
@@ -234,7 +235,7 @@ public class PIMTreeCore {
             // System.out.println("insert key = " + randomKey +" value = " + randomValue + " to dpu " + dpuID);
             PIMTreeCore.executors[dpuID].insertKeyValue(randomKey, randomValue);
         }
-        System.out.println("Generate keys finished...");
+        // System.out.println("Generate keys finished...");
     }
 
     private static void scan(List<task_union.scan_operation> scanOperations, Lock mut, int tid) {
@@ -256,7 +257,7 @@ public class PIMTreeCore {
 //            }
             List<task_union.get_operation> ops2 = make_slice(ops); // make_slice((int64_t*)ops.begin(), (int64_t*)ops.end());
             //time_nested("get load", [&]() { d
-            System.out.println("load");
+            pimTreeLogger.logln("load");
             ds.get_load(ops2);
 
             //});
@@ -266,11 +267,11 @@ public class PIMTreeCore {
         {
             Lock rLock = new ReentrantLock();
             rLock.lock();
-            System.out.printf("(%d) func void get(List<task_union.get_operation> ops, Lock mut, int tid) tid = %d\n",
+            pimTreeLogger.logf("(%d) func void get(List<task_union.get_operation> ops, Lock mut, int tid) tid = %d\n",
                     batch_number.getAndIncrement(), tid
             );
             //cout << (batch_number++) << " " << __FUNCTION__ << " " << tid << endl;
-            System.out.println("get");
+            pimTreeLogger.logln("get");
             //  time_nested("get", [&]() {
             ds.get(); // execute
             rLock.unlock();
@@ -316,7 +317,7 @@ public class PIMTreeCore {
 
 
         // get a block\
-        System.out.printf("get ops from index %d to index %d\n", l, r);
+        pimTreeLogger.logf("get ops from index %d to index %d\n", l, r);
         List<operation> mixed_op_batch = ops.subList(l, r);
 
 
@@ -333,7 +334,7 @@ public class PIMTreeCore {
             }
             for (int j = 0; j < OPERATION_NR_ITEMS; j++) {
                 sums[j].set(i, c[j]); // j-th's operation's i block has c[j] operations
-                System.out.printf("%d-th's operation's %d-th block has %d operations\n", j, i, c[j]);
+                pimTreeLogger.logf("%d-th's operation's %d-th block has %d operations\n", j, i, c[j]);
             }
         }
 

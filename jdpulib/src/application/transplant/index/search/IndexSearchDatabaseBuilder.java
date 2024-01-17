@@ -59,7 +59,11 @@ public class IndexSearchDatabaseBuilder {
             Document doc = (Document) UPMEM.getInstance().createObject(dpuID, Document.class, did);
 
             // insert words to doc
-            List<Integer> splitedContent = Arrays.stream(content.split(System.lineSeparator())).map(e -> e.split(" ")).map(e -> Arrays.stream(e).map(w -> dictionary.get(w.replace(".","").toLowerCase())).collect(Collectors.toList())).collect(Collectors.toList()).stream().flatMap(List::stream).collect(Collectors.toList());
+            List<Integer> splitedContent =
+                    Arrays.stream(content.split(System.lineSeparator()))
+                            .map(e -> e.split(" "))
+                            .map(e -> Arrays.stream(e)
+                                    .map(w -> dictionary.get(w.replace(".","").toLowerCase())).collect(Collectors.toList())).collect(Collectors.toList()).stream().flatMap(List::stream).collect(Collectors.toList());
             pushContent(doc, splitedContent);
 
             documentIDMap.put(did, f.getPath());
@@ -68,7 +72,8 @@ public class IndexSearchDatabaseBuilder {
             String[] words = content.split(" ");
 
             int location = 0;
-            for (int wid : splitedContent) {
+            for (Integer wid : splitedContent) {
+                if(wid == null) continue;
                 insertWordIndexRecord(dpuID, wid, did, location++);
             }
 
@@ -83,8 +88,8 @@ public class IndexSearchDatabaseBuilder {
     }
 
     private void pushContent(Document doc, List<Integer> splitedContent) {
-
         for(Integer wordID : splitedContent){
+                if(wordID == null) continue;
                doc.pushWord(wordID);
         }
     }
@@ -114,6 +119,7 @@ public class IndexSearchDatabaseBuilder {
     }
 
     public IndexSearchDatabaseBuilder buildDictionary(String dictionaryFilePath) throws IOException {
+        System.out.println("Begin build dictionary...");
         File f = new File(dictionaryFilePath);
 
         int wid = 0;
@@ -127,6 +133,7 @@ public class IndexSearchDatabaseBuilder {
             dictionary.put(line, wid);
             wid++;
         }
+        System.out.println("Build dictionary finished");
         return this;
     }
 

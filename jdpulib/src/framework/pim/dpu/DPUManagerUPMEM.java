@@ -2,23 +2,29 @@ package framework.pim.dpu;
 
 import com.upmem.dpu.Dpu;
 import com.upmem.dpu.DpuException;
+import framework.lang.struct.DummyProxy;
 import framework.pim.*;
 import framework.lang.struct.DPUObjectHandler;
 import framework.lang.struct.IDPUProxyObject;
+import framework.pim.dpu.cache.DPUClassFileLookupTableItem;
+import framework.pim.dpu.cache.DPULookupTableManager;
 import framework.pim.dpu.cache.DPUMethodLookupTableItem;
+import framework.pim.dpu.java_strut.DPUJClass;
+import framework.pim.dpu.java_strut.VirtualTableItem;
 import framework.pim.utils.BytesUtils;
 
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Dictionary;
 import java.util.Enumeration;
+import java.util.Iterator;
 
 import static framework.pim.dpu.java_strut.DPUJVMMemSpaceKind.DPU_HEAPSPACE;
 
 public class DPUManagerUPMEM extends DPUManager{
 
-    public <T> DPUObjectHandler createObject(Class c, Object[] params) {
 
+    public <T> DummyProxy createObject(Class c, Object[] params) {
         if(UPMEM.getConfigurator().isUseSimulator()) {
             int fieldCount = calcFieldCount(c);
             int instanceSize = 8 + fieldCount * 4;
@@ -50,7 +56,7 @@ public class DPUManagerUPMEM extends DPUManager{
 
             // call the init func
             callNonstaticMethod(classAddr, initMethodAddr, handler.address, params);
-            return handler;
+            return new DummyProxy(handler.dpuID, handler.address);
         }
         int fieldCount = calcFieldCount(c);
         int instanceSize = 8 + fieldCount * 4;
@@ -94,9 +100,11 @@ public class DPUManagerUPMEM extends DPUManager{
         int objAddr =
                 0;
         objAddr = garbageCollector.allocate(DPU_HEAPSPACE, instanceSize);
+        dpuManagerLogger.logln("allocate "  + instanceSize + "bytes in addr = " + objAddr);
         garbageCollector.transfer(DPU_HEAPSPACE, objectDataStream, objAddr);
+        dpuManagerLogger.logln("instance data transferred..");
         DPUObjectHandler handler = garbageCollector.dpuAddress2ObjHandler(objAddr, dpuID);
-        dpuManagerLogger.logln("---> Object Create Finish, handler = " + " (addr: " + handler.address + "," + "dpu: " + handler.dpuID + ") <---");
+        dpuManagerLogger.logln("---> Object Create Finish, handler = " + " (addr: " + handler.address + "===" + objAddr +"," + "dpu: " + handler.dpuID + ") <---");
 
 
         // VirtualTable virtualTable = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getClassStructure("framework.pim/algorithm/DPUTreeNode").virtualTable;
@@ -104,8 +112,9 @@ public class DPUManagerUPMEM extends DPUManager{
         // dpuManagerLogger.logln("" + virtualTable);
 
         // call the init func
+        dpuManagerLogger.logln("call init method");
         callNonstaticMethod(classAddr, initMethodAddr, handler.address, params);
-        return handler;
+        return new DummyProxy(handler.dpuID, handler.address);
     }
 
     @Override
@@ -253,7 +262,6 @@ public class DPUManagerUPMEM extends DPUManager{
     public void dpuExecute(PrintStream printStream) throws DpuException {
         dpu.exec(printStream);
         garbageCollector.readBackHeapSpacePt();
-        garbageCollector.readBackMetaSpacePt();
     }
     public void setClassPt(int classPt, int tasklet) throws DpuException {
         byte[] data = new byte[4];
@@ -359,12 +367,19 @@ public class DPUManagerUPMEM extends DPUManager{
         paramsConverted[2] = methodPt;
         paramsConverted[3] = instanceAddr;
 
+
+        dpuManagerLogger.logln("choose tasklet = " + tasklet + " set param[0] = 0, [1] = " + classPt
+        + "[2] = " + methodPt + "[3]" + instanceAddr);
+
         int i = 4;
         for(Object obj : params){
             if(obj instanceof Integer){
+                System.out.println("[" + i + "] = " + obj);
                 paramsConverted[i] = (int) obj;
             }else if(obj instanceof IDPUProxyObject){
                 paramsConverted[i] = ((IDPUProxyObject)obj).getAddr();
+                System.out.println("[" + i + "] = " + paramsConverted[i]);
+
                 if(((IDPUProxyObject)obj).getDpuID() != dpuID){
                     throw new RuntimeException("all objects in the argument list should be at the same place");
                 }
@@ -373,14 +388,67 @@ public class DPUManagerUPMEM extends DPUManager{
         }
 
         try {
+            System.out.println("push param...");
+            //printClassCache(dpuID);
+            ///printMethodCache(dpuID);
             garbageCollector.pushParameters(paramsConverted, tasklet);
-
+            System.out.println("push params finished ...");
+            System.out.println("execute");
             dpuExecute(null);
+            System.out.println("execute finished");
         } catch (DpuException e) {
             throw new RuntimeException(e);
         }
 
         taskletSemaphore[tasklet] = 0;
-        currentTasklet = (currentTasklet + 1) % 24;
+        currentTasklet = (currentTasklet + 1) % UPMEM.perDPUThreadsInUse;
+    }
+
+    private void printClassCache(int dpuID) {
+        DPULookupTableManager.DPUClassLookupTable dpuClassLookupTable =
+                UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.dpuClassLookupTable;
+        for (Iterator<String> it = dpuClassLookupTable.cache.keys().asIterator(); it.hasNext(); ) {
+            String key = it.next();
+            DPUClassFileLookupTableItem dpuClassFileLookupTableItem = dpuClassLookupTable.cache.get(key);
+            System.out.println("----- " + key + " ------");
+            System.out.println("classId: " + dpuClassFileLookupTableItem.classId);
+            System.out.printf("mramAddr: %x\n",dpuClassFileLookupTableItem.marmAddr);
+            printVTable(dpuClassFileLookupTableItem.dpuClassStructure);
+        }
+    }
+
+    private void printMethodCache(int dpuID) {
+        DPULookupTableManager.DPUMethodLookupTable dpuMethodLookupTable =
+                UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.methodCache;
+        System.out.println(" print method cache, class count = " + dpuMethodLookupTable.cache.size()
+        );
+        for (Iterator<String> it = dpuMethodLookupTable.cache.keys().asIterator(); it.hasNext(); ) {
+            String key = it.next();
+            System.out.println(" ------- class " + key + "-------");
+
+            Dictionary<String, DPUMethodLookupTableItem> dpuMethodLookupTableItem =
+                    dpuMethodLookupTable.cache.get(key);
+
+            for (Iterator<String> mit = dpuMethodLookupTableItem.keys().asIterator(); mit.hasNext();){
+                String mName = mit.next();
+                System.out.println(" ----- method " + mName);
+                DPUMethodLookupTableItem dpuMethodLookupTableItem1 = dpuMethodLookupTableItem.get(mName);
+                System.out.printf("------- mram = %x\n", dpuMethodLookupTableItem1.mramAddr);
+            }
+
+        }
+
+    }
+
+    private void printVTable(DPUJClass dpujClass) {
+        for(int i = 0; i < dpujClass.virtualTable.items.size(); i++){
+            VirtualTableItem virtualTableItem = dpujClass.virtualTable.items.get(i);
+
+            System.out.printf(" >>>>> class name = %s   desc = %s " +
+                            " class ref = %x   " +
+                    "method ref = %x\n"
+            , virtualTableItem.className, virtualTableItem.descriptor,
+                    virtualTableItem.classReferenceAddress, virtualTableItem.methodReferenceAddress);
+        }
     }
 }

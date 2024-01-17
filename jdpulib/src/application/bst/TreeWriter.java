@@ -184,7 +184,7 @@ public class TreeWriter {
 
 
             int classAddress = UPMEM.getInstance().getDPUManager(dpuID)
-                    .classCacheManager.getClassLookupTableItem("pim/algorithm/DPUTreeNode").marmAddr;
+                    .classCacheManager.getClassLookupTableItem("application/bst/DPUTreeNode").marmAddr;
 
 
             // create and write images to DPUs
