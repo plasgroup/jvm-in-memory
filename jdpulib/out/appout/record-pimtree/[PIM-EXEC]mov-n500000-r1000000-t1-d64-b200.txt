@@ -1,0 +1,78 @@
+KEYS_COUNT=500000
+TSK_N=1000000
+DPU_COUNT=64
+THREADS=1
+LOAD_BATCH=200
+EXEC_BATCH=200
+PROF_CPUDPU_DM
+KEY_VALUE_PATH=./pimtree-keyvalues/
+init DPU JVM simulator 0/64
+init DPU JVM simulator 1/64
+init DPU JVM simulator 2/64
+init DPU JVM simulator 3/64
+init DPU JVM simulator 4/64
+init DPU JVM simulator 5/64
+init DPU JVM simulator 6/64
+init DPU JVM simulator 7/64
+init DPU JVM simulator 8/64
+init DPU JVM simulator 9/64
+init DPU JVM simulator 10/64
+init DPU JVM simulator 11/64
+init DPU JVM simulator 12/64
+init DPU JVM simulator 13/64
+init DPU JVM simulator 14/64
+init DPU JVM simulator 15/64
+init DPU JVM simulator 16/64
+init DPU JVM simulator 17/64
+init DPU JVM simulator 18/64
+init DPU JVM simulator 19/64
+init DPU JVM simulator 20/64
+init DPU JVM simulator 21/64
+init DPU JVM simulator 22/64
+init DPU JVM simulator 23/64
+init DPU JVM simulator 24/64
+init DPU JVM simulator 25/64
+init DPU JVM simulator 26/64
+init DPU JVM simulator 27/64
+init DPU JVM simulator 28/64
+init DPU JVM simulator 29/64
+init DPU JVM simulator 30/64
+init DPU JVM simulator 31/64
+init DPU JVM simulator 32/64
+init DPU JVM simulator 33/64
+init DPU JVM simulator 34/64
+init DPU JVM simulator 35/64
+init DPU JVM simulator 36/64
+init DPU JVM simulator 37/64
+init DPU JVM simulator 38/64
+init DPU JVM simulator 39/64
+init DPU JVM simulator 40/64
+init DPU JVM simulator 41/64
+init DPU JVM simulator 42/64
+init DPU JVM simulator 43/64
+init DPU JVM simulator 44/64
+init DPU JVM simulator 45/64
+init DPU JVM simulator 46/64
+init DPU JVM simulator 47/64
+init DPU JVM simulator 48/64
+init DPU JVM simulator 49/64
+init DPU JVM simulator 50/64
+init DPU JVM simulator 51/64
+init DPU JVM simulator 52/64
+init DPU JVM simulator 53/64
+init DPU JVM simulator 54/64
+init DPU JVM simulator 55/64
+init DPU JVM simulator 56/64
+init DPU JVM simulator 57/64
+init DPU JVM simulator 58/64
+init DPU JVM simulator 59/64
+init DPU JVM simulator 60/64
+init DPU JVM simulator 61/64
+init DPU JVM simulator 62/64
+init DPU JVM simulator 63/64
+Begin PIM-Tree application, key = 500000, task count = 1000000 execution batch size = 200 threads = 1 dpus = 64
+execute n=1000000 batchsize=200,200
+0 / 1 *****!!! start
+0*****!!! finished
+execute finish!
+Simulated data transfer between CPU and DPUs:2588462080
