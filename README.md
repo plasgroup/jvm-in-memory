@@ -7,7 +7,7 @@
 
 3. [In Memory JVM Documents](./doc/InMemoryJVMDocument.md)
 
-
+4. [(Idea2) A JIT-compiler Based Auto Task-Level Parallel Model for PIM.](./doc/ideas/A JIT-compiler Based Auto Task-Level Parallel Model for PIM.md)
 
 ## I.2 Repository Structure
 
