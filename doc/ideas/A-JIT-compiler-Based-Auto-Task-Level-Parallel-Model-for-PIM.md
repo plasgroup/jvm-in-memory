@@ -95,19 +95,19 @@ public PIMTaskPool{
 
     e.g. 
 
-    <img src="C:\Users\Micro\AppData\Roaming\Typora\typora-user-images\image-20240121175246257.png" alt="image-20240121175246257" style="zoom:40%;" />
+    <img src="../images/image-20240121175246257.png" alt="image-20240121175246257" style="zoom:40%;" />
 
 + Implement a scheduler rewriting the task graph for each DPU, achieving task-level auto parallelism.
 
   + Rewrite the task graph by auto parallelism detection.  -> Make parallelizable tasks execute in parallel.
   + After rewriting, if  and **multi-task1** are parallelizable, the graph may seem like following graph
-  + <img src="C:\Users\Micro\AppData\Roaming\Typora\typora-user-images\image-20240121175253945.png" alt="image-20240121175253945" style="zoom:33%;" />
+  + <img src="../images/image-20240121175253945.png" alt="image-20240121175253945" style="zoom:33%;" />
 
 #### JIT Compilation
 
 Tasks are compiled into binaries.
 
-<img src="C:\Users\Micro\AppData\Roaming\Typora\typora-user-images\image-20240121175839579.png" alt="image-20240121175839579" style="zoom:33%;" />
+<img src="../images/image-20240121175839579.png" alt="image-20240121175839579" style="zoom:33%;" />
 
 
 
