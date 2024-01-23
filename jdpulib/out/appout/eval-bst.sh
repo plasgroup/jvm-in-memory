@@ -5,7 +5,7 @@ VM_OPTIONS="-XX:+UnlockDiagnosticVMOptions -XX:+PreserveFramePointer -XX:+DumpPe
 declare -a NODES_COUNTS=(100000000)
 declare -a REQ_COUNT=(200000)
 declare -a THREADS=(1 24)
-declare -a DPUS=(64)
+declare -a DPUS=(256)
 declare -a LAYERS=(18)
 
 ## 1 thread, batch dispatch
