@@ -1,11 +1,12 @@
-KEYS_COUNT=5000000
+KEYS_COUNT=1000000
 TSK_N=200000
 DPU_COUNT=64
-THREADS=1
+THREADS=24
 LOAD_BATCH=200
 EXEC_BATCH=200
 PROF_CPUDPU_DM
 KEY_VALUE_PATH=./pimtree-keyvalues/
+CPU_ONLY
 init DPU JVM simulator 0/64
 init DPU JVM simulator 1/64
 init DPU JVM simulator 2/64
@@ -70,9 +71,4 @@ init DPU JVM simulator 60/64
 init DPU JVM simulator 61/64
 init DPU JVM simulator 62/64
 init DPU JVM simulator 63/64
-Begin PIM-Tree application, key = 5000000, task count = 200000 execution batch size = 200 threads = 1 dpus = 64
-execute n=200000 batchsize=200,200
-0 / 1 *****!!! start
-0*****!!! finished
-execute finish!
-Simulated data transfer between CPU and DPUs:468282880
+Begin PIM-Tree application, key = 1000000, task count = 200000 execution batch size = 200 threads = 24 dpus = 64

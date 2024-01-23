@@ -5,10 +5,10 @@ VM_OPTIONS="-XX:+UnlockDiagnosticVMOptions -XX:+PreserveFramePointer -XX:+DumpPe
 DICT_PATH=$(pwd)/dict.txt
 FILES_PATH=$(pwd)/files
 REQ_BASE_PATH=$(pwd)
-declare -a DOC_COUNTS=(100 200 10000 20000 50000 100000 200000)
-declare -a REQ_COUNT=(100 200 200000 500000 1000000 2000000)
-declare -a THREADS=(1 2 4 8 16 24)
-declare -a DPUS=(4 8 16 32 64)
+declare -a DOC_COUNTS=(100)
+declare -a REQ_COUNT=(500)
+declare -a THREADS=(1)
+declare -a DPUS=(64)
 
 
 mkdir record-indexsearch
@@ -20,9 +20,8 @@ for cnt_doc in ${DOC_COUNTS[@]}; do
                                   bash ./kill_all_defunct.sh
                                   echo "NODES=$cnt_doc, REQUEST=$cnt_reqs, THREADS=$cnt_threads, DPUS=$cnt_dpus"
                                   sh start_simulator_server.sh $cnt_dpus $cnt_threads &
-                                  perf record -e $EVENT_LIST $JAVA $VM_OPTIONS -cp index-search.jar:dpu.jar application.transplant.index.search.IndexSearchMain DOC_COUNT=$cnt_doc TSK_N=$cnt_reqs DPU_COUNT=$cnt_dpus THREADS=$cnt_threads PROF_CPUDPU_DM DICT_PATH=$DICT_PATH FILE_PATH=$FILES_PATH REQ_FILE=$REQ_BASE_PATH  
-				  #> ./record-indexsearch/[PIM-EXEC]n${cnt_nodes}-r${cnt_reqs}-t${cnt_threads}-d${cnt_dpus}.txt
-                                  perf report --stdio > ./record-indexsearch/[PIM]n${cnt_nodes}-r${cnt_reqs}-t${cnt_threads}-d${cnt_dpus}.txt
+                                  perf record -e $EVENT_LIST $JAVA $VM_OPTIONS -cp index-search.jar:dpu.jar application.transplant.index.search.IndexSearchMain DOC_COUNT=$cnt_doc TSK_N=$cnt_reqs DPU_COUNT=$cnt_dpus THREADS=$cnt_threads PROF_CPUDPU_DM DICT_PATH=$DICT_PATH FILE_PATH=$FILES_PATH REQ_FILE=$REQ_BASE_PATH  > ./record-indexsearch/[PIM-EXEC]n${cnt_doc}-r${cnt_reqs}-t${cnt_threads}-d${cnt_dpus}.txt
+                                  perf report --stdio > ./record-indexsearch/[PIM]n${cnt_doc}-r${cnt_reqs}-t${cnt_threads}-d${cnt_dpus}.txt
                                   kill %1 2> /dev/null && wait $1 2> dev/null
                                   bash ./kill_all_defunct.sh
                         
@@ -30,9 +29,8 @@ for cnt_doc in ${DOC_COUNTS[@]}; do
 				  bash ./kill_all_defunct.sh
                                   echo "NODES=$cnt_doc, REQUEST=$cnt_reqs, THREADS=$cnt_threads, DPUS=$cnt_dpus"
                                   sh start_simulator_server.sh $cnt_dpus $cnt_threads &
-                                  perf record -e $EVENT_LIST $JAVA $VM_OPTIONS -cp index-search.jar:dpu.jar application.transplant.index.search.IndexSearchMain DOC_COUNT=$cnt_doc TSK_N=$cnt_reqs DPU_COUNT=$cnt_dpus THREADS=$cnt_threads PROF_CPUDPU_DM DICT_PATH=$DICT_PATH FILE_PATH=$FILES_PATH REQ_FILE=$REQ_BASE_PATH CPU_ONLY 
-				  #> ./record-indexsearch/[CPU-EXEC]-n${cnt_nodes}-r${cnt_reqs}-t${cnt_threads}-d${cnt_dpus}.txt
-                                  perf report --stdio > ./record-indexsearch/[CPU]n${cnt_nodes}-r${cnt_reqs}-t${cnt_threads}-d${cnt_dpus}.txt
+                                  perf record -e $EVENT_LIST $JAVA $VM_OPTIONS -cp index-search.jar:dpu.jar application.transplant.index.search.IndexSearchMain DOC_COUNT=$cnt_doc TSK_N=$cnt_reqs DPU_COUNT=$cnt_dpus THREADS=$cnt_threads PROF_CPUDPU_DM DICT_PATH=$DICT_PATH FILE_PATH=$FILES_PATH REQ_FILE=$REQ_BASE_PATH CPU_ONLY > ./record-indexsearch/[CPU-EXEC]-n${cnt_doc}-r${cnt_reqs}-t${cnt_threads}-d${cnt_dpus}.txt
+                                  perf report --stdio > ./record-indexsearch/[CPU]n${cnt_doc}-r${cnt_reqs}-t${cnt_threads}-d${cnt_dpus}.txt
                                   kill %1 2> /dev/null && wait $1 2> dev/null
                                   bash ./kill_all_defunct.sh
 

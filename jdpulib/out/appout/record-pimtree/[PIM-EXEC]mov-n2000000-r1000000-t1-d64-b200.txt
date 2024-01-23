@@ -75,4 +75,4 @@ execute n=1000000 batchsize=200,200
 0 / 1 *****!!! start
 0*****!!! finished
 execute finish!
-Simulated data transfer between CPU and DPUs:2588428800
+Simulated data transfer between CPU and DPUs:2334026240
