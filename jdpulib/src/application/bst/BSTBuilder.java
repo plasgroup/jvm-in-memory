@@ -178,7 +178,7 @@ public class BSTBuilder {
                 int dpuID = Integer.parseInt(dpuIDString.toString());
                 int address = Integer.parseInt(mramAddressString.toString());
 
-                newNode = new DPUTreeNodeProxyAutoGen(key, value, dpuID, address);
+                newNode = new DPUTreeNodeProxy(key, value, dpuID, address);
             }
 
             nodes++;
@@ -211,9 +211,9 @@ public class BSTBuilder {
             bw.write("#");
             return;
         }
-        if(root instanceof DPUTreeNodeProxyAutoGen){
+        if(root instanceof DPUTreeNodeProxy){
             data = "p" + "," + root.key + ","  + root.val + "," +
-                    ((DPUTreeNodeProxyAutoGen) root).dpuID + "," + ((DPUTreeNodeProxyAutoGen) root).address;
+                    ((DPUTreeNodeProxy) root).dpuID + "," + ((DPUTreeNodeProxy) root).address;
         }else{
             data = "-" + "," + root.key + ","  + root.val;
         }

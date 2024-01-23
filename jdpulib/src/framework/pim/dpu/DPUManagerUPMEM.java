@@ -35,7 +35,6 @@ public class DPUManagerUPMEM extends DPUManager{
                 dpuClassFileManager.loadClassToDPU(c);
             }
             classAddr = classCacheManager.getClassLookupTableItem(c.getName().replace(".","/")).marmAddr;
-            dpuManagerLogger.logln(" * Get Class Addr = " + classAddr);
             String initMethodDesc = generateInitializationDescriptor(params);
 
             initMethodAddr = classCacheManager
@@ -47,8 +46,6 @@ public class DPUManagerUPMEM extends DPUManager{
             objAddr = garbageCollector.allocate(DPU_HEAPSPACE, instanceSize);
             garbageCollector.transfer(DPU_HEAPSPACE, objectDataStream, objAddr);
             DPUObjectHandler handler = garbageCollector.dpuAddress2ObjHandler(objAddr, dpuID);
-            dpuManagerLogger.logln("---> Object Create Finish, handler = " + " (addr: " + handler.address + "," + "dpu: " + handler.dpuID + ") <---");
-            dpuManagerLogger.logln("addr " + objAddr);
 
             // VirtualTable virtualTable = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getClassStructure("framework.pim/algorithm/DPUTreeNode").virtualTable;
 
@@ -67,7 +64,6 @@ public class DPUManagerUPMEM extends DPUManager{
             dpuClassFileManager.loadClassToDPU(c);
         }
         classAddr = classCacheManager.getClassLookupTableItem(c.getName().replace(".","/")).marmAddr;
-        dpuManagerLogger.logln(" * Get Class Addr = " + classAddr);
         String initMethodDesc = generateInitializationDescriptor(params);
 
 
@@ -83,9 +79,7 @@ public class DPUManagerUPMEM extends DPUManager{
                     .getMethodLookupTableItem(c.getName().replace(".", "/"), initMethodDesc).mramAddr;
         }else{
             Dictionary<String, DPUMethodLookupTableItem> stringDPUMethodCacheItemDictionary = classCacheManager.methodCache.cache.get(c.getName().replace(".", "/"));
-            dpuManagerLogger.logln(c.getName().replace(".", "/"));
-            dpuManagerLogger.logln(c.getName());
-            dpuManagerLogger.logln(classCacheManager.methodCache.cache);
+
             Enumeration<String> keys = stringDPUMethodCacheItemDictionary.keys();
             while(keys.hasMoreElements()){
                 String key = keys.nextElement();
@@ -100,11 +94,8 @@ public class DPUManagerUPMEM extends DPUManager{
         int objAddr =
                 0;
         objAddr = garbageCollector.allocate(DPU_HEAPSPACE, instanceSize);
-        dpuManagerLogger.logln("allocate "  + instanceSize + "bytes in addr = " + objAddr);
         garbageCollector.transfer(DPU_HEAPSPACE, objectDataStream, objAddr);
-        dpuManagerLogger.logln("instance data transferred..");
         DPUObjectHandler handler = garbageCollector.dpuAddress2ObjHandler(objAddr, dpuID);
-        dpuManagerLogger.logln("---> Object Create Finish, handler = " + " (addr: " + handler.address + "===" + objAddr +"," + "dpu: " + handler.dpuID + ") <---");
 
 
         // VirtualTable virtualTable = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager.getClassStructure("framework.pim/algorithm/DPUTreeNode").virtualTable;
@@ -112,7 +103,6 @@ public class DPUManagerUPMEM extends DPUManager{
         // dpuManagerLogger.logln("" + virtualTable);
 
         // call the init func
-        dpuManagerLogger.logln("call init method");
         callNonstaticMethod(classAddr, initMethodAddr, handler.address, params);
         return new DummyProxy(handler.dpuID, handler.address);
     }
@@ -281,10 +271,8 @@ public class DPUManagerUPMEM extends DPUManager{
     @Override
     public void callNonstaticMethod(int classPt, int methodPt, int instanceAddr, Object[] params) {
         if(UPMEM.batchDispatchingRecording) {
-            //System.out.println("record batch dispatching");
-            //System.out.printf("method pt %x\n", methodPt);
             int t = UPMEM.batchDispatcher.taskletPosition[dpuID];
-            int t2 = (t + 1) % 24;
+            int t2 = (t + 1) % UPMEM.perDPUThreadsInUse;
             int size = (((1 + 2 + 1 + params.length) * 4) + 0b111) & (~0b111);
             BatchDispatcher bd = UPMEM.batchDispatcher;
             if(UPMEM.isSpecifyTasklet(dpuID)){
@@ -294,7 +282,7 @@ public class DPUManagerUPMEM extends DPUManager{
                     if(bd.paramsBufferPointer[dpuID][t2] + size < DPUGarbageCollector.perTaskletParameterBufferSize){
                         break;
                     }
-                    t2 = (t2 + 1) % 24;
+                    t2 = (t2 + 1) % UPMEM.perDPUThreadsInUse;
                     try {
                         bd.dispatchAll();
                     }
@@ -337,48 +325,49 @@ public class DPUManagerUPMEM extends DPUManager{
             bd.dpusInUse.add(dpuID);
             return;
         }
+        int tasklet = 0;
 
-        // choose a tasklet
-        int tasklet;
-        if(UPMEM.isSpecifyTasklet(dpuID)){
-            tasklet = UPMEM.getSpecifiedTaskletAndCancel(dpuID);
-        }else{
-            tasklet = currentTasklet;
-            while(true){
-                if(taskletSemaphore[tasklet] == 0){
-                    synchronized (taskletSemaphore){
-                        if(taskletSemaphore[tasklet] == 0){
-                            taskletSemaphore[tasklet] = 1;
-                            currentTasklet = tasklet;
-                            break;
+
+        if(UPMEM.perDPUThreadsInUse != 1){
+            // choose a tasklet
+            if(UPMEM.isSpecifyTasklet(dpuID)){
+                tasklet = UPMEM.getSpecifiedTaskletAndCancel(dpuID);
+            }else{
+                tasklet = currentTasklet;
+                while(true){
+                    if(taskletSemaphore[tasklet] == 0){
+                        synchronized (taskletSemaphore){
+                            if(taskletSemaphore[tasklet] == 0){
+                                taskletSemaphore[tasklet] = 1;
+                                currentTasklet = tasklet;
+                                break;
+                            }
                         }
+                    }else{
+                        tasklet = (tasklet + 1) % UPMEM.perDPUThreadsInUse;
                     }
-                }else{
-                    tasklet = (tasklet + 1) % 24;
                 }
             }
+
+            taskletSemaphore[tasklet] = 0;
+            currentTasklet = (currentTasklet + 1) % UPMEM.perDPUThreadsInUse;
+
         }
 
-        // System.out.println("select tasklet = " + tasklet);
-
-        int[] paramsConverted = new int[params.length + 1 + 2 + 1];
+        int[] paramsConverted = new int[params.length + 4];
         paramsConverted[0] = 0;
         paramsConverted[1] = classPt;
         paramsConverted[2] = methodPt;
         paramsConverted[3] = instanceAddr;
 
 
-        dpuManagerLogger.logln("choose tasklet = " + tasklet + " set param[0] = 0, [1] = " + classPt
-        + "[2] = " + methodPt + "[3]" + instanceAddr);
 
         int i = 4;
         for(Object obj : params){
             if(obj instanceof Integer){
-                System.out.println("[" + i + "] = " + obj);
                 paramsConverted[i] = (int) obj;
             }else if(obj instanceof IDPUProxyObject){
                 paramsConverted[i] = ((IDPUProxyObject)obj).getAddr();
-                System.out.println("[" + i + "] = " + paramsConverted[i]);
 
                 if(((IDPUProxyObject)obj).getDpuID() != dpuID){
                     throw new RuntimeException("all objects in the argument list should be at the same place");
@@ -388,20 +377,13 @@ public class DPUManagerUPMEM extends DPUManager{
         }
 
         try {
-            System.out.println("push param...");
-            //printClassCache(dpuID);
-            ///printMethodCache(dpuID);
             garbageCollector.pushParameters(paramsConverted, tasklet);
-            System.out.println("push params finished ...");
-            System.out.println("execute");
+
             dpuExecute(null);
-            System.out.println("execute finished");
         } catch (DpuException e) {
             throw new RuntimeException(e);
         }
 
-        taskletSemaphore[tasklet] = 0;
-        currentTasklet = (currentTasklet + 1) % UPMEM.perDPUThreadsInUse;
     }
 
     private void printClassCache(int dpuID) {
@@ -412,7 +394,7 @@ public class DPUManagerUPMEM extends DPUManager{
             DPUClassFileLookupTableItem dpuClassFileLookupTableItem = dpuClassLookupTable.cache.get(key);
             System.out.println("----- " + key + " ------");
             System.out.println("classId: " + dpuClassFileLookupTableItem.classId);
-            System.out.printf("mramAddr: %x\n",dpuClassFileLookupTableItem.marmAddr);
+            System.out.printf("mram addr: %x\n",dpuClassFileLookupTableItem.marmAddr);
             printVTable(dpuClassFileLookupTableItem.dpuClassStructure);
         }
     }

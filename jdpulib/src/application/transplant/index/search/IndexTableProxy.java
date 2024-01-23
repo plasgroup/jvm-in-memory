@@ -19,6 +19,7 @@ public class IndexTableProxy extends IndexTable implements IDPUProxyObject {
 
     @Override
     public int getSize() {
+        System.out.println("dispatch get size");
         RPCHelper.invokeMethod(dpuID, address, "application/transplant/index/search/IndexTable", "getSize:()I");
         return RPCHelper.getIReturnValue(dpuID);
     }

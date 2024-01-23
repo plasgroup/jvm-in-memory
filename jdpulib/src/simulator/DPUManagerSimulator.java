@@ -187,7 +187,7 @@ public class DPUManagerSimulator extends DPUManager {
 
     @Override
     public <T> Object createObjectSpecific(Class c, String descriptor, Object... params) {
-        if(UPMEM.getConfigurator().isCPUOnly()){
+        if(cpuOnly){
             try {
                 return c.getConstructor().newInstance(params);
             } catch (InstantiationException e) {
@@ -261,7 +261,8 @@ public class DPUManagerSimulator extends DPUManager {
 
     @Override
     public DummyProxy createObject(Class c, Object... params) {
-        if(UPMEM.getConfigurator().isCPUOnly()){
+        if(cpuOnly){
+
             try {
                 return new DummyProxy(c.getConstructor().newInstance(params));
             } catch (InstantiationException e) {

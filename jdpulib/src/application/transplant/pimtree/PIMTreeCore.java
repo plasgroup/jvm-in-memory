@@ -2,6 +2,8 @@ package application.transplant.pimtree;
 
 import framework.pim.UPMEM;
 
+import javax.annotation.processing.Filer;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -224,17 +226,38 @@ public class PIMTreeCore {
         }
     }
 
-    public static void generateData(int size){
-        //System.out.println("Generate key-value paris, and send to PIM device, size = " + size);
-        Random r = new Random();
-        int htLength = LX_HASHTABLE_SIZE;
-        for(int i = 0; i < size; i++){
-            int randomKey = r.nextInt(0, Integer.MAX_VALUE);
-            int randomValue = r.nextInt(0, Integer.MAX_VALUE);
-            int dpuID = pim_skip_list.hash_to_dpu(Long.valueOf(randomKey), 0, nr_of_dpus);
-            // System.out.println("insert key = " + randomKey +" value = " + randomValue + " to dpu " + dpuID);
-            PIMTreeCore.executors[dpuID].insertKeyValue(randomKey, randomValue);
+    public static void generateData(int size) throws IOException {
+        File kvFile = new File(PIMTreeMain.keyValuePath + "kv-" + size + ".txt");
+        if(!kvFile.exists()){
+            Random r = new Random();
+            int htLength = LX_HASHTABLE_SIZE;
+            FileWriter fileWriter = new FileWriter(kvFile);
+            for(int i = 0; i < size; i++){
+                int randomKey = r.nextInt(0, Integer.MAX_VALUE);
+                int randomValue = r.nextInt(0, Integer.MAX_VALUE);
+                int dpuID = pim_skip_list.hash_to_dpu(Long.valueOf(randomKey), 0, nr_of_dpus);
+                // System.out.println("insert key = " + randomKey +" value = " + randomValue + " to dpu " + dpuID);
+                fileWriter.append(randomKey + " " + randomValue + "\r\n");
+                PIMTreeCore.executors[dpuID].insertKeyValue(randomKey, randomValue);
+            }
+            fileWriter.close();
+        }else{
+            FileReader fr = new FileReader(kvFile);
+            BufferedReader bufferedReader = new BufferedReader(fr);
+            String line = "";
+            while((line = bufferedReader.readLine()) != null){
+                if("".equals(line)) continue;
+                String[] s = line.split(" ");
+
+                int key = Integer.parseInt(s[0]);
+                int value = Integer.parseInt(s[1]);
+                int dpuID = pim_skip_list.hash_to_dpu(Long.valueOf(key), 0, nr_of_dpus);
+                PIMTreeCore.executors[dpuID].insertKeyValue(key, value);
+            }
+            fr.close();
         }
+        //System.out.println("Generate key-value paris, and send to PIM device, size = " + size);
+
         // System.out.println("Generate keys finished...");
     }
 

@@ -11,6 +11,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class IndexSearchMain {
+    private static boolean useSimulator = true;
+
     public static void main(String[] args) throws ClassNotFoundException, IOException {
         boolean profileCPUDPUDataMovement = true;
         int docCount = 1000;
@@ -19,7 +21,7 @@ public class IndexSearchMain {
         int threads = 1;
         String dictPath = "";
         String filesPath = "";
-        String reqFilePath = "";
+        String reqFilePath = "./";
         boolean cpuOnly = false;
         if(args.length != 0){
             for(int i = 0; i < args.length; i++){
@@ -40,21 +42,26 @@ public class IndexSearchMain {
                 } else if("DICT_PATH".equals(argItem[0].strip().toUpperCase())){
                     dictPath = Arrays.stream(argItem).skip(1).reduce("", (a, b) -> a + b);
                     System.out.println("dict path = " + dictPath);
-
                 } else if("FILE_PATH".equals(argItem[0].strip().toUpperCase())){
                     filesPath = Arrays.stream(argItem).skip(1).reduce("", (a, b) -> a + b);
                 } else if("REQ_FILE".equals(argItem[0].strip().toUpperCase())){
                     reqFilePath =  Arrays.stream(argItem).skip(1).reduce("", (a, b) -> a + b);
                 } else if("CPU_ONLY".equals(argItem[0].strip().toUpperCase())){
                     cpuOnly = true;
+                } else if("USE_SIMULATOR".equals(argItem[0].strip().toUpperCase())){
+                    if(argItem.length > 1){
+                        useSimulator = Integer.parseInt(argItem[1]) != 0;
+                    }else{
+                        useSimulator = true;
+                    }
                 }
             }
         }
 
         IndexSearchDatabaseBuilder dm = new IndexSearchDatabaseBuilder();
-        System.out.println("init " + dpuCount + " DPUs with threads = " + threads);
+        System.out.println("init " + dpuCount + " DPUs with threads = " + threads + " CPU ONLY = " + cpuOnly);
             UPMEM.initialize(new UPMEMConfigurator().setThreadPerDPU(threads).setDpuInUseCount(dpuCount)
-                    .setUseSimulator(true).setPackageSearchPath("application.transplant.index.search.")
+                    .setUseSimulator(useSimulator).setPackageSearchPath("application.transplant.index.search.")
                     .setUseAllowSet(true).addClassesAllow(
                             "java.lang.Object", "java.util.HashTable",
                             "application.transplant.index.search.IndexTable",
@@ -75,7 +82,8 @@ public class IndexSearchMain {
                 }
 
                 System.out.println("use dict path = " + dictPath);
-                if("".equals(filesPath)) filesPath = basePath + "/src/application/transplant/index/search/database/files";
+                if("".equals(filesPath)) filesPath =
+                        basePath + "/src/application/transplant/index/search/database/files";
                 IndexSearchDatabase indexSearchDatabase =
                         dm.initialize()
                                 .buildDictionary(dictPath)
@@ -84,21 +92,23 @@ public class IndexSearchMain {
 
                 System.out.println("build database Finished");
 
-
-                File requestFile =
-                        new File(reqFilePath + "/" +
+                File requestFile = new File(reqFilePath + "/" +
                                 requestCount + ".txt");
+
                 if(!requestFile.exists())
                     System.out.println("generate request amount = " + requestCount);
                     Preprocessing.generateRequest(requestCount, filesPath, dictPath, reqFilePath + "/" +
                             requestCount + ".txt");
 
-
                 FileReader fileReader = new FileReader(requestFile);
                 BufferedReader br = new BufferedReader(fileReader);
                 String s;
+                int l = 0;
                 while((s = br.readLine()) != null){
+                    System.out.println("read : " + s);
                     String[] words = s.split(" ");
+                    l++;
+                    if(l % 1000 == 0) System.out.println("Finish " + l + "/" + requestCount);
                     switch (words.length){
                         case 1:
                             indexSearchDatabase.search(words[0]);
@@ -119,7 +129,7 @@ public class IndexSearchMain {
                 }
                 br.close();
                 fileReader.close();
-
+                System.out.println("Finish all queries.");
                 UPMEM.reportProfiling();
 
             } catch (IOException e) {

@@ -52,11 +52,13 @@ public class IndexSearchDatabaseBuilder {
             BufferedInputStream fis = new BufferedInputStream(new FileInputStream(file));
             String content = new String(fis.readAllBytes());
             int dpuID = lastDPU;
+
             if(getSize(dpuID) >= 10000000){
                 dpuID = ++lastDPU;
             }
 
-            Document doc = (Document) UPMEM.getInstance().createObject(dpuID, Document.class, did);
+            Document doc = UPMEM.cpuOnly ? new Document(did) :
+                    (Document) UPMEM.getInstance().createObject(dpuID, Document.class, did);
 
             // insert words to doc
             List<Integer> splitedContent =
@@ -144,17 +146,23 @@ public class IndexSearchDatabaseBuilder {
         tables = new IndexTable[PIMRemoteJVMConfiguration.JVMCount];
 
         for(int i = 0; i < PIMRemoteJVMConfiguration.JVMCount; i++){
-            tables[i] = (IndexTable) (IDPUProxyObject) UPMEM.getInstance().createObject(i, IndexTable.class);
-            documents[i] = (List<Document>) UPMEM.getInstance().createObject(i, ArrayList.class);
+            tables[i] = UPMEM.cpuOnly ? new IndexTable() : (IndexTable) UPMEM.getInstance().createObject(i, IndexTable.class);
+            documents[i] = UPMEM.cpuOnly?new ArrayList<>() : (List<Document>) UPMEM.getInstance().createObject(i, ArrayList.class);
             String descriptor = "<init>:(Lapplication/transplant/index/search/IndexTable;Ljava/util/List;)V";
-            if (dpuSearchers[i] == null)
-                dpuSearchers[i] =
-                        (Searcher) UPMEM.getInstance().getDPUManager(i).
-                                createObjectSpecific(
-                                        Searcher.class,
-                                        descriptor,
-                                        ((IDPUProxyObject)tables[i]).getAddr(),
-                                        ((IDPUProxyObject)documents[i]).getAddr());
+            if (dpuSearchers[i] == null){
+                if(!UPMEM.cpuOnly){
+
+                    dpuSearchers[i] =
+                            (Searcher) UPMEM.getInstance().getDPUManager(i).
+                                    createObjectSpecific(
+                                            Searcher.class,
+                                            descriptor,
+                                            ((IDPUProxyObject)tables[i]).getAddr(),
+                                            ((IDPUProxyObject)documents[i]).getAddr());
+                }else{
+                    dpuSearchers[i] = new Searcher(tables[i], documents[i]);
+                }
+            }
 
         }
 

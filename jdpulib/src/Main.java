@@ -7,6 +7,7 @@ import application.bst.BSTTester;
 import application.bst.DPUTreeNode;
 import application.bst.TreeNode;
 import framework.pim.dpu.classloader.ClassWriter;
+import framework.primitive.control.ControlPrimitives;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -200,12 +201,15 @@ public class Main {
        }
 
 
+
+
            // UPMEM configurator
 
        upmemConfigurator
                    .setDpuInUseCount(dpuInUse)
                    .setThreadPerDPU(tasklets)
-                   .setUseSimulator(useSimulator);
+                   .setUseSimulator(useSimulator)
+               .setEnableProfilingRPCDataMovement(true);
 
 
            // UPMEM initialization
@@ -237,5 +241,6 @@ public class Main {
            System.out.printf("Simulated data transfer between CPU and DPUs: %d bytes\n",
                    UPMEM.profiler.transferredBytes);
        }
+
     }
 }

@@ -1,9 +1,8 @@
 package framework.pim.dpu;
 
-import framework.lang.struct.DummyProxy;
 import framework.lang.struct.IDPUProxyObject;
 import framework.pim.UPMEM;
-import application.bst.DPUTreeNodeProxyAutoGen;
+import application.bst.DPUTreeNodeProxy;
 import framework.pim.dpu.cache.DPULookupTableManager;
 import framework.pim.logger.Logger;
 import framework.pim.logger.PIMLoggers;
@@ -21,6 +20,7 @@ public class RPCHelper {
 
     /** get int result value **/
     public static int getIReturnValue(int dpuID){
+        if(UPMEM.isBatchDispatchingRecording()) return -1;
         int returnVal = upmem.getDPUManager(dpuID).garbageCollector.getReturnVal();
         // pimProxy.logf( "framework.pim:proxy","return int = %d\n", returnVal);
 
@@ -30,6 +30,7 @@ public class RPCHelper {
     /** get boolean result value **/
 
     public static boolean getBooleanReturnValue(int dpuID){
+        if(UPMEM.isBatchDispatchingRecording()) return false;
         int returnVal = upmem.getDPUManager(dpuID).garbageCollector.getReturnVal() ;
         // pimProxy.logf( "framework.pim:proxy","return int = %d\n", returnVal);
 
@@ -39,6 +40,8 @@ public class RPCHelper {
     /** get reference result value **/
 
     public static IDPUProxyObject getAReturnValue(int dpuID, Class proxyClass){
+        if(UPMEM.isBatchDispatchingRecording()) return null;
+
         try {
             int returnVal = upmem.getDPUManager(dpuID).garbageCollector.getReturnVal();
             // pimProxy.logf("framework.pim:proxy","return pointer = 0x%x\n", returnVal);
@@ -59,26 +62,19 @@ public class RPCHelper {
         int methodMRAMAddr = cm.getMethodLookupTableItem(className, methodDescriptor).mramAddr;
         int classMRAMAddr = cm.getClassLookupTableItem(className).marmAddr;
 
-        // pimProxy.setEnable(true);
-
-        pimProxy.logf("framework.pim:proxy: class mram addr = 0x%x, " +
-                        "method mram addr = 0x%x, instance addr = 0x%x\n",
-                classMRAMAddr,
-                methodMRAMAddr,
-                address);
-
-        // pimProxy.setEnable(false);
 
         upmem.getDPUManager(dpuID).callNonstaticMethod(classMRAMAddr, methodMRAMAddr, address, params);
     }
 
     public static IDPUProxyObject getAReturnValue(int dpuID){
+        if(UPMEM.isBatchDispatchingRecording()) return null;
+
         try {
             int returnVal = upmem.getDPUManager(dpuID).garbageCollector.getReturnVal();
             // pimProxy.logf("pim:proxy","return pointer = 0x%x\n", returnVal);
             if(returnVal == 0) return null;
 
-            return UPMEM.generateProxyObject(DPUTreeNodeProxyAutoGen.class, dpuID, returnVal);
+            return UPMEM.generateProxyObject(DPUTreeNodeProxy.class, dpuID, returnVal);
         } catch (NoSuchFieldException | InstantiationException e) {
             throw new RuntimeException(e);
         }

@@ -1,18 +1,17 @@
 package framework.pim;
 
 import com.upmem.dpu.DpuException;
-import framework.pim.dpu.DPUGarbageCollector;
 import framework.pim.dpu.java_strut.DPUJVMMemSpaceKind;
 import framework.pim.logger.Logger;
 import framework.pim.logger.PIMLoggers;
 import framework.pim.utils.BytesUtils;
 import simulator.DPUJVMRemote;
-import simulator.DPUJVMRemoteImpl;
 import simulator.JVMSimulatorResult;
 
 import java.rmi.RemoteException;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.function.BiFunction;
 
 import static framework.pim.dpu.DPUGarbageCollector.*;
 
@@ -20,24 +19,29 @@ public class BatchDispatcher {
     public byte[][] paramsBuffer = new byte[UPMEM.dpuInUse][perTaskletParameterBufferSize * UPMEM.perDPUThreadsInUse];
     public int[][] paramsBufferPointer = new int[UPMEM.dpuInUse][UPMEM.perDPUThreadsInUse];
     public int[] taskletPosition = new int[UPMEM.dpuInUse]; // use for Round-robin scheduling
+    public BiFunction<Integer, int[], Object> dispatchCallBack = null;
 
     Logger dispatchLogger = PIMLoggers.batchDispatchLogger;
     ExecutorService executorService = Executors.newCachedThreadPool();
-    int maxResult = 1000000;
+    public int maxResult = 1000000;
     int[] result;
-    byte[] resultBytes = new byte[maxResult * 4];
+    public byte[] resultBytes = new byte[maxResult * 4];
     public int[] recordedCount = new int[UPMEM.dpuInUse];
     public HashSet<Integer> dpusInUse = new HashSet<>(); // record the dpu that has more than 1 tasks in record list.
     int dispatchedCount = 0;
     CountDownLatch latch;
     public BatchDispatcher(){
+
         result = new int[maxResult];
+    }
+    public BatchDispatcher(int resultCount){
+        result = new int[resultCount];
     }
     UPMEM upmem = UPMEM.getInstance();
 
 
     {
-        dispatchLogger.setEnable(true);
+        dispatchLogger.setEnable(false);
     }
 
     public int getResult(int tid) {
@@ -164,6 +168,9 @@ public class BatchDispatcher {
         dpusInUse.clear();
         dispatchLogger.logln("All dispatched");
         dispatchedCount += count;
+        if(dispatchCallBack != null){
+            dispatchCallBack.apply(dispatchedCount, result);
+        }
 
         dispatchLogger.logln("current total count == " + dispatchedCount);
     }

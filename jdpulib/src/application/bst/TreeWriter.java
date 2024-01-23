@@ -77,7 +77,7 @@ public class TreeWriter {
                 }
             }else{
                 int addr = node.key;
-                int dpuID = ((DPUTreeNodeProxyAutoGen) node).dpuID;
+                int dpuID = ((DPUTreeNodeProxy) node).dpuID;
                 if(rootList.get(dpuID) == null) rootList.put(dpuID, new ArrayList<>());
                 rootList.get(dpuID).add(addr);
                 int k = BytesUtils.readU4LittleEndian(heapMemory[dpuID], addr + 8);
@@ -189,8 +189,8 @@ public class TreeWriter {
 
             // create and write images to DPUs
             if(currentChildrenCount + c <= DPU_MAX_NODES_COUNT){
-                DPUTreeNodeProxyAutoGen dpuTreeNodeProxyAutoGen =
-                        new DPUTreeNodeProxyAutoGen(thisNode.key, thisNode.val);
+                DPUTreeNodeProxy dpuTreeNodeProxyAutoGen =
+                        new DPUTreeNodeProxy(thisNode.key, thisNode.val);
                 currentChildrenCount += c;
                 cpuProxyNode++;
                 dpuTreeNodeProxyAutoGen.dpuID = dpuID;
@@ -222,8 +222,8 @@ public class TreeWriter {
                 // add new node
                 currentChildrenCount = c;
 
-                DPUTreeNodeProxyAutoGen dpuTreeNodeProxyAutoGen =
-                        new DPUTreeNodeProxyAutoGen(thisNode.key, thisNode.val);
+                DPUTreeNodeProxy dpuTreeNodeProxyAutoGen =
+                        new DPUTreeNodeProxy(thisNode.key, thisNode.val);
 
                 cpuProxyNode++;
                 dpuTreeNodeProxyAutoGen.dpuID = dpuID;

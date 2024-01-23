@@ -19,7 +19,20 @@ public class Preprocessing {
         }
         return wordSet;
     }
-
+    public static <T> T getByRandomClass(Set<T> set) {
+        if (set == null || set.isEmpty()) {
+            throw new IllegalArgumentException("The Set cannot be empty.");
+        }
+        int randomIndex = new Random().nextInt(set.size());
+        int i = 0;
+        for (T element : set) {
+            if (i == randomIndex) {
+                return element;
+            }
+            i++;
+        }
+        throw new IllegalStateException("Something went wrong while picking a random element.");
+    }
     public static void generateRequest(int requestCount, String filesFolder, String dictPath, String requestFilePath) throws IOException {
         String basePath = (System.getProperty("user.dir"));
 
@@ -61,33 +74,39 @@ public class Preprocessing {
         }
 
         int filesCount = files.length;
-        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(requestFile + ""));
+        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(requestFile));
         int generatedCount = 0;
         int generateEnsuredSequenceCount = requestCount;
 
         while(generatedCount < generateEnsuredSequenceCount){
-            String s = new String(new FileInputStream(files[r.nextInt(0, filesCount)])
-                    .readAllBytes());
+//            String s = new String(new FileInputStream(files[r.nextInt(0, filesCount)])
+//                    .readAllBytes());
             int takes = r.nextInt(1, 6);
-
-            String[] words = s.split(" ");
-            int skipatable = words.length - takes;
-            if(skipatable < 2) continue;
-
-            Optional<String> requestArgs = Arrays.stream(words)
-                    .skip(r.nextInt(1, skipatable))
-                    .filter(p -> {
-                        assert wordsSet != null;
-                        return wordsSet.contains(p);
-                    })
-                    .reduce((w1, w2) -> w1 + " " + w2);
-
-            String requestLine = requestArgs.orElse("");
-            if("".equals(requestLine)){
-                bufferedWriter.append(requestLine);
-                bufferedWriter.newLine();
-                generatedCount++;
+            String s = "";
+            for(int t = 0; t < takes; t++){
+                s += getByRandomClass(wordsSet) + " ";
             }
+            s = s.strip();
+            bufferedWriter.append(s);
+            bufferedWriter.newLine();
+//            String[] words = s.split(" ");
+//            int skipatable = words.length - takes;
+//            if(skipatable < 2) continue;
+//
+//            Optional<String> requestArgs = Arrays.stream(words)
+//                    .skip(r.nextInt(1, skipatable))
+//                    .filter(p -> {
+//                        assert wordsSet != null;
+//                        return wordsSet.contains(p);
+//                    })
+//                    .reduce((w1, w2) -> w1 + " " + w2);
+//
+//            String requestLine = requestArgs.orElse("");
+//            if("".equals(requestLine)){
+//                bufferedWriter.append(requestLine);
+//                bufferedWriter.newLine();
+//                generatedCount++;
+//            }
         }
         bufferedWriter.close();
     }

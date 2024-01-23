@@ -6,15 +6,21 @@ import simulator.PIMRemoteJVMConfiguration;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static application.transplant.pimtree.PIMTreeCore.*;
+import static framework.pim.ExperimentConfigurator.imagesPath;
 
 public class PIMTreeMain {
     private static int total_communication;
     private static int total_actual_communication;
     public static int OPERATION_NR_ITEMS = 7;
     public static PIMTreeCore[] cores = new PIMTreeCore[nr_of_dpus];
+    public static boolean saveKeyValue;
+    public static Object keyValuePath = "./";
+    public static boolean cpuOnly = false;
+    private static boolean useSimulator = true;
 
     public static void main(String[] args) throws IOException {
         int keyCount = 2000;
@@ -46,19 +52,35 @@ public class PIMTreeMain {
                     profileCPUDPUDataMovement = true;
                 } else if("THREADS".equals(argItem[0].strip().toUpperCase())){
                     threads = Integer.parseInt(argItem[1].strip());
+                } else if("SAVE_KEY_VALUE".equals(argItem[0].strip().toUpperCase())){
+                    saveKeyValue = true;
+                } else if("KEY_VALUE_PATH".equals(argItem[0].strip().toUpperCase())){
+                    keyValuePath = Arrays.stream(argItem).skip(1).reduce((s1, s2) -> s1+s2).get().replace("\"", "");
+
+                }else if("CPU_ONLY".equals(argItem[0].strip().toUpperCase())){
+                    cpuOnly = true;
+                }else if("USE_SIMULATOR".equals(argItem[0].strip().toUpperCase())){
+                    if(argItem.length > 1){
+                        useSimulator = Integer.parseInt(argItem[1]) != 0;
+                    }else{
+                        useSimulator = true;
+                    }
                 }
             }
         }
 
         PIMRemoteJVMConfiguration.JVMCount = nr_of_dpus;
         UPMEM.initialize(new UPMEMConfigurator().setThreadPerDPU(threads
-                        ).setUseSimulator(true)
+                        ).setUseSimulator(useSimulator)
                 .setUseAllowSet(true).setDpuInUseCount(dpuCount)
                 .addClassesAllow("application.transplant.pimtree.PIMTreeCore",
                         "application.transplant.pimtree.PIMExecutorComputationContext")
                 .setPackageSearchPath("application.transplant.pimtree.")
                 .setEnableProfilingRPCDataMovement(profileCPUDPUDataMovement)
+                .setCPUOnly(cpuOnly)
         );
+
+
 
         List<Double> pos = new ArrayList<>(OPERATION_NR_ITEMS);
 
@@ -111,7 +133,11 @@ public class PIMTreeMain {
                             .createObject(i, PIMExecutorComputationContext.class);
         }
 
-        PIMTreeCore.generateData(keyCount);
+        try {
+            PIMTreeCore.generateData(keyCount);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         UPMEM.profiler.resetAllCounter();
 

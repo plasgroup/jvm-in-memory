@@ -52,9 +52,9 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
             jvmLogger.logln("===================== Run !!!!=-------------");
             int pt = threadID * perThreadParameterQueueLength;
             int dest = currentParamPointer[threadID] / 4;
-
+            //System.out.println("pt = " + pt + " dest = " + dest );
             while(pt < dest){
-                jvmLogger.logln("pt = " + pt + " dest = " + dest);
+                jvmLogger.logln("!pt = " + pt + " dest = " + dest);
                 int taskId =  parameterQueue[pt];
                 jvmLogger.logln(" -- get task id = " + taskId);
                 Class c = (Class) metaSpace[parameterQueue[pt + 1]];
@@ -301,8 +301,8 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
 
     @Override
     public void setParamsBufferPointer(int p, int tasklet) throws RemoteException {
-        jvmLogger.logln("set tasklet " + tasklet + "'s parameter buffer pointer = " + p);
-        currentParamPointer[tasklet] = p;
+        jvmLogger.logln("set tasklet " + tasklet + "'s parameter buffer pointer = " + (tasklet * perThreadParameterQueueSize + p));
+        currentParamPointer[tasklet] = tasklet * perThreadParameterQueueSize + p;
     }
 
     @Override
@@ -336,13 +336,14 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
     public void setParamsBufferIndex(int p, int tasklet) throws RemoteException {
         jvmLogger.logln("set tasklet " + tasklet + "'s parameter buffer pointer = " + p);
 
-        this.taskletParameterTop[tasklet] = p;
+        this.taskletParameterTop[tasklet] = perThreadParameterQueueLength * tasklet + p;
     }
 
     @Override
     public JVMSimulatorResult getResult(int resultIndex) throws RemoteException {
         int taskID = (int) resultQueue[resultIndex * 2];
         Object result = resultQueue[resultIndex * 2 + 1];
+
         if(result == null){
             return new JVMSimulatorResult(taskID,0);
         }

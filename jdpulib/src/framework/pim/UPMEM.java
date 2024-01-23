@@ -1,22 +1,18 @@
 package framework.pim;
 
-import application.transplant.index.search.Searcher;
 import framework.lang.struct.DummyProxy;
 import framework.lang.struct.dist.DPUInt32ArrayHandler;
 import framework.pim.dpu.DPUManager;
-import framework.lang.struct.DPUObjectHandler;
 import framework.pim.dpu.PIMManager;
 import framework.pim.dpu.java_strut.DPUJVMMemSpaceKind;
 import framework.pim.logger.Logger;
 import framework.lang.struct.IDPUProxyObject;
 import framework.pim.utils.BytesUtils;
 
-import simulator.DPUJVMRemote;
 import simulator.DPUManagerSimulator;
 import simulator.PIMManagerSimulator;
 import simulator.PIMRemoteJVMConfiguration;
 import sun.misc.Unsafe;
-import transplant.index.search.Document;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -24,7 +20,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
+import java.util.function.BiFunction;
 
 
 /** UPMEM class
@@ -56,6 +52,11 @@ public class UPMEM {
     static Unsafe unsafe;
     public static boolean useAllowSet;
     public static PIMProfiler profiler = new PIMProfiler();
+    public static boolean cpuOnly;
+
+    public static boolean isBatchDispatchingRecording() {
+        return batchDispatchingRecording;
+    }
 
     static {
         try {
@@ -105,9 +106,13 @@ public class UPMEM {
     /** Batch Dispatching **/
     public static boolean batchDispatchingRecording = false;
     public static BatchDispatcher batchDispatcher;
-    public static void beginRecordBatchDispatching(BatchDispatcher batchDispatcher) {
+    public static void beginRecordBatchDispatching(BatchDispatcher batchDispatcher, BiFunction<Integer, int[], Object> callback) {
         UPMEM.batchDispatcher = batchDispatcher;
         batchDispatchingRecording = true;
+        batchDispatcher.dispatchCallBack = callback;
+    }
+    public static void beginRecordBatchDispatching(BatchDispatcher batchDispatcher) {
+        beginRecordBatchDispatching(batchDispatcher, null);
     }
     public static void endRecordBatchDispatching() {
         batchDispatchingRecording = false;
@@ -156,7 +161,8 @@ public class UPMEM {
      *    - parameter 3~: the arguments for initialization method call
      * */
     public Object createObject(int dpuID, Class objectClass){
-        if(configurator.isCPUOnly()){
+        if(cpuOnly){
+
             try {
                 return objectClass.getConstructor().newInstance();
             } catch (InstantiationException e) {
@@ -189,7 +195,7 @@ public class UPMEM {
     }
 
     public Object createObject(int dpuID, Class objectClass, Object arg0){
-        if(configurator.isCPUOnly()){
+        if(cpuOnly){
             try {
                 return objectClass.getConstructor().newInstance(arg0);
             } catch (InstantiationException e) {
@@ -222,7 +228,8 @@ public class UPMEM {
     }
 
     public Object createObject(int dpuID, Class objectClass, Object arg0, Object arg1){
-        if(configurator.isCPUOnly()){
+        if(cpuOnly){
+
             try {
                 return objectClass.getConstructor().newInstance(arg0, arg1);
             } catch (InstantiationException e) {
@@ -256,7 +263,7 @@ public class UPMEM {
     }
 
     public Object createObject(int dpuID, Class objectClass, Object arg0, Object arg1, Object arg2){
-        if(configurator.isCPUOnly()){
+        if(cpuOnly){
             try {
                 return objectClass.getConstructor().newInstance(arg0, arg1, arg2);
             } catch (InstantiationException e) {
@@ -289,7 +296,8 @@ public class UPMEM {
     }
 
     public Object createObject(int dpuID, Class objectClass, Object arg0, Object arg1, Object arg2, Object arg3){
-        if(configurator.isCPUOnly()){
+        if(cpuOnly){
+
             try {
                 return objectClass.getConstructor().newInstance(arg0, arg1, arg2, arg3);
             } catch (InstantiationException e) {
@@ -335,6 +343,7 @@ public class UPMEM {
                     UPMEM.useAllowSet = configurator.isUseAllowSet();
                     UPMEM.specifiedTasklet = new boolean[dpuInUse];
                     UPMEM.decidedTasklet = new int[dpuInUse];
+                    UPMEM.cpuOnly = configurator.isCPUOnly();
                     PIMRemoteJVMConfiguration.JVMCount = dpuInUse;
                     PIMRemoteJVMConfiguration.threadCount = perDPUThreadsInUse;
                     allowSet.clear();

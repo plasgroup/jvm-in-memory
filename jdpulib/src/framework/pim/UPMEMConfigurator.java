@@ -82,7 +82,7 @@ public class UPMEMConfigurator {
      *
     **/
     public UPMEMConfigurator setCPUOnly(boolean isCPUOnly) {
-        isCPUOnly = true;
+        this.isCPUOnly = isCPUOnly;
         return this;
     }
 
