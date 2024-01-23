@@ -13,12 +13,9 @@ import static framework.pim.utils.ClassLoaderUtils.formalClassName;
 import static framework.pim.utils.ClassLoaderUtils.getUTF8;
 
 public class BytecodesHelper {
-    public static void main(String[] args){
-        byte[] bytecodes = BytecodesHelper.getBytecodes(TreeNode.class, TreeNode.class.getDeclaredMethods()[0]);
-        assert bytecodes != null;
-        for (byte bytecode : bytecodes) {
-            System.out.printf("0x%02X\n", bytecode);
-        }
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
     }
 
     public static byte[] getBytecodes(Class c, Method jmethod){
