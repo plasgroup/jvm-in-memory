@@ -2,13 +2,10 @@
 JAVA=~/jdk-17/bin/java
 EVENT_LIST="LLC-load-misses,LLC-store-misses"
 VM_OPTIONS="-XX:+UnlockDiagnosticVMOptions -XX:+PreserveFramePointer -XX:+DumpPerfMapAtExit -Xmx131072m"
-DICT_PATH=$(pwd)/dict.txt
-FILES_PATH=$(pwd)/files
-REQ_BASE_PATH=$(pwd)
 declare -a NODES_COUNTS=(100000000)
 declare -a REQ_COUNT=(200000)
 declare -a THREADS=(1 24)
-declare -a DPUS=(256)
+declare -a DPUS=(64)
 declare -a LAYERS=(18)
 
 ## 1 thread, batch dispatch
@@ -21,7 +18,7 @@ for cnt_reqs in ${REQ_COUNT[@]}; do
 	  for cnt_nodes in ${NODES_COUNTS[@]}; do
                         for cnt_layer in ${LAYERS[@]}; do
 				for cnt_dpus in ${DPUS[@]}; do
-                                  echo "NODES=$cnt_doc, REQUEST=$cnt_reqs, THREADS=$cnt_threads, DPUS=$cnt_dpus"
+                                  echo "NODES=$cnt_nodes, REQUEST=$cnt_reqs, THREADS=$cnt_threads, DPUS=$cnt_dpus"
 				  echo "img_path=/bst-tree/n-${cnt_nodes}-l-${cnt_layer}-d-${cnt_dpus}/"
 
 				  ### PIM version
