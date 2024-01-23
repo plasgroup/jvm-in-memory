@@ -8,7 +8,6 @@ THREADS THREADS=1
 PROF_CPUDPU_DM PROF_CPUDPU_DM
 SERIALIZE_TREE SERIALIZE_TREE=0
 IMG_PATH IMG_PATH=./bst-tree/n-100000000-l-18-d-256/
-BATCH_DISPATCH BATCH_DISPATCH
 PROFILE_QUERY_TIME PROFILE_QUERY_TIME=1
 NO_SEARCH NO_SEARCH=0
 dpu in use = 256
@@ -88,6 +87,3 @@ load CPU part tree
 load CPU part tree finished
 begin query..
 single thread...
-avg query time = 5806893 ns
-proxy search count = 0
-Simulated data transfer between CPU and DPUs: 206366264832 bytes
