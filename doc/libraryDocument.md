@@ -116,7 +116,18 @@ class Main(){
 }
 ```
 
-
+### I.2. Get Bytecode of a specific method
+[Example]
+``` java
+public static void main(String[] args){
+        /* parameter 1: the class of the specific method, parameter 2: the specific Method structure */
+        byte[] bytecodes = BytecodesHelper.getBytecodes(TreeNode.class, TreeNode.class.getDeclaredMethods()[0]);
+        assert bytecodes != null;
+        for (byte bytecode : bytecodes) {
+            System.out.printf("0x%02X\n", bytecode);
+        }
+}
+``` 
 
 ## PART IV. Files Introduction
 
