@@ -15,6 +15,7 @@ import static framework.pim.utils.ClassLoaderUtils.getUTF8;
 public class BytecodesHelper {
     @Override
     public boolean equals(Object obj) {
+        
         return super.equals(obj);
     }
 
