@@ -17,5 +17,5 @@ cpu tree layer count = 18
 build tree from images, path = ./bst-tree/n-100000000-l-18-d-256/
 begin query..
 single thread...
-avg query time = 3618 ns
+avg query time = 4653 ns
 Simulated data transfer between CPU and DPUs: 0 bytes

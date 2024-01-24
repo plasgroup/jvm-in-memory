@@ -84,10 +84,9 @@ load image to DPU#63 from file ./bst-tree/n-100000000-l-18-d-256/[100000000]DPU#
 load image to DPU#64 from file ./bst-tree/n-100000000-l-18-d-256/[100000000]DPU#64.img
 load image to DPU#65 from file ./bst-tree/n-100000000-l-18-d-256/[100000000]DPU#65.img
 load image to DPU#66 from file ./bst-tree/n-100000000-l-18-d-256/[100000000]DPU#66.img
-load image to DPU#67 from file ./bst-tree/n-100000000-l-18-d-256/[100000000]DPU#67.img
 load CPU part tree
 load CPU part tree finished
 begin query..
-avg query time = 63311 ns
-proxy search count = 199878
-Simulated data transfer between CPU and DPUs: 0 bytes
+avg query time = 23898 ns
+proxy search count = 0
+Simulated data transfer between CPU and DPUs: 206406633472 bytes

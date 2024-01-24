@@ -4,7 +4,7 @@ NODES NODES=100000000
 QUERIES QUERIES=200000
 DPU_COUNT DPU_COUNT=256
 CPU_LAYER_COUNT CPU_LAYER_COUNT=18
-THREADS THREADS=1
+THREADS THREADS=24
 PROF_CPUDPU_DM PROF_CPUDPU_DM
 SERIALIZE_TREE SERIALIZE_TREE=0
 IMG_PATH IMG_PATH=./bst-tree/n-100000000-l-18-d-256/
@@ -87,6 +87,6 @@ load CPU part tree
 load CPU part tree finished
 begin query..
 single thread...
-avg query time = 5819124 ns
+avg query time = 5774780 ns
 proxy search count = 0
 Simulated data transfer between CPU and DPUs: 206366264832 bytes
