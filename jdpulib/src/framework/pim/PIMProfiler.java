@@ -11,8 +11,7 @@ public class PIMProfiler {
     }
 
     public void reportProfiledData() {
-        System.out.println("Simulated data transfer from CPU to DPUs: " + transferredBytesToDPU + " bytes");
-        System.out.println("Simulated data transfer from CPU to DPUs: " + transferredBytesFromDPU + " bytes");
-
+        System.out.printf("Simulated data transfer from CPU to DPUs: %d bytes\n", transferredBytesToDPU);
+        System.out.printf("Simulated data transfer from DPUs to CPU: %d bytes\n", transferredBytesFromDPU);
     }
 }

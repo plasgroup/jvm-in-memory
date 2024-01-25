@@ -13,6 +13,8 @@ public class PIMLoggers {
     public static Logger batchDispatchLogger = appendLogger("framework.pim:batch-dispatch");
     public static Logger classfileLogger = appendLogger("framework.pim:classfile");
     public static Logger jvmSimulatorLogger = appendLogger("simulator:jvm");
+    public static Logger pimTreeLogger = appendLogger("pimtree:appmain");
+
     static{
         disableLoggers( "tree:cpu-node", "bst:testing", "bst:building",
                 "framework.pim:class-file-analyzer",   "framework.pim:cache", "framework.pim:framework.pim-manager", "framework.pim:dpu-manager",

@@ -16,13 +16,12 @@ public abstract class DPUGarbageCollector {
     public final static int metaSpaceBeginAddr = 0x3090000;
     public final static int parameterBufferBeginAddr = 0x3890000;
     public final static int parameterBufferSize = 6 * 1024;
-    public final static int perTaskletParameterBufferSize = parameterBufferSize / UPMEM.perDPUThreadsInUse;
+    public static final int MAX_TASKLET = 24;
+    public final static int perTaskletParameterBufferSize = parameterBufferSize / MAX_TASKLET;
     public final static int heapSpaceSize = 48 * 1024 * 1024;
-    public final static int metaSpaceSize = 16 * 1024 * 1024;
+    public final static int metaSpaceSize = 8 * 1024 * 1024;
 
     protected Logger gcLogger = PIMLoggers.gcLogger;
-
-
 
 
     public abstract int getHeapSpacePt();
@@ -53,4 +52,6 @@ public abstract class DPUGarbageCollector {
     public abstract int getReturnVal();
 
     public abstract int getInt32(int i);
+
+    public abstract void setInt32(int index, int val);
 }

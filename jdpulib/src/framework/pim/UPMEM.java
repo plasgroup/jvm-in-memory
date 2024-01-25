@@ -1,24 +1,26 @@
 package framework.pim;
 
-import application.transplant.index.search.Searcher;
+import framework.lang.struct.DummyProxy;
 import framework.lang.struct.dist.DPUInt32ArrayHandler;
 import framework.pim.dpu.DPUManager;
-import framework.lang.struct.DPUObjectHandler;
 import framework.pim.dpu.PIMManager;
 import framework.pim.dpu.java_strut.DPUJVMMemSpaceKind;
 import framework.pim.logger.Logger;
 import framework.lang.struct.IDPUProxyObject;
 import framework.pim.utils.BytesUtils;
 
-import simulator.DPUJVMRemote;
 import simulator.DPUManagerSimulator;
 import simulator.PIMManagerSimulator;
+import simulator.PIMRemoteJVMConfiguration;
 import sun.misc.Unsafe;
-import transplant.index.search.Document;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.function.BiFunction;
 
 
 /** UPMEM class
@@ -32,16 +34,16 @@ public class UPMEM {
     /* Configurations Fields */
     public static final int TOTAL_DPU_COUNT = 1024; // Total DPUs
     public static final int TOTAL_HARDWARE_THREADS_COUNT = 24; // hardware thread used in each DPU
-    public static int dpuInUse = 1024; // DPUs in using
+    public static int dpuInUse = 4; // DPUs in using
     public static int perDPUThreadsInUse = 1;
 
     /* Facade Class for PIM management */
     private static PIMManager pimManager;
 
     // specifiedTasklet[i]: whether require i-th DPU use a specific tasklet decidedTasklet[i] to execute tasks.
-    static boolean[] specifiedTasklet = new boolean[UPMEM.dpuInUse];
+    static boolean[] specifiedTasklet;
     // decidedTasklet[i]: when specifiedTasklet[i] = true, this saves tasklet id that the tasklet identified by it would be used to execute tasks.
-    static int[] decidedTasklet = new int[UPMEM.dpuInUse];
+    static int[] decidedTasklet;
 
     // Configuration
     private static UPMEMConfigurator configurator;
@@ -50,6 +52,11 @@ public class UPMEM {
     static Unsafe unsafe;
     public static boolean useAllowSet;
     public static PIMProfiler profiler = new PIMProfiler();
+    public static boolean cpuOnly;
+
+    public static boolean isBatchDispatchingRecording() {
+        return batchDispatchingRecording;
+    }
 
     static {
         try {
@@ -99,9 +106,13 @@ public class UPMEM {
     /** Batch Dispatching **/
     public static boolean batchDispatchingRecording = false;
     public static BatchDispatcher batchDispatcher;
-    public static void beginRecordBatchDispatching(BatchDispatcher batchDispatcher) {
+    public static void beginRecordBatchDispatching(BatchDispatcher batchDispatcher, BiFunction<Integer, int[], Object> callback) {
         UPMEM.batchDispatcher = batchDispatcher;
         batchDispatchingRecording = true;
+        batchDispatcher.dispatchCallBack = callback;
+    }
+    public static void beginRecordBatchDispatching(BatchDispatcher batchDispatcher) {
+        beginRecordBatchDispatching(batchDispatcher, null);
     }
     public static void endRecordBatchDispatching() {
         batchDispatchingRecording = false;
@@ -130,21 +141,44 @@ public class UPMEM {
         return proxyObject;
     }
 
-
     public static String packageSearchPath = "";
 
+    public static HashSet<String> allowSet = new HashSet<>();
+
+    static {
+        allowSet.add("java.lang.Object");
+        allowSet.add("java.util.HashTable");
+        allowSet.add("application.transplant.index.search.IndexTable");
+        allowSet.add("application.transplant.index.search.Document");
+        allowSet.add("java.util.ArrayList");
+        allowSet.add("application.transplant.index.search.Searcher");
+        allowSet.add("application.transplant.index.search.pojo.SearchResult");
+    }
 
     /* Create a proxy object of a given class, by create a new object at the DPU side.
-    *    - parameter 1: the dpu id that indicate in which dpu should the new object be created.
-    *    - parameter 2: the class for which create a proxy object of it
-    *    - parameter 3~: the arguments for initialization method call
-    * */
-    public IDPUProxyObject createObject(int dpuID, Class objectClass){
+     *    - parameter 1: the dpu id that indicate in which dpu should the new object be created.
+     *    - parameter 2: the class for which create a proxy object of it
+     *    - parameter 3~: the arguments for initialization method call
+     * */
+    public Object createObject(int dpuID, Class objectClass){
+        if(cpuOnly){
 
+            try {
+                return objectClass.getConstructor().newInstance();
+            } catch (InstantiationException e) {
+                throw new RuntimeException(e);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            } catch (InvocationTargetException e) {
+                throw new RuntimeException(e);
+            } catch (NoSuchMethodException e) {
+                throw new RuntimeException(e);
+            }
+        }
         IDPUProxyObject proxyObject;
-        DPUObjectHandler handler;
+        DummyProxy handler;
         try {
-                handler = getDPUManager(dpuID).createObject(objectClass);
+            handler = getDPUManager(dpuID).createObject(objectClass);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -159,10 +193,23 @@ public class UPMEM {
         }
         return proxyObject;
     }
-    public IDPUProxyObject createObject(int dpuID, Class objectClass, Object arg0){
 
+    public Object createObject(int dpuID, Class objectClass, Object arg0){
+        if(cpuOnly){
+            try {
+                return objectClass.getConstructor().newInstance(arg0);
+            } catch (InstantiationException e) {
+                throw new RuntimeException(e);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            } catch (InvocationTargetException e) {
+                throw new RuntimeException(e);
+            } catch (NoSuchMethodException e) {
+                throw new RuntimeException(e);
+            }
+        }
         IDPUProxyObject proxyObject;
-        DPUObjectHandler handler;
+        DummyProxy handler;
         try {
             handler = getDPUManager(dpuID).createObject(objectClass, arg0);
         } catch (IOException e) {
@@ -179,24 +226,25 @@ public class UPMEM {
         }
         return proxyObject;
     }
-    public static HashSet<String> allowSet = new HashSet<>();
 
-    static {
-        allowSet.add("java.lang.Object");
-        allowSet.add("java.util.HashTable");
-        allowSet.add("application.transplant.index.search.IndexTable");
-        allowSet.add("application.transplant.index.search.Document");
-        allowSet.add("java.util.ArrayList");
-        allowSet.add("application.transplant.index.search.Searcher");
-        allowSet.add("application.transplant.index.search.pojo.SearchResult");
-    }
+    public Object createObject(int dpuID, Class objectClass, Object arg0, Object arg1){
+        if(cpuOnly){
 
-
-
-    public IDPUProxyObject createObject(int dpuID, Class objectClass, Object arg0, Object arg1){
-
+            try {
+                return objectClass.getConstructor().newInstance(arg0, arg1);
+            } catch (InstantiationException e) {
+                throw new RuntimeException(e);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            } catch (InvocationTargetException e) {
+                throw new RuntimeException(e);
+            } catch (NoSuchMethodException e) {
+                throw new RuntimeException(e);
+            }
+        }
         IDPUProxyObject proxyObject;
-        DPUObjectHandler handler;
+        DummyProxy handler;
+
         try {
             handler = getDPUManager(dpuID).createObject(objectClass, arg0, arg1);
         } catch (IOException e) {
@@ -213,10 +261,23 @@ public class UPMEM {
         }
         return proxyObject;
     }
-    public IDPUProxyObject createObject(int dpuID, Class objectClass, Object arg0, Object arg1, Object arg2){
 
+    public Object createObject(int dpuID, Class objectClass, Object arg0, Object arg1, Object arg2){
+        if(cpuOnly){
+            try {
+                return objectClass.getConstructor().newInstance(arg0, arg1, arg2);
+            } catch (InstantiationException e) {
+                throw new RuntimeException(e);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            } catch (InvocationTargetException e) {
+                throw new RuntimeException(e);
+            } catch (NoSuchMethodException e) {
+                throw new RuntimeException(e);
+            }
+        }
         IDPUProxyObject proxyObject;
-        DPUObjectHandler handler;
+        DummyProxy handler;
         try {
             handler = getDPUManager(dpuID).createObject(objectClass, arg0, arg1, arg2);
         } catch (IOException e) {
@@ -234,11 +295,24 @@ public class UPMEM {
         return proxyObject;
     }
 
+    public Object createObject(int dpuID, Class objectClass, Object arg0, Object arg1, Object arg2, Object arg3){
+        if(cpuOnly){
 
-    public IDPUProxyObject createObject(int dpuID, Class objectClass, Object arg0, Object arg1, Object arg2, Object arg3){
+            try {
+                return objectClass.getConstructor().newInstance(arg0, arg1, arg2, arg3);
+            } catch (InstantiationException e) {
+                throw new RuntimeException(e);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            } catch (InvocationTargetException e) {
+                throw new RuntimeException(e);
+            } catch (NoSuchMethodException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
         IDPUProxyObject proxyObject;
-        DPUObjectHandler handler;
+        DummyProxy handler;
         try {
             handler = getDPUManager(dpuID).createObject(objectClass, arg0, arg1, arg2);
         } catch (IOException e) {
@@ -267,6 +341,11 @@ public class UPMEM {
                     UPMEM.perDPUThreadsInUse = configurator.getThreadPerDPU();
                     UPMEM.packageSearchPath = configurator.getPackageSearchPath();
                     UPMEM.useAllowSet = configurator.isUseAllowSet();
+                    UPMEM.specifiedTasklet = new boolean[dpuInUse];
+                    UPMEM.decidedTasklet = new int[dpuInUse];
+                    UPMEM.cpuOnly = configurator.isCPUOnly();
+                    PIMRemoteJVMConfiguration.JVMCount = dpuInUse;
+                    PIMRemoteJVMConfiguration.threadCount = perDPUThreadsInUse;
                     allowSet.clear();
                     allowSet = configurator.getAllowSet();
                 }
@@ -298,20 +377,27 @@ public class UPMEM {
         return getDPUManager(dpuID).garbageCollector.getRemainMetaMemory();
     }
 
-    public <T> DPUInt32ArrayHandler createArray(int dpuID, int len) {
+    public <T> DPUInt32ArrayHandler createArray(int dpuID, int len) throws RemoteException {
         // must 1 + 4 * a bit
-        int addr = UPMEM.getInstance().getDPUManager(dpuID).garbageCollector.allocate(DPUJVMMemSpaceKind.DPU_HEAPSPACE, len * 4 + 4);
-        byte[] lenBytes = new byte[4];
-        BytesUtils.writeU4LittleEndian(lenBytes, len ,0);
-        UPMEM.getInstance().getDPUManager(dpuID).garbageCollector.transfer(DPUJVMMemSpaceKind.DPU_HEAPSPACE, lenBytes, addr);
-        return new DPUInt32ArrayHandler(dpuID, addr, len);
-    }
 
+        if(!configurator.isUseSimulator()){
+            int addr = UPMEM.getInstance().getDPUManager(dpuID).garbageCollector.allocate(DPUJVMMemSpaceKind.DPU_HEAPSPACE, len * 4 + 4);
+            byte[] lenBytes = new byte[len * 4 + 4];
+            BytesUtils.writeU4LittleEndian(lenBytes, len ,0);
+            UPMEM.getInstance().getDPUManager(dpuID)
+                    .garbageCollector.transfer(DPUJVMMemSpaceKind.DPU_HEAPSPACE, lenBytes, addr);
+            return new DPUInt32ArrayHandler(dpuID, addr, len);
+        }else{
+            int addr = ((DPUManagerSimulator)UPMEM.getInstance().getDPUManager(dpuID)).getDpujvmRemote().createArray(len);
+            return new DPUInt32ArrayHandler(dpuID, addr, len);
+        }
+    }
 
     public static void reportProfiling(){
         if(!getConfigurator().isEnableProfilingRPCDataMovement()) return;
         profiler.reportProfiledData();
     }
+
     public Object createObjectSpecific(int dpuID, String descriptor, Object... params) {
         return null;
     }
@@ -322,5 +408,18 @@ public class UPMEM {
         }else{
             return pimManager.getDPUManager(i).dpu;
         }
+    }
+
+    public ArrayList<Integer> creatInt32List(int dpuID, int size) {
+        if(configurator.isUseSimulator()){
+            try {
+                return ((DPUManagerSimulator)UPMEM.getInstance().getDPUManager(dpuID))
+                        .getDpujvmRemote().createInt32List(size);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+
+        }
+        return null;
     }
 }

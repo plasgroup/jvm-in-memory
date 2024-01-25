@@ -7,16 +7,61 @@ import framework.pim.UPMEMConfigurator;
 import transplant.index.search.pojo.Word;
 
 import java.io.*;
+import java.util.Arrays;
 import java.util.List;
 
 public class IndexSearchMain {
+    private static boolean useSimulator = true;
+
     public static void main(String[] args) throws ClassNotFoundException, IOException {
-        if (args.length < 1 || "SEARCH".equals(args[0].strip())){
+        boolean profileCPUDPUDataMovement = true;
+        int docCount = 1000;
+        int reqs = 1000;
+        int dpuCount = 4;
+        int threads = 1;
+        String dictPath = "";
+        String filesPath = "";
+        String reqFilePath = "./";
+        boolean cpuOnly = false;
+        if(args.length != 0){
+            for(int i = 0; i < args.length; i++){
+                String[] argItem = args[i].split("=");
+                System.out.println(args[i]);
+                System.out.println("parse arg:" + (argItem.length > 0 ?  argItem[0] : "")
+                        + " = " + (argItem.length > 1 ? argItem[1] : ""));
+                if ("DOC_COUNT".equals(argItem[0].strip().toUpperCase())){
+                    docCount = Integer.parseInt(argItem[1].strip());
+                } else if("TSK_N".equals(argItem[0].strip().toUpperCase())){
+                    reqs = Integer.parseInt(argItem[1].strip());
+                } else if("DPU_COUNT".equals(argItem[0].strip().toUpperCase())){
+                    dpuCount = Integer.parseInt(argItem[1].strip());
+                } else if("PROF_CPUDPU_DM".equals(argItem[0].strip().toUpperCase())){
+                    profileCPUDPUDataMovement = true;
+                } else if("THREADS".equals(argItem[0].strip().toUpperCase())){
+                    threads = Integer.parseInt(argItem[1].strip());
+                } else if("DICT_PATH".equals(argItem[0].strip().toUpperCase())){
+                    dictPath = Arrays.stream(argItem).skip(1).reduce("", (a, b) -> a + b);
+                    System.out.println("dict path = " + dictPath);
+                } else if("FILE_PATH".equals(argItem[0].strip().toUpperCase())){
+                    filesPath = Arrays.stream(argItem).skip(1).reduce("", (a, b) -> a + b);
+                } else if("REQ_FILE".equals(argItem[0].strip().toUpperCase())){
+                    reqFilePath =  Arrays.stream(argItem).skip(1).reduce("", (a, b) -> a + b);
+                } else if("CPU_ONLY".equals(argItem[0].strip().toUpperCase())){
+                    cpuOnly = true;
+                } else if("USE_SIMULATOR".equals(argItem[0].strip().toUpperCase())){
+                    if(argItem.length > 1){
+                        useSimulator = Integer.parseInt(argItem[1]) != 0;
+                    }else{
+                        useSimulator = true;
+                    }
+                }
+            }
+        }
 
-            IndexSearchDatabaseBuilder dm = new IndexSearchDatabaseBuilder();
-
-            UPMEM.initialize(new UPMEMConfigurator().setThreadPerDPU(1).setDpuInUseCount(64)
-                    .setUseSimulator(true).setPackageSearchPath("application.transplant.index.search.")
+        IndexSearchDatabaseBuilder dm = new IndexSearchDatabaseBuilder();
+        System.out.println("init " + dpuCount + " DPUs with threads = " + threads + " CPU ONLY = " + cpuOnly);
+            UPMEM.initialize(new UPMEMConfigurator().setThreadPerDPU(threads).setDpuInUseCount(dpuCount)
+                    .setUseSimulator(useSimulator).setPackageSearchPath("application.transplant.index.search.")
                     .setUseAllowSet(true).addClassesAllow(
                             "java.lang.Object", "java.util.HashTable",
                             "application.transplant.index.search.IndexTable",
@@ -24,34 +69,46 @@ public class IndexSearchMain {
                             "java.util.ArrayList",
                             "application.transplant.index.search.Searcher",
                             "application.transplant.index.search.pojo.SearchResult")
-                    .setEnableProfilingRPCDataMovement(true).setEnableProfilingRPCDataMovement(true));
+                    .setEnableProfilingRPCDataMovement(profileCPUDPUDataMovement)
+                    .setCPUOnly(cpuOnly)
+            );
 
-            int requestCount = 1000000;
+            int requestCount = reqs;
 
             try {
                 String basePath = (System.getProperty("user.dir"));
+                if("".equals(dictPath)) {
+                    dictPath = basePath + "/src/application/transplant/index/search/database/dict.txt";
+                }
 
+                System.out.println("use dict path = " + dictPath);
+                if("".equals(filesPath)) filesPath =
+                        basePath + "/src/application/transplant/index/search/database/files";
                 IndexSearchDatabase indexSearchDatabase =
                         dm.initialize()
-                                .buildDictionary(basePath + "/src/application/transplant/index/search/database/dict.txt")
-                                .buildIndexes(basePath + "/src/application/transplant/index/search/database/files", 200)
+                                .buildDictionary(dictPath)
+                                .buildIndexes(filesPath, docCount)
                                 .buildDatabase();
 
                 System.out.println("build database Finished");
 
-
-                File requestFile =
-                        new File(basePath + "/src/application/transplant/index/search/database/request" +
+                File requestFile = new File(reqFilePath + "/" +
                                 requestCount + ".txt");
-                if(!requestFile.exists())
-                    Preprocessing.generateRequest(requestCount);
 
+                if(!requestFile.exists())
+                    System.out.println("generate request amount = " + requestCount);
+                    Preprocessing.generateRequest(requestCount, filesPath, dictPath, reqFilePath + "/" +
+                            requestCount + ".txt");
 
                 FileReader fileReader = new FileReader(requestFile);
                 BufferedReader br = new BufferedReader(fileReader);
                 String s;
+                int l = 0;
                 while((s = br.readLine()) != null){
+                    System.out.println("read : " + s);
                     String[] words = s.split(" ");
+                    l++;
+                    if(l % 1000 == 0) System.out.println("Finish " + l + "/" + requestCount);
                     switch (words.length){
                         case 1:
                             indexSearchDatabase.search(words[0]);
@@ -72,15 +129,13 @@ public class IndexSearchMain {
                 }
                 br.close();
                 fileReader.close();
-
+                System.out.println("Finish all queries.");
                 UPMEM.reportProfiling();
+
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-        } else if(args.length >= 1 && "GEN_KEYS".equals(args[0].strip())){
-            if(args.length < 2) return;
-            Preprocessing.generateRequest(Integer.parseInt(args[1].strip()));
-        }
+
 
     }
 }

@@ -1,0 +1,93 @@
+TYPE TYPE=PIM
+NODES NODES=100000000
+DPU_COUNT DPU_COUNT=256
+CPU_LAYER_COUNT CPU_LAYER_COUNT=18
+IMG_PATH IMG_PATH=./bst-tree/n-100000000-l-18-d-256/
+NO_SEARCH NO_SEARCH
+THREADS THREADS=1
+BUILD_FROM_IMG BUILD_FROM_IMG=0
+SERIALIZE_TREE SERIALIZE_TREE
+dpu in use = 256
+PIM mode, nodes count = 100000000 query count = 100000
+cpu tree layer count = 18
+No search mode
+output tree to file. Imgs path = ./bst-tree/n-100000000-l-18-d-256/
+build CPU Tree.....
+build cpu tree finished
+Serialize tree to files
+cpu nodes (top k layers) 135278
+write image to DPU 0 children count = 1999934 heap_pt_current = 47998424
+write image to DPU 1 children count = 1997973 heap_pt_current = 47951360
+write image to DPU 2 children count = 1966905 heap_pt_current = 47205728
+write image to DPU 3 children count = 244573 heap_pt_current = 5869760
+write image to DPU 4 children count = 1784156 heap_pt_current = 42819752
+write image to DPU 5 children count = 1871164 heap_pt_current = 44907944
+write image to DPU 6 children count = 482408 heap_pt_current = 11577800
+write image to DPU 7 children count = 1803753 heap_pt_current = 43290080
+write image to DPU 8 children count = 441731 heap_pt_current = 10601552
+write image to DPU 9 children count = 1956483 heap_pt_current = 46955600
+write image to DPU 10 children count = 1755772 heap_pt_current = 42138536
+write image to DPU 11 children count = 1257061 heap_pt_current = 30169472
+write image to DPU 12 children count = 1101498 heap_pt_current = 26435960
+write image to DPU 13 children count = 1201253 heap_pt_current = 28830080
+write image to DPU 14 children count = 1808617 heap_pt_current = 43406816
+write image to DPU 15 children count = 1921802 heap_pt_current = 46123256
+write image to DPU 16 children count = 1269565 heap_pt_current = 30469568
+write image to DPU 17 children count = 934160 heap_pt_current = 22419848
+write image to DPU 18 children count = 1792681 heap_pt_current = 43024352
+write image to DPU 19 children count = 1268585 heap_pt_current = 30446048
+write image to DPU 20 children count = 1815546 heap_pt_current = 43573112
+write image to DPU 21 children count = 1983295 heap_pt_current = 47599088
+write image to DPU 22 children count = 1902507 heap_pt_current = 45660176
+write image to DPU 23 children count = 303191 heap_pt_current = 7276592
+write image to DPU 24 children count = 1977990 heap_pt_current = 47471768
+write image to DPU 25 children count = 1332836 heap_pt_current = 31988072
+write image to DPU 26 children count = 1689159 heap_pt_current = 40539824
+write image to DPU 27 children count = 1300536 heap_pt_current = 31212872
+write image to DPU 28 children count = 1881697 heap_pt_current = 45160736
+write image to DPU 29 children count = 1817752 heap_pt_current = 43626056
+write image to DPU 30 children count = 873851 heap_pt_current = 20972432
+write image to DPU 31 children count = 1963545 heap_pt_current = 47125088
+write image to DPU 32 children count = 857948 heap_pt_current = 20590760
+write image to DPU 33 children count = 1818243 heap_pt_current = 43637840
+write image to DPU 34 children count = 1596277 heap_pt_current = 38310656
+write image to DPU 35 children count = 1494578 heap_pt_current = 35869880
+write image to DPU 36 children count = 1395525 heap_pt_current = 33492608
+write image to DPU 37 children count = 1249442 heap_pt_current = 29986616
+write image to DPU 38 children count = 1517713 heap_pt_current = 36425120
+write image to DPU 39 children count = 1441483 heap_pt_current = 34595600
+write image to DPU 40 children count = 1087016 heap_pt_current = 26088392
+write image to DPU 41 children count = 1837457 heap_pt_current = 44098976
+write image to DPU 42 children count = 1999968 heap_pt_current = 47999240
+write image to DPU 43 children count = 866893 heap_pt_current = 20805440
+write image to DPU 44 children count = 1946028 heap_pt_current = 46704680
+write image to DPU 45 children count = 1445535 heap_pt_current = 34692848
+write image to DPU 46 children count = 1717196 heap_pt_current = 41212712
+write image to DPU 47 children count = 1762792 heap_pt_current = 42307016
+write image to DPU 48 children count = 1596247 heap_pt_current = 38309936
+write image to DPU 49 children count = 1532163 heap_pt_current = 36771920
+write image to DPU 50 children count = 1178321 heap_pt_current = 28279712
+write image to DPU 51 children count = 1053772 heap_pt_current = 25290536
+write image to DPU 52 children count = 1900060 heap_pt_current = 45601448
+write image to DPU 53 children count = 1619628 heap_pt_current = 38871080
+write image to DPU 54 children count = 1781050 heap_pt_current = 42745208
+write image to DPU 55 children count = 1976783 heap_pt_current = 47442800
+write image to DPU 56 children count = 1841630 heap_pt_current = 44199128
+write image to DPU 57 children count = 374215 heap_pt_current = 8981168
+write image to DPU 58 children count = 1895035 heap_pt_current = 45480848
+write image to DPU 59 children count = 1379457 heap_pt_current = 33106976
+write image to DPU 60 children count = 1882837 heap_pt_current = 45188096
+write image to DPU 61 children count = 900116 heap_pt_current = 21602792
+write image to DPU 62 children count = 1474014 heap_pt_current = 35376344
+write image to DPU 63 children count = 743015 heap_pt_current = 17832368
+write image to DPU 64 children count = 1945199 heap_pt_current = 46684784
+write image to DPU 65 children count = 1131561 heap_pt_current = 27157472
+write image to DPU 66 children count = 1923237 heap_pt_current = 46157696
+135587 cpu nodes (final) and 79636 proxy in CPU
+cpu part size = 215223
+cpu size count = 215223
+Serialize Tree
+Serialize Tree Finish
+begin query..
+proxy search count = 0
+Simulated data transfer between CPU and DPUs: 205904695040 bytes

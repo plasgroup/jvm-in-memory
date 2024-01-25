@@ -1,5 +1,7 @@
 package application.bst;
 
+import com.upmem.dpu.DpuException;
+import framework.pim.BatchDispatcher;
 import framework.pim.ExperimentConfigurator;
 import framework.pim.UPMEM;
 import framework.pim.logger.Logger;
@@ -8,10 +10,11 @@ import framework.pim.logger.PIMLoggers;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
-import static framework.pim.ExperimentConfigurator.noSearch;
 import static application.bst.BSTBuilder.*;
 import static application.bst.TreeWriter.*;
+import static framework.pim.ExperimentConfigurator.*;
 
 public class BSTTester {
     static List<Integer> keys = readIntergerArrayList("keys_random.txt");
@@ -84,7 +87,7 @@ public class BSTTester {
         TreeNode root;
         if(ExperimentConfigurator.buildFromSerializedData){
             try{
-                root = buildCpuPartTreeFromFile("CPU_TREE_" + totalNodeCount + ".txt");
+                root = buildCpuPartTreeFromFile(imagesPath + "CPU_TREE_" + totalNodeCount + ".txt");
             }catch (IOException e){
                  throw new RuntimeException(e);
             }
@@ -94,7 +97,7 @@ public class BSTTester {
 
 
         if(ExperimentConfigurator.serializeToFile)
-            serializeTreeToFile(root, "CPU_TREE_" + totalNodeCount + ".txt");
+            serializeTreeToFile(root, imagesPath+ "CPU_TREE_" + totalNodeCount + ".txt");
         return queryInTree(queriesCount, root);
     }
 
@@ -103,13 +106,16 @@ public class BSTTester {
         if(ExperimentConfigurator.buildFromSerializedData){
             System.out.println("Build Tree From Images");
             try {
+                System.out.println("init DPUs");
+
                 for(int i = 0; i < UPMEM.dpuInUse; i++){
                     UPMEM.getInstance().getDPUManager(i).createObject(DPUTreeNode.class, new Object[]{0, 0});
                 }
                 writeDPUImages(totalNodeCount, ExperimentConfigurator.imagesPath);
 
                 System.out.println("load CPU part tree");
-                root = buildCpuPartTreeFromFile("PIM_TREE_" + totalNodeCount + ".txt");
+                root = buildCpuPartTreeFromFile(imagesPath + "PIM_TREE_" + totalNodeCount + ".txt");
+                System.out.println("load CPU part tree finished");
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -121,26 +127,67 @@ public class BSTTester {
 
         if(ExperimentConfigurator.serializeToFile){
             System.out.println("Serialize Tree");
-            serializeTreeToFile(root, "PIM_TREE_" + totalNodeCount + ".txt");
+            serializeTreeToFile(root,  imagesPath + "PIM_TREE_" + totalNodeCount + ".txt");
             System.out.println("Serialize Tree Finish");
         }
 
         int t = queryInTree(queryCount, root);
-        System.out.println("proxy search count = " + DPUTreeNodeProxyAutoGen.searchDispatchCount);
+        System.out.println("proxy search count = " + DPUTreeNodeProxy.searchDispatchCount);
         return t;
     }
 
+    public static long prepareTimeTotal = 0;
     private static int queryInTree(int queryCount, TreeNode root) {
+        System.out.println("begin query..");
+        UPMEM.profiler.resetAllCounter();
         int i = 0;
-        int s = 0;
+        AtomicInteger s = new AtomicInteger();
+
+        long startTime = 0;
+        long endTime = 0;
         if(noSearch) return -1;
-        while(i < queryCount){
-            int qk = keys.get(i);
-            int v = root.search(qk);
-            s += v;
-            i++;
+
+        if(performanceEvaluationEnableBatchDispatch){
+            BatchDispatcher bd = new BatchDispatcher();
+            // TODO: clean dirty codes..
+            bd.maxResult = 1024;
+            bd.resultBytes = new byte[4096];
+            UPMEM.beginRecordBatchDispatching(bd, (count, ret) ->{
+                for(int c = 0; c < count; c++){
+                    s.addAndGet(ret[c]);
+                }
+                return null;
+            });
+
+            startTime = System.nanoTime();
+            while(i < queryCount){
+                int qk = keys.get(i);
+                int v = root.search(qk);
+                s.addAndGet(v);
+                i++;
+            }
+            try {
+                bd.dispatchAll();
+            } catch (DpuException e) {
+                throw new RuntimeException(e);
+            }
+            endTime = System.nanoTime();
+        }else{
+            System.out.println("single thread...");
+            startTime = System.nanoTime();
+
+            while(i < queryCount){
+                int qk = keys.get(i);
+                int v = root.search(qk);
+                s.addAndGet(v);
+                i++;
+            }
+            endTime = System.nanoTime();
         }
-        return s;
+
+        System.out.println("avg query time = " + ((endTime - startTime)  / queryCount) + " ns");
+
+        return s.get();
     }
 
     public static void testPIMBST(int totalNodeCount, int queryCount){

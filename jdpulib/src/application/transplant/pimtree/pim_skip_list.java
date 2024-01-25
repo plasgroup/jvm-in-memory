@@ -3,6 +3,8 @@ package application.transplant.pimtree;
 import com.upmem.dpu.DpuException;
 import framework.pim.BatchDispatcher;
 import framework.pim.UPMEM;
+import framework.pim.logger.Logger;
+import framework.pim.logger.PIMLoggers;
 
 import java.util.*;
 
@@ -23,6 +25,10 @@ public class pim_skip_list {
     private Integer[] back_trace_offset = new Integer[BATCH_SIZE];
     public static final int nr_of_dpus = 4;
 
+    private static Logger pimTreeLogger = PIMLoggers.pimTreeLogger;
+    static {
+        pimTreeLogger.setEnable(false);
+    }
     public void init() {
 
     }
@@ -130,7 +136,7 @@ public class pim_skip_list {
         UPMEM.beginRecordBatchDispatching(bd);
         for(int i = 0; i < llen; i++){
             int targetDPUID = hash_to_dpu(keys_sorted[ll.get(i)], 0, nr_of_dpus);
-            System.out.println("key = " + keys_sorted[ll.get(i)] + " dispatch to DPU " + targetDPUID);
+            pimTreeLogger.logln("key = " + keys_sorted[ll.get(i)] + " dispatch to DPU " + targetDPUID);
             pptr pptr = executors[targetDPUID].p_get(Math.toIntExact(keys_sorted[ll.get(i)]));
             // dispatching to DPU
 

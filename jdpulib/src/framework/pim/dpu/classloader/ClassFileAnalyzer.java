@@ -478,6 +478,9 @@ public class ClassFileAnalyzer {
         int methodCount =  BytesUtils.readU2BigEndian(classFileBytes, pos);
         pos += 2;
 
+        classfileAnalyzerLogger.setEnable(false);
+
+
         classfileAnalyzerLogger.logln("- Method Count = " + methodCount);
         jc.methodCount = methodCount;
         jc.methodTable = new DPUJMethod[methodCount];

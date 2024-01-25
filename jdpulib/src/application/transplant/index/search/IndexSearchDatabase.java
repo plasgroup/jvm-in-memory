@@ -35,21 +35,32 @@ public class IndexSearchDatabase {
     }
 
     public void search(String... words) {
-        List<Integer> collectA = Arrays.stream(words)
-                .map(s -> dictionary.get(s.replace(".", "").toLowerCase())).collect(Collectors.toList());
-
-        if(collectA.stream().anyMatch(Objects::isNull)){
-            throw new RuntimeException();
-        }
+//        List<Integer> collectA = Arrays.stream(words)
+//                .map(s -> dictionary.get(s.replace(".", "").toLowerCase()))
+//                .filter(Objects::nonNull).collect(Collectors.toList());
+//
+//        if(collectA.stream().anyMatch(Objects::isNull)){
+//            throw new RuntimeException();
+//        }
         int[] collect = Arrays.stream(words)
                 .map(s -> dictionary.get(s.replace(".", "").toLowerCase()))
+                .filter(Objects::nonNull)
                 .mapToInt(e -> e).toArray();
+        if(collect.length == 0) {
+            System.out.println("exist not avalibale words");
+            for(int i = 0; i < words.length; i++){
+                System.out.println(" " + words[i]);
+            }
+            System.out.println("\r\n");
+            return;
+        }
+
 
         int totalMatch = 0;
         int firstMatchLocation = -1;
 
         int firstMatchDocumentID = Integer.MAX_VALUE;
-        for(int i = 0; i < PIMRemoteJVMConfiguration.JVMCount; i++){
+        for(int i = 0; i < UPMEM.dpuInUse; i++){
             SearchResult searchResult;
             if(words.length == 1){
                 searchResult = dpuSearchers[i].search(collect[0]);

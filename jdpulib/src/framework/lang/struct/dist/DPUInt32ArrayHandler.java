@@ -21,4 +21,9 @@ public class DPUInt32ArrayHandler {
         int elementBytes = UPMEM.getInstance().getDPUManager(dpuID).garbageCollector.getInt32(address + 4+ i * 4);
         return elementBytes;
     }
+
+    public void set(int index, int val) {
+        UPMEM.getInstance().getDPUManager(dpuID).garbageCollector.setInt32(index, val);
+
+    }
 }

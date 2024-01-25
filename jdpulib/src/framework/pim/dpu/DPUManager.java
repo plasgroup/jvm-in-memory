@@ -1,14 +1,12 @@
 package framework.pim.dpu;
 import com.upmem.dpu.Dpu;
 import com.upmem.dpu.DpuException;
-import framework.lang.struct.IDPUProxyObject;
+import framework.lang.struct.DummyProxy;
 import framework.pim.UPMEM;
 import framework.pim.dpu.cache.DPULookupTableManager;
 import framework.pim.dpu.classloader.DPUClassFileManager;
 import framework.pim.logger.Logger;
 import framework.pim.logger.PIMLoggers;
-import framework.lang.struct.DPUObjectHandler;
-import simulator.DPUJVMRemote;
 import simulator.DPUJVMRemoteImpl;
 
 import java.io.IOException;
@@ -58,9 +56,9 @@ public abstract class DPUManager {
         return desc + ")V";
     }
 
-    public abstract  <T> DPUObjectHandler createObject(Class c, Object... params) throws IOException;
+    public abstract  <T> DummyProxy createObject(Class c, Object... params) throws IOException;
 
-    public abstract  <T> IDPUProxyObject createObjectSpecific(Class c, String descriptor, Object... params) throws IOException;
+    public abstract  <T> Object createObjectSpecific(Class c, String descriptor, Object... params) throws IOException;
 
     protected DPUManager(){}
 

@@ -18,6 +18,7 @@ public class Searcher {
     }
 
     public SearchResult searchDocumentIds(int... keywordIDs) {
+         System.out.println("search...");
         SearchResult searchResult = new SearchResult();
         int matchedCount = 0;
         int lastDocumentId = -1;

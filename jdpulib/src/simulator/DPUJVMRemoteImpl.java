@@ -9,6 +9,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.*;
 
 public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemote {
@@ -34,6 +36,7 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
     int heapSpaceIndex = 0;
     int[] taskletParameterTop;
     static Logger jvmLogger = PIMLoggers.jvmSimulatorLogger;
+
     static {
         jvmLogger.setEnable(false);
     }
@@ -46,37 +49,38 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
 
         @Override
         public void run() {
-            System.out.println("===================== Run !!!!=-------------");
+            jvmLogger.logln("===================== Run !!!!=-------------");
             int pt = threadID * perThreadParameterQueueLength;
             int dest = currentParamPointer[threadID] / 4;
-
+            //System.out.println("pt = " + pt + " dest = " + dest );
             while(pt < dest){
-                // System.out.println("pt = " + pt + " dest = " + dest);
+                jvmLogger.logln("!pt = " + pt + " dest = " + dest);
                 int taskId =  parameterQueue[pt];
-                // System.out.println(" -- get task id = " + taskId);
+                jvmLogger.logln(" -- get task id = " + taskId);
                 Class c = (Class) metaSpace[parameterQueue[pt + 1]];
-                // System.out.println(" -- get class = " + c);
+                jvmLogger.logln(" -- get class = " + c);
 
                 if(metaSpace[parameterQueue[pt + 2]] instanceof Constructor){
                     Constructor constructor = (Constructor) metaSpace[parameterQueue[pt + 2]];
                     int instanceIndex = parameterQueue[pt + 3];
                     int paramCount =  constructor.getParameterCount();
-                    // System.out.println("constructor param count = " + paramCount + ", constructor = " + constructor);
+                    jvmLogger.logln("constructor param count = " + paramCount + ", constructor = " + constructor);
 
                     if(paramCount == 0){
                         try {
                             heap[instanceIndex] = constructor.newInstance();
-                            // System.out.println(" > call " + constructor);
+                            jvmLogger.logln(" > call " + constructor);
 
                         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
                             throw new RuntimeException(e);
                         }
+                        pt += 4;
                     }else{
                         Object[] params = new Object[paramCount];
                         pt += 4;
                         for(int i = 0; i < paramCount; i++){
                             Class parameterType = constructor.getParameterTypes()[i];
-                            // System.out.println("try read argument " + i + " = " + parameterQueue[i] + ", " + parameterType);
+                            jvmLogger.logln("try read argument " + i + " = " + parameterQueue[i] + ", " + parameterType);
                             if(Integer.class.isAssignableFrom(parameterType) || "int".equals("" + parameterType)){
                                 params[i] = parameterQueue[pt];
                                 jvmLogger.logln(" -- set arg " + i + " = (int) " + parameterQueue[pt]);
@@ -87,19 +91,24 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
                                 pt++;
                             }
                         }
+
+                        if(((params.length * 4 + 16) % 8 != 0)){
+                            pt++;
+                        }
+
                         try {
                             heap[instanceIndex] = constructor.newInstance(params);
+                            jvmLogger.logln("write result, tid = " + taskId + " address = " + instanceIndex + " to index = " + (resultQueuePointer) + " and " + (resultQueuePointer + 1) + "/" + resultQueue.length );
+
+                            resultQueue[resultQueuePointer++] = taskId;
+                            resultQueue[resultQueuePointer++] = instanceIndex;
                             jvmLogger.logln(" > call " + constructor);
 
                         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
                             throw new RuntimeException(e);
                         }
                     }
-                    taskletParameterTop[threadID] = perThreadParameterQueueLength * threadID;
-                    currentParamPointer[threadID] = perThreadParameterQueueSize * threadID;
-                    countDownLatch.countDown();
-                    jvmLogger.logln(" > thread " + threadID + " finish.");
-                    return;
+                    continue;
                 }
                 jvmLogger.logln("   ---- normal method ----");
                 jvmLogger.logln(metaSpace[parameterQueue[pt + 2]]);
@@ -112,6 +121,7 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
                 jvmLogger.logln("class = " + c.getSimpleName());
                 jvmLogger.logln("method = " + m.getName());
                 jvmLogger.logln("instance pos = " + parameterQueue[pt + 3]);
+
                 jvmLogger.logln("method params count = " + m.getParameterCount());
                 Object instance =  heap[parameterQueue[pt + 3]];
                 jvmLogger.logln(" -- instance = " + instance);
@@ -130,26 +140,25 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
                 if(((params.length * 4 + 16) % 8 != 0)){
                     pt++;
                 }
-                // System.out.println(" -- read params finished.");
+                jvmLogger.logln(" -- read params finished.");
                 try {
-                    // System.out.println("method =  " + m);
+                    jvmLogger.logln("method =  " + m);
                     Object ret = m.invoke(instance, params);
-                    // System.out.println(" get result " + ret);
+                    jvmLogger.logln(" get result " + ret);
                     synchronized (resultQueuePointer){
-                        // System.out.println(" set taskid = " + taskId + " to result area index = " + resultQueuePointer + " max length = " + resultQueue.length);
+                        jvmLogger.logln(" set taskid = " + taskId + " to result area index = " + resultQueuePointer + " max length = " + resultQueue.length);
                         resultQueue[resultQueuePointer] = taskId;
                         resultQueuePointer++;
                         if(ret == null){
                             resultQueue[resultQueuePointer] = 0;
                         }else{
-
                             if(!m.getReturnType().isPrimitive()){
                                 int addr = -1;
                                 synchronized (heap){
                                     addr = ++heapSpaceIndex;
                                     heap[addr] = ret;
                                     resultQueue[resultQueuePointer] = addr;
-                                    // System.out.println("write reference of " + ret.getClass() + " = addr: " + addr + " to result queue index = " + resultQueuePointer);
+                                    jvmLogger.logln("write reference of " + ret.getClass() + " = addr: " + addr + " to result queue index = " + resultQueuePointer);
                                 }
                             }else{
                                 resultQueue[resultQueuePointer] = ret;
@@ -157,7 +166,6 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
                         }
                         resultQueuePointer++;
                     }
-
 
                 } catch (IllegalAccessException | InvocationTargetException e) {
                     throw new RuntimeException(e);
@@ -167,11 +175,13 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
             // clear
             taskletParameterTop[threadID] = perThreadParameterQueueLength * threadID;
             currentParamPointer[threadID] = perThreadParameterQueueSize * threadID;
+
             // System.out.println("reset taskletParameterTop of " + threadID + "to" + taskletParameterTop[threadID]);
             countDownLatch.countDown();
-            // System.out.println(" > thread " + threadID + " finish.");
-            resultQueuePointer = 0;
+            jvmLogger.logln(" > thread " + threadID + " finish.");
+
         }
+
     }
     public DPUJVMRemoteImpl(int id, int threadCount) throws RemoteException {
         this.id = id;
@@ -179,7 +189,7 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
         this.threads = new Runnable[threadCount];
         this.perThreadParameterQueueSize = maxParamSize / PIMRemoteJVMConfiguration.threadCount;
         this.currentParamPointer = new int[PIMRemoteJVMConfiguration.threadCount];
-        this.resultQueue = new Object[PIMRemoteJVMConfiguration.threadCount * perThreadParameterQueueSize / 16];
+        this.resultQueue = new Object[PIMRemoteJVMConfiguration.threadCount * perThreadParameterQueueSize];
         this.taskletParameterTop = new int[PIMRemoteJVMConfiguration.threadCount];
         for(int i = 0; i < threadCount; i++){
             this.threads[i] = new ProcessorBinary(i);
@@ -197,10 +207,10 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
 
     @Override
     public void start() throws RemoteException{
-        System.out.println("remote JVM start...");
+        jvmLogger.logln("remote JVM start...");
         countDownLatch = new CountDownLatch(threadCount);
         for(int i = 0; i < threadCount; i++){
-            System.out.println("> start thread " + i);
+            jvmLogger.logln("> start thread " + i);
             service.submit(threads[i]);
         }
         try {
@@ -208,7 +218,9 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        System.out.println("remote JVM finish...");
+        resultQueuePointer = 0;
+
+        jvmLogger.logln("remote JVM finish...");
 
     }
 
@@ -289,8 +301,8 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
 
     @Override
     public void setParamsBufferPointer(int p, int tasklet) throws RemoteException {
-        System.out.println("set tasklet " + tasklet + "'s parameter buffer pointer = " + p);
-        currentParamPointer[tasklet] = p;
+        jvmLogger.logln("set tasklet " + tasklet + "'s parameter buffer pointer = " + (tasklet * perThreadParameterQueueSize + p));
+        currentParamPointer[tasklet] = tasklet * perThreadParameterQueueSize + p;
     }
 
     @Override
@@ -322,15 +334,16 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
 
     @Override
     public void setParamsBufferIndex(int p, int tasklet) throws RemoteException {
-        System.out.println("set tasklet " + tasklet + "'s parameter buffer pointer = " + p);
+        jvmLogger.logln("set tasklet " + tasklet + "'s parameter buffer pointer = " + p);
 
-        this.taskletParameterTop[tasklet] = p;
+        this.taskletParameterTop[tasklet] = perThreadParameterQueueLength * tasklet + p;
     }
 
     @Override
     public JVMSimulatorResult getResult(int resultIndex) throws RemoteException {
         int taskID = (int) resultQueue[resultIndex * 2];
         Object result = resultQueue[resultIndex * 2 + 1];
+
         if(result == null){
             return new JVMSimulatorResult(taskID,0);
         }
@@ -359,7 +372,7 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
 
     @Override
     public int pushArguments(int[] params, int tasklet) throws RemoteException {
-        System.out.printf("taskletParameterTop[tasklet] = %d, " +
+        jvmLogger.logf("taskletParameterTop[tasklet] = %d, " +
                 "params length = %d, perThreadParameterQueueLength = %d \n", taskletParameterTop[tasklet], params.length, perThreadParameterQueueLength);
         if(taskletParameterTop[tasklet] + params.length >= perThreadParameterQueueLength * tasklet + perThreadParameterQueueLength)
             throw new RuntimeException("parameter buffer overflow");
@@ -379,6 +392,31 @@ public class DPUJVMRemoteImpl extends UnicastRemoteObject implements DPUJVMRemot
         return maxMetaspaceSize;
     }
 
+
+    @Override
+    public void setInt32(int index, int val) throws RemoteException {
+        heap[index] = val;
+    }
+
+    @Override
+    public int createArray(int len) throws RemoteException {
+        int addr = getHeapPointer();
+        setHeapIndex(addr + len + 1);
+        setHeapPointer(getHeapPointer() + len * 4 + 4);
+        Arrays.fill(heap,  addr + 1, addr + 1 + len, 0);
+        return addr;
+    }
+
+    @Override
+    public ArrayList createInt32List(int size) throws RemoteException {
+        int pt = allocateObject();
+        ArrayList list = new ArrayList();
+        heap[pt] = list;
+        for(int i = 0; i < size; i++){
+            list.add(0);
+        }
+        return list;
+    }
 
     @Override
     public int getID() {

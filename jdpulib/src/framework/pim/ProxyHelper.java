@@ -1,11 +1,5 @@
 package framework.pim;
 
-import application.bst.DPUTreeNodeProxyAutoGen;
-import framework.lang.struct.IDPUProxyObject;
-import framework.pim.dpu.cache.DPULookupTableManager;
-import framework.pim.logger.Logger;
-import framework.pim.logger.PIMLoggers;
-
 public class ProxyHelper {
 //    static Logger pimProxy = PIMLoggers.pimProxy;
 //    public static UPMEM upmem = UPMEM.getInstance();

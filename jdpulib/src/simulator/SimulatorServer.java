@@ -11,6 +11,7 @@ public class SimulatorServer {
         for(int i = 0; i < args.length; i++){
             String arg = args[i];
             String[] items = arg.split("=");
+            System.out.println(arg);
             String argumentName = items[0];
             System.out.println(argumentName + " " + args[i]);
             if("DPU_COUNT".equals(argumentName)){
@@ -30,7 +31,6 @@ public class SimulatorServer {
         UPMEM.perDPUThreadsInUse = PIMRemoteJVMConfiguration.threadCount;
         UPMEM.dpuInUse = PIMRemoteJVMConfiguration.JVMCount;
         String deviceName = "DPU";
-
         /* Bind DPU#i at localhost with port of (9239 + i) */
         for(int i = 0; i < PIMRemoteJVMConfiguration.JVMCount; i++){
             DPUJVMRemoteImpl jvmRemote = new DPUJVMRemoteImpl(i, PIMRemoteJVMConfiguration.threadCount);

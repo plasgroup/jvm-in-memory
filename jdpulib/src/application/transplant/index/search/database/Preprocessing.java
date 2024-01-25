@@ -7,6 +7,7 @@ public class Preprocessing {
     static String dictionaryFilePath =
             System.getProperty("user.dir") + "/src/application/transplant/index/search/database/dict.txt";
     static HashSet<String> buildDictionary() throws IOException {
+        System.out.println("build dict from " + dictionaryFilePath);
         File f = new File(dictionaryFilePath);
         HashSet<String> wordSet = new HashSet<>();
         if(!f.exists()) return null;
@@ -18,44 +19,94 @@ public class Preprocessing {
         }
         return wordSet;
     }
-
-    public static void generateRequest(int requestCount) throws IOException {
+    public static <T> T getByRandomClass(Set<T> set) {
+        if (set == null || set.isEmpty()) {
+            throw new IllegalArgumentException("The Set cannot be empty.");
+        }
+        int randomIndex = new Random().nextInt(set.size());
+        int i = 0;
+        for (T element : set) {
+            if (i == randomIndex) {
+                return element;
+            }
+            i++;
+        }
+        throw new IllegalStateException("Something went wrong while picking a random element.");
+    }
+    public static void generateRequest(int requestCount, String filesFolder, String dictPath, String requestFilePath) throws IOException {
         String basePath = (System.getProperty("user.dir"));
 
         System.out.println("generate request, count = " + requestCount);
-        File requestFile =
-                new File(basePath +
-                        "/src/application/transplant/index/search/database/request" + requestCount + ".txt");
+
+        if("".equals(requestFilePath)){
+            requestFilePath = basePath +  "/src/application/transplant/index/search/database/request"
+                    + requestCount + ".txt";
+        }
+
+
+        if("".equals(dictPath))
+            dictPath = dictionaryFilePath;
+        else{
+            dictionaryFilePath = dictPath;
+        }
+        if("".equals(filesFolder)){
+            filesFolder = basePath + "/src/application/transplant/index/search/database/files";
+        }
+
+
+
+        File requestFile = new File(requestFilePath);
+
+
         HashSet<String> wordsSet = buildDictionary();
 
         Random r = new Random();
 
+        System.out.println("files path = " + filesFolder);
         File filesDictionary =
-                new File(basePath + "/src/application/transplant/index/search/database/files");
-        File[] files = filesDictionary.listFiles();
+                new File(filesFolder);
+        File[] files = null;
+        if(filesDictionary.isDirectory()){
+            System.out.println(filesFolder + " is dictionary");
+            files = (filesDictionary.listFiles());
+        }else{
+            System.out.println(filesFolder + " is not a dictionary");
+        }
 
         int filesCount = files.length;
         BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(requestFile));
         int generatedCount = 0;
         int generateEnsuredSequenceCount = requestCount;
+
         while(generatedCount < generateEnsuredSequenceCount){
-            String s = new String(new FileInputStream(files[r.nextInt(0, filesCount)])
-                    .readAllBytes());
+//            String s = new String(new FileInputStream(files[r.nextInt(0, filesCount)])
+//                    .readAllBytes());
             int takes = r.nextInt(1, 6);
-
-            String[] words = s.split(" ");
-            int skipatable = words.length - takes;
-            if(skipatable < 2) continue;
-
-            String requestLine = Arrays.stream(words)
-                    .skip(r.nextInt(1, skipatable))
-                    .filter(p -> wordsSet.contains(p))
-                    .reduce((w1, w2) -> w1 + " " + w2)
-                    .get();
-
-            bufferedWriter.append(requestLine);
+            String s = "";
+            for(int t = 0; t < takes; t++){
+                s += getByRandomClass(wordsSet) + " ";
+            }
+            s = s.strip();
+            bufferedWriter.append(s);
             bufferedWriter.newLine();
-            generatedCount++;
+//            String[] words = s.split(" ");
+//            int skipatable = words.length - takes;
+//            if(skipatable < 2) continue;
+//
+//            Optional<String> requestArgs = Arrays.stream(words)
+//                    .skip(r.nextInt(1, skipatable))
+//                    .filter(p -> {
+//                        assert wordsSet != null;
+//                        return wordsSet.contains(p);
+//                    })
+//                    .reduce((w1, w2) -> w1 + " " + w2);
+//
+//            String requestLine = requestArgs.orElse("");
+//            if("".equals(requestLine)){
+//                bufferedWriter.append(requestLine);
+//                bufferedWriter.newLine();
+//                generatedCount++;
+//            }
         }
         bufferedWriter.close();
     }
@@ -64,9 +115,13 @@ public class Preprocessing {
         if(args.length < 1) return;
         String mode = args[0].strip().toUpperCase();
         if("NORM".equals(mode)){
-            String basePath = (System.getProperty("user.dir"));
-            File filesDictionary = new File(basePath + "/src/application/transplant/index/search/database/files");
+            if(args.length < 3) return;
+            String dictPath = (args[1]);
+            String filesPath = (args[2]);
+            File filesDictionary = new File(filesPath);
             File[] files = filesDictionary.listFiles();
+            System.out.println("Get dict path = " + dictPath);
+            dictionaryFilePath = dictPath;
             HashSet<String> wordsSet = buildDictionary();
             for(int i = 0; i < Objects.requireNonNull(files).length; i++){
                 File f = files[i];
@@ -87,7 +142,19 @@ public class Preprocessing {
             }
         }else if("GEN_REQ".equals(mode)){
             if(args.length < 2) return;
-            generateRequest(Integer.parseInt(args[1]));
+            String dictPath = "";
+            String filesPath = "";
+            String reqPath = "";
+            if(args.length == 3){
+                dictPath = args[2];
+            }
+            if (args.length == 4) {
+                filesPath = args[3];
+            }
+            if (args.length == 5) {
+                reqPath = args[4];
+            }
+            generateRequest(Integer.parseInt(args[1]), reqPath, dictPath, filesPath);
         }
     }
 }

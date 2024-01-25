@@ -17,6 +17,7 @@ public class UPMEMConfigurator {
     private boolean useAllowSet;
     private boolean enableProfilingRPCDataMovement = false;
     private boolean reportProfiling = false;
+    private boolean isCPUOnly = false;
     public boolean isUseSimulator() {
         return useSimulator;
     }
@@ -72,5 +73,20 @@ public class UPMEMConfigurator {
     public UPMEMConfigurator setReportProfiling(boolean reportProfiling) {
         this.reportProfiling = reportProfiling;
         return this;
+    }
+
+
+    /**
+     *
+     *  In the CPU Only Method, all proxy create behaviors would be converted to normal object creation.
+     *
+    **/
+    public UPMEMConfigurator setCPUOnly(boolean isCPUOnly) {
+        this.isCPUOnly = isCPUOnly;
+        return this;
+    }
+
+    public boolean isCPUOnly() {
+        return isCPUOnly;
     }
 }
