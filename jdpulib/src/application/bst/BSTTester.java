@@ -139,6 +139,7 @@ public class BSTTester {
     public static long prepareTimeTotal = 0;
     private static int queryInTree(int queryCount, TreeNode root) {
         System.out.println("begin query..");
+        UPMEM.profiler.resetAllCounter();
         int i = 0;
         AtomicInteger s = new AtomicInteger();
 
@@ -146,7 +147,7 @@ public class BSTTester {
         long endTime = 0;
         if(noSearch) return -1;
 
-        if(performanceEvaluationEnableBatchDispatch && tasklets != 1){
+        if(performanceEvaluationEnableBatchDispatch){
             BatchDispatcher bd = new BatchDispatcher();
             // TODO: clean dirty codes..
             bd.maxResult = 1024;

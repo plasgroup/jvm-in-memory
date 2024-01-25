@@ -1,13 +1,18 @@
 package framework.pim;
 
 public class PIMProfiler {
-    public long transferredBytes = 0;
+    public long transferredBytesToDPU = 0;
+    public long transferredBytesFromDPU = 0;
+
 
     public void resetAllCounter(){
-        this.transferredBytes = 0;
+        this.transferredBytesToDPU = 0;
+        this.transferredBytesFromDPU = 0;
     }
 
     public void reportProfiledData() {
-        System.out.printf("Simulated data transfer between CPU and DPUs: %d bytes\n", transferredBytes);
+        System.out.printf("Simulated data transfer from CPU to DPUs: %d bytes\n", transferredBytesToDPU);
+        System.out.printf("Simulated data transfer from DPUs to CPU: %d bytes\n", transferredBytesFromDPU);
+
     }
 }

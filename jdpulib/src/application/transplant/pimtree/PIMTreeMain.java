@@ -107,7 +107,8 @@ public class PIMTreeMain {
 
         run(frontend, loadBatchSize, executeBatchSize, keyCount);
         if(profileCPUDPUDataMovement){
-            System.out.println("Simulated data transfer between CPU and DPUs:" + UPMEM.profiler.transferredBytes);
+            System.out.printf("Simulated data transfer from CPU to DPUs: %d bytes\n", UPMEM.profiler.transferredBytesToDPU);
+            System.out.printf("Simulated data transfer from DPUs to CPU: %d bytes\n", UPMEM.profiler.transferredBytesFromDPU);
         }
     }
 
