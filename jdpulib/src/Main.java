@@ -126,9 +126,9 @@ public class Main {
                 totalTimeInMs += timeElapsed / 1000000;
             }
 
-            System.out.println("CPU 500,000 queries average time = " + totalTimeInMs / cpuPerformanceEvaluationRepeatTime);
+            System.out.println("CPU " + queryCount + " queries average time = " + totalTimeInMs / cpuPerformanceEvaluationRepeatTime);
             System.out.println("single query average time = " + totalTimeInMs / cpuPerformanceEvaluationRepeatTime / (double)keys.size());
-            System.out.println("end evaluate CPU Tree 500,000 queries performance");
+            System.out.println("end evaluate CPU Tree " + queryCount + " queries performance");
         }
 
         if (pimPerformanceEvaluation) {
@@ -237,6 +237,8 @@ public class Main {
        }
 
        UPMEM.reportProfiling();
+
+
        if(UPMEM.getConfigurator().isReportProfiling()){
            System.out.printf("Simulated data transfer from CPU to DPUs: %d bytes\n", UPMEM.profiler.transferredBytesToDPU);
            System.out.printf("Simulated data transfer from DPUs to CPU: %d bytes\n", UPMEM.profiler.transferredBytesFromDPU);
