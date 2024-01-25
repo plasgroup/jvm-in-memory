@@ -114,6 +114,7 @@ public class BytecodesHelper {
     public static String getBytecodeDescription(byte bytecode){
         return bytecodeMap.get(bytecode);
     }
+
     public static int getBytecodeFromDescription(String bytecode){
         return bytecodeDescriptionMap.get(bytecode);
     }
