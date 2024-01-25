@@ -238,8 +238,8 @@ public class Main {
 
        UPMEM.reportProfiling();
        if(UPMEM.getConfigurator().isReportProfiling()){
-           System.out.printf("Simulated data transfer between CPU and DPUs: %d bytes\n",
-                   UPMEM.profiler.transferredBytes);
+           System.out.printf("Simulated data transfer from CPU to DPUs: %d bytes\n", UPMEM.profiler.transferredBytesToDPU);
+           System.out.printf("Simulated data transfer from DPUs to CPU: %d bytes\n", UPMEM.profiler.transferredBytesFromDPU);
        }
 
     }
