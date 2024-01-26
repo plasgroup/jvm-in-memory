@@ -4,13 +4,10 @@ EVENT_LIST="LLC-load-misses,LLC-store-misses"
 VM_OPTIONS="-XX:+UnlockDiagnosticVMOptions -XX:+PreserveFramePointer -XX:+DumpPerfMapAtExit -Xmx131072m"
 declare -a NODES_COUNTS=(100000000)
 declare -a REQ_COUNT=(200000)
-declare -a THREADS=( 24)
+declare -a THREADS=(1 24)
 declare -a DPUS=(256)
 declare -a LAYERS=(18)
 
-## 1 thread, batch dispatch
-## 24 thread, batch dispatch
-## 1 thread, non batch dispatch
 
 # PIM Version
 for cnt_reqs in ${REQ_COUNT[@]}; do
