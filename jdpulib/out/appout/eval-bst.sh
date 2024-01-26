@@ -29,11 +29,12 @@ for cnt_reqs in ${REQ_COUNT[@]}; do
           perf report --stdio > ./bst-tree/n-${cnt_nodes}-l-${cnt_layer}-d-${cnt_dpus}/[PIM]n-${cnt_nodes}-r${cnt_reqs}-t${cnt_threads}-d${cnt_dpus}-no-batch.txt
 
 
-
+				if [! -f ./bst-tree/n-${cnt_nodes}-l-${cnt_layer}-d-${cnt_dpus}/[CPU-EXEC]n-${cnt_nodes}-r${cnt_reqs}-d${cnt_dpus}.txt ]; then	
 				 ### CPU-Only version 
-				  perf record -e $EVENT_LIST $JAVA $VM_OPTIONS -cp bst.jar:dpu.jar Main BUILD_FROM_IMG=1 TYPE=CPU NODES=$cnt_nodes QUERIES=${cnt_reqs} DPU_COUNT=$cnt_dpus CPU_LAYER_COUNT=$cnt_layer THREADS=$cnt_threads PROF_CPUDPU_DM SERIALIZE_TREE=0 IMG_PATH=./bst-tree/n-${cnt_nodes}-l-${cnt_layer}-d-${cnt_dpus}/ BATCH_DISPATCH PROFILE_QUERY_TIME=1 NO_SEARCH=0  > ./bst-tree/n-${cnt_nodes}-l-${cnt_layer}-d-${cnt_dpus}/[CPU-EXEC]n-${cnt_nodes}-r${cnt_reqs}-t${cnt_threads}-d${cnt_dpus}.txt
+				  perf record -e $EVENT_LIST $JAVA $VM_OPTIONS -cp bst.jar:dpu.jar Main BUILD_FROM_IMG=1 TYPE=CPU NODES=$cnt_nodes QUERIES=${cnt_reqs} DPU_COUNT=$cnt_dpus CPU_LAYER_COUNT=$cnt_layer THREADS=$cnt_threads PROF_CPUDPU_DM SERIALIZE_TREE=0 IMG_PATH=./bst-tree/n-${cnt_nodes}-l-${cnt_layer}-d-${cnt_dpus}/ BATCH_DISPATCH PROFILE_QUERY_TIME=1 NO_SEARCH=0  > ./bst-tree/n-${cnt_nodes}-l-${cnt_layer}-d-${cnt_dpus}/[CPU-EXEC]n-${cnt_nodes}-r${cnt_reqs}-d${cnt_dpus}.txt
                                   
-				  perf report --stdio > ./bst-tree/n-${cnt_nodes}-l-${cnt_layer}-d-${cnt_dpus}/[CPU]n-${cnt_nodes}-r${cnt_reqs}-t${cnt_threads}-d${cnt_dpus}.txt
+				  perf report --stdio > ./bst-tree/n-${cnt_nodes}-l-${cnt_layer}-d-${cnt_dpus}/[CPU]n-${cnt_nodes}-r${cnt_reqs}-d${cnt_dpus}.txt
+fi
 			  	done
                         done
                 done
