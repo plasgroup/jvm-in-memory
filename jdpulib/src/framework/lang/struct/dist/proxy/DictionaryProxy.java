@@ -6,7 +6,7 @@ import framework.pim.dpu.RPCHelper;
 import java.util.Dictionary;
 import java.util.Enumeration;
 
-public class DictionaryProxy extends Dictionary implements  IDPUProxyObject {
+public class DictionaryProxy extends Dictionary implements IDPUProxyObject {
     public Integer address;
     public Integer dpuID;
     @Override
