@@ -25,9 +25,7 @@ class DistSkipNode<K extends Comparable, T> extends SkipNode
 }
 
 public class DistributedSkiplist<K extends Comparable, V> extends SSkipList<K, V> {
-
     int partitionCount;
-
 
     int count = 0;
     Random random = new Random();

@@ -16,7 +16,7 @@ public class DistributedHash<K, V> extends SHash<K, V>{
         hashes = new Dictionary[partitionCount];
         this.partitionCount = partitionCount;
         for(int i = 0; i < partitionCount; i++){
-            hashes[i] = (DictionaryProxy) UPMEM.getInstance().createObject(i, Dictionary.class);
+            hashes[i] = (HashtableProxy) UPMEM.getInstance().createObject(i, Hashtable.class);
         }
     }
 

@@ -6,7 +6,7 @@ import framework.pim.dpu.RPCHelper;
 import java.util.Dictionary;
 import java.util.Enumeration;
 
-public class DictionaryProxy extends Dictionary implements IDPUProxyObject {
+public class HashtableProxy extends Hashtable implements IDPUProxyObject {
     public Integer address;
     public Integer dpuID;
     @Override
@@ -21,13 +21,13 @@ public class DictionaryProxy extends Dictionary implements IDPUProxyObject {
 
     @Override
     public int size() {
-        RPCHelper.invokeMethod(dpuID, address, "java/util/Collection/Dictionary", "size:()I");
+        RPCHelper.invokeMethod(dpuID, address, "java/util/Collection/Hashtable", "size:()I");
         return RPCHelper.getIReturnValue(dpuID);
     }
 
     @Override
     public boolean isEmpty() {
-        RPCHelper.invokeMethod(dpuID, address, "java/util/Collection/Dictionary", "isEmpty:()Z");
+        RPCHelper.invokeMethod(dpuID, address, "java/util/Collection/Hashtable", "isEmpty:()Z");
         return RPCHelper.getBooleanReturnValue(dpuID);
     }
 
@@ -43,19 +43,19 @@ public class DictionaryProxy extends Dictionary implements IDPUProxyObject {
 
     @Override
     public Object get(Object key) {
-        RPCHelper.invokeMethod(dpuID, address, "java/util/Collection/Dictionary", "get:(Ljava/lang/Object;)Ljava/lang/Object;", key);
+        RPCHelper.invokeMethod(dpuID, address, "java/util/Collection/Hashtable", "get:(Ljava/lang/Object;)Ljava/lang/Object;", key);
         return RPCHelper.getAReturnValue(dpuID);
     }
 
     @Override
     public Object put(Object key, Object value) {
-        RPCHelper.invokeMethod(dpuID, address, "java/util/Collection/Dictionary", "put:(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;", key, value);
+        RPCHelper.invokeMethod(dpuID, address, "java/util/Collection/Hashtable", "put:(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;", key, value);
         return RPCHelper.getAReturnValue(dpuID);
     }
 
     @Override
     public Object remove(Object key) {
-        RPCHelper.invokeMethod(dpuID, address, "java/util/Collection/Dictionary", "remove:(Ljava/lang/Object;)Ljava/lang/Object;", key);
+        RPCHelper.invokeMethod(dpuID, address, "java/util/Collection/Hashtable", "remove:(Ljava/lang/Object;)Ljava/lang/Object;", key);
         return RPCHelper.getAReturnValue(dpuID);
     }
 }
