@@ -143,9 +143,10 @@ public class BSTTester {
         int i = 0;
         AtomicInteger s = new AtomicInteger();
 
-        long startTime = 0;
-        long endTime = 0;
-        if(noSearch) return -1;
+        long startTime;
+        long endTime;
+        if(noSearch)
+            return -1;
 
         if(performanceEvaluationEnableBatchDispatch){
             BatchDispatcher bd = new BatchDispatcher();
@@ -166,11 +167,13 @@ public class BSTTester {
                 s.addAndGet(v);
                 i++;
             }
+
             try {
                 bd.dispatchAll();
             } catch (DpuException e) {
                 throw new RuntimeException(e);
             }
+             
             endTime = System.nanoTime();
         }else{
             System.out.println("single thread...");
