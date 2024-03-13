@@ -112,7 +112,6 @@ void exec_tasks() {
                     params_buffer_pt[me()] += 4;    
    
     while(buffer_begin < tasklet_buffer_pt){
-
         /* get a task from parameter buffer */
         /* | task_id (4B) | java class structure pointer (4B) |  java method structure pointer (4B) | parameters (4 * |parameters| B)| */
         int task_id = *(uint32_t __mram_ptr*) buffer_begin;
@@ -121,20 +120,15 @@ void exec_tasks() {
         buffer_begin += 4; // move buffer_begin pointer toward the head (tasklet_buffer_pt)
         fc.func = (struct j_method __mram_ptr*)(*(uint32_t __mram_ptr*)buffer_begin);
         buffer_begin += 4 + fc.func->params_count * 4; // move buffer_begin pointer toward the head (tasklet_buffer_pt)
-        fc.params = buffer_begin;
-
-        // mem.meta_space = buffer_begin;
-        
+        fc.params = buffer_begin;      
 
         // init fp (frame pointer) and sp (stack pointer)
         current_fp[tasklet_id] = 0;
         current_sp[tasklet_id] = wram_data_space +  tasklet_id * (WRAM_DATA_SPACE_SIZE / TASKLET_CNT);
        
-
         // interpretation
         interp(fc);
         
-
         // write result. The result space hold format | task_id, return_val | task_id, return_val | ...
         return_values[task_id * 2] = task_id;
         return_values[task_id * 2 + 1] = return_val;
