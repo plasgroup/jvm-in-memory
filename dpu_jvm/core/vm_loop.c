@@ -162,15 +162,14 @@ void interp(struct function_thunk func_thunk) {
             DEBUG_OUT_INSN_PARSED("GETFIELD")
             op1 = (code_buffer[pc] << 8) | code_buffer[pc + 1];
             pc += 2;
-            DEBUG_PRINT(" - fieldref in cp index = %d\n", op1);
+            DEBUG_PRINT(" - fieldref in cp index = %d\n", op1); // index to a fieldref item inside the entry table.
             DEBUG_PRINT(" - cp val = 0x%08x | 0x%08x\n", func_thunk.jc->items[op1].info, func_thunk.jc->items[op1].direct_value);
             op2 = func_thunk.jc->items[op1].direct_value & 0xFFFF;
-            DEBUG_PRINT(" - field index in instance = %d\n", op2);
+            DEBUG_PRINT(" - field index in instance = %d\n", op2); // get the index of that field in the instance's field area.
             POP_EVAL_STACK(op3)
-            
             DEBUG_PRINT(" - instance addr(m) = %p, field index = %d, addr(m) = %p\n",
                 op3, op2, op3 + 8 + 4 * op2);
-            op4 = *(uint32_t __mram_ptr*)(op3 + 8 + 4 * op2);
+            op4 = *(uint32_t __mram_ptr*)(op3 + 8 + 4 * op2); // get the value of that field. 
             DEBUG_PRINT("field val = 0x%x\n", op4);
             PUSH_EVAL_STACK(op4);
             break;
@@ -182,8 +181,8 @@ void interp(struct function_thunk func_thunk) {
             pc += 2;
             op2 = (jc->items[op1].direct_value >> 16 & 0xFFFF);
             DEBUG_PRINT(" - field index in instance = %d\n", (jc->items[op1].direct_value & 0xFFFF));
-            op1 = jc->items[op1].direct_value & 0xFFFF; // index in instance fields
-            POP_EVAL_STACK(op3); // val
+            op1 = jc->items[op1].direct_value & 0xFFFF; // get the index of that field in the instance's field area
+            POP_EVAL_STACK(op3); // value
             POP_EVAL_STACK(op4); // instance addr
             DEBUG_PRINT("set val = %d (hex:0x%08x), at addr(m):0x%08x, instance addr: 0x%08x\n", op3, op3, op4 + 8 + op1 * 4, op4);
             *(uint32_t __mram_ptr*)(op4 + 8 + op1 * 4) = op3;
