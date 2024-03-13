@@ -112,16 +112,16 @@ struct memory {
 extern struct memory mem;
 
 
-extern uint8_t __mram_ptr* current_sp[24];
-extern uint8_t __mram_ptr* current_fp[24];
+extern uint8_t __mram_ptr* current_sp[TASKLET_CNT];
+extern uint8_t __mram_ptr* current_fp[TASKLET_CNT];
 extern uint8_t __mram_ptr* stack_top;
 
 extern __host uint8_t __mram_ptr* mram_heap_pt;
 extern __host uint8_t __mram_ptr* func_pt;
 extern __host uint8_t __mram_ptr* meta_space_pt;
 
-extern __host uint8_t __mram_ptr* exec_method_pt[24];
-extern __host uint8_t __mram_ptr* exec_class_pt[24];
+extern __host uint8_t __mram_ptr* exec_method_pt[TASKLET_CNT];
+extern __host uint8_t __mram_ptr* exec_class_pt[TASKLET_CNT];
 
 
 extern __dma_aligned __mram_noinit uint8_t wram_data_space[WRAM_DATA_SPACE_SIZE];
@@ -131,7 +131,7 @@ extern __dma_aligned __mram_noinit uint8_t m_heapspace[MRAM_HEAP_SIZE];
 
 extern __dma_aligned __mram_noinit uint8_t params_buffer[PARAMS_BUFFER_SIZE];
 extern __host uint8_t* return_val;
-extern __host uint8_t __mram_ptr* params_buffer_pt[24];
+extern __host uint8_t __mram_ptr* params_buffer_pt[TASKLET_CNT];
 
 extern struct static_fields_table __mram_ptr* sfields_table;
 extern struct static_field_line __mram_ptr* static_var_m;

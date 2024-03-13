@@ -312,7 +312,7 @@ void interp(struct function_thunk func_thunk) {
                 DEBUG_PRINT(" - >> final frame\n");
                 return_val = 0;
                 current_fp[tasklet_id] = 0;
-                current_sp[tasklet_id] = wram_data_space +  tasklet_id * (WRAM_DATA_SPACE_SIZE / 24) - 4;
+                current_sp[tasklet_id] = wram_data_space +  tasklet_id * (WRAM_DATA_SPACE_SIZE / TASKLET_CNT) - 4;
                 params_buffer_pt[tasklet_id] = buffer_begin;
                 return;
             }
@@ -347,7 +347,7 @@ void interp(struct function_thunk func_thunk) {
                 DEBUG_PRINT(" - >> final frame\n");
                 return_val = op1;
                 current_fp[tasklet_id] = 0;
-                current_sp[tasklet_id] = wram_data_space +  tasklet_id * (WRAM_DATA_SPACE_SIZE / 24) - 4;
+                current_sp[tasklet_id] = wram_data_space +  tasklet_id * (WRAM_DATA_SPACE_SIZE / TASKLET_CNT) - 4;
                 params_buffer_pt[tasklet_id] = buffer_begin;
                 return;
             }
@@ -384,7 +384,7 @@ void interp(struct function_thunk func_thunk) {
                 DEBUG_PRINT(" - >> final frame\n");
                 return_val = op1;
                 current_fp[tasklet_id] = 0;
-                current_sp[tasklet_id] = wram_data_space + tasklet_id * (WRAM_DATA_SPACE_SIZE / 24) - 4;
+                current_sp[tasklet_id] = wram_data_space + tasklet_id * (WRAM_DATA_SPACE_SIZE / TASKLET_CNT) - 4;
                 params_buffer_pt[tasklet_id] = buffer_begin;
                 return;
             }

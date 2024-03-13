@@ -1,4 +1,5 @@
 #include "jstruct_printer.h"
+
 void print_class(struct j_class __mram_ptr* jc){
     uint8_t __mram_ptr* loc = (uint8_t __mram_ptr*) jc;
     int i = 0;
@@ -42,5 +43,49 @@ void print_class(struct j_class __mram_ptr* jc){
     DEBUG_PRINT("-- (%p) virtual_table_pt = %p\n", loc, *(u4 __mram_ptr*)loc);
     loc += 4;
 
+    DEBUG_PRINT("-------------------------------------------------------------------\n");
+}
+
+
+
+void print_virtual_table(struct j_class __mram_ptr* jc){
+    int len = jc->virtual_table_length;
+    for(int i = 0; i < len; i++){
+        DEBUG_PRINT("Vtable #%d, classref = %p, method ref = %p\n", i, 
+        jc->virtual_table[i].classref,
+        jc->virtual_table[i].methodref);
+    }
+}
+
+void print_method(struct j_method __mram_ptr* jm){
+    uint8_t __mram_ptr* loc = (uint8_t __mram_ptr*) jm;
+    int i = 0;
+    DEBUG_PRINT("-------------------------------------------------------------------\n");
+    DEBUG_PRINT("-- JMethod Addr = %p\n", jm);
+    DEBUG_PRINT("-- (%p) total_size = %d\n", loc,*(u4 __mram_ptr*)loc);
+    loc += 4;
+    DEBUG_PRINT("-- (%p) access_flags = 0x%04x\n", loc, *(u2 __mram_ptr*)loc);
+    loc += 2;
+    DEBUG_PRINT("-- (%p) params_count = %d\n", loc, *(u2 __mram_ptr*)loc);
+    loc += 2;
+    DEBUG_PRINT("-- (%p) name_index = %d\n", loc, *(u2 __mram_ptr*)loc);
+    loc += 2;
+    DEBUG_PRINT("-- (%p) max_stack = %d\n", loc, *(u2 __mram_ptr*)loc);
+    loc += 2;
+    DEBUG_PRINT("-- (%p) max_locals = %d\n", loc, *(u2 __mram_ptr*)loc);
+    loc += 2;
+    loc += 2;
+    DEBUG_PRINT("-- (%p) code_length = %d\n", loc, *(u4 __mram_ptr*)loc);
+    loc += 4;
+    DEBUG_PRINT("-- (%p) bytecodes_list_ref = %p === %p\n", loc, *(uint32_t __mram_ptr*)loc, jm->bytecodes);
+    loc += 4;
+    
+    // loc += 4;
+    // bytecodes
+    for(i = 0; i < jm->code_length; i++){
+        DEBUG_PRINT("---- (%p) bytecode[%d] = 0x%02x\n", loc, i,
+                *(uint8_t __mram_ptr*)loc);
+        loc++;
+    }
     DEBUG_PRINT("-------------------------------------------------------------------\n");
 }

@@ -4,8 +4,6 @@
 
 // frame printer
 void print_frame(uint8_t __mram_ptr* fp, uint8_t __mram_ptr* sp) {
-
-
 #define PRINT_FIELD_ADDR(field_name) DEBUG_PRINT("\t| [addr:" RED "%p" CYAN "] (" RED field_name CYAN ") => \n", fp);
     uint8_t __mram_ptr* loc = fp;
     int i;
