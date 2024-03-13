@@ -79,8 +79,6 @@ void print_method(struct j_method __mram_ptr* jm){
     loc += 4;
     DEBUG_PRINT("-- (%p) bytecodes_list_ref = %p === %p\n", loc, *(uint32_t __mram_ptr*)loc, jm->bytecodes);
     loc += 4;
-    
-    // loc += 4;
     // bytecodes
     for(i = 0; i < jm->code_length; i++){
         DEBUG_PRINT("---- (%p) bytecode[%d] = 0x%02x\n", loc, i,
