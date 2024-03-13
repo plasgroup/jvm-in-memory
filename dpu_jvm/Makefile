@@ -1,10 +1,6 @@
 CC := dpu-upmem-dpurte-clang
-
 CXX := g++
-
 DPU_CFLAGE += -DINMEMORY -DDEBUG_PRINT_ENABLE=0 
-
-
 DEPS := \
 	classloader/class.h \
 	classloader/printers/print.h \
@@ -20,7 +16,6 @@ DEPS := \
 	utils/memory_read_helper.h \
 	utils/jstruct_printer.h
 	
-
 DPU_DEPS := core/memory.h \
 	core/vm_loop.h \
 	core/frame_helper.h \

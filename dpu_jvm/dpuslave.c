@@ -18,7 +18,6 @@
 #include "core/jclass.h"
 #include "core/vm_loop.h"
 #include "utils/jstruct_printer.h"
-#include "sample_ils/test_cases_gen.h"
 
 #define MARAM_METASPACE_MALLOC(size) meta_space_pt; meta_space_pt += size;
 
