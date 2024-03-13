@@ -28,11 +28,8 @@ void interp(struct function_thunk func_thunk) {
     DEBUG_PRINT("code_buffer = %p\n", code_buffer);
 #define DEBUG
     DEBUG_PRINT("create frame finished\n");
-    DEBUG_PRINT("FP = (%p)\n", current_fp[tasklet_id]);
-   
-                
+    DEBUG_PRINT("FP = (%p)\n", current_fp[tasklet_id]); 
     while (1) {
-
         switch (code_buffer[pc++])
         {
         case NOP:
@@ -161,6 +158,7 @@ void interp(struct function_thunk func_thunk) {
             }
             break;
         case GETFIELD:
+            // an instance has the form of '|4 bytes (reserved)| 4 byte (class ref) |   fields (4 * field_count B) |' on the MRAM.
             DEBUG_OUT_INSN_PARSED("GETFIELD")
             op1 = (code_buffer[pc] << 8) | code_buffer[pc + 1];
             pc += 2;
@@ -169,6 +167,7 @@ void interp(struct function_thunk func_thunk) {
             op2 = func_thunk.jc->items[op1].direct_value & 0xFFFF;
             DEBUG_PRINT(" - field index in instance = %d\n", op2);
             POP_EVAL_STACK(op3)
+            
             DEBUG_PRINT(" - instance addr(m) = %p, field index = %d, addr(m) = %p\n",
                 op3, op2, op3 + 8 + 4 * op2);
             op4 = *(uint32_t __mram_ptr*)(op3 + 8 + 4 * op2);
@@ -176,6 +175,7 @@ void interp(struct function_thunk func_thunk) {
             PUSH_EVAL_STACK(op4);
             break;
         case PUTFIELD:
+            // an instance has the form of '|4 bytes (reserved)| 4 byte (class ref) |   fields (4 * field_count B) |' on the MRAM.
             DEBUG_OUT_INSN_PARSED("PUTFIELD")
             op1 = (code_buffer[pc] << 8) | code_buffer[pc + 1]; // constant table index
             DEBUG_PRINT(" - constant table index = %d\n", op1);
