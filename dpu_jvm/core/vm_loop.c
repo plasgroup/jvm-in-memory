@@ -190,28 +190,42 @@ void interp(struct function_thunk func_thunk) {
             break;
         case INVOKEVIRTUAL: // virtual function call
             DEBUG_OUT_INSN_PARSED("INVOKEVIRTUAL")
-            op1 = (uint8_t)(code_buffer[pc] << 8) | code_buffer[pc + 1]; // constant table index to methoderef
+            op1 = (uint8_t)(code_buffer[pc] << 8) | code_buffer[pc + 1]; // entry table index to an item of methodref
             DEBUG_PRINT(" - current-class-ref = %p\n", func_thunk.jc);
             DEBUG_PRINT(" - method-ref-cp-index = %d\n", op1);
-            op2 = func_thunk.jc->items[op1].direct_value;
+            op2 = func_thunk.jc->items[op1].direct_value; // the corresponding virtual table item index of the methodref
             DEBUG_PRINT(" - v-index = %p\n", op2);
-            callee.func = func_thunk.jc->virtual_table[op2].methodref;
-            op4 = (uint8_t __mram_ptr*)(current_sp[tasklet_id] - 4 * (callee.func->params_count - 1));
+            // callee.func = func_thunk.jc->virtual_table[op2].methodref; // get real method reference from virtual table
+            op4 = (uint8_t __mram_ptr*)(current_sp[tasklet_id] - 4 * (callee.func->params_count - 1)); // get the address of instance that call the method.
             DEBUG_PRINT(" - instance-address [me()]= %p, %p\n", *(uint8_t __mram_ptr* __mram_ptr*)op4, op4);
-            op3 = *(uint32_t __mram_ptr*)op4 + 4;
-            op1 = *(uint32_t __mram_ptr*)(op3);
+            op3 = *(uint32_t __mram_ptr*)op4 + 4; // MRAM address that stores the instance's corresponding class reference
+            op1 = *(uint32_t __mram_ptr*)(op3); // class reference
             DEBUG_PRINT(" - instance-class-address = %p\n", op1);             
+            /* read class reference and method reference from virtual table inside the instance's corresponding class structure. */
             DEBUG_PRINT(" - jclass-ref = %p\n", ((struct j_class __mram_ptr*)(op1))->virtual_table[op2].classref);
             DEBUG_PRINT(" - jmethod-ref = %p\n", ((struct j_class __mram_ptr*)(op1))->virtual_table[op2].methodref);
+            /* set up callee structure. */
             callee.jc = ((struct j_class __mram_ptr*)(op1))->virtual_table[op2].classref;
             callee.func = ((struct j_class __mram_ptr*)(op1))->virtual_table[op2].methodref;
-            callee.params = current_sp[tasklet_id];
+            /* 
+                SP points to the top of evaluation stack. 
+                When |arguments| indicates the amount of arguments needed by the method call, 
+                the |arguments| elements on the top of the evaluation stack are arguments for the method call.
+                We use the SP as the argument buffer pointer for the method call.
+                Use the SP as the argument buffer pointer for the method call makes the interpreter
+                tackle the data stored from address (SP - |arguments| * 4) to address SP as the arguments for the new method call.
+            */
+            callee.params = current_sp[tasklet_id]; 
+            /* pop |arguments| * 4 elements. */
             current_sp[tasklet_id] -= 4 * callee.func->params_count;
             DEBUG_PRINT(" - pop %d elements from operand stack\n", callee.func->params_count);
             DEBUG_PRINT(" -- new sp = %p\n", current_sp[tasklet_id]);
             DEBUG_PRINT(" -- params-pt = %p\n", callee.params);
             DEBUG_PRINT(" -- return pc = %d\n", pc + 2);
+            /* create new VM frame. */
             current_fp[tasklet_id] = create_new_vmframe(callee,  pc + 2);
+            /* set up pc register, function structure reference, class structure reference. */
+            /* the interpreter begin interpret the instantialization method from the first bytecode in its bytecode list at the next 'while' iteration. */
             pc = 0;
             func = callee.func;
             code_buffer = func->bytecodes;
@@ -219,7 +233,7 @@ void interp(struct function_thunk func_thunk) {
             last_func = func_thunk;
             func_thunk = callee;
             break;
-        case NEW:
+        case NEW: /* new instance */
             DEBUG_OUT_INSN_PARSED("NEW")
             op1 = (code_buffer[pc] << 8) | code_buffer[pc + 1]; // index in constant table (classref)
             pc += 2;
@@ -227,7 +241,8 @@ void interp(struct function_thunk func_thunk) {
             op1 = op2;
             op3 = 0;
             DEBUG_PRINT(" - count field count\n");
-            // |4 bytes ()| 4 byte (class ref) |   fields (4 * field_count bytes) |
+            /* count amount of inherented fields. */ 
+            /* we need consider all fields of classes on the  inherent chain of the instance's correspondent class. */
             while(op2 != NULL){
                 DEBUG_PRINT(" - + %d\n",  ((struct j_class __mram_ptr*)op2)->fields_count);
                 op3 += ((struct j_class __mram_ptr*)op2)->fields_count;
@@ -236,34 +251,38 @@ void interp(struct function_thunk func_thunk) {
                 DEBUG_PRINT(" -- super class addr = %p\n", ((struct j_class __mram_ptr*)op2)->items[op4].direct_value);
                 op2 = ((struct j_class __mram_ptr*)op2)->items[op4].direct_value;
             }
+            // an instance has the form of '|4 bytes (reserved)| 4 byte (class ref) |   fields (4 * field_count B) |' on the MRAM.
             DEBUG_PRINT(" - field count = %d, instance size = %d\n", op3, 8 + op3 * 4);
             DEBUG_PRINT(" - allocate instance in mram %p\n", mram_heap_pt);
-            PUSH_EVAL_STACK(mram_heap_pt);
+            PUSH_EVAL_STACK(mram_heap_pt); // push sintance MRAM address to the evaluation stack
             DEBUG_PRINT(" - write class addr: %p\n", op1);
+            /* write class address to 4~8 th bytes of the instance. */
             for(op4 = 0; op4 < 8 + op3 * 4; op4++){
                 *(uint8_t __mram_ptr*)(mram_heap_pt + op4) = 0;
             }
             *(uint32_t __mram_ptr*)(mram_heap_pt + 4) = op1;
-            mram_heap_pt += 8 + op3 * 4;
+            mram_heap_pt += 8 + op3 * 4; // "allocate" MRAM
             break;
-        case DUP:
+        case DUP: /* duplicate the element on the top of the evaluation stack. */
             DEBUG_OUT_INSN_PARSED("DUP")
             op1 = EVAL_STACK_TOPSLOT_VALUE;
             DEBUG_PRINT(" - dup %d(hex: %x)\n", op1, op1);
             PUSH_EVAL_STACK(op1);
             break;
-        case RETURN:
+        case RETURN: /* return without return value */
             DEBUG_OUT_INSN_PARSED("RETURN")
             DEBUG_PRINT("return");
             DEBUG_PRINT(" - last-sp = %p\n", FRAME_GET_OLDSP(current_fp[tasklet_id]));
             DEBUG_PRINT(" - last-fp = %p\n", FRAME_GET_OLDFP(current_fp[tasklet_id]));
             DEBUG_PRINT(" - return-pc = %p\n", FRAME_GET_RETPC(current_fp[tasklet_id]));
+            /* recover SP, FP. set up PC register.*/
             op2 = FRAME_GET_OLDSP(current_fp[tasklet_id]);
             op3 = FRAME_GET_OLDFP(current_fp[tasklet_id]);
             op4 = FRAME_GET_RETPC(current_fp[tasklet_id]);
-            if(op3 == NULL){
+            if(op3 == NULL){ /* in the condition that current frame is the final frame. */
                 DEBUG_PRINT(" - >> final frame\n");
                 return_val = 0;
+                /* reset current tasklet's 'current_fp', 'current_sp' and 'params_buffer_pt' value to initial value.*/
                 current_fp[tasklet_id] = 0;
                 current_sp[tasklet_id] = wram_data_space +  tasklet_id * (WRAM_DATA_SPACE_SIZE / TASKLET_CNT) - 4;
                 params_buffer_pt[tasklet_id] = buffer_begin;
@@ -272,31 +291,33 @@ void interp(struct function_thunk func_thunk) {
             current_sp[tasklet_id] = op2;
             DEBUG_PRINT(" - change sp to %p\n", op2);
             DEBUG_PRINT(" - reset pc to 0x%02x\n", op4);
-            func = FRAME_GET_METHOD(op3);
+            func = FRAME_GET_METHOD(op3); // revocer the function structure
             DEBUG_PRINT(" - reset func pt to 0x%08x\n", func);
             current_fp[tasklet_id] = op3;
-            code_buffer = func->bytecodes;
+            code_buffer = func->bytecodes; // revocer the code_buffer
             jc = FRAME_GET_CLASS(op3);
             pc = op4;
             DEBUG_PRINT(" - bytecodes addr: %08x\n", func->bytecodes);
             func_thunk.func = func;
             func_thunk.jc = jc;
             break;
-        case ARETURN:
+        case ARETURN: /* return with a reference */
             DEBUG_OUT_INSN_PARSED("ARETURN")
             if(FRAME_GET_OPERAND_STACK_SIZE(current_fp[tasklet_id], current_sp[tasklet_id]) >= 0){
-                POP_EVAL_STACK(op1);
+                POP_EVAL_STACK(op1); // push return value to evaluation stack
                 DEBUG_PRINT(" - ret val = %d\n", op1);
             }
+            /* recover SP, FP. set up PC register.*/
             DEBUG_PRINT(" - last-sp = %p\n", FRAME_GET_OLDSP(current_fp[tasklet_id]));
             DEBUG_PRINT(" - last-fp = %p\n", FRAME_GET_OLDFP(current_fp[tasklet_id]));
             DEBUG_PRINT(" - return-pc = %p\n", FRAME_GET_RETPC(current_fp[tasklet_id]));
             op2 = FRAME_GET_OLDSP(current_fp[tasklet_id]);
             op3 = FRAME_GET_OLDFP(current_fp[tasklet_id]);
             op4 =  FRAME_GET_RETPC(current_fp[tasklet_id]);
-            if(op3 == NULL){
+            if(op3 == NULL){ /* in the condition that current frame is the final frame. */
                 DEBUG_PRINT(" - >> final frame\n");
                 return_val = op1;
+                /* reset current tasklet's 'current_fp', 'current_sp' and 'params_buffer_pt' value to initial value.*/
                 current_fp[tasklet_id] = 0;
                 current_sp[tasklet_id] = wram_data_space +  tasklet_id * (WRAM_DATA_SPACE_SIZE / TASKLET_CNT) - 4;
                 params_buffer_pt[tasklet_id] = buffer_begin;
@@ -305,22 +326,23 @@ void interp(struct function_thunk func_thunk) {
             current_sp[tasklet_id] = op2;
             DEBUG_PRINT(" - change sp to %p\n", op2);
             DEBUG_PRINT(" - push ret val %d\n", op1);
-            PUSH_EVAL_STACK(op1)
+            PUSH_EVAL_STACK(op1) // push return value
             DEBUG_PRINT(" - reset pc to 0x%02x\n", op4);
-            func = FRAME_GET_METHOD(op3);
+            func = FRAME_GET_METHOD(op3); // revocer the function structure
             DEBUG_PRINT(" - reset func pt to 0x%08x\n", func);
             current_fp[tasklet_id] = op3;
-            code_buffer = func->bytecodes;
+            code_buffer = func->bytecodes; // revocer the code_buffer
             jc = FRAME_GET_CLASS(op3);
             pc = op4;
             DEBUG_PRINT(" - bytecodes addr: %08x\n", func->bytecodes);
+            /* recover the function structure reference and class structure reference in `func_thunk` */
             func_thunk.func = func;
             func_thunk.jc = jc;
             break;
-        case IRETURN:
+        case IRETURN: /* return with an integer */
             DEBUG_OUT_INSN_PARSED("IRETURN")
             if(FRAME_GET_OPERAND_STACK_SIZE(current_fp[tasklet_id], current_sp[tasklet_id]) >= 0){
-                POP_EVAL_STACK(op1);
+                POP_EVAL_STACK(op1); // push return value to evaluation stack
                 DEBUG_PRINT(" - ret val = %d\n", op1);
             }
             DEBUG_PRINT(" - last-sp = %p\n", FRAME_GET_OLDSP(current_fp[tasklet_id]));
