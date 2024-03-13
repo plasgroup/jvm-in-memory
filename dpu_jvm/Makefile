@@ -48,7 +48,6 @@ SHARD_CFILES += core/memory.c \
 		  core/frame_helper.c \
           core/vm_loop.c \
 		  utils/jstruct_printer.c \
-          sample_ils/test_cases_gen.c \
 				
 SHARD_DEPS += ir/opcode.h \
 	   ir/bytecode.h \
@@ -56,7 +55,6 @@ SHARD_DEPS += ir/opcode.h \
        core/method.h \
        core/memory.h \
        core/vm_loop.h \
-       sample_ils/test_cases_gen.h \
 
 DPU_SLAVE_CFILES += dpuslave.c \
     $(SHARD_CFILES)
