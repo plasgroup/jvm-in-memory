@@ -114,6 +114,7 @@ void exec_tasks() {
     while(buffer_begin < tasklet_buffer_pt){
 
         /* get a task from parameter buffer */
+        /* | task_id (4B) | java class structure pointer (4B) |  java method structure pointer (4B) | parameters (4 * |parameters| B)| */
         int task_id = *(uint32_t __mram_ptr*) buffer_begin;
         buffer_begin += 4; // move buffer_begin pointer toward the head (tasklet_buffer_pt)
         fc.jc = (struct j_class __mram_ptr*)(*(uint32_t __mram_ptr*)buffer_begin);
@@ -127,7 +128,7 @@ void exec_tasks() {
 
         // init fp (frame pointer) and sp (stack pointer)
         current_fp[tasklet_id] = 0;
-        current_sp[tasklet_id] = wram_data_space +  tasklet_id * (WRAM_DATA_SPACE_SIZE / 24);
+        current_sp[tasklet_id] = wram_data_space +  tasklet_id * (WRAM_DATA_SPACE_SIZE / TASKLET_CNT);
        
 
         // interpretation
@@ -138,7 +139,7 @@ void exec_tasks() {
         return_values[task_id * 2] = task_id;
         return_values[task_id * 2 + 1] = return_val;
         
-        // alignment (8 B)
+        // align (8 B)
         buffer_begin = (buffer_begin + 0b111) & (~0b111);
     }
 
