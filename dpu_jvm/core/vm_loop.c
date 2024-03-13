@@ -326,12 +326,15 @@ void interp(struct function_thunk func_thunk) {
             DEBUG_PRINT(" - last-sp = %p\n", FRAME_GET_OLDSP(current_fp[tasklet_id]));
             DEBUG_PRINT(" - last-fp = %p\n", FRAME_GET_OLDFP(current_fp[tasklet_id]));
             DEBUG_PRINT(" - return-pc = %p\n", FRAME_GET_RETPC(current_fp[tasklet_id]));
+            /* get old SP, FP. */
             op2 = FRAME_GET_OLDSP(current_fp[tasklet_id]);
             op3 = FRAME_GET_OLDFP(current_fp[tasklet_id]);
+            /* ger return register. */
             op4 =  FRAME_GET_RETPC(current_fp[tasklet_id]);
-            if(op3 == NULL){
+            if(op3 == NULL){ /* in the condition that current frame is the final frame. */
                 DEBUG_PRINT(" - >> final frame\n");
                 return_val = op1;
+                /* reset current tasklet's 'current_fp', 'current_sp' and 'params_buffer_pt' value to initial value.*/
                 current_fp[tasklet_id] = 0;
                 current_sp[tasklet_id] = wram_data_space + tasklet_id * (WRAM_DATA_SPACE_SIZE / TASKLET_CNT) - 4;
                 params_buffer_pt[tasklet_id] = buffer_begin;
@@ -340,15 +343,16 @@ void interp(struct function_thunk func_thunk) {
             current_sp[tasklet_id] = op2;
             DEBUG_PRINT(" - change sp to %p\n", op2);
             DEBUG_PRINT(" - push ret val %d\n", op1);
-            PUSH_EVAL_STACK(op1)
+            PUSH_EVAL_STACK(op1) // push return value
             DEBUG_PRINT(" - reset pc to 0x%02x\n", op4);
-            func = FRAME_GET_METHOD(op3);
+            func = FRAME_GET_METHOD(op3); // revocer the function structure
             DEBUG_PRINT(" - reset func pt to 0x%08x\n", func);
             current_fp[tasklet_id] = op3;
-            code_buffer = func->bytecodes;
+            code_buffer = func->bytecodes; // revocer the code_buffer
             jc = FRAME_GET_CLASS(op3);
             pc = op4;
             DEBUG_PRINT(" - bytecodes addr: %08x\n", func->bytecodes);
+            /* recover the function structure reference and class structure reference in `func_thunk` */
             func_thunk.func = func;
             func_thunk.jc = jc;
             break;
@@ -370,17 +374,20 @@ void interp(struct function_thunk func_thunk) {
             DEBUG_PRINT(" - mul result = %d\n", op2 * op1);
             PUSH_EVAL_STACK(op2 * op1);
             break;
-        case INVOKESPECIAL:
+        case INVOKESPECIAL: // this bytecode is used for calling a class's instantialization method
             DEBUG_OUT_INSN_PARSED("INVOKESPECIAL")
-            op1 = (code_buffer[pc] << 8) | code_buffer[pc + 1]; // constant table index to methoderef
-            DEBUG_PRINT(" - method-ref-cp-index = %d\n", op1);
+            /* get method structure address */
+            op1 = (code_buffer[pc] << 8) | code_buffer[pc + 1]; // entry table index of a methodref item
+            DEBUG_PRINT(" - method-ref-cp-index = %d\n", op1); // the virtual table index for the methodref  
             DEBUG_PRINT(" - jmethod-v-index = %p\n", func_thunk.jc->items[op1].direct_value);
             op4 = func_thunk.jc->items[op1].direct_value;
-            DEBUG_PRINT(" - jmethod-ref = %p\n", func_thunk.jc->virtual_table[op4].methodref);
+            DEBUG_PRINT(" - jmethod-ref = %p\n", func_thunk.jc->virtual_table[op4].methodref); // the real method address the methodref identify
             callee.func = func_thunk.jc->virtual_table[op4].methodref;
-            op2 = (func_thunk.jc->items[op1].info >> 16) & 0xFFFF;
+            /* get class structure address */
+            op2 = (func_thunk.jc->items[op1].info >> 16) & 0xFFFF; // entry table index of a classref item
             DEBUG_PRINT(" - class-ref-cp-index = %d\n", op2);
-            DEBUG_PRINT(" - jclass-ref = %p\n", func_thunk.jc->items[op2].direct_value);
+            DEBUG_PRINT(" - jclass-ref = %p\n", func_thunk.jc->items[op2].direct_value);  // class structure address
+            /* pop arguments */
             callee.jc = func_thunk.jc->items[op2].direct_value;
             callee.params = current_sp[tasklet_id];
             current_sp[tasklet_id] -= 4 * callee.func->params_count;
@@ -388,7 +395,10 @@ void interp(struct function_thunk func_thunk) {
             DEBUG_PRINT(" -- new sp = %p\n", current_sp[tasklet_id]);
             DEBUG_PRINT(" -- params-pt = %p\n", callee.params);
             DEBUG_PRINT(" -- return pc = %d\n", pc + 2);   
+            /* create new VM frame */
             current_fp[tasklet_id] = create_new_vmframe(callee,  pc + 2);
+            /* set up pc register, function structure reference, class structure reference. */
+            /* the interpreter begin interpret the instantialization method from the first bytecode in its bytecode list at the next 'while' iteration. */
             pc = 0;
             func = callee.func;
             code_buffer = func->bytecodes;
@@ -398,11 +408,11 @@ void interp(struct function_thunk func_thunk) {
             break;
         case GOTO:
             DEBUG_OUT_INSN_PARSED("GOTO")
-            op1 = (uint8_t)(code_buffer[pc] << 8) | code_buffer[pc + 1];
-            op1 = pc + (short)op1 - 1;
+            op1 = (uint8_t)(code_buffer[pc] << 8) | code_buffer[pc + 1]; // read 2B from bytecode buffer
+            op1 = pc + (short)op1 - 1; // the target bytecode index in the bytecode list.
             pc += 2;
             DEBUG_PRINT(" - goto %d\n", op1);
-            pc = op1;
+            pc = op1; // set PC register to the target bytecode index
             break;
         default:
             DEBUG_OUT_INSN_PARSED("UNKNOW")
