@@ -21,7 +21,6 @@
 
 #define MARAM_METASPACE_MALLOC(size) meta_space_pt; meta_space_pt += size;
 
-#define TASKLET_CNT 24
 
 char inited = 0;
 
@@ -74,8 +73,6 @@ void exec_tasks() {
     int t  = 0;
 
     int tasklet_id = me(); // get the id of current tasklet.
-    struct j_method __mram_ptr *jm = exec_method_pt[tasklet_id];
-    struct j_class __mram_ptr *jc = exec_class_pt[tasklet_id];
 
     // Each tasklet hold part of the whole parameter buffer. 
     // This statement calculate the size of subparameter buffer that a tasklet hold.
