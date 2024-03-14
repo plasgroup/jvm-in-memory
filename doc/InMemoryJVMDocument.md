@@ -119,7 +119,7 @@ $ make dpuslave
 
 ### III.2 Object Structure
 
-![image-20240314083611580](C:\Users\Micro\AppData\Roaming\Typora\typora-user-images\image-20240314083611580.png)
+![image-20240314083611580](./images/image-20240314083611580.png)
 
 
 
@@ -127,7 +127,7 @@ $ make dpuslave
 
 ### III.3 Class Structure
 
-<img src="C:\Users\Micro\AppData\Roaming\Typora\typora-user-images\image-20240314091735777.png" alt="image-20240314091735777" style="zoom:67%;" />
+<img src="./images/image-20240314091735777.png" alt="image-20240314091735777" style="zoom:67%;" />
 
 1. **total_size**: $4$-byte unsigned int value. The total size of the entire class structure in bytes
 
@@ -138,7 +138,7 @@ $ make dpuslave
 
 > For the `access_flag`, it could refer to https://docs.oracle.com/javase/specs/jvms/se8/jvms8.pdf (page $71$) for more details.
 >
-> <img src="C:\Users\Micro\AppData\Roaming\Typora\typora-user-images\image-20240314084221555.png" alt="image-20240314084221555" style="zoom:43%;" />
+> <img src="./images/image-20240314084221555.png" alt="image-20240314084221555" style="zoom:43%;" />
 
 6. **constantpool_items_count**: The count of items in the constant table of the original Java class file. This value is equal to the count of items in the entry table of the DPU class structure. 
 
@@ -185,13 +185,13 @@ A method invocation bytecode contains an index to a MethodRef item in the entry 
 
 ### III.4 Method Structure
 
-<img src="C:\Users\Micro\AppData\Roaming\Typora\typora-user-images\image-20240314092107685.png" alt="image-20240314092107685" style="zoom:67%;" />
+<img src="./images/image-20240314092107685.png" alt="image-20240314092107685" style="zoom:67%;" />
 
 1. **total_size**: $4$-byte unsigned integer. The total size of this DPU method structure in bytes.
 
 2. **access_flag**: $2$-byte unsigned integer. The access flag of this method. For more details, refer to https://docs.oracle.com/javase/specs/jvms/se8/jvms8.pdf （Page 93)
 
-   <img src="C:\Users\Micro\AppData\Roaming\Typora\typora-user-images\image-20240314092512194.png" alt="image-20240314092512194" style="zoom:50%;" />
+   <img src="./images/image-20240314092512194.png" alt="image-20240314092512194" style="zoom:50%;" />
 
 3. **parameter_count**: $2$-byte unsigned short integer. The count of parameters of this method.
 
