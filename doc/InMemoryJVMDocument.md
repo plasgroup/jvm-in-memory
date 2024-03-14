@@ -115,9 +115,107 @@ $ make dpuslave
 
 
 
-### III.2 Class and Method Structure
 
-![image-20231212123304583](./images/image-20231212123304583.png)
 
-### III.3 Interpreter
+### III.2 Object Structure
+
+![image-20240314083611580](C:\Users\Micro\AppData\Roaming\Typora\typora-user-images\image-20240314083611580.png)
+
+
+
+
+
+### III.3 Class Structure
+
+<img src="C:\Users\Micro\AppData\Roaming\Typora\typora-user-images\image-20240314091735777.png" alt="image-20240314091735777" style="zoom:67%;" />
+
+1. **total_size**: $4$-byte unsigned int value. The total size of the entire class structure in bytes
+
+2. **this_class_name**: $2$-byte unsigned short int value. An index to an `UTF-8` item in the entry table. The `UTF-8` item in the entry table indicates the offset of the string of this class's name inside the `Utf8 / Number Constant Area` 
+3. **super_class_name**: $2$-byte unsigned short int value. An index to an `UTF-8` item in the entry table. The `UTF-8` item in the entry table indicates the offset of the string of the super class's name inside the `Utf8 / Number Constant Area` 
+4. **super_class_ref**: $4$-byte MRAM pointer points to the super class's class structure.
+5. **access_flag**: $2$-byte class's access_flag.
+
+> For the `access_flag`, it could refer to https://docs.oracle.com/javase/specs/jvms/se8/jvms8.pdf (page $71$) for more details.
+>
+> <img src="C:\Users\Micro\AppData\Roaming\Typora\typora-user-images\image-20240314084221555.png" alt="image-20240314084221555" style="zoom:43%;" />
+
+6. **constantpool_items_count**: The count of items in the constant table of the original Java class file. This value is equal to the count of items in the entry table of the DPU class structure. 
+
+   > The  constant table of the original Java class file store symbol reference of various types of resources, e.g., classref, fieldref, utf-8 string, interger value, double value, etc. 
+   >
+   > Each of them in the constant table is resolved to a value that can be used to access the corresponding resource, and become an item in the entry table inside the DPU class structure.
+
+7. **constant_table_items_pt**: points to the beginning of the entry table.
+
+8. **fields_count**: count of fields.
+
+9. **fields_pt**:  $4$-byte MRAM pointer points to the field area of the DPU class structure
+
+10. **method_count**: $4$-byte unsigned short integer. The count of methods in the method area of this DPU class structure.
+
+11. **methods_pt**: $4$-byte MRAM pointer points to the method area of the DPU class structure
+
+12. **string/int_constant_area_length**: $4$-byte unsigned short integer. It indicates the length (in bytes) of the **Utf8 / Number Constant Area**.
+13. **constant_area_pt**: $4$-byte MRAM pointer points to the **Utf8 / Number Constant Area**.
+
+14. **Entry Table**: Contains **constantpool_items_count** $8$​-byte items. 
+
+    The constant table of the original Java class file store symbol reference of various types of resources, e.g., ClassRef, FieldRef, UTF-8 string, integer value, double value, etc. 
+
+    Each of them in the constant table is resolved to a value (direct value) that can be used to access the corresponding resource and become an item in the entry table inside the DPU class structure.
+
+    The direct value of each type of constant table item is as follows:
+
+    + **MethodRef**: $4$-byte index to the virtual table
+    +  **UTF-8**: $4$-byte byte offset of the **Utf8 / Number Constant Area**
+    + **int/short int**: the direct value of the integer
+
+15. **Fields**: stores field structures
+16. **Methods**: stores method structures of this class. Note that, this area does not include inherent methods' structures.
+17. **Virtual Table**:
+
+The virtual table of this class. Each item is $8$-byte. The first 4 bytes of each item is a $4$-byte MRAM pointer points to a DPU class structure. The last $4$ bytes of each item is a pointer points to a DPU method structure. 
+
+A method invocation bytecode contains an index to a MethodRef item in the entry table. The  MethodRef item in the entry table indicates an index of the virtual table. The invocation operation then utilize the class reference and method reference information provided by the virtual table item to recognize which method of which class should be invocated.
+
+
+
+
+
+### III.4 Method Structure
+
+<img src="C:\Users\Micro\AppData\Roaming\Typora\typora-user-images\image-20240314092107685.png" alt="image-20240314092107685" style="zoom:67%;" />
+
+1. **total_size**: $4$-byte unsigned integer. The total size of this DPU method structure in bytes.
+
+2. **access_flag**: $2$-byte unsigned integer. The access flag of this method. For more details, refer to https://docs.oracle.com/javase/specs/jvms/se8/jvms8.pdf （Page 93)
+
+   <img src="C:\Users\Micro\AppData\Roaming\Typora\typora-user-images\image-20240314092512194.png" alt="image-20240314092512194" style="zoom:50%;" />
+
+3. **parameter_count**: $2$-byte unsigned short integer. The count of parameters of this method.
+
+4. **name_index**: $2$-byte unsigned short integer. Indicates the index to a UTF-8 item inside the entry table.
+
+5. **max_stack**: $2$-byte unsigned short integer. THe max count of elements inside the evaluation stack in the process of executing this method.
+
+6. **max_locals**: $2$-byte unsigned short integer. The max amount of local variables, includes arguments.
+
+7. **code_length**: length of the bytecode list of this method, in bytes.
+
+8. **bytecode_ref**: reference to the bytecode area of this method.
+
+9. **bytecodes**: the bytecode area of this method, storing bytecodes of this method.
+
+
+
+
+
+
+
+### III.5 Interpreter
+
+
+
+
 
