@@ -284,7 +284,6 @@ public class DPUClassFileManagerUPMEM extends DPUClassFileManager {
 
             int classAddr = upmem.getDPUManager(dpuID).garbageCollector.allocate(DPUJVMMemSpaceKind.DPU_METASPACE, jc.totalSize);
 
-
             recordClass(className, jc, classAddr);
             recordMethodDistribution(c, jc, classAddr);
             recordFieldDistribution(c, jc);
@@ -312,7 +311,7 @@ public class DPUClassFileManagerUPMEM extends DPUClassFileManager {
             }
 
             // TODO: Resolve class use a white list. (Currently skip the resolution of java/framework.lang/Object).
-            /** We skip all subsequent analysis of java/framework.lang/Object **/
+            /** We skip all subsequent analysis of java/framework.lang/Object currently **/
             return jc;
         }
 
@@ -328,9 +327,7 @@ public class DPUClassFileManagerUPMEM extends DPUClassFileManager {
                 ((8 * jc.virtualTable.items.size()) + 0b111) & (~0b111));
 
 
-        classfileLogger.logln(" - In class " + c.getName() + " resolve unknow name");
-
-
+        classfileLogger.logln(" - In class " + c.getName() + " resolve unknow symbols");
         // resolve each entry item from preprocessed entry table.
 
         for(int i = 0; i < jc.cpItemCount; i++){
@@ -349,7 +346,7 @@ public class DPUClassFileManagerUPMEM extends DPUClassFileManager {
                     }else{
                         if(!"java/lang/System".equals(classNameUTF8)){
                             try {
-                                // TODO className$1 loading..
+                                // TODO: process className$1 loading..
                                 loadClassToDPU(Class.forName(classNameUTF8.replace("/", ".")));
                             } catch (ClassNotFoundException e) {
                                 classfileLogger.logln("cannot find class " + classNameUTF8);
@@ -412,9 +409,6 @@ public class DPUClassFileManagerUPMEM extends DPUClassFileManager {
                             vItem.className, vItem.descriptor
                     );
 
-                    if(methodCacheItem != null){
-
-                    }
 
                     cacheLine =
                             upmem.getDPUManager(dpuID).classCacheManager.dpuClassLookupTable.cache.get(vItem.className);
@@ -473,7 +467,6 @@ public class DPUClassFileManagerUPMEM extends DPUClassFileManager {
                     String matched = "";
                     int state = 0;
 
-
                     /** parse and process descriptor **/
                     for(int ci = 0; ci < paramsDesc.length(); ci++){
                         char ch = paramsDesc.charAt(ci);
@@ -525,7 +518,6 @@ public class DPUClassFileManagerUPMEM extends DPUClassFileManager {
                     jc.entryItems[i] = 0;
                     jc.entryItems[i] |= ((long)BytesUtils.readU2BigEndian(classFileBytes, jc.itemBytesEntries[i] + 1) << 48) & 0xFFFF000000000000L;
                     jc.entryItems[i] |= ((long)BytesUtils.readU2BigEndian(classFileBytes, jc.itemBytesEntries[i] + 3) << 32) & 0x0000FFFF00000000L;
-
                     jc.entryItems[i] |=  methodTableIndex;
                     classfileLogger.logf("%x\n", methodCacheItem.mramAddr);
 
