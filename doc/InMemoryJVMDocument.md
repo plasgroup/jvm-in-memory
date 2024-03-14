@@ -197,7 +197,7 @@ A method invocation bytecode contains an index to a MethodRef item in the entry 
 
 4. **name_index**: $2$-byte unsigned short integer. Indicates the index to a UTF-8 item inside the entry table.
 
-5. **max_stack**: $2$-byte unsigned short integer. THe max count of elements inside the evaluation stack in the process of executing this method.
+5. **max_stack**: $2$-byte unsigned short integer. The max count of elements inside the evaluation stack in the process of executing this method.
 
 6. **max_locals**: $2$-byte unsigned short integer. The max amount of local variables, includes arguments.
 
