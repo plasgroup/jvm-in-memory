@@ -19,10 +19,10 @@ void print_class(struct j_class __mram_ptr* jc){
     loc += 2;
     DEBUG_PRINT("-- (%p) cp_2b_offset = %d\n", loc, *(u2 __mram_ptr*)loc);
     loc += 2;
-    DEBUG_PRINT("-- (%p) constant_table_items_count = %d\n", loc, *(u4 __mram_ptr*)loc);
+    DEBUG_PRINT("-- (%p) entry_table_items_count = %d\n", loc, *(u4 __mram_ptr*)loc);
     loc += 4;
-    DEBUG_PRINT("-- (%p) constant_table_ref = %p\n", loc, (struct constant_table_item __mram_ptr*)*(u4 __mram_ptr*)loc);
-    loc += sizeof(struct constant_table_item __mram_ptr*);
+    DEBUG_PRINT("-- (%p) constant_table_ref = %p\n", loc, (struct entry_table_item __mram_ptr*)*(u4 __mram_ptr*)loc);
+    loc += sizeof(struct entry_table_item __mram_ptr*);
     for(i = 1; i < jc->cp_item_count; i++){
         DEBUG_PRINT("---- (%p) CP item #%d: 0x%08x | 0x%08x\n",  &jc->items[i],i, jc->items[i].info, jc->items[i].direct_value);
     }

@@ -5,7 +5,7 @@
 struct j_field{
     // currently not implemented
 };
-struct constant_table_item{
+struct entry_table_item{
     u4 info;
     u4 direct_value;
 };
@@ -24,7 +24,7 @@ struct j_class{
     u2 cp_2b_offset; // constant pool area offset calculate from the beginning of the class.
 
     u4 cp_item_count;  // the items count in constant pool
-    struct constant_table_item __mram_ptr* items;  // items in constant pool
+    struct entry_table_item __mram_ptr* items;  // items in constant pool
     
     u4 fields_count;  // the count of fields
     struct j_field __mram_ptr* fields; // fields
