@@ -4,8 +4,6 @@
 
 ## 1. A JIT-compiler Based Auto Task-Level Parallel Model for PIM.
 
-[Draft]
-
 > タスクとタスクの依存関係を定義出来るような仕組みを導入し、自動的並行可能なタスクを見つけて、Tasksを並行処理できるようにSchedulingをする, JITによってtaskをcompileしDPUへ実行する。
 
 
@@ -158,7 +156,7 @@ Finally, compile the intermediate language to the PIM backend.
 
 This consideration is somehow similar to a machine learning compiler, such as TVM [1]. **Automatically** **scheduling** and **optimization** to acheive higher parallism may be helpful in PIM development.
 
-When not consider **"Automatically"**, design a **user schedulable** language design may be also helpful. Let user (the developer) manually schedule the execution.
+While not considered **"Automatically" scheduling**, the design of a kind of user-schedulable language may be also helpful, in which lets the developer manually schedule the execution.
 
 
 
