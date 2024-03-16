@@ -270,7 +270,6 @@ public class DPUClassFileManagerUPMEM extends DPUClassFileManager {
                 classfileLogger.logln(" ---- load super class " + className + ", index " + jc.superClassNameIndex);
                 if(c.isInterface()){
                     classfileLogger.logln(" ---- Interface.. Load super class of java/lang/Object");
-
                     loadClassToDPU(Object.class);
                 }else{
                     loadClassToDPU(c.getSuperclass());

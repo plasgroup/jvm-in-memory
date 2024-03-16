@@ -146,7 +146,7 @@ $ make dpuslave
    >
    > Each of them in the constant table is resolved to a value that can be used to access the corresponding resource, and become an item in the entry table inside the DPU class structure.
 
-7. **constant_table_items_pt**: points to the beginning of the entry table.
+7. **entry_table_items_pt**: points to the beginning of the entry table.
 
 8. **fields_count**: count of fields.
 
@@ -161,15 +161,22 @@ $ make dpuslave
 
 14. **Entry Table**: Contains **constantpool_items_count** $8$​-byte items. 
 
-    The constant table of the original Java class file store symbol reference of various types of resources, e.g., ClassRef, FieldRef, UTF-8 string, integer value, double value, etc. 
+    The constant table of the original Java class file store symbol reference of various kinds of resources, e.g., ClassRef, FieldRef, UTF-8 string, integer value, double value, etc. 
 
-    Each of them in the constant table is resolved to a value (direct value) that can be used to access the corresponding resource and become an item in the entry table inside the DPU class structure.
+    The entry table inside a DPU class structure is a resolved constant table, with the same amount of items as the original class file's constant table.
 
-    The direct value of each type of constant table item is as follows:
+    Each item in the constant table of original class file is resolved to $8$-byte item in the entry table in the DPU class structure.
+
+    Each entry table item's lower $4$ bytes  store a value that can be used to access the corresponding resource.
+
+    Each entry table item correspond to a resource. For different kind of resource, the  lower $4$ bytes of entry table item hold different meaning.
+
+    Different type of resources' entry table items lower $4$ bytes value are interpreted as follows:
 
     + **MethodRef**: $4$-byte index to the virtual table
     +  **UTF-8**: $4$-byte byte offset of the **Utf8 / Number Constant Area**
     + **int/short int**: the direct value of the integer
+    + **FieldRef:** $4$-byte index indicates the index of the corresponding field inside the field area of the object instance of this class.
 
 15. **Fields**: stores field structures
 16. **Methods**: stores method structures of this class. Note that, this area does not include inherent methods' structures.
@@ -209,13 +216,6 @@ A method invocation bytecode contains an index to a MethodRef item in the entry 
 
 
 
-
-
-
-
 ### III.5 Interpreter
-
-
-
 
 
