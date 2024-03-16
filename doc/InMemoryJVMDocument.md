@@ -129,12 +129,12 @@ $ make dpuslave
 
 <img src="./images/image-20240314091735777.png" alt="image-20240314091735777" style="zoom:67%;" />
 
-1. **total_size**: $4$-byte unsigned int value. The total size of the entire class structure in bytes
+1. **total_size**: $4$-byte unsigned int value. The total size (in bytes) of the entire class structure.
 
-2. **this_class_name**: $2$-byte unsigned short int value. An index to an `UTF-8` item in the entry table. The `UTF-8` item in the entry table indicates the offset of the string of this class's name inside the `Utf8 / Number Constant Area` 
-3. **super_class_name**: $2$-byte unsigned short int value. An index to an `UTF-8` item in the entry table. The `UTF-8` item in the entry table indicates the offset of the string of the super class's name inside the `Utf8 / Number Constant Area` 
+2. **this_class_name**: $2$-byte unsigned short int value. An index to an `UTF-8` item in the entry table. The `UTF-8` item in the entry table indicates the offset of the string of this class's name inside the `Utf8 / Number Constant Area`.
+3. **super_class_name**: $2$-byte unsigned short int value. An index to an `UTF-8` item in the entry table. The `UTF-8` item in the entry table indicates the offset of the string of the super class's name inside the `Utf8 / Number Constant Area`. 
 4. **super_class_ref**: $4$-byte MRAM pointer points to the super class's class structure.
-5. **access_flag**: $2$-byte class's access_flag.
+5. **access_flag**: $2$-byte `access_flag`.
 
 > For the `access_flag`, it could refer to https://docs.oracle.com/javase/specs/jvms/se8/jvms8.pdf (page $71$) for more details.
 >
@@ -142,13 +142,13 @@ $ make dpuslave
 
 6. **constantpool_items_count**: The count of items in the constant table of the original Java class file. This value is equal to the count of items in the entry table of the DPU class structure. 
 
-   > The  constant table of the original Java class file store symbol reference of various types of resources, e.g., classref, fieldref, utf-8 string, interger value, double value, etc. 
+   > The  constant table of the original Java class file store symbol reference of various types of resources, e.g., classref, FieldRef, utf-8 string, integer value, double value, etc. 
    >
-   > Each of them in the constant table is resolved to a value that can be used to access the corresponding resource, and become an item in the entry table inside the DPU class structure.
+   > Each item in the constant table is resolved to a value that can be used to access the corresponding resource, and become an item in the entry table inside the DPU class structure.
 
 7. **entry_table_items_pt**: points to the beginning of the entry table.
 
-8. **fields_count**: count of fields.
+8. **fields_count**: count of fields defined in this class.
 
 9. **fields_pt**:  $4$-byte MRAM pointer points to the field area of the DPU class structure
 
@@ -157,6 +157,7 @@ $ make dpuslave
 11. **methods_pt**: $4$-byte MRAM pointer points to the method area of the DPU class structure
 
 12. **string/int_constant_area_length**: $4$-byte unsigned short integer. It indicates the length (in bytes) of the **Utf8 / Number Constant Area**.
+
 13. **constant_area_pt**: $4$-byte MRAM pointer points to the **Utf8 / Number Constant Area**.
 
 14. **Entry Table**: Contains **constantpool_items_count** $8$​-byte items. 
@@ -178,8 +179,14 @@ $ make dpuslave
     + **int/short int**: the direct value of the integer
     + **FieldRef:** $4$-byte index indicates the index of the corresponding field inside the field area of the object instance of this class.
 
-15. **Fields**: stores field structures
-16. **Methods**: stores method structures of this class. Note that, this area does not include inherent methods' structures.
+15. **Fields**: stores field structures.
+
+16. **Methods**: 
+
+    stores method structures of this class. A method structure's content is shown in the right side of the figure with label "DPU Method Structure".
+
+    This area does not include inherent methods' structures. 
+
 17. **Virtual Table**:
 
 The virtual table of this class. Each item is $8$-byte. The first 4 bytes of each item is a $4$-byte MRAM pointer points to a DPU class structure. The last $4$ bytes of each item is a pointer points to a DPU method structure. 
