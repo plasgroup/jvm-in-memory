@@ -1,6 +1,8 @@
-## A JIT-compiler Based Auto Task-Level Parallel Model for PIM.
+# IDEAS
 
 > 参考になれたら幸いです。
+
+## 1. A JIT-compiler Based Auto Task-Level Parallel Model for PIM.
 
 [Draft]
 
@@ -146,5 +148,23 @@ Tasks are compiled into binaries.
 
 
 
+## 2. A PIM-Oriented Language Processing System with Scheduling
 
+Introducing a kind of domain-specific language, compiling it to a kind of high-level intermediate language (e.g., Graph-IR), make **optimizations**, and **scheduling** on the high-level intermediate language. 
+
+Then high-level intermediate language is compiled into a kind of lower-level intermediate language, with optimizations also performed on the lower-level intermediate language.
+
+Finally, compile the intermediate language to the PIM backend.
+
+This consideration is somehow similar to a machine learning compiler, such as TVM [1]. **Automatically** **scheduling** and **optimization** to acheive higher parallism may be helpful in PIM development.
+
+When not consider **"Automatically"**, design a **user schedulable** language design may be also helpful. Let user (the developer) manually schedule the execution.
+
+
+
+[1] Tianqi Chen, Thierry Moreau, Ziheng Jiang, Lianmin Zheng, Eddie Yan, Meghan Cowan, Haichen Shen, Leyuan Wang, Yuwei Hu, Luis Ceze, Carlos Guestrin, and Arvind Krishnamurthy. 2018. TVM: an automated end-to-end optimizing compiler for deep learning. In Proceedings of the 13th USENIX conference on Operating Systems Design and Implementation (OSDI'18). USENIX Association, USA, 579–594.
+
+
+
+## 3. A User-Schedulable Language
 
