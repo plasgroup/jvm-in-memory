@@ -223,7 +223,20 @@ A method invocation bytecode contains an index to a MethodRef item in the entry 
 
 
 
-### III.5 Interpreter
+### III.5 Interpreter (DPU JVM)
 
 + `bytecode.h` inside `./ir` defines all names of JVM bytecodes
-+ 
+
++ `dpuslave.c` define the main function of the DPU JVM. 
++ Each tasklet (hardware thread) run a DPU JVM. The amount of tasklets per DPU is defined by the macro `TASKLET_CNT`. `TASKLET_CNT` is defined by the `make` tools, and is defined in the `Makefile`.
++  All tasklets in a DPU will begin running simultaneously after a DPU is launched.
+
++ Each tasklet holds a task buffer independent to other tasklets.
+
++ Each tasklet process the task inside its task buffer serially.
+
++ Each task has the format as following:
+
+  `| task_id (4B) | java class structure pointer (4B) |  java method structure pointer (4B) | parameters (4 * parameters_count * B)|`
+
++ Each task holds a unique `task_id`. The execution result of task with `task_id` is written to `return_values[task_id * 2]` and `return_values[task_id * 2 + 1]`, with `return_values[task_id * 2]` storing the `task_id` and `return_values[task_id * 2 + 1]` store the return value.
