@@ -225,4 +225,5 @@ A method invocation bytecode contains an index to a MethodRef item in the entry 
 
 ### III.5 Interpreter
 
-
++ `bytecode.h` inside `./ir` defines all names of JVM bytecodes
++ 
