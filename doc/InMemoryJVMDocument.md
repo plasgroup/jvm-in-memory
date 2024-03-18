@@ -183,7 +183,7 @@ $ make dpuslave
 
 16. **Methods**: 
 
-    stores method structures of this class. A method structure's content is shown in the right side of the figure with label "DPU Method Structure".
+    Stores DPU method structures of this class. A method structure's content is shown in the right side of the figure with label "DPU Method Structure".
 
     This area does not include inherent methods' structures. 
 
