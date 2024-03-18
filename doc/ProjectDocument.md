@@ -74,5 +74,9 @@
 ### I.4  **DPU JVM**
 
 + An execution engine.
-+ Use a switch loop-based interpretation of Java bytecode
++ A `switch` loop-based interpretation implementation is used for interpreting Java bytecodes.
+
+
+
+
 

@@ -81,17 +81,11 @@ class AProxy extends A implements IDPUProxyObject{
 
 
 
-
-
-
-
 ## PART III. Remote Procedure Call
 
 > [!NOTE]
 >
 > Currently, provides a generator for automatically generating proxy class. But it is untested.
-
-
 
 ### I.1 Remote Create Object
 
@@ -116,7 +110,10 @@ class Main(){
 }
 ```
 
+
+
 ### I.2. Get Bytecode of a specific method
+
 [Example]
 ``` java
 public static void main(String[] args){
@@ -127,7 +124,9 @@ public static void main(String[] args){
             System.out.printf("0x%02X\n", bytecode);
         }
 }
-``` 
+```
+
+
 
 ## PART IV. Files Introduction
 

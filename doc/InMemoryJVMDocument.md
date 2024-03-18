@@ -235,8 +235,13 @@ A method invocation bytecode contains an index to a MethodRef item in the entry 
 
 + Each tasklet process the task inside its task buffer serially.
 
++ Tasks in task buffers are written by CPU.
+
 + Each task has the format as following:
 
   `| task_id (4B) | java class structure pointer (4B) |  java method structure pointer (4B) | parameters (4 * parameters_count * B)|`
 
++  `java class structure pointer` and  `java method structure pointer` indicates the MRAM address of DPU class structure and DPU method structure. The CPU manage lookup table for  DPU class structures and  DPU DPU method structures. By looking up the lookup tables, the CPU recognize the MRAM addresses of the DPU method structure and the DPU class structure needed for a task execution. 
+
 + Each task holds a unique `task_id`. The execution result of task with `task_id` is written to `return_values[task_id * 2]` and `return_values[task_id * 2 + 1]`, with `return_values[task_id * 2]` storing the `task_id` and `return_values[task_id * 2 + 1]` store the return value.
+
