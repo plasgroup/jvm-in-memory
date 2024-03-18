@@ -143,3 +143,5 @@ public static void main(String[] args){
 
 + Currently the java class loading process for UPMEM DPU and UPMEM DPU Java Simulator are implemented differently.
   + Implementation exists in `jvm-in-memory\jdpulib\src\framework\pim\DPUClassFileManagerUPMEM.java` and `jvm-in-memory\jdpulib\src\simulator\DPUClassFileManagerSimulator.java`
+  + While classes are required to be encoded into bytes so that it could be transferred to UPMEM DPUs, the framework directly transfer Java Class Instance to the UPMEM DPU Java simulators.
+
