@@ -1,4 +1,0 @@
-#ifndef H_METHOD_PRINTER
-#define H_METHOD_PRINTER
-
-#endif // !H_METHOD_PRINTER
