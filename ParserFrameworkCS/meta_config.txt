@@ -1,0 +1,300 @@
+%Tokens%
+SELECT select
+FROM from
+GROUP group
+BY by
+ORDERBY orderby
+WHERE where
+IN in
+IS is
+AS as
+IF if
+ELSE else
+INTO into
+ASCENDING ascending
+DESCENDING descending
+JOIN join
+ON on
+EQUALS equals
+LET let
+VAR var
+YIELD yield
+VOID void
+W_ADD add
+ALIAS alias
+ARGLIST arglist
+DYNAMIC dynamic
+GET get
+NAMEOF nameof
+PARTIAL partial
+WHEN when
+SET set
+REMOVE remove
+ASSIGN =
+MUL *
+QUESTION_MARK ?
+$! IDENTIFIER [A-Z_a-z]+|[A-Z_a-z]+[0-9_A-Za-z] 1
+BOOL bool
+LM [
+RM ]
+COMMA ,
+SBYTE sbyte
+BYTE byte
+INT int
+UINT uint
+LONG long
+ULONG ulong
+CHAR char
+SHORT short
+USHORT ushort
+FLOAT float
+DOUBLE double
+DOT .
+OBJECT object
+STRING string
+LESS <
+GREATER >
+REF ref
+ADD +
+MINUS -
+AMP &
+CIRCUMFLEX ^
+TILDE ~
+DOUBLE_PLUS ++
+DOUBLE_MINUS --
+RIGHT_ARROW ->
+EXCLAMATION_MARK !
+COLON :
+USING using
+READONLY readonly
+SEMICOLON ;
+FIXED fixed
+ASYNC async
+ADD_ASSIGN +=
+SUB_ASSIGN -=
+MUL_ASSIGN *=
+DIV_ASSIGN /=
+MOD_ASSIGN %=
+AMP_ASSIGN &=
+PIPE_ASSIGN |=
+CIRCUMFLEX_ASSIGN ^=
+LEFT_SHIFT_ASSIGN <<=
+RIGHT_SHIFT_ASSIGN >>=
+RIGHT_SHIFT >>
+LEFT_SHIFT <<
+OP_OR ||
+OP_AND &&
+EXCLUSIVE_OR |
+OP_EQ ==
+OP_NE !=
+LE <=
+GE >=
+DIV /
+MOD %
+OPEN_BRACE {
+CLOSE_BRACE }
+SWITCH switch
+OP_RANGE ..
+OPEN_PARENS (
+CLOSE_PARENS )
+THIS this
+TRUE true
+FALSE false
+NULL null
+CASE case
+DEFAULT default
+WHILE while
+DO do
+FOR for
+$ HEX_INTEGER_LITERAL 0[xX]('_'*[0-9a-fA-F])+([lL]?[uU]|[uU]?[lL])?
+$ BIN_INTEGER_LITERAL 0[bB]('_'*[01])+([lL]?[uU]|[uU]?[lL])?
+$ INTEGER_LITERAL [0-9]('_'*[0-9])*([lL]?[uU]|[uU]?[lL])?
+CONST const
+STATIC static
+BREAK break
+LOCK lock
+RETURN return
+CONTINUE continue
+GOTO goto
+CLASS class
+STRUCT struct
+NEW new
+PARAMS params
+%%
+
+%Grammars%
+.linq{
+query_expression:from_clause query_body
+from_clause:FROM typeT identifier IN expression|FROM identifier IN expression
+query_body: query_body_p1 | query_body_p1 query_continuation
+query_body_p1: select_or_group_clause | query_body_clause query_body_p1 
+query_body_clause:from_clause|let_clause|where_clause|combined_join_clause|orderby_clause
+select_or_group_clause:SELECT expression|GROUP expression BY expression
+query_continuation:INTO identifier query_body
+orderby_clause:ORDERBY ordering_one_or_more
+ordering_one_or_more: ordering|COMMA ordering_one_or_more 
+where_clause:WHERE expression
+let_clause:LET identifier ASSIGN expression
+combined_join_clause:JOIN combined_join_clause_p1|JOIN typeT combined_join_clause_p1
+combined_join_clause_p1:identifier IN expression ON expression EQUALS expression into_identifier|identifier IN expression ON expression EQUALS expression
+into_identifier:INTO identifier
+ordering:expression ASCENDING|expression DESCENDING
+typeT:base_type type_p1|base_type
+type_p1:QUESTION_MARK|rank_specifier|MUL
+}
+
+.host_lang_type_and_ID{
+base_type:simple_type|class_type type_parameter|VOID MUL
+simple_type:numeric_type|BOOL
+identifier:IDENTIFIER|W_ADD|ALIAS|ARGLIST|ASCENDING|BY|DESCENDING|DYNAMIC|EQUALS|FROM|GET|GROUP|INTO|JOIN|LET|NAMEOF|ON|ORDERBY|PARTIAL|REMOVE|SELECT|SET|VAR|WHEN|WHERE|YIELD
+rank_specifier:LM rank_specifier_p1
+class_type:namespace_or_type_name|OBJECT|DYNAMIC|STRING
+rank_specifier_p1:RM|COMMA rank_specifier_p1
+numeric_type:integral_type|floating_point_type
+integral_type:SBYTE|BYTE|SHORT|USHORT|INT|UINT|LONG|ULONG|CHAR
+floating_point_type:FLOAT|DOUBLE
+type_parameter:identifier
+namespace_or_type_name:namespace_or_type_name_p1|namespace_or_type_name_p1 namespace_or_type_name_p2
+namespace_or_type_name_p1:identifier type_argument_list|identifier 
+namespace_or_type_name_p2:DOT identifier type_argument_list|DOT identifier
+type_argument_list:LESS typeT type_argument_list_p1
+type_argument_list_p1:GREATER|COMMA typeT type_argument_list_p1
+}
+
+.host_lang_expression{
+expression:assignment|non_assignment_expression|REF non_assignment_expression
+assignment:non_assignment_expression|lambda_expression|query_expression|conditional_expression
+non_assignment_expression:lambda_expression|query_expression|conditional_expression
+assignment:unary_expression assignment_operator expression
+unary_expression:primary_expression|ADD  unary_expression|MINUS unary_expression|TILDE unary_expression|DOUBLE_PLUS unary_expression|DOUBLE_MINUS unary_expression|AMP unary_expression|MUL unary_expression|CIRCUMFLEX unary_expression
+primary_expression:primary_expression_p0|primary_expression_p0 primary_expression_p1
+primary_expression_p0:primary_expression_start primary_expression_p2
+primary_expression_p1:member_access primary_expression_p2|method_invocation primary_expression_p2|DOUBLE_PLUS primary_expression_p2|DOUBLE_MINUS primary_expression_p2|RIGHT_ARROW identifier primary_expression_p2 
+primary_expression_p2:primary_expression_p3|EXCLAMATION_MARK primary_expression_p3
+primary_expression_p3:EXCLAMATION_MARK|bracket_expression primary_expression_p3
+bracket_expression:QUESTION_MARK bracket_expression_p1|bracket_expression_p1
+bracket_expression_p1:LM indexer_argument bracket_expression_p2
+bracket_expression_p2:COMMA indexer_argument RM| RM
+indexer_argument:identifier COLON expression|expression
+conditional_expression:null_coalescing_expression
+null_coalescing_expression:conditional_or_expression 
+conditional_or_expression:conditional_and_expression|conditional_and_expression conditional_or_expression_p1
+conditional_or_expression_p1:OP_OR conditional_and_expression conditional_or_expression_p1|OP_OR conditional_and_expression
+conditional_and_expression:inclusive_or_expression|inclusive_or_expression conditional_and_expression_p1
+conditional_and_expression_p1:OP_AND inclusive_or_expression|OP_AND inclusive_or_expression conditional_and_expression_p1
+inclusive_or_expression:exclusive_or_expression|exclusive_or_expression inclusive_or_expression_p1 
+inclusive_or_expression_p1: EXCLUSIVE_OR exclusive_or_expression|EXCLUSIVE_OR exclusive_or_expression inclusive_or_expression_p1
+exclusive_or_expression:and_expression|and_expression exclusive_or_expression_p1 
+exclusive_or_expression_p1:CIRCUMFLEX and_expression|CIRCUMFLEX and_expression exclusive_or_expression_p1
+and_expression:equality_expression|equality_expression and_expression_p1 
+and_expression_p1:AMP equality_expression|AMP equality_expression and_expression_p1
+equality_expression: relational_expression|relational_expression equality_expression_p1
+equality_expression_p1:equality_expression_p2|equality_expression_p2 equality_expression_p1
+equality_expression_p2:OP_EQ relational_expression|OP_NE relational_expression
+relational_expression:shift_expression relational_expression_p1|shift_expression
+relational_expression_p1:relational_expression_p2|relational_expression_p2 relational_expression_p1
+relational_expression_p2:LESS shift_expression|GREATER shift_expression|LE shift_expression|GE shift_expression|IS isType|AS typeT
+shift_expression:additive_expression shift_expression_p1|additive_expression
+shift_expression_p1:shift_expression_p1|shift_expression_p1 shift_expression_p2
+shift_expression_p2:LEFT_SHIFT_ASSIGN additive_expression|RIGHT_SHIFT additive_expression
+additive_expression:multiplicative_expression additive_expression_p1|multiplicative_expression
+additive_expression_p1:additive_expression_p2|additive_expression_p2 additive_expression_p1
+additive_expression_p2:ADD multiplicative_expression|MINUS multiplicative_expression
+multiplicative_expression:switch_expression|switch_expression multiplicative_expression_p1
+multiplicative_expression_p1:multiplicative_expression_p2|multiplicative_expression_p2 multiplicative_expression_p1
+multiplicative_expression_p2:MUL switch_expression|DIV switch_expression|MOD switch_expression
+switch_expression:range_expression
+range_expression:unary_expression|unary_expression OP_RANGE unary_expression|OP_RANGE unary_expression|OP_RANGE|unary_expression OP_RANGE
+assignment_operator:ASSIGN|ADD_ASSIGN|SUB_ASSIGN|MUL_ASSIGN|DIV_ASSIGN|MOD_ASSIGN|AMP_ASSIGN|PIPE_ASSIGN|CIRCUMFLEX_ASSIGN|LEFT_SHIFT_ASSIGN|RIGHT_SHIFT_ASSIGN
+method_invocation:OPEN_PARENS argument_list CLOSE_PARENS|OPEN_PARENS CLOSE_PARENS
+argument_list:argument argument_list_p1|argument
+argument_list_p1:argument_list_p2|argument_list_p2 argument_list_p1
+argument_list_p2:COMMA argument
+argument:argument_p1 argument_p2 argument_p3|argument_p2 argument_p3|argument_p3|argument_p1 argument_p3 
+argument_p1:identifier COLON
+argument_p2:REF
+argument_p3:expression|VAR expression|typeT expression
+member_access:QUESTION_MARK member_access_p1|member_access_p1
+member_access_p1:DOT identifier type_argument_list | DOT identifier
+isType:base_type
+primary_expression_start: literal|identifier type_argument_list|identifier|OPEN_PARENS expression CLOSE_PARENS|predefined_type|THIS
+predefined_type:BOOL|BYTE|CHAR|DOUBLE|FLOAT|INT|LONG|OBJECT|SBYTE|SHORT|STRING|UINT|ULONG|USHORT
+literal:boolean_literal|INTEGER_LITERAL|HEX_INTEGER_LITERAL|BIN_INTEGER_LITERAL|NULL
+boolean_literal:TRUE|FALSE
+lambda_expression: anonymous_function_signature RIGHT_ARROW anonymous_function_body
+anonymous_function_signature:OPEN_PARENS CLOSE_PARENS|OPEN_PARENS explicit_anonymous_function_parameter_list CLOSE_PARENS|OPEN_PARENS implicit_anonymous_function_parameter_list CLOSE_PARENS|identifier
+implicit_anonymous_function_parameter_list:identifier | identifier implicit_anonymous_function_parameter_list_p1
+implicit_anonymous_function_parameter_list_p1:COMMA identifier | COMMA identifier implicit_anonymous_function_parameter_list_p1
+explicit_anonymous_function_parameter_list:explicit_anonymous_function_parameter|explicit_anonymous_function_parameter explicit_anonymous_function_parameter_list_p1
+explicit_anonymous_function_parameter_list_p1:COMMA explicit_anonymous_function_parameter|COMMA explicit_anonymous_function_parameter explicit_anonymous_function_parameter_list_p1
+explicit_anonymous_function_parameter:REF typeT identifier|typeT identifier|typeT identifier |identifier 
+anonymous_function_body:block
+block:OPEN_BRACE statement_list CLOSE_BRACE|OPEN_BRACE CLOSE_BRACE
+statement_list:statement statement_list
+statement:labeled_Statement|declarationStatement|embedded_statement
+labeled_Statement:identifier COLON statement
+declarationStatement:local_variable_declaration SEMICOLON|local_constant_declaration SEMICOLON|local_function_declaration
+embedded_statement:block|simple_embedded_statement
+local_variable_declaration: local_variable_declaration_p1
+local_variable_declaration_p1:local_variable_declaration_p2|USING local_variable_declaration_p2|REF local_variable_declaration_p2|REF READONLY local_variable_declaration_p2
+local_variable_declaration_p2:local_variable_type local_variable_declarator|local_variable_type local_variable_declarator local_variable_declaration_p3
+local_variable_declaration_p3:SEMICOLON|SEMICOLON local_variable_declarator|SEMICOLON local_variable_declaration_p3|SEMICOLON local_variable_declarator local_variable_declaration_p3
+local_constant_declaration: CONST typeT constant_declarators
+constant_declarators:constant_declarator constant_declarators_p1|constant_declarator
+constant_declarators_p1:COMMA constant_declarator|COMMA constant_declarator constant_declarators_p1
+local_function_declaration:local_function_header local_function_body
+local_function_header:local_function_modifiers local_function_header_p1|local_function_header_p1
+local_function_header_p1:return_type identifier local_function_header_p2
+local_function_header_p2:type_parameter_list OPEN_PARENS local_function_header_p3|OPEN_PARENS local_function_header_p3
+local_function_header_p3:formal_parameter_list CLOSE_PARENS type_parameter_constraints_clauses|CLOSE_PARENS type_parameter_constraints_clauses|CLOSE_PARENS|formal_parameter_list CLOSE_PARENS
+simple_embedded_statement:SEMICOLON|expression SEMICOLON|selection_statements|iteration_statements|jump_statements
+selection_statements:IF OPEN_PARENS expression CLOSE_PARENS if_body|IF OPEN_PARENS expression CLOSE_PARENS if_body ELSE if_body|SWITCH OPEN_PARENS expression CLOSE_PARENS OPEN_BRACE selection_statements_p1 
+selection_statements_p1:CLOSE_BRACE|switch_section selection_statements_p1
+iteration_statements:WHILE OPEN_PARENS expression CLOSE_PARENS embedded_statement|DO embedded_statement WHILE OPEN_PARENS expression CLOSE_PARENS SEMICOLON|FOR OPEN_PARENS iteration_statements_p1
+iteration_statements_p1:for_initializer iteration_statements_p2|iteration_statements_p2
+iteration_statements_p2:SEMICOLON expression SEMICOLON CLOSE_PARENS embedded_statement|SEMICOLON expression SEMICOLON for_iterator CLOSE_PARENS embedded_statement|SEMICOLON SEMICOLON for_iterator CLOSE_PARENS embedded_statement|SEMICOLON SEMICOLON CLOSE_PARENS embedded_statement|SEMICOLON SEMICOLON for_iterator CLOSE_PARENS embedded_statement|SEMICOLON SEMICOLON CLOSE_PARENS embedded_statement
+constant_declarator: identifier ASSIGN expression
+for_iterator:expression|expression for_iterator_p1
+for_iterator_p1:COMMA expression|COMMA expression for_iterator_p1
+for_initializer:local_variable_declaration|expression for_initializer_p1|expression
+for_initializer_p1:COMMA expression|COMMA expression for_initializer_p1
+jump_statements:BREAK SEMICOLON|CONTINUE SEMICOLON|GOTO identifier SEMICOLON|GOTO CASE expression SEMICOLON|GOTO DEFAULT SEMICOLON|RETURN expression SEMICOLON|RETURN SEMICOLON|LOCK OPEN_PARENS expression CLOSE_PARENS embedded_statement|USING OPEN_PARENS resource_acquisition CLOSE_PARENS embedded_statement|YIELD RETURN expression SEMICOLON|YIELD BREAK SEMICOLON
+switch_section:switch_label statement_list|switch_label switch_section
+switch_label:CASE expression COLON| DEFAULT COLON
+if_body:block|simple_embedded_statement
+local_variable_type:VAR|typeT
+local_variable_declarator:identifier|identifier ASSIGN REF local_variable_initializer|identifier ASSIGN local_variable_initializer
+local_function_body:block
+local_function_modifiers:ASYNC STATIC|ASYNC|STATIC ASYNC
+local_variable_initializer:expression|array_initializer
+return_type:typeT|VOID
+type_parameter_list:LESS type_parameter type_parameter_list_p1
+type_parameter_list_p1:GREATER|COMMA type_parameter type_parameter_list_p1
+formal_parameter_list:parameter_array|fixed_parameters|fixed_parameters COMMA parameter_array
+fixed_parameters:fixed_parameter fixed_parameters_p1|fixed_parameter
+fixed_parameters_p1:COMMA fixed_parameter|COMMA fixed_parameter fixed_parameters_p1
+fixed_parameter:ARGLIST|arg_declaration|parameter_modifier arg_declaration
+type_parameter_constraints_clauses:type_parameter_constraints_clause|type_parameter_constraints_clause type_parameter_constraints_clauses
+type_parameter_constraints_clause:WHERE identifier SEMICOLON type_parameter_constraints
+type_parameter_constraints:constructor_constraint|primary_constraint COMMA secondary_constraints COMMA constructor_constraint|primary_constraint COMMA secondary_constraints|primary_constraint COMMA constructor_constraint|primary_constraint
+primary_constraint:class_type|CLASS|CLASS QUESTION_MARK|STRUCT
+secondary_constraints:namespace_or_type_name secondary_constraints_p1|namespace_or_type_name
+secondary_constraints_p1:COMMA namespace_or_type_name|COMMA namespace_or_type_name secondary_constraints_p1
+constructor_constraint:NEW OPEN_PARENS CLOSE_PARENS
+parameter_modifier:REF|REF THIS|THIS
+arg_declaration:typeT identifier|typeT identifier ASSIGN expression
+resource_acquisition:local_variable_declaration|expression
+parameter_array:PARAMS array_type identifier
+array_type:base_type array_type_p1
+array_type_p1:rank_specifier array_type_p1|rank_specifier|array_type_p2 array_type_p1|array_type_p2 rank_specifier
+array_type_p2:MUL|QUESTION_MARK|MUL array_type_p2|QUESTION_MARK array_type_p2
+array_initializer:OPEN_BRACE array_initializer_p1 COMMA CLOSE_BRACE|OPEN_BRACE COMMA CLOSE_BRACE|OPEN_BRACE CLOSE_BRACE|OPEN_BRACE CLOSE_BRACE|OPEN_BRACE array_initializer_p1 CLOSE_BRACE
+array_initializer_p1:variable_initializer COMMA variable_initializer|variable_initializer COMMA variable_initializer array_initializer_p1
+variable_initializer:expression|array_initializer
+}
+%%
+
+
+
+
+

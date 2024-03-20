@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YaccLexCS", "YaccLexCS\YaccLexCS.csproj", "{396FD744-DA02-4ED0-AC9A-F98FD9DACADA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConfigFileGenerator", "ConfigFileGenerator\ConfigFileGenerator.csproj", "{638DF133-A71B-4892-A875-8FFFA69BBE48}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{396FD744-DA02-4ED0-AC9A-F98FD9DACADA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{396FD744-DA02-4ED0-AC9A-F98FD9DACADA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{396FD744-DA02-4ED0-AC9A-F98FD9DACADA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{396FD744-DA02-4ED0-AC9A-F98FD9DACADA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{638DF133-A71B-4892-A875-8FFFA69BBE48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{638DF133-A71B-4892-A875-8FFFA69BBE48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{638DF133-A71B-4892-A875-8FFFA69BBE48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{638DF133-A71B-4892-A875-8FFFA69BBE48}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
