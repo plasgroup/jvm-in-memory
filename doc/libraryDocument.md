@@ -139,9 +139,13 @@ public static void main(String[] args){
 + When there is a remote procedure call request (RPC), Java classes needed by the call should be existed inside the target DPU.  If the classes needed by the call are still not existed inside the DPU, the CPU then parses and resolves these classes and generates byte-form DPU class structures. DPU class structures. are then copied to the `metaspace` of the DPU that the RPC is targeted. In addition, the MRAM addresses of DPU class structures and MRAM addresses all method structures inside classes are recorded on lookup tables in the CPU.
   + more details for the process described above may refers to `  public DPUJClass loadClassToDPU(Class c) `method in  `jvm-in-memory\jdpulib\src\framework\pim\DPUClassFileManagerUPMEM.java`
 
+
+
 2. **The class loading process**
 
 + Currently the java class loading process for UPMEM DPU and UPMEM DPU Java Simulator are implemented differently.
   + Implementation exists in `jvm-in-memory\jdpulib\src\framework\pim\DPUClassFileManagerUPMEM.java` and `jvm-in-memory\jdpulib\src\simulator\DPUClassFileManagerSimulator.java`
   + While classes are required to be encoded into bytes so that it could be transferred to UPMEM DPUs, the framework directly transfer Java Class Instance to the UPMEM DPU Java simulators.
+
+
 
