@@ -1,4 +1,4 @@
-compile_output=$(javac -sourcepath ./src -d ./out2 ./src/Main.java -classpath ./dpu.jar)
+compile_output=$(javac -encoding utf-8 -sourcepath ./src -d ./out2 ./src/Main.java -classpath ./dpu.jar)
 echo $compile_output
 
 if [ -z "grep $compile_output error" ]

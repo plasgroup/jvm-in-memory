@@ -5,7 +5,7 @@ VM_OPTIONS="-XX:+UnlockDiagnosticVMOptions -XX:+PreserveFramePointer -XX:+DumpPe
 NODES_COUNT=10000
 DPU_COUNT=1
 QUERY_COUNT=500
-LAYER_COUNT=18
+LAYER_COUNT=5
 JAVA=java # ~/jdk-17.0.1/bin/java
 BST_JAR="bst-latest.jar"
 ## stat mode
