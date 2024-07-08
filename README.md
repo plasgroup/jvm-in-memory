@@ -10,7 +10,7 @@
 共有ライブラリのビルドの指示は従わなきゃいけないが、dpu.jar は jdpulib にあるものをコピーしてしまえばいい
 
 jdpulib の中で ./compile-source-code.sh してから ../evaluation/bst-performance-eval.sh
-key_value ペアを作るには、../evaluation/bst-serialize.sh をする。大きさが 10000000で固定なので head -n とかで適切な大きさに切ってから jdpulib にコピーする
+key_value ペアを作るには、java -cp generate-key-values.jar Main してから ../evaluation/bst-serialize.sh をする。大きさが 10000000で固定なので head -n とかで適切な大きさに切ってから jdpulib にコピーする
 
 ## 1.2 Compile Extended UPMEM Java Library
 
