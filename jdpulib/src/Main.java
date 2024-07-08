@@ -97,13 +97,14 @@ public class Main {
             for (int i = 0; i < cpuPerformanceEvaluationRepeatTime; i++) {
                 
 		long startTime = System.nanoTime();
-                for(int j = 0; j < queryCount / 10000; j++){
-			for(int k = 0; k < 10000; k++){
+                // ! Changed: 10000 -> 100
+                for(int j = 0; j < queryCount / 100; j++){
+			for(int k = 0; k < 100; k++){
                     int key = keys.get(pos++);
                     int v = CPURoot.search(key);
                     r += v;
 			}
-			  System.out.println("avg per query time = " + (System.nanoTime() - startTime) / pos / 100000 + "ms");
+			  System.out.println("avg per query time = " + (System.nanoTime() - startTime) / pos / 1000 + "us");
                 }
                 long endTime = System.nanoTime();
                 long timeElapsed = endTime - startTime;
