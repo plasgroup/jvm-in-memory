@@ -1,0 +1,8 @@
+{
+    "java.project.sourcePaths": [
+        "src"
+    ],
+    "java.project.referencedLibraries": [
+        "/home/ichinose/upmem-2023.1.0-Linux-x86_64/share/java/dpu.jar"
+    ]
+}

@@ -115,14 +115,14 @@ public class DPUManagerUPMEM extends DPUManager{
             //System.out.println("record batch dispatching");
             //System.out.printf("method pt %x\n", methodPt);
             int t = UPMEM.batchDispatcher.taskletPosition[dpuID];
-            int t2 = (t + 1) % 24;
+            int t2 = (t + 1) % UPMEM.perDPUThreadsInUse;
             int size = (((1 + 2 + 1 + params.length) * 4) + 0b111) & (~0b111);
             BatchDispatcher bd = UPMEM.batchDispatcher;
             while(t2 != t){
                 if(bd.paramsBufferPointer[dpuID][t2] + size < DPUGarbageCollector.perDPUBufferSize){
                     break;
                 }
-                t2 = (t2 + 1) % 24;
+                t2 = (t2 + 1) % UPMEM.perDPUThreadsInUse;
                 try {
                     bd.dispatchAll();
                 } catch (DpuException e) {
@@ -175,7 +175,7 @@ public class DPUManagerUPMEM extends DPUManager{
                     }
                 }
             }else{
-                tasklet = (tasklet + 1) % 24;
+                tasklet = (tasklet + 1) % UPMEM.perDPUThreadsInUse;
             }
         }
         // System.out.println("select tasklet = " + tasklet);
@@ -208,6 +208,6 @@ public class DPUManagerUPMEM extends DPUManager{
         }
 
         taskletSemaphore[tasklet] = 0;
-        currentTasklet = (currentTasklet + 1) % 24;
+        currentTasklet = (currentTasklet + 1) % UPMEM.perDPUThreadsInUse;
     }
 }

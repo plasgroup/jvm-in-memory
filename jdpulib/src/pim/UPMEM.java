@@ -20,9 +20,9 @@ import java.lang.reflect.Field;
 
 public class UPMEM {
     /* Configurations Fields */
-    public static final int TOTAL_DPU_COUNT = 1024;
-    public static final int TOTAL_HARDWARE_THREADS_COUNT = 24;
-    public static int dpuInUse = 1024;
+    public static final int TOTAL_DPU_COUNT = 1;
+    public static final int TOTAL_HARDWARE_THREADS_COUNT = 1;
+    public static int dpuInUse = 1;
     public static int perDPUThreadsInUse = TOTAL_HARDWARE_THREADS_COUNT;
 
     /* Facade Class for PIM management*/

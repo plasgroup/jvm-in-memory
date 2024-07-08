@@ -2,11 +2,11 @@
 EVENT_LIST=LLC-load-misses,LLC-store-misses,offcore_requests.all_data_rd,uncore_imc_0/cas_count_read/,uncore_imc_0/cas_count_write/,uncore_imc_1/cas_count_read/,uncore_imc_1/cas_count_write/
 RECORD_EVENT_LIST="LLC-load-misses,LLC-store-misses"
 VM_OPTIONS="-XX:+UnlockDiagnosticVMOptions -XX:+PreserveFramePointer -XX:+DumpPerfMapAtExit -Xmx131072m"
-NODES_COUNT=100000000
-DPU_COUNT=1024
-QUERY_COUNT=500000
+NODES_COUNT=10000
+DPU_COUNT=1
+QUERY_COUNT=500
 LAYER_COUNT=18
-JAVA=~/jdk-17.0.1/bin/java
+JAVA=java # ~/jdk-17.0.1/bin/java
 BST_JAR="bst-latest.jar"
 ## stat mode
 PARAM_LIST_CPU="CPU_LAYER_COUNT=$LAYER_COUNT DPU_COUNT=$DPU_COUNT QUERIES=$QUERY_COUNT IMG_PATH=./imgs/ NODES=$NODES_COUNT NO_SEARCH TYPE=PIM SERIALIZE_TREE=1  JVM_SIMULATOR=0 BUILD_FROM_IMG=0"

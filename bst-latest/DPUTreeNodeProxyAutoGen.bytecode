@@ -1,0 +1,682 @@
+Classfile /home/ichinose/jvm-in-memory/bst-latest/pim/algorithm/DPUTreeNodeProxyAutoGen.class
+  Last modified Aug 2, 2023; size 3740 bytes
+  SHA-256 checksum 9a288e202b9975329f76ef4161e7b6c0359772ec45e02ce77862912dfbf2064e
+  Compiled from "DPUTreeNodeProxyAutoGen.java"
+public class pim.algorithm.DPUTreeNodeProxyAutoGen extends pim.algorithm.DPUTreeNode implements pim.IDPUProxyObject
+  minor version: 0
+  major version: 54
+  flags: (0x0021) ACC_PUBLIC, ACC_SUPER
+  this_class: #43                         // pim/algorithm/DPUTreeNodeProxyAutoGen
+  super_class: #44                        // pim/algorithm/DPUTreeNode
+  interfaces: 1, fields: 11, methods: 15, attributes: 1
+Constant pool:
+    #1 = Fieldref           #43.#99       // pim/algorithm/DPUTreeNodeProxyAutoGen.objectHandler:Lpim/dpu/DPUObjectHandler;
+    #2 = Fieldref           #5.#100       // pim/dpu/DPUObjectHandler.dpuID:I
+    #3 = Fieldref           #5.#101       // pim/dpu/DPUObjectHandler.address:I
+    #4 = Methodref          #44.#102      // pim/algorithm/DPUTreeNode."<init>":(II)V
+    #5 = Class              #103          // pim/dpu/DPUObjectHandler
+    #6 = Methodref          #5.#102       // pim/dpu/DPUObjectHandler."<init>":(II)V
+    #7 = Fieldref           #43.#104      // pim/algorithm/DPUTreeNodeProxyAutoGen.getLeftDispatchCount:I
+    #8 = String             #105          // pim/algorithm/TreeNode
+    #9 = String             #106          // getLeft:()Lpim/algorithm/TreeNode;
+   #10 = Class              #107          // java/lang/Object
+   #11 = Methodref          #108.#109     // pim/dpu/ProxyHelper.invokeMethod:(Lpim/dpu/DPUObjectHandler;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
+   #12 = Methodref          #43.#110      // pim/algorithm/DPUTreeNodeProxyAutoGen.getDpuID:()I
+   #13 = Methodref          #108.#111     // pim/dpu/ProxyHelper.getAReturnValue:(I)Lpim/IDPUProxyObject;
+   #14 = Class              #105          // pim/algorithm/TreeNode
+   #15 = Fieldref           #43.#112      // pim/algorithm/DPUTreeNodeProxyAutoGen.getRightDispatchCount:I
+   #16 = String             #113          // getRight:()Lpim/algorithm/TreeNode;
+   #17 = Fieldref           #43.#114      // pim/algorithm/DPUTreeNodeProxyAutoGen.setRightDispatchCount:I
+   #18 = String             #115          // setRight:(Lpim/algorithm/TreeNode;)V
+   #19 = Fieldref           #43.#116      // pim/algorithm/DPUTreeNodeProxyAutoGen.setLeftDispatchCount:I
+   #20 = String             #117          // setLeft:(Lpim/algorithm/TreeNode;)V
+   #21 = Fieldref           #43.#118      // pim/algorithm/DPUTreeNodeProxyAutoGen.setKeyDispatchCount:I
+   #22 = String             #119          // setKey:(I)V
+   #23 = Methodref          #120.#121     // java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+   #24 = Fieldref           #43.#122      // pim/algorithm/DPUTreeNodeProxyAutoGen.setValDispatchCount:I
+   #25 = String             #123          // setVal:(I)V
+   #26 = Fieldref           #43.#124      // pim/algorithm/DPUTreeNodeProxyAutoGen.getValDispatchCount:I
+   #27 = String             #125          // getVal:()I
+   #28 = Methodref          #108.#126     // pim/dpu/ProxyHelper.getIReturnValue:(I)I
+   #29 = String             #127          // pim/algorithm/DPUTreeNode
+   #30 = String             #128          // createNode:(II)Lpim/algorithm/TreeNode;
+   #31 = Fieldref           #43.#129      // pim/algorithm/DPUTreeNodeProxyAutoGen.getKeyDispatchCount:I
+   #32 = String             #130          // getKey:()I
+   #33 = Fieldref           #43.#131      // pim/algorithm/DPUTreeNodeProxyAutoGen.pimProxy:Lpim/logger/Logger;
+   #34 = String             #132          // insert dispatch
+   #35 = Methodref          #133.#134     // pim/logger/Logger.log:(Ljava/lang/String;)V
+   #36 = Methodref          #135.#136     // pim/UPMEM.getInstance:()Lpim/UPMEM;
+   #37 = Methodref          #135.#137     // pim/UPMEM.getDPUManager:(I)Lpim/dpu/DPUManager;
+   #38 = Fieldref           #138.#139     // pim/dpu/DPUManager.classCacheManager:Lpim/dpu/DPUCacheManager;
+   #39 = String             #140          // insert:(II)V
+   #40 = Fieldref           #43.#141      // pim/algorithm/DPUTreeNodeProxyAutoGen.searchDispatchCount:I
+   #41 = String             #142          // search:(I)I
+   #42 = Fieldref           #143.#131     // pim/logger/PIMLoggers.pimProxy:Lpim/logger/Logger;
+   #43 = Class              #144          // pim/algorithm/DPUTreeNodeProxyAutoGen
+   #44 = Class              #127          // pim/algorithm/DPUTreeNode
+   #45 = Class              #145          // pim/IDPUProxyObject
+   #46 = Utf8               objectHandler
+   #47 = Utf8               Lpim/dpu/DPUObjectHandler;
+   #48 = Utf8               pimProxy
+   #49 = Utf8               Lpim/logger/Logger;
+   #50 = Utf8               getLeftDispatchCount
+   #51 = Utf8               I
+   #52 = Utf8               getRightDispatchCount
+   #53 = Utf8               setRightDispatchCount
+   #54 = Utf8               setLeftDispatchCount
+   #55 = Utf8               setKeyDispatchCount
+   #56 = Utf8               setValDispatchCount
+   #57 = Utf8               getValDispatchCount
+   #58 = Utf8               searchDispatchCount
+   #59 = Utf8               getKeyDispatchCount
+   #60 = Utf8               getDpuID
+   #61 = Utf8               ()I
+   #62 = Utf8               Code
+   #63 = Utf8               LineNumberTable
+   #64 = Utf8               LocalVariableTable
+   #65 = Utf8               this
+   #66 = Utf8               Lpim/algorithm/DPUTreeNodeProxyAutoGen;
+   #67 = Utf8               getAddr
+   #68 = Utf8               <init>
+   #69 = Utf8               (II)V
+   #70 = Utf8               k
+   #71 = Utf8               v
+   #72 = Utf8               getLeft
+   #73 = Utf8               ()Lpim/algorithm/TreeNode;
+   #74 = Utf8               getRight
+   #75 = Utf8               setRight
+   #76 = Utf8               (Lpim/algorithm/TreeNode;)V
+   #77 = Utf8               right
+   #78 = Utf8               Lpim/algorithm/TreeNode;
+   #79 = Utf8               setLeft
+   #80 = Utf8               left
+   #81 = Utf8               setKey
+   #82 = Utf8               (I)V
+   #83 = Utf8               key
+   #84 = Utf8               setVal
+   #85 = Utf8               getVal
+   #86 = Utf8               createNode
+   #87 = Utf8               (II)Lpim/algorithm/TreeNode;
+   #88 = Utf8               getKey
+   #89 = Utf8               retVal
+   #90 = Utf8               insert
+   #91 = Utf8               classCacheManager1
+   #92 = Utf8               Lpim/dpu/DPUCacheManager;
+   #93 = Utf8               search
+   #94 = Utf8               (I)I
+   #95 = Utf8               <clinit>
+   #96 = Utf8               ()V
+   #97 = Utf8               SourceFile
+   #98 = Utf8               DPUTreeNodeProxyAutoGen.java
+   #99 = NameAndType        #46:#47       // objectHandler:Lpim/dpu/DPUObjectHandler;
+  #100 = NameAndType        #146:#51      // dpuID:I
+  #101 = NameAndType        #147:#51      // address:I
+  #102 = NameAndType        #68:#69       // "<init>":(II)V
+  #103 = Utf8               pim/dpu/DPUObjectHandler
+  #104 = NameAndType        #50:#51       // getLeftDispatchCount:I
+  #105 = Utf8               pim/algorithm/TreeNode
+  #106 = Utf8               getLeft:()Lpim/algorithm/TreeNode;
+  #107 = Utf8               java/lang/Object
+  #108 = Class              #148          // pim/dpu/ProxyHelper
+  #109 = NameAndType        #149:#150     // invokeMethod:(Lpim/dpu/DPUObjectHandler;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
+  #110 = NameAndType        #60:#61       // getDpuID:()I
+  #111 = NameAndType        #151:#152     // getAReturnValue:(I)Lpim/IDPUProxyObject;
+  #112 = NameAndType        #52:#51       // getRightDispatchCount:I
+  #113 = Utf8               getRight:()Lpim/algorithm/TreeNode;
+  #114 = NameAndType        #53:#51       // setRightDispatchCount:I
+  #115 = Utf8               setRight:(Lpim/algorithm/TreeNode;)V
+  #116 = NameAndType        #54:#51       // setLeftDispatchCount:I
+  #117 = Utf8               setLeft:(Lpim/algorithm/TreeNode;)V
+  #118 = NameAndType        #55:#51       // setKeyDispatchCount:I
+  #119 = Utf8               setKey:(I)V
+  #120 = Class              #153          // java/lang/Integer
+  #121 = NameAndType        #154:#155     // valueOf:(I)Ljava/lang/Integer;
+  #122 = NameAndType        #56:#51       // setValDispatchCount:I
+  #123 = Utf8               setVal:(I)V
+  #124 = NameAndType        #57:#51       // getValDispatchCount:I
+  #125 = Utf8               getVal:()I
+  #126 = NameAndType        #156:#94      // getIReturnValue:(I)I
+  #127 = Utf8               pim/algorithm/DPUTreeNode
+  #128 = Utf8               createNode:(II)Lpim/algorithm/TreeNode;
+  #129 = NameAndType        #59:#51       // getKeyDispatchCount:I
+  #130 = Utf8               getKey:()I
+  #131 = NameAndType        #48:#49       // pimProxy:Lpim/logger/Logger;
+  #132 = Utf8               insert dispatch
+  #133 = Class              #157          // pim/logger/Logger
+  #134 = NameAndType        #158:#159     // log:(Ljava/lang/String;)V
+  #135 = Class              #160          // pim/UPMEM
+  #136 = NameAndType        #161:#162     // getInstance:()Lpim/UPMEM;
+  #137 = NameAndType        #163:#164     // getDPUManager:(I)Lpim/dpu/DPUManager;
+  #138 = Class              #165          // pim/dpu/DPUManager
+  #139 = NameAndType        #166:#92      // classCacheManager:Lpim/dpu/DPUCacheManager;
+  #140 = Utf8               insert:(II)V
+  #141 = NameAndType        #58:#51       // searchDispatchCount:I
+  #142 = Utf8               search:(I)I
+  #143 = Class              #167          // pim/logger/PIMLoggers
+  #144 = Utf8               pim/algorithm/DPUTreeNodeProxyAutoGen
+  #145 = Utf8               pim/IDPUProxyObject
+  #146 = Utf8               dpuID
+  #147 = Utf8               address
+  #148 = Utf8               pim/dpu/ProxyHelper
+  #149 = Utf8               invokeMethod
+  #150 = Utf8               (Lpim/dpu/DPUObjectHandler;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
+  #151 = Utf8               getAReturnValue
+  #152 = Utf8               (I)Lpim/IDPUProxyObject;
+  #153 = Utf8               java/lang/Integer
+  #154 = Utf8               valueOf
+  #155 = Utf8               (I)Ljava/lang/Integer;
+  #156 = Utf8               getIReturnValue
+  #157 = Utf8               pim/logger/Logger
+  #158 = Utf8               log
+  #159 = Utf8               (Ljava/lang/String;)V
+  #160 = Utf8               pim/UPMEM
+  #161 = Utf8               getInstance
+  #162 = Utf8               ()Lpim/UPMEM;
+  #163 = Utf8               getDPUManager
+  #164 = Utf8               (I)Lpim/dpu/DPUManager;
+  #165 = Utf8               pim/dpu/DPUManager
+  #166 = Utf8               classCacheManager
+  #167 = Utf8               pim/logger/PIMLoggers
+{
+  public pim.dpu.DPUObjectHandler objectHandler;
+    descriptor: Lpim/dpu/DPUObjectHandler;
+    flags: (0x0001) ACC_PUBLIC
+
+  static pim.logger.Logger pimProxy;
+    descriptor: Lpim/logger/Logger;
+    flags: (0x0008) ACC_STATIC
+
+  public static int getLeftDispatchCount;
+    descriptor: I
+    flags: (0x0009) ACC_PUBLIC, ACC_STATIC
+
+  public static int getRightDispatchCount;
+    descriptor: I
+    flags: (0x0009) ACC_PUBLIC, ACC_STATIC
+
+  public static int setRightDispatchCount;
+    descriptor: I
+    flags: (0x0009) ACC_PUBLIC, ACC_STATIC
+
+  public static int setLeftDispatchCount;
+    descriptor: I
+    flags: (0x0009) ACC_PUBLIC, ACC_STATIC
+
+  public static int setKeyDispatchCount;
+    descriptor: I
+    flags: (0x0009) ACC_PUBLIC, ACC_STATIC
+
+  public static int setValDispatchCount;
+    descriptor: I
+    flags: (0x0009) ACC_PUBLIC, ACC_STATIC
+
+  public static int getValDispatchCount;
+    descriptor: I
+    flags: (0x0009) ACC_PUBLIC, ACC_STATIC
+
+  public static int searchDispatchCount;
+    descriptor: I
+    flags: (0x0009) ACC_PUBLIC, ACC_STATIC
+
+  public static int getKeyDispatchCount;
+    descriptor: I
+    flags: (0x0009) ACC_PUBLIC, ACC_STATIC
+
+  public int getDpuID();
+    descriptor: ()I
+    flags: (0x0001) ACC_PUBLIC
+    Code:
+      stack=1, locals=1, args_size=1
+         0: aload_0
+         1: getfield      #1                  // Field objectHandler:Lpim/dpu/DPUObjectHandler;
+         4: getfield      #2                  // Field pim/dpu/DPUObjectHandler.dpuID:I
+         7: ireturn
+      LineNumberTable:
+        line 18: 0
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0       8     0  this   Lpim/algorithm/DPUTreeNodeProxyAutoGen;
+
+  public int getAddr();
+    descriptor: ()I
+    flags: (0x0001) ACC_PUBLIC
+    Code:
+      stack=1, locals=1, args_size=1
+         0: aload_0
+         1: getfield      #1                  // Field objectHandler:Lpim/dpu/DPUObjectHandler;
+         4: getfield      #3                  // Field pim/dpu/DPUObjectHandler.address:I
+         7: ireturn
+      LineNumberTable:
+        line 23: 0
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0       8     0  this   Lpim/algorithm/DPUTreeNodeProxyAutoGen;
+
+  public pim.algorithm.DPUTreeNodeProxyAutoGen(int, int);
+    descriptor: (II)V
+    flags: (0x0001) ACC_PUBLIC
+    Code:
+      stack=5, locals=3, args_size=3
+         0: aload_0
+         1: iload_1
+         2: iload_2
+         3: invokespecial #4                  // Method pim/algorithm/DPUTreeNode."<init>":(II)V
+         6: aload_0
+         7: aconst_null
+         8: putfield      #1                  // Field objectHandler:Lpim/dpu/DPUObjectHandler;
+        11: aload_0
+        12: new           #5                  // class pim/dpu/DPUObjectHandler
+        15: dup
+        16: iconst_0
+        17: iconst_0
+        18: invokespecial #6                  // Method pim/dpu/DPUObjectHandler."<init>":(II)V
+        21: putfield      #1                  // Field objectHandler:Lpim/dpu/DPUObjectHandler;
+        24: return
+      LineNumberTable:
+        line 27: 0
+        line 13: 6
+        line 27: 11
+        line 28: 24
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0      25     0  this   Lpim/algorithm/DPUTreeNodeProxyAutoGen;
+            0      25     1     k   I
+            0      25     2     v   I
+
+  public pim.algorithm.TreeNode getLeft();
+    descriptor: ()Lpim/algorithm/TreeNode;
+    flags: (0x0001) ACC_PUBLIC
+    Code:
+      stack=4, locals=1, args_size=1
+         0: getstatic     #7                  // Field getLeftDispatchCount:I
+         3: iconst_1
+         4: iadd
+         5: putstatic     #7                  // Field getLeftDispatchCount:I
+         8: aload_0
+         9: getfield      #1                  // Field objectHandler:Lpim/dpu/DPUObjectHandler;
+        12: ldc           #8                  // String pim/algorithm/TreeNode
+        14: ldc           #9                  // String getLeft:()Lpim/algorithm/TreeNode;
+        16: iconst_0
+        17: anewarray     #10                 // class java/lang/Object
+        20: invokestatic  #11                 // Method pim/dpu/ProxyHelper.invokeMethod:(Lpim/dpu/DPUObjectHandler;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
+        23: aload_0
+        24: invokevirtual #12                 // Method getDpuID:()I
+        27: invokestatic  #13                 // Method pim/dpu/ProxyHelper.getAReturnValue:(I)Lpim/IDPUProxyObject;
+        30: checkcast     #14                 // class pim/algorithm/TreeNode
+        33: areturn
+      LineNumberTable:
+        line 41: 0
+        line 42: 8
+        line 43: 23
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0      34     0  this   Lpim/algorithm/DPUTreeNodeProxyAutoGen;
+
+  public pim.algorithm.TreeNode getRight();
+    descriptor: ()Lpim/algorithm/TreeNode;
+    flags: (0x0001) ACC_PUBLIC
+    Code:
+      stack=4, locals=1, args_size=1
+         0: getstatic     #15                 // Field getRightDispatchCount:I
+         3: iconst_1
+         4: iadd
+         5: putstatic     #15                 // Field getRightDispatchCount:I
+         8: aload_0
+         9: getfield      #1                  // Field objectHandler:Lpim/dpu/DPUObjectHandler;
+        12: ldc           #8                  // String pim/algorithm/TreeNode
+        14: ldc           #16                 // String getRight:()Lpim/algorithm/TreeNode;
+        16: iconst_0
+        17: anewarray     #10                 // class java/lang/Object
+        20: invokestatic  #11                 // Method pim/dpu/ProxyHelper.invokeMethod:(Lpim/dpu/DPUObjectHandler;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
+        23: aload_0
+        24: invokevirtual #12                 // Method getDpuID:()I
+        27: invokestatic  #13                 // Method pim/dpu/ProxyHelper.getAReturnValue:(I)Lpim/IDPUProxyObject;
+        30: checkcast     #14                 // class pim/algorithm/TreeNode
+        33: areturn
+      LineNumberTable:
+        line 48: 0
+        line 49: 8
+        line 50: 23
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0      34     0  this   Lpim/algorithm/DPUTreeNodeProxyAutoGen;
+
+  public void setRight(pim.algorithm.TreeNode);
+    descriptor: (Lpim/algorithm/TreeNode;)V
+    flags: (0x0001) ACC_PUBLIC
+    Code:
+      stack=7, locals=2, args_size=2
+         0: getstatic     #17                 // Field setRightDispatchCount:I
+         3: iconst_1
+         4: iadd
+         5: putstatic     #17                 // Field setRightDispatchCount:I
+         8: aload_0
+         9: getfield      #1                  // Field objectHandler:Lpim/dpu/DPUObjectHandler;
+        12: ldc           #8                  // String pim/algorithm/TreeNode
+        14: ldc           #18                 // String setRight:(Lpim/algorithm/TreeNode;)V
+        16: iconst_1
+        17: anewarray     #10                 // class java/lang/Object
+        20: dup
+        21: iconst_0
+        22: aload_1
+        23: aastore
+        24: invokestatic  #11                 // Method pim/dpu/ProxyHelper.invokeMethod:(Lpim/dpu/DPUObjectHandler;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
+        27: return
+      LineNumberTable:
+        line 55: 0
+        line 56: 8
+        line 57: 27
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0      28     0  this   Lpim/algorithm/DPUTreeNodeProxyAutoGen;
+            0      28     1 right   Lpim/algorithm/TreeNode;
+
+  public void setLeft(pim.algorithm.TreeNode);
+    descriptor: (Lpim/algorithm/TreeNode;)V
+    flags: (0x0001) ACC_PUBLIC
+    Code:
+      stack=7, locals=2, args_size=2
+         0: getstatic     #19                 // Field setLeftDispatchCount:I
+         3: iconst_1
+         4: iadd
+         5: putstatic     #19                 // Field setLeftDispatchCount:I
+         8: aload_0
+         9: getfield      #1                  // Field objectHandler:Lpim/dpu/DPUObjectHandler;
+        12: ldc           #8                  // String pim/algorithm/TreeNode
+        14: ldc           #20                 // String setLeft:(Lpim/algorithm/TreeNode;)V
+        16: iconst_1
+        17: anewarray     #10                 // class java/lang/Object
+        20: dup
+        21: iconst_0
+        22: aload_1
+        23: aastore
+        24: invokestatic  #11                 // Method pim/dpu/ProxyHelper.invokeMethod:(Lpim/dpu/DPUObjectHandler;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
+        27: return
+      LineNumberTable:
+        line 61: 0
+        line 62: 8
+        line 63: 27
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0      28     0  this   Lpim/algorithm/DPUTreeNodeProxyAutoGen;
+            0      28     1  left   Lpim/algorithm/TreeNode;
+
+  public void setKey(int);
+    descriptor: (I)V
+    flags: (0x0001) ACC_PUBLIC
+    Code:
+      stack=7, locals=2, args_size=2
+         0: getstatic     #21                 // Field setKeyDispatchCount:I
+         3: iconst_1
+         4: iadd
+         5: putstatic     #21                 // Field setKeyDispatchCount:I
+         8: aload_0
+         9: getfield      #1                  // Field objectHandler:Lpim/dpu/DPUObjectHandler;
+        12: ldc           #8                  // String pim/algorithm/TreeNode
+        14: ldc           #22                 // String setKey:(I)V
+        16: iconst_1
+        17: anewarray     #10                 // class java/lang/Object
+        20: dup
+        21: iconst_0
+        22: iload_1
+        23: invokestatic  #23                 // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+        26: aastore
+        27: invokestatic  #11                 // Method pim/dpu/ProxyHelper.invokeMethod:(Lpim/dpu/DPUObjectHandler;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
+        30: return
+      LineNumberTable:
+        line 67: 0
+        line 68: 8
+        line 69: 30
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0      31     0  this   Lpim/algorithm/DPUTreeNodeProxyAutoGen;
+            0      31     1   key   I
+
+  public void setVal(int);
+    descriptor: (I)V
+    flags: (0x0001) ACC_PUBLIC
+    Code:
+      stack=7, locals=2, args_size=2
+         0: getstatic     #24                 // Field setValDispatchCount:I
+         3: iconst_1
+         4: iadd
+         5: putstatic     #24                 // Field setValDispatchCount:I
+         8: aload_0
+         9: getfield      #1                  // Field objectHandler:Lpim/dpu/DPUObjectHandler;
+        12: ldc           #8                  // String pim/algorithm/TreeNode
+        14: ldc           #25                 // String setVal:(I)V
+        16: iconst_1
+        17: anewarray     #10                 // class java/lang/Object
+        20: dup
+        21: iconst_0
+        22: iload_1
+        23: invokestatic  #23                 // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+        26: aastore
+        27: invokestatic  #11                 // Method pim/dpu/ProxyHelper.invokeMethod:(Lpim/dpu/DPUObjectHandler;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
+        30: return
+      LineNumberTable:
+        line 73: 0
+        line 74: 8
+        line 75: 30
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0      31     0  this   Lpim/algorithm/DPUTreeNodeProxyAutoGen;
+            0      31     1   key   I
+
+  public int getVal();
+    descriptor: ()I
+    flags: (0x0001) ACC_PUBLIC
+    Code:
+      stack=4, locals=1, args_size=1
+         0: getstatic     #26                 // Field getValDispatchCount:I
+         3: iconst_1
+         4: iadd
+         5: putstatic     #26                 // Field getValDispatchCount:I
+         8: aload_0
+         9: getfield      #1                  // Field objectHandler:Lpim/dpu/DPUObjectHandler;
+        12: ldc           #8                  // String pim/algorithm/TreeNode
+        14: ldc           #27                 // String getVal:()I
+        16: iconst_0
+        17: anewarray     #10                 // class java/lang/Object
+        20: invokestatic  #11                 // Method pim/dpu/ProxyHelper.invokeMethod:(Lpim/dpu/DPUObjectHandler;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
+        23: aload_0
+        24: invokevirtual #12                 // Method getDpuID:()I
+        27: invokestatic  #28                 // Method pim/dpu/ProxyHelper.getIReturnValue:(I)I
+        30: ireturn
+      LineNumberTable:
+        line 79: 0
+        line 80: 8
+        line 81: 23
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0      31     0  this   Lpim/algorithm/DPUTreeNodeProxyAutoGen;
+
+  public pim.algorithm.TreeNode createNode(int, int);
+    descriptor: (II)Lpim/algorithm/TreeNode;
+    flags: (0x0001) ACC_PUBLIC
+    Code:
+      stack=7, locals=3, args_size=3
+         0: aload_0
+         1: getfield      #1                  // Field objectHandler:Lpim/dpu/DPUObjectHandler;
+         4: ldc           #29                 // String pim/algorithm/DPUTreeNode
+         6: ldc           #30                 // String createNode:(II)Lpim/algorithm/TreeNode;
+         8: iconst_2
+         9: anewarray     #10                 // class java/lang/Object
+        12: dup
+        13: iconst_0
+        14: iload_1
+        15: invokestatic  #23                 // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+        18: aastore
+        19: dup
+        20: iconst_1
+        21: iload_2
+        22: invokestatic  #23                 // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+        25: aastore
+        26: invokestatic  #11                 // Method pim/dpu/ProxyHelper.invokeMethod:(Lpim/dpu/DPUObjectHandler;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
+        29: aload_0
+        30: invokevirtual #12                 // Method getDpuID:()I
+        33: invokestatic  #13                 // Method pim/dpu/ProxyHelper.getAReturnValue:(I)Lpim/IDPUProxyObject;
+        36: checkcast     #14                 // class pim/algorithm/TreeNode
+        39: areturn
+      LineNumberTable:
+        line 86: 0
+        line 87: 29
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0      40     0  this   Lpim/algorithm/DPUTreeNodeProxyAutoGen;
+            0      40     1     k   I
+            0      40     2     v   I
+
+  public int getKey();
+    descriptor: ()I
+    flags: (0x0001) ACC_PUBLIC
+    Code:
+      stack=4, locals=2, args_size=1
+         0: getstatic     #31                 // Field getKeyDispatchCount:I
+         3: iconst_1
+         4: iadd
+         5: putstatic     #31                 // Field getKeyDispatchCount:I
+         8: aload_0
+         9: getfield      #1                  // Field objectHandler:Lpim/dpu/DPUObjectHandler;
+        12: ldc           #8                  // String pim/algorithm/TreeNode
+        14: ldc           #32                 // String getKey:()I
+        16: iconst_0
+        17: anewarray     #10                 // class java/lang/Object
+        20: invokestatic  #11                 // Method pim/dpu/ProxyHelper.invokeMethod:(Lpim/dpu/DPUObjectHandler;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
+        23: aload_0
+        24: invokevirtual #12                 // Method getDpuID:()I
+        27: invokestatic  #28                 // Method pim/dpu/ProxyHelper.getIReturnValue:(I)I
+        30: istore_1
+        31: iload_1
+        32: ireturn
+      LineNumberTable:
+        line 92: 0
+        line 93: 8
+        line 94: 23
+        line 95: 31
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0      33     0  this   Lpim/algorithm/DPUTreeNodeProxyAutoGen;
+           31       2     1 retVal   I
+
+  public void insert(int, int);
+    descriptor: (II)V
+    flags: (0x0001) ACC_PUBLIC
+    Code:
+      stack=7, locals=4, args_size=3
+         0: getstatic     #33                 // Field pimProxy:Lpim/logger/Logger;
+         3: ldc           #34                 // String insert dispatch
+         5: invokevirtual #35                 // Method pim/logger/Logger.log:(Ljava/lang/String;)V
+         8: invokestatic  #36                 // Method pim/UPMEM.getInstance:()Lpim/UPMEM;
+        11: aload_0
+        12: invokevirtual #12                 // Method getDpuID:()I
+        15: invokevirtual #37                 // Method pim/UPMEM.getDPUManager:(I)Lpim/dpu/DPUManager;
+        18: getfield      #38                 // Field pim/dpu/DPUManager.classCacheManager:Lpim/dpu/DPUCacheManager;
+        21: astore_3
+        22: aload_0
+        23: getfield      #1                  // Field objectHandler:Lpim/dpu/DPUObjectHandler;
+        26: ldc           #8                  // String pim/algorithm/TreeNode
+        28: ldc           #39                 // String insert:(II)V
+        30: iconst_2
+        31: anewarray     #10                 // class java/lang/Object
+        34: dup
+        35: iconst_0
+        36: iload_1
+        37: invokestatic  #23                 // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+        40: aastore
+        41: dup
+        42: iconst_1
+        43: iload_2
+        44: invokestatic  #23                 // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+        47: aastore
+        48: invokestatic  #11                 // Method pim/dpu/ProxyHelper.invokeMethod:(Lpim/dpu/DPUObjectHandler;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
+        51: return
+      LineNumberTable:
+        line 100: 0
+        line 101: 8
+        line 102: 22
+        line 103: 51
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0      52     0  this   Lpim/algorithm/DPUTreeNodeProxyAutoGen;
+            0      52     1     k   I
+            0      52     2     v   I
+           22      30     3 classCacheManager1   Lpim/dpu/DPUCacheManager;
+
+  public int search(int);
+    descriptor: (I)I
+    flags: (0x0001) ACC_PUBLIC
+    Code:
+      stack=7, locals=3, args_size=2
+         0: getstatic     #40                 // Field searchDispatchCount:I
+         3: iconst_1
+         4: iadd
+         5: putstatic     #40                 // Field searchDispatchCount:I
+         8: aload_0
+         9: getfield      #1                  // Field objectHandler:Lpim/dpu/DPUObjectHandler;
+        12: ldc           #8                  // String pim/algorithm/TreeNode
+        14: ldc           #41                 // String search:(I)I
+        16: iconst_1
+        17: anewarray     #10                 // class java/lang/Object
+        20: dup
+        21: iconst_0
+        22: iload_1
+        23: invokestatic  #23                 // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+        26: aastore
+        27: invokestatic  #11                 // Method pim/dpu/ProxyHelper.invokeMethod:(Lpim/dpu/DPUObjectHandler;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
+        30: aload_0
+        31: invokevirtual #12                 // Method getDpuID:()I
+        34: invokestatic  #28                 // Method pim/dpu/ProxyHelper.getIReturnValue:(I)I
+        37: istore_2
+        38: iload_2
+        39: ireturn
+      LineNumberTable:
+        line 107: 0
+        line 108: 8
+        line 109: 30
+        line 110: 38
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0      40     0  this   Lpim/algorithm/DPUTreeNodeProxyAutoGen;
+            0      40     1     k   I
+           38       2     2 retVal   I
+
+  static {};
+    descriptor: ()V
+    flags: (0x0008) ACC_STATIC
+    Code:
+      stack=1, locals=0, args_size=0
+         0: getstatic     #42                 // Field pim/logger/PIMLoggers.pimProxy:Lpim/logger/Logger;
+         3: putstatic     #33                 // Field pimProxy:Lpim/logger/Logger;
+         6: iconst_0
+         7: putstatic     #7                  // Field getLeftDispatchCount:I
+        10: iconst_0
+        11: putstatic     #15                 // Field getRightDispatchCount:I
+        14: iconst_0
+        15: putstatic     #17                 // Field setRightDispatchCount:I
+        18: iconst_0
+        19: putstatic     #19                 // Field setLeftDispatchCount:I
+        22: iconst_0
+        23: putstatic     #21                 // Field setKeyDispatchCount:I
+        26: iconst_0
+        27: putstatic     #24                 // Field setValDispatchCount:I
+        30: iconst_0
+        31: putstatic     #26                 // Field getValDispatchCount:I
+        34: iconst_0
+        35: putstatic     #40                 // Field searchDispatchCount:I
+        38: iconst_0
+        39: putstatic     #31                 // Field getKeyDispatchCount:I
+        42: return
+      LineNumberTable:
+        line 14: 0
+        line 30: 6
+        line 31: 10
+        line 32: 14
+        line 33: 18
+        line 34: 22
+        line 35: 26
+        line 36: 30
+        line 37: 34
+        line 38: 38
+}
+SourceFile: "DPUTreeNodeProxyAutoGen.java"
