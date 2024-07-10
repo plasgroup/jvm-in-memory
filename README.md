@@ -8,9 +8,30 @@
 実験レポジトリ https://github.com/plasgroup/paper-jssst2023-huang/tree/main
 
 共有ライブラリのビルドの指示は従わなきゃいけないが、dpu.jar は jdpulib にあるものをコピーしてしまえばいい
+実行時に共有ライブラリロードのエラーが出るときは、`export LD_LIBRARY_PATH=/home/ichinose/jvm-in-memory/upmem-2023.1.0-Linux-x86_64/lib:$LD_LIBRARY_PATH`
+などとして共有ライブラリを探すパスを設定する。Java がネイティブライブラリを探す場所は -Djava.library.path= で指定するが、共有ライブラリが依存する別のライブラリは LD_LIBRARY_PATH を見るらしい
 
-jdpulib の中で ./compile-source-code.sh してから ../evaluation/bst-performance-eval.sh
-key_value ペアを作るには、java -cp generate-key-values.jar Main してから ../evaluation/bst-serialize.sh をする。大きさが 10000000で固定なので head -n とかで適切な大きさに切ってから jdpulib にコピーする
+1. 改造済み DPU ライブラリの upmem_env.sh を実行
+2. jdpulib の中で ./compile-source-code.sh してから ../evaluation/bst-performance-eval.sh
+3. key_value ペアを作るには、java -cp generate-key-values.jar Main してから ../evaluation/bst-serialize.sh をする。大きさが 10000000で固定なので head -n とかで適切な大きさに切ってから jdpulib にコピーする
+
+### 解読
+- bst-serialize
+  - TYPE=PIM, PERF_MODE 指定なし
+  - main() で BSTTester.evaluatePIMBST が呼ばれる
+  - evaluatePIMBST の中で、buildFromSerializedData がオフなら BSTBuilder.buildPIMTree が呼ばれる
+  - buildPIMTree の中では、クラスのロードをして TreeWriter.convertCPUTreeToPIMTree を呼ぶ
+  - TreeWriter.convertCPUTreeToPIMTree の中で DPU の中に木を作る処理をしている
+  - TreeWriter.writeSubTreeBytes() でヒープバイト配列に DPU 用の木を書き込んでいる
+- bst-performance-evaluation
+  - Main.performanceEvaluation()
+
+### 改造
+- Main.main()
+- Main.performanceEvaluation()
+- BSTBuilder.buildPIMTreeDirect()
+- TreeWriter.convertCPUTreeToPIMTreeDirect()
+- TreeWriter.createSubTree()
 
 ## 1.2 Compile Extended UPMEM Java Library
 
