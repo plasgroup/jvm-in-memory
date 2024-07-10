@@ -7,7 +7,7 @@
 
 実験レポジトリ https://github.com/plasgroup/paper-jssst2023-huang/tree/main
 
-共有ライブラリのビルドの指示は従わなきゃいけないが、dpu.jar は jdpulib にあるものをコピーしてしまえばいい
+共有ライブラリのビルドの指示は従わなきゃいけないが、dpu.jar は jvm-in-memory 直下にあるものをコピーしてしまえばいい
 実行時に共有ライブラリロードのエラーが出るときは、`export LD_LIBRARY_PATH=/home/ichinose/jvm-in-memory/upmem-2023.1.0-Linux-x86_64/lib:$LD_LIBRARY_PATH`
 などとして共有ライブラリを探すパスを設定する。Java がネイティブライブラリを探す場所は -Djava.library.path= で指定するが、共有ライブラリが依存する別のライブラリは LD_LIBRARY_PATH を見るらしい
 

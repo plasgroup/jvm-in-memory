@@ -7,6 +7,7 @@ import pim.algorithm.BSTTester;
 import pim.algorithm.DPUTreeNode;
 import pim.algorithm.IntIntValuePairGenerator;
 import pim.algorithm.TreeNode;
+import pim.algorithm.TreeWriter;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
@@ -70,6 +71,9 @@ public class Main {
             }else if("BATCH_DISPATCH".equals(argumentName)){
                 performanceEvaluationEnableBatchDispatch = true;
                 if(items.length > 1) performanceEvaluationEnableBatchDispatch = Integer.parseInt(items[1]) != 0;
+            }else if("DIRECT_TREE_BULID".equals(argumentName)){
+                buildTreeDirectly = true;
+                if(items.length > 1) buildTreeDirectly = Integer.parseInt(items[1]) != 0;
             }else if("JVM_SIMULATOR".equals(argumentName)){
 	        useSimulator = true;
 		if(items.length > 1) useSimulator = Integer.parseInt(items[1]) != 0;
@@ -118,17 +122,23 @@ public class Main {
         }
 
         if (pimPerformanceEvaluation) {
-            try {
-                for (int i = 0; i < UPMEM.dpuInUse; i++) {
-                    UPMEM.getInstance().getDPUManager(i).createObject(DPUTreeNode.class, new Object[]{0, 0});
+            // ! Build CPU and DPU tree here
+            if (buildTreeDirectly) {
+                PIMRoot = BSTBuilder.buildPIMTreeDirect("key_values-" + totalNodeCount + ".txt", cpuLayerCount);
+                int count = TreeWriter.getTreeSize(PIMRoot);
+                System.out.println("cpu size count = " + count);
+            } else {
+                try {
+                    for (int i = 0; i < UPMEM.dpuInUse; i++) {
+                        UPMEM.getInstance().getDPUManager(i).createObject(DPUTreeNode.class, new Object[]{0, 0});
+                    }
+                    writeDPUImages(performanceEvaluationNodeCount, ExperimentConfigurator.imagesPath);
+                    System.out.println("load CPU part tree");
+                    PIMRoot = buildCpuPartTreeFromFile("PIM_TREE_" + performanceEvaluationNodeCount + ".txt");
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
-                writeDPUImages(performanceEvaluationNodeCount, ExperimentConfigurator.imagesPath);
-                System.out.println("load CPU part tree");
-                PIMRoot = buildCpuPartTreeFromFile("PIM_TREE_" + performanceEvaluationNodeCount + ".txt");
-            } catch (IOException e) {
-                throw new RuntimeException(e);
             }
-
 
             System.out.println("begin evaluate PIM Tree 500,000 queries performance");
             totalTimeInMs = 0;

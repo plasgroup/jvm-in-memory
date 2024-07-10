@@ -11,6 +11,7 @@ import java.util.HashSet;
 
 import static pim.ExperimentConfigurator.totalNodeCount;
 import static pim.algorithm.TreeWriter.convertCPUTreeToPIMTree;
+import static pim.algorithm.TreeWriter.convertCPUTreeToPIMTreeDirect;;
 
 public class BSTBuilder {
     static Logger bstBuildingLogger = PIMLoggers.bstBuildingLogger;
@@ -277,6 +278,21 @@ public class BSTBuilder {
             serializeTreeToFile(root, "CPU_TREE_" + totalNodeCount + ".txt");
         }
         convertCPUTreeToPIMTree(root, cpuLayerCount);
+
+        return root;
+    }
+
+    public static TreeNode buildPIMTreeDirect(String filePath, int cpuLayerCount){
+        // ! DPU initialize みたいなのに変更
+        for(int i = 0; i < UPMEM.dpuInUse; i++){
+            UPMEM.getInstance().getDPUManager(i).dpuClassFileManager.loadClassForDPU(DPUTreeNode.class);
+        }
+
+        TreeNode root = BSTBuilder.buildCPUTree(filePath);
+        if(ExperimentConfigurator.serializeToFile){
+            serializeTreeToFile(root, "CPU_TREE_" + totalNodeCount + ".txt");
+        }
+        convertCPUTreeToPIMTreeDirect(root, cpuLayerCount);
 
         return root;
     }

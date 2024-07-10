@@ -2,6 +2,7 @@ package pim.algorithm;
 
 import com.upmem.dpu.DpuException;
 import pim.ExperimentConfigurator;
+import pim.IDPUProxyObject;
 import pim.UPMEM;
 import pim.dpu.DPUGarbageCollector;
 import pim.dpu.java_strut.DPUJVMMemSpaceKind;
@@ -49,6 +50,8 @@ public class TreeWriter {
 
     public static void writeDPUImages(int totalNodeCount, String imagesPath) {
         int i = 0;
+        // ! image とかいうのを transfer しているだけなので、これをなんとかしないといけない
+        // ! image を作っている部分の処理をそのままここへ持ってくる
         while(true){
             String filePath = imagesPath + "[" + totalNodeCount + "]DPU#" + i + ".img";
             File imgI = new File(filePath);
@@ -250,6 +253,102 @@ public class TreeWriter {
         System.out.println("cpu part size = " + size);
     }
 
+    /* Convert a CPU tree to PIM tree, with keeping first cpuLayerCount layers in CPU */
+    static void convertCPUTreeToPIMTreeDirect(TreeNode root, int cpuLayerCount){
+        TreeNode point = root;
+        Queue<TreeNode[]> queue = new ArrayDeque<>();
+        queue.add(new TreeNode[]{null, point});
+
+        int currentLayer = 0;
+        int cpuNode = 0;
+        int cpuProxyNode = 0;
+
+        // first cpuLayerCount layers retain on CPU
+        while(currentLayer < cpuLayerCount){
+            int size = queue.size();
+            for(int i = 0; i < size; i++){
+                TreeNode[] record = queue.remove();
+                TreeNode thisNode = record[1];
+                if(thisNode.left != null) queue.add(new TreeNode[]{thisNode, thisNode.left});
+                if(thisNode.right != null) queue.add(new TreeNode[]{thisNode, thisNode.right});
+                cpuNode ++;
+            }
+            currentLayer ++;
+        }
+
+        System.out.println("cpu nodes (top k layers) " + cpuNode);
+
+        int currentChildrenCount = 0;
+        int dpuID = 0;
+
+        // move subtree from (cpuLayerCount + 1) layers to a certain DPU
+        while(queue.size() > 0){
+            TreeNode[] record = queue.remove();
+            TreeNode thisNode = record[1]; // ! thisNode は CPU tree のノードであることに注意
+            TreeNode parent = record[0];
+            int c = getTreeSize(thisNode);
+
+            /* when a nodes' tree size exceed the DPU capacity limitation, retain
+             this node in CPU, but put its children into workspace
+             */
+            if(c > DPU_MAX_NODES_COUNT){
+                cpuNode++;
+                if(thisNode.right != null)
+                    queue.add(new TreeNode[]{thisNode, thisNode.right});
+                if(thisNode.left != null)
+                    queue.add(new TreeNode[]{thisNode, thisNode.left});
+                continue;
+            }
+
+            // create and write images to DPUs
+            if(currentChildrenCount + c <= DPU_MAX_NODES_COUNT){
+                // ! DPU 側の根を createObject() して、その Proxy Object を作る
+                IDPUProxyObject pObject = UPMEM.getInstance().createObject(dpuID, DPUTreeNode.class, thisNode.key, thisNode.val);
+                DPUTreeNodeProxyAutoGen dpuTreeNodeProxyAutoGen =
+                        new DPUTreeNodeProxyAutoGen(thisNode.key, thisNode.val, dpuID, pObject.getAddr());
+                currentChildrenCount += c;
+                cpuProxyNode++;
+                dpuTreeNodeProxyAutoGen.left = null;
+                dpuTreeNodeProxyAutoGen.right = null;
+
+                // write heap
+                // ! 今作った根より下にある CPU tree のノードをすべて DPU に insert する
+                insertSubTree(dpuTreeNodeProxyAutoGen, thisNode);
+
+                // ! 親ノードの left/right が指す先を今作ったプロキシオブジェクトで上書き
+                if(parent.left == thisNode){
+                    parent.left = dpuTreeNodeProxyAutoGen;
+                }else if(parent.right == thisNode){
+                    parent.right = dpuTreeNodeProxyAutoGen;
+                }
+            }else{
+                // ! 次の dpuID へ
+                System.out.println("write image to DPU " + dpuID + " children count = " + currentChildrenCount);
+                dpuID++;
+
+                // add new node
+                currentChildrenCount = c;
+
+                IDPUProxyObject pObject = UPMEM.getInstance().createObject(dpuID, DPUTreeNode.class, thisNode.key, thisNode.val);
+                DPUTreeNodeProxyAutoGen dpuTreeNodeProxyAutoGen =
+                        new DPUTreeNodeProxyAutoGen(thisNode.key, thisNode.val, dpuID, pObject.getAddr());
+                cpuProxyNode++;
+                dpuTreeNodeProxyAutoGen.left = null;
+                dpuTreeNodeProxyAutoGen.right = null;
+
+                insertSubTree(dpuTreeNodeProxyAutoGen, thisNode);
+                if(parent.left == thisNode){
+                    parent.left = dpuTreeNodeProxyAutoGen;
+                }else if(parent.right == thisNode){
+                    parent.right = dpuTreeNodeProxyAutoGen;
+                }
+            }
+        }
+        System.out.println(cpuNode + " cpu nodes (final) and " + cpuProxyNode + " proxy in CPU");
+        int size = getTreeSize(root);
+        System.out.println("cpu part size = " + size);
+    }
+
     /* Write the heap memory bytes array to a DPU */
     private static void writeHeapImageToDPU(int dpuID) {
         UPMEM.getInstance().getDPUManager(dpuID).garbageCollector.allocate(DPUJVMMemSpaceKind.DPU_HEAPSPACE,2000000 * INSTANCE_SIZE);
@@ -290,6 +389,24 @@ public class TreeWriter {
             writeRight(0, heapMemory, thisNodeAddress);
         }
         return new int[]{heapAddress, l, r};
+    }
+
+    /* Insert the tree represented by thisNode to DPU */
+    private static void insertSubTree(TreeNode dpuRootProxy, TreeNode thisNode) {
+        // ! 与えられたノードの左右を探索して insert するだけ
+        if(thisNode == null) return;
+
+        if(thisNode.left != null){
+            // recursive left
+            dpuRootProxy.insert(thisNode.left.key, thisNode.left.val);
+            insertSubTree(dpuRootProxy, thisNode.left);
+        }
+
+        if(thisNode.right != null){
+            // recursive right
+            dpuRootProxy.insert(thisNode.right.key, thisNode.right.val);
+            insertSubTree(dpuRootProxy, thisNode.right);
+        }
     }
 
     public static int getTreeSize(TreeNode thisNode) {
