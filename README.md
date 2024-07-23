@@ -92,7 +92,7 @@ Java_com_upmem_dpu_NativeDpuSet_copy__Ljava_lang_String_2_3_3B_3IZZ(JNIEnv *env,
         buffers[each_buffer] = jbuffer;
         offset =  (*env)->GetIntArrayElements(env, offsets, 0);
          // printf("* transit data to offset %d, symbol = %s\n",
-         offset[each_buffer], symbol);
+         // offset[each_buffer], symbol);
     }
 
     bool length_initialized = false;
