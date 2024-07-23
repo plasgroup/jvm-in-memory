@@ -16,7 +16,8 @@
 3. key_value ペアを作るには、java -cp generate-key-values.jar Main してから ../evaluation/bst-serialize.sh をする。大きさが 10000000で固定なので head -n とかで適切な大きさに切ってから jdpulib にコピーする
 
 ### 実行の準備
-- `wget http://sdk-releases.upmem.com/2023.1.0/debian_10/upmem-2023.1.0-Linux-x86_64.tar.gz` または `wget http://sdk-releases.upmem.com/2023.1.0/upmem-src-2023.1.0-Linux-x86_64.tar.gz`
+- `wget http://sdk-releases.upmem.com/2023.1.0/debian_10/upmem-2023.1.0-Linux-x86_64.tar.gz`
+- `wget http://sdk-releases.upmem.com/2023.1.0/upmem-src-2023.1.0-Linux-x86_64.tar.gz`
 - `tar xzvf upmem-2023.1.0-Linux-x86_64.tar.gz`
 - `tar xzvf upmem-src-2023.1.0-Linux-x86_64.tar.gz`
 - `src/backends/api/src/api/dpu_jni.c` に対する指示をやる（ビルドと共有ライブラリの入れ替え）
