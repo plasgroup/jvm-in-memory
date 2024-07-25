@@ -103,8 +103,6 @@ public class DPUManagerUPMEM extends DPUManager {
         if (perfCounterCycle) {
             System.out.println("DPU cycles: " + nbCyclesTotal);
             System.out.println("DPU time: " + String.format("%.2e", dpuTime) + " secs.");
-        } else if (perfCounterInsn) {
-            System.out.println("DPU insns: " + nbInsnTotal);
         }
         garbageCollector.readBackHeapSpacePt();
         garbageCollector.readBackMetaSpacePt();
