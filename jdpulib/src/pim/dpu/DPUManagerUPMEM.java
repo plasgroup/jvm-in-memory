@@ -6,10 +6,11 @@ import pim.*;
 import pim.dpu.cache.DPUCacheManager;
 import pim.dpu.classloader.DPUClassFileManager;
 import pim.utils.BytesUtils;
-import pim.ExperimentConfigurator;
 
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
 import static pim.dpu.java_strut.DPUJVMMemSpaceKind.DPU_HEAPSPACE;
 
@@ -101,6 +102,12 @@ public class DPUManagerUPMEM extends DPUManager {
         double dpuTime = 0.0;
         dpu.exec(printStream);
         if (ExperimentConfigurator.perfCounterCycle) {
+            dpu.copy(nbCycles, "nb_cycles");
+            ByteBuffer nbCyclesWrapped = ByteBuffer.wrap(nbCycles).order(ByteOrder.LITTLE_ENDIAN);
+            nbCyclesTotal += nbCyclesWrapped.getInt();
+            dpu.copy(clocksPerSec, "CLOCKS_PER_SEC");
+            ByteBuffer clocksWrapped = ByteBuffer.wrap(clocksPerSec).order(ByteOrder.LITTLE_ENDIAN);
+            dpuTime += (double) nbCyclesWrapped.getInt(0) / clocksWrapped.getInt(0);
             System.out.println("DPU cycles: " + nbCyclesTotal);
             System.out.println("DPU time: " + String.format("%.2e", dpuTime) + " secs.");
         }
