@@ -23,4 +23,5 @@ public class ExperimentConfigurator {
     public static boolean useSimulator = false;
 
     public static boolean buildTreeDirectly = false;
+    public static boolean perfCounterCycle = true;
 }
