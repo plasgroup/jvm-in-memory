@@ -6,7 +6,7 @@ import pim.*;
 import pim.dpu.cache.DPUCacheManager;
 import pim.dpu.classloader.DPUClassFileManager;
 import pim.utils.BytesUtils;
-import pim.ExperimentConfigurator.*;
+import pim.ExperimentConfigurator;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -100,7 +100,7 @@ public class DPUManagerUPMEM extends DPUManager {
         byte[] clocksPerSec = new byte[4];
         double dpuTime = 0.0;
         dpu.exec(printStream);
-        if (perfCounterCycle) {
+        if (ExperimentConfigurator.perfCounterCycle) {
             System.out.println("DPU cycles: " + nbCyclesTotal);
             System.out.println("DPU time: " + String.format("%.2e", dpuTime) + " secs.");
         }
