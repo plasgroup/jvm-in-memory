@@ -1,0 +1,42 @@
+CPU_LAYER_COUNT CPU_LAYER_COUNT=5
+DPU_COUNT DPU_COUNT=1
+QUERIES QUERIES=500
+IMG_PATH IMG_PATH=./imgs/
+NODES NODES=1000
+TYPE TYPE=CPU
+SERIALIZE_TREE SERIALIZE_TREE=0
+PERF_MODE PERF_MODE=1
+CPU_PERF_REPEAT CPU_PERF_REPEAT=1
+PIM_PERF_REPEAT PIM_PERF_REPEAT=1
+EVAL_CPU_PERF EVAL_CPU_PERF=1
+EVAL_PIM_PERF EVAL_PIM_PERF=1
+EVAL_NODES EVAL_NODES=1000
+BATCH_DISPATCH BATCH_DISPATCH=0
+JVM_SIMULATOR JVM_SIMULATOR=0
+BUILD_FROM_IMG BUILD_FROM_IMG=0
+dpu in use = 1
+CPU mode, nodes count = 1000 query count = 500
+cpu tree layer count = 5
+begin evaluate CPU Tree 500,000 queries performance
+avg per query time = 4us
+avg per query time = 18us
+avg per query time = 13us
+avg per query time = 11us
+avg per query time = 9us
+1/1 Execution time in milliseconds: 4
+CPU 500,000 queries average time = 4
+single query average time = 2.0E-6
+end evaluate CPU Tree 500,000 queries performance
+load image to DPU#0 from file ./imgs/[1000]DPU#0.img
+load CPU part tree
+begin evaluate PIM Tree 500,000 queries performance
+query count = 500
+avg per query time = 6548us
+avg per query time = 6951us
+avg per query time = 6905us
+avg per query time = 6898us
+avg per query time = 6938us
+1/1 Execution time in milliseconds: 347
+PIM 500,000 queries average time = 347
+single queries average time = 1.735E-4
+end evaluate PIM Tree 500,000 queries performance

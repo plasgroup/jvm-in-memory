@@ -2,7 +2,7 @@ CC := dpu-upmem-dpurte-clang
 
 CXX := g++
 
-DPU_CFLAGE += -DINMEMORY -DDEBUG_PRINT_ENABLE=0 
+DPU_CFLAGE += -DINMEMORY -DDEBUG_PRINT_ENABLE=0 -O2
 
 
 DEPS := \
