@@ -15,6 +15,13 @@ PARAM_LIST_CPU="CPU_LAYER_COUNT=$LAYER_COUNT DPU_COUNT=$DPU_COUNT QUERIES=$QUERY
 #perf stat -a -e $EVENT_LIST java $VM_OPTIONS -jar bst-latest.jar TYPE=PIM $PARAM_LIST 2> "pim-nodes-all-$NODES_COUNT-($QUERY_COUNT).txt"
 #perf stat -a -e $EVENT_LIST java $VM_OPTIONS -jar bst-latest.jar TYPE=PIM NO_SEARCH $PARAM_LIST 2> "pim-nodes-prepare-$NODES_COUNT-($QUERY_COUNT).txt"
 
+if [ "$PERF_COUNTER_CYCLE" == "true" ]; then
+    PARAM_LIST_CPU="$PARAM_LIST_CPU PERF_COUNTER_CYCLE"
+fi
+if [ "$PERF_COUNTER_INSN" == "true" ]; then
+    PARAM_LIST_CPU="$PARAM_LIST_CPU PERF_COUNTER_INSN"
+fi
+
 ## record 
 $JAVA $VM_OPTIONS -Djava.library.path=../upmem-2023.1.0-Linux-x86_64/lib -cp $BST_JAR:dpu.jar Main $PARAM_LIST_CPU
 #perf report -n -f --stdio > "./record_files/[q]cpu-profile-${NODES_COUNT}n-${QUERY_COUNT}q.txt";
