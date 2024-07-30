@@ -10,7 +10,7 @@ JVM_IN_MEMORY_ROOT_DIR=$(dirname "$(readlink -f "$0")")
 export PERF_COUNTER_CYCLE=false
 export PERF_COUNTER_INSN=false
 cd $JVM_IN_MEMORY_ROOT_DIR/dpu_jvm
-rm dpuslave
+rm dpuslave || true
 make dpuslave
 cd $JVM_IN_MEMORY_ROOT_DIR/jdpulib
 export OUTPUT_FILE="$OUTPUT_DIR"/"FASTEST.txt"
@@ -21,7 +21,7 @@ $JVM_IN_MEMORY_ROOT_DIR/evaluation/bst-performance-eval.sh > $OUTPUT_FILE
 export PERF_COUNTER_CYCLE=true
 export PERF_COUNTER_INSN=false
 cd $JVM_IN_MEMORY_ROOT_DIR/dpu_jvm
-rm dpuslave
+rm dpuslave || true
 make dpuslave
 cd $JVM_IN_MEMORY_ROOT_DIR/jdpulib
 export OUTPUT_FILE="$OUTPUT_DIR"/"CYCLE.txt"
@@ -32,7 +32,7 @@ $JVM_IN_MEMORY_ROOT_DIR/evaluation/bst-performance-eval.sh > $OUTPUT_FILE
 export PERF_COUNTER_CYCLE=false
 export PERF_COUNTER_INSN=true
 cd $JVM_IN_MEMORY_ROOT_DIR/dpu_jvm
-rm dpuslave
+rm dpuslave || true
 make dpuslave
 cd $JVM_IN_MEMORY_ROOT_DIR/jdpulib
 export OUTPUT_FILE="$OUTPUT_DIR"/"INSN.txt"
