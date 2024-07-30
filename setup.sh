@@ -2,10 +2,6 @@
 
 JVM_IN_MEMORY_ROOT_DIR=$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")
 
-echo $JVM_IN_MEMORY_ROOT_DIR
-
-exit(0)
-
 # UPMEM SDK
 wget http://sdk-releases.upmem.com/2023.1.0/debian_10/upmem-2023.1.0-Linux-x86_64.tar.gz
 wget http://sdk-releases.upmem.com/2023.1.0/upmem-src-2023.1.0-Linux-x86_64.tar.gz
