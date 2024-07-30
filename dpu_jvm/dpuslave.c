@@ -211,14 +211,14 @@ void exec_task_from_host()
 
 int main()
 {
-#ifdef PERF_COUTER_CYCLE
+#ifdef PERF_COUNTER_CYCLE
     perfcounter_config(COUNT_CYCLES, true);
 #elif PERF_COUNTER_INSN
     perfcounter_config(COUNT_INSTRUCTIONS, true);
 #endif
     DEBUG_PRINT("meta_space_begin = 0x%x, heap_space_begin = 0x%x, param_begin = 0x%x, wram_space_begin = 0x%x\n", m_metaspace, m_heapspace, params_buffer, wram_data_space);
     exec_task_from_host();
-#ifdef PERF_COUTER_CYCLE
+#ifdef PERF_COUNTER_CYCLE
     nb_cycles = perfcounter_get();
 #elif PERF_COUNTER_INSN
     nb_insns = perfcounter_get();
