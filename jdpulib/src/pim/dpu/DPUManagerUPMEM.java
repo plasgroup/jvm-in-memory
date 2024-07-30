@@ -12,6 +12,7 @@ import java.io.PrintStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+import static pim.ExperimentConfigurator.perfCounterInsn;
 import static pim.dpu.java_strut.DPUJVMMemSpaceKind.DPU_HEAPSPACE;
 
 public class DPUManagerUPMEM extends DPUManager {
@@ -104,12 +105,17 @@ public class DPUManagerUPMEM extends DPUManager {
         if (ExperimentConfigurator.perfCounterCycle) {
             dpu.copy(nbCycles, "nb_cycles");
             ByteBuffer nbCyclesWrapped = ByteBuffer.wrap(nbCycles).order(ByteOrder.LITTLE_ENDIAN);
-            nbCyclesTotal += nbCyclesWrapped.getInt();
+            nbCyclesTotal += nbCyclesWrapped.getLong(0);
             dpu.copy(clocksPerSec, "CLOCKS_PER_SEC");
             ByteBuffer clocksWrapped = ByteBuffer.wrap(clocksPerSec).order(ByteOrder.LITTLE_ENDIAN);
-            dpuTime += (double) nbCyclesWrapped.getInt(0) / clocksWrapped.getInt(0);
+            dpuTime += (double) nbCyclesWrapped.getLong(0) / clocksWrapped.getInt(0);
             System.out.println("DPU cycles: " + nbCyclesTotal);
             System.out.println("DPU time: " + String.format("%.2e", dpuTime) + " secs.");
+        } else if (ExperimentConfigurator.perfCounterInsn) {
+            dpu.copy(nbInsn, "nb_insns");
+            ByteBuffer nbInsnWrapped = ByteBuffer.wrap(nbInsn).order(ByteOrder.LITTLE_ENDIAN);
+            nbInsnTotal += nbInsnWrapped.getLong(0);
+            System.out.println("DPU insns: " + nbInsnTotal);
         }
         garbageCollector.readBackHeapSpacePt();
         garbageCollector.readBackMetaSpacePt();

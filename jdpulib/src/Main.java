@@ -89,6 +89,8 @@ public class Main {
                     useSimulator = Integer.parseInt(items[1]) != 0;
             } else if ("PERF_COUNTER_CYCLE".equals(argumentName)) {
                 perfCounterCycle = true;
+            } else if ("PERF_COUNTER_INSN".equals(argumentName)) {
+                perfCounterInsn = true;
             }
 
         }
@@ -108,7 +110,7 @@ public class Main {
                 throw new RuntimeException(e);
             }
 
-            System.out.println("begin evaluate CPU Tree 500,000 queries performance");
+            System.out.println("begin evaluate CPU Tree " + queryCount + " queries performance");
             int pos = 0;
             for (int i = 0; i < cpuPerformanceEvaluationRepeatTime; i++) {
 
@@ -130,10 +132,11 @@ public class Main {
             }
 
             System.out.println(
-                    "CPU 500,000 queries average time = " + totalTimeInMs / cpuPerformanceEvaluationRepeatTime);
+                    "CPU " + queryCount + " queries average time = "
+                            + totalTimeInMs / cpuPerformanceEvaluationRepeatTime);
             System.out.println("single query average time = "
                     + totalTimeInMs / cpuPerformanceEvaluationRepeatTime / (double) keys.size());
-            System.out.println("end evaluate CPU Tree 500,000 queries performance");
+            System.out.println("end evaluate CPU Tree " + queryCount + " queries performance");
         }
 
         if (pimPerformanceEvaluation) {
@@ -155,7 +158,7 @@ public class Main {
                 }
             }
 
-            System.out.println("begin evaluate PIM Tree 500,000 queries performance");
+            System.out.println("begin evaluate PIM Tree " + queryCount + " queries performance");
             totalTimeInMs = 0;
 
             BatchDispatcher bd1 = new BatchDispatcher();
@@ -184,10 +187,11 @@ public class Main {
             if (performanceEvaluationEnableBatchDispatch)
                 UPMEM.endRecordBatchDispatching();
             System.out.println(
-                    "PIM 500,000 queries average time = " + totalTimeInMs / pimPerformanceEvaluationRepeatTime);
+                    "PIM " + queryCount + " queries average time = "
+                            + totalTimeInMs / pimPerformanceEvaluationRepeatTime);
             System.out.println("single queries average time = "
                     + totalTimeInMs / pimPerformanceEvaluationRepeatTime / (double) keys.size());
-            System.out.println("end evaluate PIM Tree 500,000 queries performance");
+            System.out.println("end evaluate PIM Tree " + queryCount + " queries performance");
         }
     }
 
