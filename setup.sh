@@ -14,10 +14,12 @@ cd upmem-2023.1.0-Linux-x86_64/src/backends
 cmake .
 make
 cd $JVM_IN_MEMORY_ROOT_DIR/upmem-2023.1.0-Linux-x86_64/lib
+cp ../src/backends/api/libdpu.so.0.0 .
+cp ../src/backends/api/libdpujni.so.0.0 .
 rm libdpu.so
 rm libdpujni.so
-ln -s ../src/backends/api/libdpu.so.0.0 ./libdpu.so
-ln -s ../src/backends/api/libdpujni.so.0.0 ./libdpujni.so
+ln -s libdpu.so.0.0 libdpu.so
+ln -s libdpujni.so.0.0 libdpujni.so
 cd $JVM_IN_MEMORY_ROOT_DIR
 
 #Java
