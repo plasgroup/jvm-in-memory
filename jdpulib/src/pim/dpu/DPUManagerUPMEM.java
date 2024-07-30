@@ -110,7 +110,7 @@ public class DPUManagerUPMEM extends DPUManager {
             ByteBuffer clocksWrapped = ByteBuffer.wrap(clocksPerSec).order(ByteOrder.LITTLE_ENDIAN);
             dpuTime += (double) nbCyclesWrapped.getLong(0) / clocksWrapped.getInt(0);
             System.out.println("DPU cycles: " + nbCyclesTotal);
-            System.out.println("DPU time: " + String.format("%.2e", dpuTime) + " secs.");
+            System.out.println("DPU time: " + String.format("%.5e", dpuTime) + " secs.");
         } else if (ExperimentConfigurator.perfCounterInsn) {
             dpu.copy(nbInsn, "nb_insns");
             ByteBuffer nbInsnWrapped = ByteBuffer.wrap(nbInsn).order(ByteOrder.LITTLE_ENDIAN);
