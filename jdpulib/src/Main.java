@@ -229,10 +229,11 @@ public class Main {
 
         // UPMEM initialization
         UPMEM.initialize(upmemConfigurator);
+        UPMEM.setPackageSearchPath("application.bst.");
 
         // Test DPUTreeNode
         // UPMEM.getInstance().getDPUManager(0).dpuClassFileManager.loadClassToDPU(DPUTreeNode.class);
-        TreeNode root = UPMEM.getInstance().getDPUManager(0).createObject(DPUTreeNode.class, 0, 0);
+        TreeNode root = (TreeNode) UPMEM.getInstance().createObject(0, DPUTreeNode.class, 0, 3);
         System.out.println("root.value = " + root.getVal());
 
         // // Evaluate performance. In performance evaluation mode, the execution time
