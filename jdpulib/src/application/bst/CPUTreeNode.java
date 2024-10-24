@@ -20,26 +20,26 @@ public class CPUTreeNode extends TreeNode {
         this.height = height;
     }
 
-
     @Override
     public TreeNode createNode(int k, int v) {
         if (height >= this.CriticalHeight) {
             cpuTreeNodeLogger.logln("create node at DPU from CPU.");
-            dpuNode ++;
+            dpuNode++;
             int dpu = allocateDPU();
             return (TreeNode) UPMEM.getInstance().createObject(dpu, DPUTreeNode.class, k, v);
         } else {
-            cpuNode ++;
+            cpuNode++;
             cpuTreeNodeLogger.logln("create node at CPU. new height = " + (this.height + 1));
 
             return new CPUTreeNode(k, v, this.height + 1);
         }
     }
 
-    public TreeNode createNodeCPU(int k, int v){
+    public TreeNode createNodeCPU(int k, int v) {
         return new CPUTreeNode(k, v);
     }
-    int allocateDPU(){
+
+    int allocateDPU() {
 
         for (int i = 0; i < UPMEM.TOTAL_DPU_COUNT; i++) {
             int remainHeapMemory = UPMEM.getInstance().getDPUHeapMemoryRemain(i);
@@ -49,6 +49,5 @@ public class CPUTreeNode extends TreeNode {
         }
         return -1;
     }
-
 
 }

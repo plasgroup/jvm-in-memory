@@ -3,6 +3,7 @@
 set -e
 
 EVAL_DIR=$(realpath $(dirname "$(readlink -f "${BASH_SOURCE[0]}")"))
+DPUJVM_DIR=$EVAL_DIR/../dpu_jvm
 JDPU_DIR=$EVAL_DIR/../jdpulib
 OUT2_DIR=$JDPU_DIR/out2
 
@@ -10,6 +11,10 @@ OUT2_DIR=$JDPU_DIR/out2
 # jar cvfm bst-latest.jar $OUT2_DIR/MANIFEST.MF $OUT2_DIR
 # cp $OUT2_DIR/bst-latest.jar $EVAL_DIR/bst-latest.jar
 
+cd $DPUJVM_DIR
+rm dpuslave || true
+make dpuslave
+cp dpuslave $EVAL_DIR/dpuslave
 cd $JDPU_DIR
 javac -sourcepath ./src -d ./out2 ./src/Main.java -classpath ./src/dpu.jar
 cd $OUT2_DIR

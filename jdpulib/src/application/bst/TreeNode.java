@@ -8,10 +8,22 @@ public abstract class TreeNode implements Serializable {
     public TreeNode left;
     public TreeNode right;
 
+    private final int[] testArray;
+
     public TreeNode(int k, int v) {
         this.key = k;
         this.val = v;
+        testArray = new int[3];
     }
+
+    public void setTestArray(int index, int value) {
+        testArray[index] = value;
+    }
+
+    public int getTestArray(int index) {
+        return testArray[index];
+    }
+
     public TreeNode getLeft() {
         return left;
     }
@@ -44,13 +56,13 @@ public abstract class TreeNode implements Serializable {
         return val;
     }
 
-    public void insert(int k, int v){
-        if(k < getKey()){
+    public void insert(int k, int v) {
+        if (k < getKey()) {
             if (getLeft() == null)
                 setLeft(createNode(k, v));
             else
                 getLeft().insert(k, v);
-        }else{
+        } else {
             if (getRight() == null)
                 setRight(createNode(k, v));
             else
@@ -58,11 +70,12 @@ public abstract class TreeNode implements Serializable {
         }
     }
 
-    public int search(int k){
-        if(k == getKey()) return getVal();
-        if(k < getKey() && getLeft() != null){
+    public int search(int k) {
+        if (k == getKey())
+            return getVal();
+        if (k < getKey() && getLeft() != null) {
             return getLeft().search(k);
-        }else if(k >= getKey() && getRight() != null){
+        } else if (k >= getKey() && getRight() != null) {
             return getRight().search(k);
         }
         return -1;
@@ -70,7 +83,4 @@ public abstract class TreeNode implements Serializable {
 
     public abstract TreeNode createNode(int k, int v);
 
-
 }
-
-

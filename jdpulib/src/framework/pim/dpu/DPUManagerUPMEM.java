@@ -391,7 +391,7 @@ public class DPUManagerUPMEM extends DPUManager {
         try {
             garbageCollector.pushParameters(paramsConverted, tasklet);
 
-            dpuExecute(null);
+            dpuExecute(UPMEM.printStream);
         } catch (DpuException e) {
             throw new RuntimeException(e);
         }

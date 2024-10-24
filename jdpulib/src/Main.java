@@ -225,7 +225,9 @@ public class Main {
                 .setDpuInUseCount(1)
                 .setThreadPerDPU(1)
                 .setUseSimulator(false)
-                .setEnableProfilingRPCDataMovement(false);
+                .setEnableProfilingRPCDataMovement(false)
+                // .setPrintStream(System.out);
+                .setPrintStream(null);
 
         // UPMEM initialization
         UPMEM.initialize(upmemConfigurator);
@@ -235,6 +237,9 @@ public class Main {
         // UPMEM.getInstance().getDPUManager(0).dpuClassFileManager.loadClassToDPU(DPUTreeNode.class);
         TreeNode root = (TreeNode) UPMEM.getInstance().createObject(0, DPUTreeNode.class, 0, 3);
         System.out.println("root.value = " + root.getVal());
+        System.out.println("testArray[0] = " + root.getTestArray(1));
+        root.setTestArray(1, 3);
+        System.out.println("testArray[0] = " + root.getTestArray(1));
 
         // // Evaluate performance. In performance evaluation mode, the execution time
         // would be measured.

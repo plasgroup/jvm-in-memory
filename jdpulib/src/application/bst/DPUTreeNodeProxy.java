@@ -38,15 +38,28 @@ public class DPUTreeNodeProxy extends DPUTreeNode implements IDPUProxyObject {
     public DPUTreeNodeProxy(int k, int v) {
         super(k, v);
     }
+
     public DPUTreeNodeProxy(int k, int v, int dpuID, int mramAddress) {
         super(k, v);
         this.dpuID = dpuID;
         this.address = mramAddress;
     }
+
+    @Override
+    public void setTestArray(int index, int value) {
+        invokeMethod(dpuID, address, "application/bst/TreeNode", "setTestArray:(II)V", index, value);
+    }
+
+    @Override
+    public int getTestArray(int index) {
+        invokeMethod(dpuID, address, "application/bst/TreeNode", "getTestArray:(I)I", index);
+        return getIReturnValue(dpuID);
+    }
+
     @Override
     public TreeNode getLeft() {
         getLeftDispatchCount++;
-        invokeMethod(dpuID, address,"application/bst/TreeNode", "getLeft:()Lpim/algorithm/TreeNode;");
+        invokeMethod(dpuID, address, "application/bst/TreeNode", "getLeft:()Lpim/algorithm/TreeNode;");
         return (TreeNode) getAReturnValue(dpuID, DPUTreeNodeProxy.class);
     }
 
@@ -65,11 +78,12 @@ public class DPUTreeNodeProxy extends DPUTreeNode implements IDPUProxyObject {
 
     @Override
     public void setLeft(TreeNode left) {
-        invokeMethod(dpuID, address,"application/bst/TreeNode", "setLeft:(Lpim/algorithm/TreeNode;)V", left);
+        invokeMethod(dpuID, address, "application/bst/TreeNode", "setLeft:(Lpim/algorithm/TreeNode;)V", left);
     }
+
     @Override
     public void setKey(int key) {
-        invokeMethod(dpuID, address,"application/bst/TreeNode", "setKey:(I)V", key);
+        invokeMethod(dpuID, address, "application/bst/TreeNode", "setKey:(I)V", key);
     }
 
     @Override
@@ -79,20 +93,20 @@ public class DPUTreeNodeProxy extends DPUTreeNode implements IDPUProxyObject {
 
     @Override
     public int getVal() {
-        invokeMethod(dpuID, address,"application/bst/TreeNode", "getVal:()I");
+        invokeMethod(dpuID, address, "application/bst/TreeNode", "getVal:()I");
         return getIReturnValue(dpuID);
     }
 
     @Override
-    public TreeNode createNode(int k, int v){
-        invokeMethod(dpuID, address,"application/bst/TreeNode", "createNode:(II)Lpim/algorithm/TreeNode;", k, v);
+    public TreeNode createNode(int k, int v) {
+        invokeMethod(dpuID, address, "application/bst/TreeNode", "createNode:(II)Lpim/algorithm/TreeNode;", k, v);
         return (TreeNode) getAReturnValue(dpuID, DPUTreeNodeProxy.class);
     }
 
     @Override
     public int getKey() {
 
-        invokeMethod(dpuID, address,"application/bst/TreeNode", "getKey:()I");
+        invokeMethod(dpuID, address, "application/bst/TreeNode", "getKey:()I");
         int retVal = getIReturnValue(dpuID);
         return retVal;
     }
@@ -101,7 +115,7 @@ public class DPUTreeNodeProxy extends DPUTreeNode implements IDPUProxyObject {
     public void insert(int k, int v) {
         long s = System.nanoTime();
         DPULookupTableManager classCacheManager1 = UPMEM.getInstance().getDPUManager(dpuID).classCacheManager;
-        invokeMethod(dpuID, address,"application/bst/TreeNode", "insert:(II)V", k, v);
+        invokeMethod(dpuID, address, "application/bst/TreeNode", "insert:(II)V", k, v);
         BSTTester.prepareTimeTotal += System.nanoTime() - s;
     }
 
@@ -112,4 +126,3 @@ public class DPUTreeNodeProxy extends DPUTreeNode implements IDPUProxyObject {
         return retVal;
     }
 }
-
