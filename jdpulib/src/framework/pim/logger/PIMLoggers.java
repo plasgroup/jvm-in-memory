@@ -15,21 +15,22 @@ public class PIMLoggers {
     public static Logger jvmSimulatorLogger = appendLogger("simulator:jvm");
     public static Logger pimTreeLogger = appendLogger("pimtree:appmain");
 
-    static{
-        disableLoggers( "tree:cpu-node", "bst:testing", "bst:building",
-                "framework.pim:class-file-analyzer",   "framework.pim:cache", "framework.pim:framework.pim-manager", "framework.pim:dpu-manager",
-                "framework.pim:gc", "framework.pim:classfile", "simulator:jvm"
-                );
-        Logger.disableAllBeginWith("pim");
+    static {
+        // disableLoggers("tree:cpu-node", "bst:testing", "bst:building",
+        // "framework.pim:class-file-analyzer", "framework.pim:cache",
+        // "framework.pim:framework.pim-manager",
+        // "framework.pim:dpu-manager",
+        // "framework.pim:gc", "framework.pim:classfile" , "simulator:jvm");
+        // Logger.disableAllBeginWith("pim");
     }
 
-    private static Logger appendLogger(String loggerName){
+    private static Logger appendLogger(String loggerName) {
         Logger logger = Logger.getLogger(loggerName);
         return logger;
     }
 
-    public static void disableLoggers(String... names){
-        for(String name : names){
+    public static void disableLoggers(String... names) {
+        for (String name : names) {
             Logger.getLogger(name).setEnable(false);
         }
     }

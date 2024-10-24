@@ -16,7 +16,7 @@ rm dpuslave || true
 make dpuslave
 cp dpuslave $EVAL_DIR/dpuslave
 cd $JDPU_DIR
-javac -sourcepath ./src -d ./out2 ./src/Main.java -classpath ./src/dpu.jar
+javac -encoding UTF-8 -sourcepath ./src -d ./out2 ./src/Main.java -classpath ./src/dpu.jar
 cd $OUT2_DIR
 jar cvfm bst-latest.jar MANIFEST.MF .
 cp bst-latest.jar $EVAL_DIR/bst-latest.jar

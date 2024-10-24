@@ -5,6 +5,7 @@ import framework.pim.UPMEMConfigurator;
 import application.bst.BSTBuilder;
 import application.bst.BSTTester;
 import application.bst.DPUTreeNode;
+import application.bst.NBodySystem;
 import application.bst.TreeNode;
 import framework.pim.dpu.classloader.ClassWriter;
 import framework.primitive.control.ControlPrimitives;
@@ -235,11 +236,8 @@ public class Main {
 
         // Test DPUTreeNode
         // UPMEM.getInstance().getDPUManager(0).dpuClassFileManager.loadClassToDPU(DPUTreeNode.class);
-        TreeNode root = (TreeNode) UPMEM.getInstance().createObject(0, DPUTreeNode.class, 0, 3);
-        System.out.println("root.value = " + root.getVal());
-        System.out.println("testArray[0] = " + root.getTestArray(1));
-        root.setTestArray(1, 3);
-        System.out.println("testArray[0] = " + root.getTestArray(1));
+        NBodySystem nbs = (NBodySystem) UPMEM.getInstance().createObject(0, NBodySystem.class);
+        System.out.println("nbd.test() = " + nbs.test());
 
         // // Evaluate performance. In performance evaluation mode, the execution time
         // would be measured.
