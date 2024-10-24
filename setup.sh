@@ -1,13 +1,13 @@
 #!/bin/bash
 
-JVM_IN_MEMORY_ROOT_DIR=$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")
+JVM_IN_MEMORY_ROOT_DIR=$(realpath $(dirname "$(readlink -f "${BASH_SOURCE[0]}")"))
 
 # UPMEM SDK
 if [ ! -d upmem-2023.1.0-Linux-x86_64 ]; then
   wget http://sdk-releases.upmem.com/2023.1.0/debian_10/upmem-2023.1.0-Linux-x86_64.tar.gz
   tar xzvf upmem-2023.1.0-Linux-x86_64.tar.gz
 fi
-if [ ! -f upmem-src-2023.1.0-Linux-x86_64.tar.gz ]; then
+if [ ! -d upmem-2023.1.0-Linux-x86_64/src ]; then
     wget http://sdk-releases.upmem.com/2023.1.0/upmem-src-2023.1.0-Linux-x86_64.tar.gz
     tar xzvf upmem-src-2023.1.0-Linux-x86_64.tar.gz
 fi
