@@ -222,10 +222,10 @@ public class Main {
         // UPMEM configurator
 
         upmemConfigurator
-                .setDpuInUseCount(dpuInUse)
-                .setThreadPerDPU(tasklets)
-                .setUseSimulator(useSimulator)
-                .setEnableProfilingRPCDataMovement(true);
+                .setDpuInUseCount(1)
+                .setThreadPerDPU(1)
+                .setUseSimulator(false)
+                .setEnableProfilingRPCDataMovement(false);
 
         // UPMEM initialization
         UPMEM.initialize(upmemConfigurator);
