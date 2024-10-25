@@ -631,13 +631,18 @@ public class DPUClassFileManagerUPMEM extends DPUClassFileManager {
 
         // debug
 
-        classfileLogger.logln("thisClass: " + jc.thisClass + " superClass: " + jc.superClass);
-        classfileLogger.logln("thisClassNameIndex: " + (short) (jc.entryItems[jc.thisClass] & 0xFFFF));
-        classfileLogger.logln("superClassNameIndex: " + (short) (jc.entryItems[jc.superClass] & 0xFFFF));
-        classfileLogger.logln(
-                "thisClassName: " + ClassLoaderUtils.getUTF8(jc, (short) (jc.entryItems[jc.thisClass] & 0xFFFF)));
-        classfileLogger.logln(
-                " superClassName: " + ClassLoaderUtils.getUTF8(jc, (short) (jc.entryItems[jc.superClass] & 0xFFFF)));
+        classfileLogger.logln("thisClass: " + jc.thisClass + " superClass: " +
+                jc.superClass);
+        // classfileLogger.logln("thisClassNameIndex: " + (short)
+        // (jc.entryItems[jc.thisClass] & 0xFFFF));
+        // classfileLogger.logln("superClassNameIndex: " + (short)
+        // (jc.entryItems[jc.superClass] & 0xFFFF));
+        // classfileLogger.logln(
+        // "thisClassName: " + ClassLoaderUtils.getUTF8(jc, (short)
+        // (jc.entryItems[jc.thisClass] & 0xFFFF)));
+        // classfileLogger.logln(
+        // " superClassName: " + ClassLoaderUtils.getUTF8(jc, (short)
+        // (jc.entryItems[jc.superClass] & 0xFFFF)));
         return jc;
     }
 }

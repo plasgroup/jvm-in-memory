@@ -443,8 +443,8 @@ public class ClassFileAnalyzer {
                         + " superClassName: "
                         + ClassLoaderUtils.getUTF8(jc, (short) (jc.entryItems[jc.superClass] & 0xFFFF)));
         classfileAnalyzerLogger.logln(
-                "thisClassNameIndex: " + (short) (jc.entryItems[jc.thisClass] & 0xFFFF) + " superClassNameIndex: "
-                        + (short) (jc.entryItems[jc.superClass] & 0xFFFF));
+                "thisClassNameIndex: " + ((short) (jc.entryItems[jc.thisClass] & 0xFFFF)) + " superClassNameIndex: "
+                        + ((short) (jc.entryItems[jc.superClass] & 0xFFFF)));
 
         classfileAnalyzerLogger.logln("rescan for filling utf_8 string and number area, total size = "
                 + constantAreaSize + " bytes");

@@ -164,6 +164,8 @@ public class Main {
         // System.out.println("nbs.test() = " + nbs.test());
 
         DPUTreeNodeProxy dpuTreeNode = (DPUTreeNodeProxy) UPMEM.getInstance().createObject(0, DPUTreeNode.class, 1, 1);
+        dpuTreeNode.insert(3, 3);
+        ;
 
         // // Evaluate performance. In performance evaluation mode, the execution time
         // would be measured.

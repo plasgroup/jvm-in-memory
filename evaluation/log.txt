@@ -6310,9 +6310,1041 @@ method 13 from 0x490 === 0x228
 thisClass: 8 superClass: 2
 
 
-thisClassNameIndex: 2160
+================= End of load super object ================
 
 
-superClassNameIndex: 0
+get DPUID = 0 class =  application/bst/DPUTreeNode from cache
+set framework.pim.dpu.java_strut.DPUJClass@4ee285c6 to com.upmem.dpu.Dpu@246b179d, key=application/bst/DPUTreeNode, val = 3090f58 class name = application/bst/DPUTreeNode
+
+set method: <init>:(II)V of class application/bst/DPUTreeNode to com.upmem.dpu.Dpu@246b179d v = 3091010
+
+set method: createNode:(II)Lapplication/bst/TreeNode; of class application/bst/DPUTreeNode to com.upmem.dpu.Dpu@246b179d v = 3091030
+
+in java class = application/bst/DPUTreeNode
 
 
+get DPUID = 0 class =  application/bst/TreeNode from cache
+ - #1 is MethodRef, description = application/bst/TreeNode.<init>:(II)V
+
+
+set #1 application/bst/TreeNode.<init>:(II)V index 13
+
+
+ - #9 is MethodRef, description = application/bst/DPUTreeNode.<init>:(II)V
+
+
+set #9 application/bst/DPUTreeNode.<init>:(II)V index 27
+
+
+vtable #0 .
+
+
+vtable #1 java/lang/Object.<init>:()V
+
+
+vtable #2 java/lang/Object.getClass:()Ljava/lang/Class;
+
+
+vtable #3 java/lang/Object.hashCode:()I
+
+
+vtable #4 java/lang/Object.equals:(Ljava/lang/Object;)Z
+
+
+vtable #5 java/lang/Object.clone:()Ljava/lang/Object;
+
+
+vtable #6 java/lang/Object.toString:()Ljava/lang/String;
+
+
+vtable #7 java/lang/Object.notify:()V
+
+
+vtable #8 java/lang/Object.notifyAll:()V
+
+
+vtable #9 java/lang/Object.wait:()V
+
+
+vtable #10 java/lang/Object.wait:(J)V
+
+
+vtable #11 java/lang/Object.wait:(JI)V
+
+
+vtable #12 java/lang/Object.finalize:()V
+
+
+vtable #13 application/bst/TreeNode.<init>:(II)V
+
+
+vtable #14 application/bst/TreeNode.setTestArray:(II)V
+
+
+vtable #15 application/bst/TreeNode.getTestArray:(I)I
+
+
+vtable #16 application/bst/TreeNode.getLeft:()Lapplication/bst/TreeNode;
+
+
+vtable #17 application/bst/TreeNode.getRight:()Lapplication/bst/TreeNode;
+
+
+vtable #18 application/bst/TreeNode.setLeft:(Lapplication/bst/TreeNode;)V
+
+
+vtable #19 application/bst/TreeNode.setRight:(Lapplication/bst/TreeNode;)V
+
+
+vtable #20 application/bst/TreeNode.setKey:(I)V
+
+
+vtable #21 application/bst/TreeNode.setVal:(I)V
+
+
+vtable #22 application/bst/TreeNode.getKey:()I
+
+
+vtable #23 application/bst/TreeNode.getVal:()I
+
+
+vtable #24 application/bst/TreeNode.insert:(II)V
+
+
+vtable #25 application/bst/TreeNode.search:(I)I
+
+
+vtable #26 application/bst/DPUTreeNode.createNode:(II)Lapplication/bst/TreeNode;
+
+
+vtable #27 application/bst/DPUTreeNode.<init>:(II)V
+
+
+
+
+
+ - item 1 line =  
+0a 00 00 00|00 01 00 0d
+
+ - item 2 line =  
+07 00 00 04|00 00 00 04
+
+ - item 3 line =  
+0c 00 00 00|00 05 00 06
+
+ - item 4 line =  
+01 00 18 00|00 00 00 00
+
+ - item 5 line =  
+01 00 06 00|00 00 00 18
+
+ - item 6 line =  
+01 00 05 00|00 00 00 1e
+
+ - item 7 line =  
+07 00 00 08|00 00 00 08
+
+ - item 8 line =  
+01 00 1b 00|00 00 00 23
+
+ - item 9 line =  
+0a 00 00 00|00 02 00 1b
+
+ - item 10 line =  
+01 00 04 00|00 00 00 3e
+
+ - item 11 line =  
+01 00 0f 00|00 00 00 42
+
+ - item 12 line =  
+01 00 0a 00|00 00 00 51
+
+ - item 13 line =  
+01 00 1e 00|00 00 00 5b
+
+ - item 14 line =  
+01 00 0a 00|00 00 00 79
+
+ - item 15 line =  
+01 00 10 00|00 00 00 83
+
+ - In class application.bst.DPUTreeNode resolve unknow name
+
+
+In #0 of class 8 application.bst.DPUTreeNode: tag = 0, whole line = 0
+
+
+In #1 of class 8 application.bst.DPUTreeNode: tag = 10, whole line = a0000000001000d
+
+
+In #1 MethodRef: 
+
+
+method Table Index = 13
+
+
+global class Index = 1
+
+
+get DPUID = 0 class =  application/bst/TreeNode from cache
+description = application/bst/TreeNode.<init>:(II)V
+
+
+get DPUID = 0 method =  <init>:(II)V of class application/bst/TreeNode from cache
+
+class application/bst/TreeNode loaded, mram addr = 0x3090870
+
+get DPUID = 0 class =  application/bst/TreeNode from cache
+methodName = <init>
+
+
+type desc = (II)V
+
+
+return val = V
+
+
+params desc = II
+
+
+3090ad8
+
+In #2 of class 8 application.bst.DPUTreeNode: tag = 7, whole line = 700000400000004
+
+
+In #2 ClassRef: 
+
+
+className = application/bst/TreeNode, index = #4
+
+
+class application/bst/TreeNode loaded, mram addr = 0x3090870
+
+In #3 of class 8 application.bst.DPUTreeNode: tag = 12, whole line = c00000000050006
+
+
+In #4 of class 8 application.bst.DPUTreeNode: tag = 1, whole line = 100180000000000
+
+
+In #5 of class 8 application.bst.DPUTreeNode: tag = 1, whole line = 100060000000018
+
+
+In #6 of class 8 application.bst.DPUTreeNode: tag = 1, whole line = 10005000000001e
+
+
+In #7 of class 8 application.bst.DPUTreeNode: tag = 7, whole line = 700000800000008
+
+
+In #7 ClassRef: 
+
+
+className = application/bst/DPUTreeNode, index = #8
+
+
+class application/bst/DPUTreeNode loaded, mram addr = 0x3090f58
+
+In #8 of class 8 application.bst.DPUTreeNode: tag = 1, whole line = 1001b0000000023
+
+
+In #9 of class 8 application.bst.DPUTreeNode: tag = 10, whole line = a0000000002001b
+
+
+In #9 MethodRef: 
+
+
+method Table Index = 27
+
+
+global class Index = 2
+
+
+get DPUID = 0 class =  application/bst/DPUTreeNode from cache
+description = application/bst/DPUTreeNode.<init>:(II)V
+
+
+get DPUID = 0 method =  <init>:(II)V of class application/bst/DPUTreeNode from cache
+
+class application/bst/DPUTreeNode loaded, mram addr = 0x3090f58
+
+get DPUID = 0 class =  application/bst/DPUTreeNode from cache
+methodName = <init>
+
+
+type desc = (II)V
+
+
+return val = V
+
+
+params desc = II
+
+
+3091010
+
+In #10 of class 8 application.bst.DPUTreeNode: tag = 1, whole line = 10004000000003e
+
+
+In #11 of class 8 application.bst.DPUTreeNode: tag = 1, whole line = 1000f0000000042
+
+
+In #12 of class 8 application.bst.DPUTreeNode: tag = 1, whole line = 1000a0000000051
+
+
+In #13 of class 8 application.bst.DPUTreeNode: tag = 1, whole line = 1001e000000005b
+
+
+In #14 of class 8 application.bst.DPUTreeNode: tag = 1, whole line = 1000a0000000079
+
+
+In #15 of class 8 application.bst.DPUTreeNode: tag = 1, whole line = 100100000000083
+
+
+End of for loop: resolve unknow name
+
+
+get DPUID = 0 method =   of class  from cache
+
+get DPUID = 0 method =  <init>:()V of class java/lang/Object from cache
+
+get DPUID = 0 class =  java/lang/Object from cache
+get DPUID = 0 method =  getClass:()Ljava/lang/Class; of class java/lang/Object from cache
+
+get DPUID = 0 class =  java/lang/Object from cache
+get DPUID = 0 method =  hashCode:()I of class java/lang/Object from cache
+
+get DPUID = 0 class =  java/lang/Object from cache
+get DPUID = 0 method =  equals:(Ljava/lang/Object;)Z of class java/lang/Object from cache
+
+get DPUID = 0 class =  java/lang/Object from cache
+get DPUID = 0 method =  clone:()Ljava/lang/Object; of class java/lang/Object from cache
+
+get DPUID = 0 class =  java/lang/Object from cache
+get DPUID = 0 method =  toString:()Ljava/lang/String; of class java/lang/Object from cache
+
+get DPUID = 0 class =  java/lang/Object from cache
+get DPUID = 0 method =  notify:()V of class java/lang/Object from cache
+
+get DPUID = 0 class =  java/lang/Object from cache
+get DPUID = 0 method =  notifyAll:()V of class java/lang/Object from cache
+
+get DPUID = 0 class =  java/lang/Object from cache
+get DPUID = 0 method =  wait:()V of class java/lang/Object from cache
+
+get DPUID = 0 class =  java/lang/Object from cache
+get DPUID = 0 method =  wait:(J)V of class java/lang/Object from cache
+
+get DPUID = 0 class =  java/lang/Object from cache
+get DPUID = 0 method =  wait:(JI)V of class java/lang/Object from cache
+
+get DPUID = 0 class =  java/lang/Object from cache
+get DPUID = 0 method =  finalize:()V of class java/lang/Object from cache
+
+get DPUID = 0 class =  java/lang/Object from cache
+get DPUID = 0 method =  <init>:(II)V of class application/bst/TreeNode from cache
+
+get DPUID = 0 class =  application/bst/TreeNode from cache
+get DPUID = 0 method =  setTestArray:(II)V of class application/bst/TreeNode from cache
+
+get DPUID = 0 class =  application/bst/TreeNode from cache
+get DPUID = 0 method =  getTestArray:(I)I of class application/bst/TreeNode from cache
+
+get DPUID = 0 class =  application/bst/TreeNode from cache
+get DPUID = 0 method =  getLeft:()Lapplication/bst/TreeNode; of class application/bst/TreeNode from cache
+
+get DPUID = 0 class =  application/bst/TreeNode from cache
+get DPUID = 0 method =  getRight:()Lapplication/bst/TreeNode; of class application/bst/TreeNode from cache
+
+get DPUID = 0 class =  application/bst/TreeNode from cache
+get DPUID = 0 method =  setLeft:(Lapplication/bst/TreeNode;)V of class application/bst/TreeNode from cache
+
+get DPUID = 0 class =  application/bst/TreeNode from cache
+get DPUID = 0 method =  setRight:(Lapplication/bst/TreeNode;)V of class application/bst/TreeNode from cache
+
+get DPUID = 0 class =  application/bst/TreeNode from cache
+get DPUID = 0 method =  setKey:(I)V of class application/bst/TreeNode from cache
+
+get DPUID = 0 class =  application/bst/TreeNode from cache
+get DPUID = 0 method =  setVal:(I)V of class application/bst/TreeNode from cache
+
+get DPUID = 0 class =  application/bst/TreeNode from cache
+get DPUID = 0 method =  getKey:()I of class application/bst/TreeNode from cache
+
+get DPUID = 0 class =  application/bst/TreeNode from cache
+get DPUID = 0 method =  getVal:()I of class application/bst/TreeNode from cache
+
+get DPUID = 0 class =  application/bst/TreeNode from cache
+get DPUID = 0 method =  insert:(II)V of class application/bst/TreeNode from cache
+
+get DPUID = 0 class =  application/bst/TreeNode from cache
+get DPUID = 0 method =  search:(I)I of class application/bst/TreeNode from cache
+
+get DPUID = 0 class =  application/bst/TreeNode from cache
+get DPUID = 0 method =  createNode:(II)Lapplication/bst/TreeNode; of class application/bst/DPUTreeNode from cache
+
+get DPUID = 0 class =  application/bst/DPUTreeNode from cache
+get DPUID = 0 method =  <init>:(II)V of class application/bst/DPUTreeNode from cache
+
+get DPUID = 0 class =  application/bst/DPUTreeNode from cache
+get DPUID = 0 class =  application/bst/DPUTreeNode from cache
+print 0x93 to 28
+
+print 3090f90 in 14
+
+print 0x3091010 to 24
+
+method 0 from 0xb8 === 0x0
+
+method 1 from 0xd8 === 0x20
+
+=============== !Alert pos = 632 === total-size = 632 ================
+
+ ==========--> End of load class application.bst.DPUTreeNode to dpu#0 <--==========
+
+
+thisClass: 7 superClass: 2
+
+
+createObject: after loadClassToDPU
+get DPUID = 0 class =  application/bst/DPUTreeNode from cache
+get DPUID = 0 method =  <init>:(II)V of class application/bst/DPUTreeNode from cache
+
+get DPUID = 0 method =  <init>:(II)V of class application/bst/DPUTreeNode from cache
+
+=== DPU#0x0 ===
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+param_buffer(wram)=0x3890000, sim_wram(wram)=(nil), mram = 0x120028
+param_buffer(wram)=0x3890000, sim_wram(wram)=(nil), mram = 0x120028
+param_buffer(wram)=0x3890000, sim_wram(wram)=(nil), mram = 0x120028
+param_buffer(wram)=0x3890000, sim_wram(wram)=(nil), mram = 0x120028
+param_buffer(wram)=0x3890000, sim_wram(wram)=(nil), mram = 0x120028
+param_buffer(wram)=0x3890000, sim_wram(wram)=(nil), mram = 0x120028
+param_buffer(wram)=0x3890000, sim_wram(wram)=(nil), mram = 0x120028
+param_buffer(wram)=0x3890000, sim_wram(wram)=(nil), mram = 0x120028
+param_buffer(wram)=0x3890000, sim_wram(wram)=(nil), mram = 0x120028
+param_buffer(wram)=0x3890000, sim_wram(wram)=(nil), mram = 0x120028
+param_buffer(wram)=0x3890000, sim_wram(wram)=(nil), mram = 0x120028
+param_buffer(wram)=0x3890000, sim_wram(wram)=(nil), mram = 0x120028
+param_buffer(wram)=0x3890000, sim_wram(wram)=(nil), mram = 0x120028
+param_buffer(wram)=0x3890000, sim_wram(wram)=(nil), mram = 0x120028
+param_buffer(wram)=0x3890000, sim_wram(wram)=(nil), mram = 0x120028
+param_buffer(wram)=0x3890000, sim_wram(wram)=(nil), mram = 0x120028
+param_buffer(wram)=0x3890000, sim_wram(wram)=(nil), mram = 0x120028
+param_buffer(wram)=0x3890000, sim_wram(wram)=(nil), mram = 0x120028
+param_buffer(wram)=0x3890000, sim_wram(wram)=(nil), mram = 0x120028
+param_buffer(wram)=0x3890000, sim_wram(wram)=(nil), mram = 0x120028
+param_buffer(wram)=0x3890000, sim_wram(wram)=(nil), mram = 0x120028
+param_buffer(wram)=0x3890000, sim_wram(wram)=(nil), mram = 0x120028
+param_buffer(wram)=0x3890000, sim_wram(wram)=(nil), mram = 0x120028
+param_buffer(wram)=0x3890000, sim_wram(wram)=(nil), mram = 0x120028
+[31m --------------------- (IN DPU) -----------------------------
+[0mmeta_space_pt = 0x30911d0, heap_space_pt = 0x90028, param_pt = 0x3890018
+[31m
+--------------------------------- Create Frame ---------------------------------
+--------- [0] Frame from ((nil)) ------------
+0x389000c params_count = 3
+((nil)) (param) local 0 = 589832 (addr(p): 0x0389000c)
+(0x4) (param) local 1 = 1 (addr(p): 0x03890010)
+(0x8) (param) local 2 = 1 (addr(p): 0x03890014)
+-------> new current_sp = 0xc
+(0xc) --> FP = (0xc) -> old-frame-fp = (nil) 
+(0x10) old-stack-pointer = (nil) 
+(0x14) return pc = 0x0 
+(0x18) method-ref = 0x3091010 
+(0x1c) class-ref = 0x3090f58 
+(0x20) constant-pool-ref = 0x3090f90 
+(0x24) bytecodes = 0x3091028 
+------------------------------ End Create Frame ------------------------------
+code_buffer = 0x3091028
+create frame finished
+FP = (0xc)
+pc:0x0 op = 0x2a, ALOAD_0 (addr: 0x03091028)
+ - Load ref 0x90008 to stack
+>> new sp = 0x28
+pc:0x1 op = 0x1b, ILOAD_1 (addr: 0x03091029)
+ - Load INT 1 to stack
+>> new sp = 0x2c
+pc:0x2 op = 0x1c, ILOAD_2 (addr: 0x0309102a)
+ - Load INT 1 to stack
+>> new sp = 0x30
+pc:0x3 op = 0xb7, INVOKESPECIAL (addr: 0x0309102b)
+ - method-ref-cp-index = 1
+ - jmethod-v-index = 0xd
+ - jmethod-ref = 0x3090ad8
+ - class-ref-cp-index = 2
+ - jclass-ref = 0x3090870
+ - pop 3 elements from operand stack
+ -- new sp = 0x24
+ -- params-pt = 0x30
+ -- return pc = 6
+
+--------------------------------- Create Frame ---------------------------------
+--------- [0] Frame from (0x24) ------------
+ >> create frame from an existed function call
+(0x28) (param) local 0 = 589832
+(0x2c) (param) local 1 = 1
+(0x30) (param) local 2 = 1
+-------> new current_sp = 0x34
+(0x34) --> FP = (0x34) -> old-frame-fp = 0xc 
+(0x38) old-stack-pointer = 0x24 
+(0x3c) return pc = 0x6 
+(0x40) method-ref = 0x3090ad8 
+(0x44) class-ref = 0x3090870 
+(0x48) constant-pool-ref = 0x30908a8 
+(0x4c) bytecodes = 0x3090af0 
+------------------------------ End Create Frame ------------------------------
+pc:0x0 op = 0x2a, ALOAD_0 (addr: 0x03090af0)
+ - Load ref 0x90008 to stack
+>> new sp = 0x50
+pc:0x1 op = 0xb7, INVOKESPECIAL (addr: 0x03090af1)
+ - method-ref-cp-index = 1
+ - jmethod-v-index = 0x1
+ - jmethod-ref = 0x3090318
+ - class-ref-cp-index = 2
+ - jclass-ref = 0x3090000
+ - pop 1 elements from operand stack
+ -- new sp = 0x4c
+ -- params-pt = 0x50
+ -- return pc = 4
+
+--------------------------------- Create Frame ---------------------------------
+--------- [0] Frame from (0x4c) ------------
+ >> create frame from an existed function call
+(0x50) (param) local 0 = 589832
+-------> new current_sp = 0x54
+(0x54) --> FP = (0x54) -> old-frame-fp = 0x34 
+(0x58) old-stack-pointer = 0x4c 
+(0x5c) return pc = 0x4 
+(0x60) method-ref = 0x3090318 
+(0x64) class-ref = 0x3090000 
+(0x68) constant-pool-ref = 0x3090038 
+(0x6c) bytecodes = 0x3090330 
+------------------------------ End Create Frame ------------------------------
+pc:0x0 op = 0xb1, RETURN (addr: 0x03090330)
+return - last-sp = 0x4c
+ - last-fp = 0x34
+ - return-pc = 0x4
+ - change sp to 0x4c
+ - reset pc to 0x04
+ - reset func pt to 0x03090ad8
+ - bytecodes addr: 03090af0
+pc:0x4 op = 0x2a, ALOAD_0 (addr: 0x03090af4)
+ - Load ref 0x90008 to stack
+>> new sp = 0x50
+pc:0x5 op = 0x1b, ILOAD_1 (addr: 0x03090af5)
+ - Load INT 1 to stack
+>> new sp = 0x54
+pc:0x6 op = 0xb5, PUTFIELD (addr: 0x03090af6)
+ - constant table index = 7
+ - field index in instance = 0
+>> new sp = 0x50
+>> new sp = 0x4c
+set val = 1 (hex:0x00000001), at addr(m):0x00090010, instance addr: 0x00090008
+pc:0x9 op = 0x2a, ALOAD_0 (addr: 0x03090af9)
+ - Load ref 0x90008 to stack
+>> new sp = 0x50
+pc:0xa op = 0x1c, ILOAD_2 (addr: 0x03090afa)
+ - Load INT 1 to stack
+>> new sp = 0x54
+pc:0xb op = 0xb5, PUTFIELD (addr: 0x03090afb)
+ - constant table index = 13
+ - field index in instance = 1
+>> new sp = 0x50
+>> new sp = 0x4c
+set val = 1 (hex:0x00000001), at addr(m):0x00090014, instance addr: 0x00090008
+pc:0xe op = 0x2a, ALOAD_0 (addr: 0x03090afe)
+ - Load ref 0x90008 to stack
+>> new sp = 0x50
+pc:0xf op = 0x06, ICONST_3 (addr: 0x03090aff)
+ - push const 3 to stack
+>> new sp = 0x54
+>> new sp = 0x50
+>> new sp = 0x54
+pc:0x12 op = 0xb5, PUTFIELD (addr: 0x03090b02)
+ - constant table index = 16
+ - field index in instance = 4
+>> new sp = 0x50
+>> new sp = 0x4c
+set val = 589864 (hex:0x00090028), at addr(m):0x00090020, instance addr: 0x00090008
+pc:0x15 op = 0xb1, RETURN (addr: 0x03090b05)
+return - last-sp = 0x24
+ - last-fp = 0xc
+ - return-pc = 0x6
+ - change sp to 0x24
+ - reset pc to 0x06
+ - reset func pt to 0x03091010
+ - bytecodes addr: 03091028
+pc:0x6 op = 0xb1, RETURN (addr: 0x0309102e)
+return - last-sp = (nil)
+ - last-fp = (nil)
+ - return-pc = (nil)
+ - >> final frame
+[31m --------------------- (END DPU) -----------------------------
+[0mget DPUID = 0 method =  insert:(II)V of class application/bst/TreeNode from cache
+
+get DPUID = 0 class =  application/bst/TreeNode from cache
+=== DPU#0x0 ===
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+[31m --------------------- (IN DPU) -----------------------------
+[0mmeta_space_pt = 0x30911d0, heap_space_pt = 0x90040, param_pt = 0x3890018
+[31m
+--------------------------------- Create Frame ---------------------------------
+--------- [0] Frame from ((nil)) ------------
+0x389000c params_count = 3
+((nil)) (param) local 0 = 589832 (addr(p): 0x0389000c)
+(0x4) (param) local 1 = 3 (addr(p): 0x03890010)
+(0x8) (param) local 2 = 3 (addr(p): 0x03890014)
+-------> new current_sp = 0xc
+(0xc) --> FP = (0xc) -> old-frame-fp = (nil) 
+(0x10) old-stack-pointer = (nil) 
+(0x14) return pc = 0x0 
+(0x18) method-ref = 0x3090c48 
+(0x1c) class-ref = 0x3090870 
+(0x20) constant-pool-ref = 0x30908a8 
+(0x24) bytecodes = 0x3090c60 
+------------------------------ End Create Frame ------------------------------
+code_buffer = 0x3090c60
+create frame finished
+FP = (0xc)
+pc:0x0 op = 0x1b, ILOAD_1 (addr: 0x03090c60)
+ - Load INT 3 to stack
+>> new sp = 0x28
+pc:0x1 op = 0x2a, ALOAD_0 (addr: 0x03090c61)
+ - Load ref 0x90008 to stack
+>> new sp = 0x2c
+pc:0x2 op = 0xb6, INVOKEVIRTUAL (addr: 0x03090c62)
+ - current-class-ref = 0x3090870
+ - method-ref-cp-index = 27
+ - v-index = 0x16
+ - instance-address [me()]= 0x90008, 0x2c
+ - instance-class-address = 0x3090f58
+ - jclass-ref = 0x3090870
+ - jmethod-ref = 0x3090c08
+ - pop 1 elements from operand stack
+ -- new sp = 0x28
+ -- params-pt = 0x2c
+ -- return pc = 5
+
+--------------------------------- Create Frame ---------------------------------
+--------- [0] Frame from (0x28) ------------
+ >> create frame from an existed function call
+(0x2c) (param) local 0 = 589832
+-------> new current_sp = 0x30
+(0x30) --> FP = (0x30) -> old-frame-fp = 0xc 
+(0x34) old-stack-pointer = 0x28 
+(0x38) return pc = 0x5 
+(0x3c) method-ref = 0x3090c08 
+(0x40) class-ref = 0x3090870 
+(0x44) constant-pool-ref = 0x30908a8 
+(0x48) bytecodes = 0x3090c20 
+------------------------------ End Create Frame ------------------------------
+pc:0x0 op = 0x2a, ALOAD_0 (addr: 0x03090c20)
+ - Load ref 0x90008 to stack
+>> new sp = 0x4c
+pc:0x1 op = 0xb4, GETFIELD (addr: 0x03090c21)
+ - fieldref in cp index = 7
+ - cp val = 0x09000000 | 0x00080000
+ - field index in instance = 0
+>> new sp = 0x48
+ - instance addr(m) = 0x90008, field index = 0, addr(m) = 0x90010
+field val = 0x1
+>> new sp = 0x4c
+pc:0x4 op = 0xac, IRETURN (addr: 0x03090c24)
+>> new sp = 0x48
+ - ret val = 1
+ - last-sp = 0x28
+ - last-fp = 0xc
+ - return-pc = 0x5
+ - change sp to 0x28
+ - push ret val 1
+>> new sp = 0x2c
+ - reset pc to 0x05
+ - reset func pt to 0x03090c48
+ - bytecodes addr: 03090c60
+pc:0x5 op = 0xa2, UNKNOW (addr: 0x03090c65)
+pc:0x6 op = 0x00, NOP (addr: 0x03090c66)
+pc:0x7 op = 0x23, UNKNOW (addr: 0x03090c67)
+--------- (END DPU) -----------------------------
+[0mpc:0x8 op = 0x2a, ALOAD_0 (addr: 0x03090c68)
+ - Load ref 0x90008 to stack
+>> new sp = 0x30
+pc:0x9 op = 0xb6, INVOKEVIRTUAL (addr: 0x03090c69)
+ - current-class-ref = 0x3090870
+ - method-ref-cp-index = 31
+ - v-index = 0x10
+ - instance-address [me()]= 0x90008, 0x30
+ - instance-class-address = 0x3090f58
+ - jclass-ref = 0x3090870
+ - jmethod-ref = 0x3090b48
+ - pop 1 elements from operand stack
+ -- new sp = 0x2c
+ -- params-pt = 0x30
+ -- return pc = 12
+
+--------------------------------- Create Frame ---------------------------------
+--------- [0] Frame from (0x2c) ------------
+ >> create frame from an existed function call
+(0x30) (param) local 0 = 589832
+-------> new current_sp = 0x34
+(0x34) --> FP = (0x34) -> old-frame-fp = 0xc 
+(0x38) old-stack-pointer = 0x2c 
+(0x3c) return pc = 0xc 
+(0x40) method-ref = 0x3090b48 
+(0x44) class-ref = 0x3090870 
+(0x48) constant-pool-ref = 0x30908a8 
+(0x4c) bytecodes = 0x3090b60 
+------------------------------ End Create Frame ------------------------------
+pc:0x0 op = 0x2a, ALOAD_0 (addr: 0x03090b60)
+ - Load ref 0x90008 to stack
+>> new sp = 0x50
+pc:0x1 op = 0xb4, GETFIELD (addr: 0x03090b61)
+ - fieldref in cp index = 20
+ - cp val = 0x09000000 | 0x00080002
+ - field index in instance = 2
+>> new sp = 0x4c
+ - instance addr(m) = 0x90008, field index = 2, addr(m) = 0x90018
+field val = 0x0
+>> new sp = 0x50
+pc:0x4 op = 0xb0, ARETURN (addr: 0x03090b64)
+>> new sp = 0x4c
+ - ret val = 0
+ - last-sp = 0x2c
+ - last-fp = 0xc
+ - return-pc = 0xc
+ - change sp to 0x2c
+ - push ret val 0
+>> new sp = 0x30
+ - reset pc to 0x0c
+ - reset func pt to 0x03090c48
+ - bytecodes addr: 03090c60
+pc:0xc op = 0xc7, UNKNOW (addr: 0x03090c6c)
+pc:0xd op = 0x00, NOP (addr: 0x03090c6d)
+pc:0xe op = 0x10, UNKNOW (addr: 0x03090c6e)
+--------- (END DPU) -----------------------------
+[0mpc:0xf op = 0x2a, ALOAD_0 (addr: 0x03090c6f)
+ - Load ref 0x90008 to stack
+>> new sp = 0x34
+pc:0x10 op = 0x2a, ALOAD_0 (addr: 0x03090c70)
+ - Load ref 0x90008 to stack
+>> new sp = 0x38
+pc:0x11 op = 0x1b, ILOAD_1 (addr: 0x03090c71)
+ - Load INT 3 to stack
+>> new sp = 0x3c
+pc:0x12 op = 0x1c, ILOAD_2 (addr: 0x03090c72)
+ - Load INT 3 to stack
+>> new sp = 0x40
+pc:0x13 op = 0xb6, INVOKEVIRTUAL (addr: 0x03090c73)
+ - current-class-ref = 0x3090870
+ - method-ref-cp-index = 35
+ - v-index = 0x1a
+ - instance-address [me()]= 0x90008, 0x38
+ - instance-class-address = 0x3090f58
+ - jclass-ref = 0x3090f58
+ - jmethod-ref = 0x3091030
+ - pop 3 elements from operand stack
+ -- new sp = 0x34
+ -- params-pt = 0x40
+ -- return pc = 22
+
+--------------------------------- Create Frame ---------------------------------
+--------- [0] Frame from (0x34) ------------
+ >> create frame from an existed function call
+(0x38) (param) local 0 = 589832
+(0x3c) (param) local 1 = 3
+(0x40) (param) local 2 = 3
+-------> new current_sp = 0x44
+(0x44) --> FP = (0x44) -> old-frame-fp = 0xc 
+(0x48) old-stack-pointer = 0x34 
+(0x4c) return pc = 0x16 
+(0x50) method-ref = 0x3091030 
+(0x54) class-ref = 0x3090f58 
+(0x58) constant-pool-ref = 0x3090f90 
+(0x5c) bytecodes = 0x3091048 
+------------------------------ End Create Frame ------------------------------
+pc:0x0 op = 0xbb, NEW (addr: 0x03091048)
+ - count field count
+ - + 0
+ -- super class index = 2
+ -- super class addr = 0x3090870
+ - + 5
+ -- super class index = 2
+ -- super class addr = 0x3090000
+ - + 0
+ -- super class index = 0
+ -- super class addr = (nil)
+ - field count = 5, instance size = 28
+ - allocate instance in mram 0x90040
+>> new sp = 0x60
+ - write class addr: 0x3090f58
+pc:0x3 op = 0x59, DUP (addr: 0x0309104b)
+ - dup 589888(hex: 90040)
+>> new sp = 0x64
+pc:0x4 op = 0x1b, ILOAD_1 (addr: 0x0309104c)
+ - Load INT 3 to stack
+>> new sp = 0x68
+pc:0x5 op = 0x1c, ILOAD_2 (addr: 0x0309104d)
+ - Load INT 3 to stack
+>> new sp = 0x6c
+pc:0x6 op = 0xb7, INVOKESPECIAL (addr: 0x0309104e)
+ - method-ref-cp-index = 9
+ - jmethod-v-index = 0x1b
+ - jmethod-ref = 0x3091010
+ - class-ref-cp-index = 7
+ - jclass-ref = 0x3090f58
+ - pop 3 elements from operand stack
+ -- new sp = 0x60
+ -- params-pt = 0x6c
+ -- return pc = 9
+
+--------------------------------- Create Frame ---------------------------------
+--------- [0] Frame from (0x60) ------------
+ >> create frame from an existed function call
+(0x64) (param) local 0 = 589888
+(0x68) (param) local 1 = 3
+(0x6c) (param) local 2 = 3
+-------> new current_sp = 0x70
+(0x70) --> FP = (0x70) -> old-frame-fp = 0x44 
+(0x74) old-stack-pointer = 0x60 
+(0x78) return pc = 0x9 
+(0x7c) method-ref = 0x3091010 
+(0x80) class-ref = 0x3090f58 
+(0x84) constant-pool-ref = 0x3090f90 
+(0x88) bytecodes = 0x3091028 
+------------------------------ End Create Frame ------------------------------
+pc:0x0 op = 0x2a, ALOAD_0 (addr: 0x03091028)
+ - Load ref 0x90040 to stack
+>> new sp = 0x8c
+pc:0x1 op = 0x1b, ILOAD_1 (addr: 0x03091029)
+ - Load INT 3 to stack
+>> new sp = 0x90
+pc:0x2 op = 0x1c, ILOAD_2 (addr: 0x0309102a)
+ - Load INT 3 to stack
+>> new sp = 0x94
+pc:0x3 op = 0xb7, INVOKESPECIAL (addr: 0x0309102b)
+ - method-ref-cp-index = 1
+ - jmethod-v-index = 0xd
+ - jmethod-ref = 0x3090ad8
+ - class-ref-cp-index = 2
+ - jclass-ref = 0x3090870
+ - pop 3 elements from operand stack
+ -- new sp = 0x88
+ -- params-pt = 0x94
+ -- return pc = 6
+
+--------------------------------- Create Frame ---------------------------------
+--------- [0] Frame from (0x88) ------------
+ >> create frame from an existed function call
+(0x8c) (param) local 0 = 589888
+(0x90) (param) local 1 = 3
+(0x94) (param) local 2 = 3
+-------> new current_sp = 0x98
+(0x98) --> FP = (0x98) -> old-frame-fp = 0x70 
+(0x9c) old-stack-pointer = 0x88 
+(0xa0) return pc = 0x6 
+(0xa4) method-ref = 0x3090ad8 
+(0xa8) class-ref = 0x3090870 
+(0xac) constant-pool-ref = 0x30908a8 
+(0xb0) bytecodes = 0x3090af0 
+------------------------------ End Create Frame ------------------------------
+pc:0x0 op = 0x2a, ALOAD_0 (addr: 0x03090af0)
+ - Load ref 0x90040 to stack
+>> new sp = 0xb4
+pc:0x1 op = 0xb7, INVOKESPECIAL (addr: 0x03090af1)
+ - method-ref-cp-index = 1
+ - jmethod-v-index = 0x1
+ - jmethod-ref = 0x3090318
+ - class-ref-cp-index = 2
+ - jclass-ref = 0x3090000
+ - pop 1 elements from operand stack
+ -- new sp = 0xb0
+ -- params-pt = 0xb4
+ -- return pc = 4
+
+--------------------------------- Create Frame ---------------------------------
+--------- [0] Frame from (0xb0) ------------
+ >> create frame from an existed function call
+(0xb4) (param) local 0 = 589888
+-------> new current_sp = 0xb8
+(0xb8) --> FP = (0xb8) -> old-frame-fp = 0x98 
+(0xbc) old-stack-pointer = 0xb0 
+(0xc0) return pc = 0x4 
+(0xc4) method-ref = 0x3090318 
+(0xc8) class-ref = 0x3090000 
+(0xcc) constant-pool-ref = 0x3090038 
+(0xd0) bytecodes = 0x3090330 
+------------------------------ End Create Frame ------------------------------
+pc:0x0 op = 0xb1, RETURN (addr: 0x03090330)
+return - last-sp = 0xb0
+ - last-fp = 0x98
+ - return-pc = 0x4
+ - change sp to 0xb0
+ - reset pc to 0x04
+ - reset func pt to 0x03090ad8
+ - bytecodes addr: 03090af0
+pc:0x4 op = 0x2a, ALOAD_0 (addr: 0x03090af4)
+ - Load ref 0x90040 to stack
+>> new sp = 0xb4
+pc:0x5 op = 0x1b, ILOAD_1 (addr: 0x03090af5)
+ - Load INT 3 to stack
+>> new sp = 0xb8
+pc:0x6 op = 0xb5, PUTFIELD (addr: 0x03090af6)
+ - constant table index = 7
+ - field index in instance = 0
+>> new sp = 0xb4
+>> new sp = 0xb0
+set val = 3 (hex:0x00000003), at addr(m):0x00090048, instance addr: 0x00090040
+pc:0x9 op = 0x2a, ALOAD_0 (addr: 0x03090af9)
+ - Load ref 0x90040 to stack
+>> new sp = 0xb4
+pc:0xa op = 0x1c, ILOAD_2 (addr: 0x03090afa)
+ - Load INT 3 to stack
+>> new sp = 0xb8
+pc:0xb op = 0xb5, PUTFIELD (addr: 0x03090afb)
+ - constant table index = 13
+ - field index in instance = 1
+>> new sp = 0xb4
+>> new sp = 0xb0
+set val = 3 (hex:0x00000003), at addr(m):0x0009004c, instance addr: 0x00090040
+pc:0xe op = 0x2a, ALOAD_0 (addr: 0x03090afe)
+ - Load ref 0x90040 to stack
+>> new sp = 0xb4
+pc:0xf op = 0x06, ICONST_3 (addr: 0x03090aff)
+ - push const 3 to stack
+>> new sp = 0xb8
+>> new sp = 0xb4
+>> new sp = 0xb8
+pc:0x12 op = 0xb5, PUTFIELD (addr: 0x03090b02)
+ - constant table index = 16
+ - field index in instance = 4
+>> new sp = 0xb4
+>> new sp = 0xb0
+set val = 589916 (hex:0x0009005c), at addr(m):0x00090058, instance addr: 0x00090040
+pc:0x15 op = 0xb1, RETURN (addr: 0x03090b05)
+return - last-sp = 0x88
+ - last-fp = 0x70
+ - return-pc = 0x6
+ - change sp to 0x88
+ - reset pc to 0x06
+ - reset func pt to 0x03091010
+ - bytecodes addr: 03091028
+pc:0x6 op = 0xb1, RETURN (addr: 0x0309102e)
+return - last-sp = 0x60
+ - last-fp = 0x44
+ - return-pc = 0x9
+ - change sp to 0x60
+ - reset pc to 0x09
+ - reset func pt to 0x03091030
+ - bytecodes addr: 03091048
+pc:0x9 op = 0xb0, ARETURN (addr: 0x03091051)
+>> new sp = 0x5c
+ - ret val = 589888
+ - last-sp = 0x34
+ - last-fp = 0xc
+ - return-pc = 0x16
+ - change sp to 0x34
+ - push ret val 589888
+>> new sp = 0x38
+ - reset pc to 0x16
+ - reset func pt to 0x03090c48
+ - bytecodes addr: 03090c60
+pc:0x16 op = 0xb6, INVOKEVIRTUAL (addr: 0x03090c76)
+ - current-class-ref = 0x3090870
+ - method-ref-cp-index = 39
+ - v-index = 0x12
+ - instance-address [me()]= 0x90008, 0x34
+ - instance-class-address = 0x3090f58
+ - jclass-ref = 0x3090870
+ - jmethod-ref = 0x3090b88
+ - pop 2 elements from operand stack
+ -- new sp = 0x30
+ -- params-pt = 0x38
+ -- return pc = 25
+
+--------------------------------- Create Frame ---------------------------------
+--------- [0] Frame from (0x30) ------------
+ >> create frame from an existed function call
+(0x34) (param) local 0 = 589832
+(0x38) (param) local 1 = 589888
+-------> new current_sp = 0x3c
+(0x3c) --> FP = (0x3c) -> old-frame-fp = 0xc 
+(0x40) old-stack-pointer = 0x30 
+(0x44) return pc = 0x19 
+(0x48) method-ref = 0x3090b88 
+(0x4c) class-ref = 0x3090870 
+(0x50) constant-pool-ref = 0x30908a8 
+(0x54) bytecodes = 0x3090ba0 
+------------------------------ End Create Frame ------------------------------
+pc:0x0 op = 0x2a, ALOAD_0 (addr: 0x03090ba0)
+ - Load ref 0x90008 to stack
+>> new sp = 0x58
+pc:0x1 op = 0x2b, ALOAD_1 (addr: 0x03090ba1)
+ - Load ref 0x90040 to stack
+>> new sp = 0x5c
+pc:0x2 op = 0xb5, PUTFIELD (addr: 0x03090ba2)
+ - constant table index = 20
+ - field index in instance = 2
+>> new sp = 0x58
+>> new sp = 0x54
+set val = 589888 (hex:0x00090040), at addr(m):0x00090018, instance addr: 0x00090008
+pc:0x5 op = 0xb1, RETURN (addr: 0x03090ba5)
+return - last-sp = 0x30
+ - last-fp = 0xc
+ - return-pc = 0x19
+ - change sp to 0x30
+ - reset pc to 0x19
+ - reset func pt to 0x03090c48
+ - bytecodes addr: 03090c60
+pc:0x19 op = 0xa7, GOTO (addr: 0x03090c79)
+ - goto 69
+pc:0x45 op = 0xb1, RETURN (addr: 0x03090ca5)
+return - last-sp = (nil)
+ - last-fp = (nil)
+ - return-pc = (nil)
+ - >> final frame
+[31m --------------------- (END DPU) -----------------------------
+[0m
