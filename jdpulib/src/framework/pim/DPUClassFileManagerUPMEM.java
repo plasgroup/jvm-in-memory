@@ -11,6 +11,7 @@ import framework.pim.dpu.classloader.ClassFileAnalyzerConstants;
 import framework.pim.dpu.classloader.DPUClassFileManager;
 import framework.pim.dpu.java_strut.*;
 import framework.pim.utils.BytesUtils;
+import framework.pim.utils.ClassLoaderUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -91,6 +92,7 @@ public class DPUClassFileManagerUPMEM extends DPUClassFileManager {
                         putGlobalClassId(className);
                         jc.entryItems[i] &= 0xFFFFFFFF00000000L;
                         jc.entryItems[i] |= index + (getGlobalClassId(className) << 16);
+                        // jc.entryItems[i] |= index;
                     } else {
                         classfileLogger.logln(className + " is not loaded, skip");
                     }
@@ -165,6 +167,7 @@ public class DPUClassFileManagerUPMEM extends DPUClassFileManager {
                             putGlobalClassId(className);
                             jc.entryItems[i] &= 0xFFFFFFFF00000000L;
                             jc.entryItems[i] |= index + (getGlobalClassId(className) << 16);
+                            // jc.entryItems[i] |= index;
                             break;
                         } else {
                             classfileLogger.logln("try get " + className);
@@ -259,7 +262,7 @@ public class DPUClassFileManagerUPMEM extends DPUClassFileManager {
     }
 
     static {
-        classfileLogger.setEnable(false);
+        classfileLogger.setEnable(true);
     }
 
     @Override
@@ -464,6 +467,7 @@ public class DPUClassFileManagerUPMEM extends DPUClassFileManager {
                     String declaredClassName = getClassNameFromGlobalClassId(globalClassIndex);
                     DPUJClass declaredClass = getLoadedClassRecord(declaredClassName).dpuClassStructure;
                     VirtualTableItem vItem = declaredClass.virtualTable.items.get(methodTableIndex);
+                    // VirtualTableItem vItem = jc.virtualTable.items.get(methodTableIndex);
                     classfileLogger.logln("description = " + vItem.className + "." + vItem.descriptor);
 
                     DPUMethodLookupTableItem methodCacheItem = UPMEM.getInstance()
@@ -625,6 +629,15 @@ public class DPUClassFileManagerUPMEM extends DPUClassFileManager {
         classfileLogger
                 .logln(" ==========--> End of load class " + c.getName() + " to dpu#" + dpuID + " <--==========");
 
+        // debug
+
+        classfileLogger.logln("thisClass: " + jc.thisClass + " superClass: " + jc.superClass);
+        classfileLogger.logln("thisClassNameIndex: " + (short) (jc.entryItems[jc.thisClass] & 0xFFFF));
+        classfileLogger.logln("superClassNameIndex: " + (short) (jc.entryItems[jc.superClass] & 0xFFFF));
+        classfileLogger.logln(
+                "thisClassName: " + ClassLoaderUtils.getUTF8(jc, (short) (jc.entryItems[jc.thisClass] & 0xFFFF)));
+        classfileLogger.logln(
+                " superClassName: " + ClassLoaderUtils.getUTF8(jc, (short) (jc.entryItems[jc.superClass] & 0xFFFF)));
         return jc;
     }
 }

@@ -224,7 +224,7 @@ public class ClassFileAnalyzer {
     }
 
     static {
-        classfileAnalyzerLogger.setEnable(false);
+        classfileAnalyzerLogger.setEnable(true);
     }
 
     public static void printEntryTable(DPUJClass jc) {
@@ -437,6 +437,14 @@ public class ClassFileAnalyzer {
 
         jc.thisClassNameIndex = (short) (jc.entryItems[jc.thisClass] & 0xFFFF);
         jc.superClassNameIndex = (short) (jc.entryItems[jc.superClass] & 0xFFFF);
+        // debug
+        classfileAnalyzerLogger
+                .logln("thisClassName: " + ClassLoaderUtils.getUTF8(jc, (short) (jc.entryItems[jc.thisClass] & 0xFFFF))
+                        + " superClassName: "
+                        + ClassLoaderUtils.getUTF8(jc, (short) (jc.entryItems[jc.superClass] & 0xFFFF)));
+        classfileAnalyzerLogger.logln(
+                "thisClassNameIndex: " + (short) (jc.entryItems[jc.thisClass] & 0xFFFF) + " superClassNameIndex: "
+                        + (short) (jc.entryItems[jc.superClass] & 0xFFFF));
 
         classfileAnalyzerLogger.logln("rescan for filling utf_8 string and number area, total size = "
                 + constantAreaSize + " bytes");

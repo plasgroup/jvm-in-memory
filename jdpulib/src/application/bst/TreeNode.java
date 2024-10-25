@@ -2,7 +2,7 @@ package application.bst;
 
 import java.io.Serializable;
 
-public abstract class TreeNode implements Serializable {
+public abstract class TreeNode /* implements Serializable */ {
     public int key;
     public int val;
     public TreeNode left;

@@ -16,12 +16,12 @@ public class PIMLoggers {
     public static Logger pimTreeLogger = appendLogger("pimtree:appmain");
 
     static {
-        disableLoggers("tree:cpu-node", "bst:testing", "bst:building",
-                "framework.pim:class-file-analyzer", "framework.pim:cache",
-                "framework.pim:framework.pim-manager",
-                "framework.pim:dpu-manager",
-                "framework.pim:gc", "framework.pim:classfile", "simulator:jvm");
-        Logger.disableAllBeginWith("pim");
+        // disableLoggers("tree:cpu-node", "bst:testing", "bst:building",
+        // "framework.pim:class-file-analyzer", "framework.pim:cache",
+        // "framework.pim:framework.pim-manager",
+        // "framework.pim:dpu-manager",
+        // "framework.pim:gc", "framework.pim:classfile", "simulator:jvm");
+        // Logger.disableAllBeginWith("pim");
     }
 
     private static Logger appendLogger(String loggerName) {
