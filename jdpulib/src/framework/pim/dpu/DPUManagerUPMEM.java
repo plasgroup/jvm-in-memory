@@ -395,6 +395,11 @@ public class DPUManagerUPMEM extends DPUManager {
 
             dpuExecute(UPMEM.printStream);
         } catch (DpuException e) {
+            try {
+                dpu.log(UPMEM.printStream);
+            } catch (DpuException e1) {
+                throw new RuntimeException("Failed to get log: " + e1);
+            }
             throw new RuntimeException(e);
         }
 

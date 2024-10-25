@@ -5,11 +5,13 @@
  */
 package application.bst;
 
-import javalib.IDPUProxyObject;
-import javalib.logger.Logger;
-import javalib.logger.PIMLoggers;
+import framework.lang.struct.IDPUProxyObject;
+import framework.pim.UPMEM;
+import framework.pim.dpu.cache.DPULookupTableManager;
+import framework.pim.logger.Logger;
+import framework.pim.logger.PIMLoggers;
 
-import static javalib.dpu.ProxyHelper.*;
+import static framework.pim.dpu.RPCHelper.*;
 
 public class NBodySystemProxy extends NBodySystem implements IDPUProxyObject {
     public Integer dpuID;

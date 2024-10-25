@@ -109,6 +109,12 @@ void interp(struct function_thunk func_thunk)
             ;
             PUSH_EVAL_STACK(-1);
             break;
+        case ACONST_NULL:
+            DEBUG_OUT_INSN_PARSED("ACONST_NULL")
+            DEBUG_PRINT(" - push const NULL to stack\n");
+            ;
+            PUSH_EVAL_STACK(0);
+            break;
         // case IFGE:
         //     DEBUG_OUT_INSN_PARSED("IFGE")
         //     op1 = (uint8_t)code_buffer[pc] << 8 | code_buffer[pc + 1];
