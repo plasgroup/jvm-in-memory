@@ -237,7 +237,7 @@ public class Main {
         // Test DPUTreeNode
         // UPMEM.getInstance().getDPUManager(0).dpuClassFileManager.loadClassToDPU(DPUTreeNode.class);
         NBodySystem nbs = (NBodySystem) UPMEM.getInstance().createObject(0, NBodySystem.class);
-        System.out.println("nbd.test() = " + nbs.test());
+        System.out.println("nbs.test() = " + nbs.test());
 
         // // Evaluate performance. In performance evaluation mode, the execution time
         // would be measured.

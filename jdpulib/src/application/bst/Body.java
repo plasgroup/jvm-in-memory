@@ -6,9 +6,9 @@
 package application.bst;
 
 final class Body {
-    private static final float PI = (float) 3.141592653589793;
-    private static final float SOLAR_MASS = 4 * PI * PI;
-    private static final float DAYS_PER_YER = (float) 365.24;
+    private final float PI = (float) 3.141592653589793;
+    private final float SOLAR_MASS = 4 * PI * PI;
+    private final float DAYS_PER_YER = (float) 365.24;
 
     float x;
     float y;
@@ -35,7 +35,17 @@ final class Body {
         this.mass = mass * SOLAR_MASS;
     }
 
-    static Body jupiter() {
+    Body() {
+        this.x = 0;
+        this.y = 0;
+        this.z = 0;
+        this.vx = 0;
+        this.vy = 0;
+        this.vz = 0;
+        this.mass = 0;
+    }
+
+    Body jupiter() {
         return new Body(
                 (float) 4.84143144246472090e+00,
                 (float) -1.16032004402742839e+00,
@@ -46,7 +56,7 @@ final class Body {
                 (float) 9.54791938424326609e-04);
     }
 
-    static Body saturn() {
+    Body saturn() {
         return new Body(
                 (float) 8.34336671824457987e+00,
                 (float) 4.12479856412430479e+00,
@@ -57,7 +67,7 @@ final class Body {
                 (float) 2.85885980666130812e-04);
     }
 
-    static Body uranus() {
+    Body uranus() {
         return new Body(
                 (float) 1.28943695621391310e+01,
                 (float) -1.51111514016986312e+01,
@@ -68,7 +78,7 @@ final class Body {
                 (float) 4.36624404335156298e-05);
     }
 
-    static Body neptune() {
+    Body neptune() {
         return new Body(
                 (float) 1.53796971148509165e+01,
                 (float) -2.59193146099879641e+01,
@@ -79,7 +89,7 @@ final class Body {
                 (float) 5.15138902046611451e-05);
     }
 
-    static Body sun() {
+    Body sun() {
         return new Body((float) 0.0, (float) 0.0, (float) 0.0, (float) 0.0, (float) 0.0, (float) 0.0,
                 (float) 1.0);
     }

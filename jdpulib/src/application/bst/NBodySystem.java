@@ -7,6 +7,8 @@ package application.bst;
 
 public class NBodySystem {
     private final Body[] bodies;
+    private final Sqrt sqrt = new Sqrt();
+    private final Body body = new Body();
 
     public NBodySystem() {
         // bodies = createBodies();
@@ -18,11 +20,11 @@ public class NBodySystem {
     }
 
     public Body[] createBodies() {
-        Body[] bodies = new Body[] { Body.sun(),
-                Body.jupiter(),
-                Body.saturn(),
-                Body.uranus(),
-                Body.neptune() };
+        Body[] bodies = new Body[] { body.sun(),
+                body.jupiter(),
+                body.saturn(),
+                body.uranus(),
+                body.neptune() };
 
         float px = (float) 0.0;
         float py = (float) 0.0;
@@ -51,7 +53,7 @@ public class NBodySystem {
                 float dz = iBody.z - jBody.z;
 
                 float dSquared = dx * dx + dy * dy + dz * dz;
-                float distance = (float) Sqrt.compute(dSquared);
+                float distance = (float) sqrt.compute(dSquared);
                 float mag = dt / (dSquared * distance);
 
                 iBody.vx = iBody.vx - (dx * jBody.mass * mag);
@@ -87,7 +89,7 @@ public class NBodySystem {
                 float dy = iBody.y - jBody.y;
                 float dz = iBody.z - jBody.z;
 
-                float distance = (float) Sqrt.compute(dx * dx + dy * dy + dz * dz);
+                float distance = (float) sqrt.compute(dx * dx + dy * dy + dz * dz);
                 e -= (iBody.mass * jBody.mass) / distance;
             }
         }
