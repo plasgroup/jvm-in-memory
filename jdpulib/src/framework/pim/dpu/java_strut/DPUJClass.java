@@ -8,7 +8,7 @@ public class DPUJClass {
     public int thisClass;
     public short accessFlags;
     public short cp2BOffset;
-    public int cpItemCount;
+    private int cpItemCount = -1;
     public long[] entryItems;
     public int fieldCount;
     public DPUJField[] fields;
@@ -22,7 +22,15 @@ public class DPUJClass {
     public byte[] staticArea;
     public VirtualTable virtualTable;
 
+    public void setCpItemCount(int cpItemCount) {
+        if (this.getCpItemCount() != -1) {
+            throw new RuntimeException("cpItemCount already set");
+        }
+        this.cpItemCount = cpItemCount;
+    }
 
-
+    public int getCpItemCount() {
+        return cpItemCount;
+    }
 
 }

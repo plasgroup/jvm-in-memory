@@ -7,6 +7,9 @@ import application.bst.BSTTester;
 import application.bst.DPUTreeNode;
 import application.bst.NBodySystem;
 import application.bst.TreeNode;
+import application.bst.Body;
+import application.bst.Sqrt;
+
 import framework.pim.dpu.classloader.ClassWriter;
 import framework.primitive.control.ControlPrimitives;
 
@@ -107,89 +110,6 @@ public class Main {
         }
     }
 
-    public static void performanceEvaluation() {
-        TreeNode PIMRoot;
-        TreeNode CPURoot;
-        long totalTimeInMs = 0;
-        int r = 0;
-        List<Integer> keys = readIntergerArrayList("keys_random.txt");
-
-        if (cpuPerformanceEvaluation) {
-            try {
-                CPURoot = BSTBuilder
-                        .buildCpuPartTreeFromFile(imagesPath + "CPU_TREE_" + performanceEvaluationNodeCount + ".txt");
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-
-            System.out.println("begin evaluate CPU Tree 500,000 queries performance");
-            for (int i = 0; i < cpuPerformanceEvaluationRepeatTime; i++) {
-                long startTime = System.nanoTime();
-                for (int j = 0; j < queryCount; j++) {
-                    int key = keys.get(j);
-                    int v = CPURoot.search(key);
-                    r += v;
-                }
-                long endTime = System.nanoTime();
-                long timeElapsed = endTime - startTime;
-                System.out.println((i + 1) + "/" + cpuPerformanceEvaluationRepeatTime
-                        + " Execution time in milliseconds: " + timeElapsed / 1000000);
-                totalTimeInMs += timeElapsed / 1000000;
-            }
-
-            System.out.println(
-                    "CPU 500,000 queries average time = " + totalTimeInMs / cpuPerformanceEvaluationRepeatTime);
-            System.out.println("single query average time = "
-                    + totalTimeInMs / cpuPerformanceEvaluationRepeatTime / (double) keys.size());
-            System.out.println("end evaluate CPU Tree 500,000 queries performance");
-        }
-
-        if (pimPerformanceEvaluation) {
-            try {
-                for (int i = 0; i < UPMEM.dpuInUse; i++) {
-                    UPMEM.getInstance().getDPUManager(i).createObject(DPUTreeNode.class, 0, 0);
-                }
-                writeDPUImages(performanceEvaluationNodeCount, ExperimentConfigurator.imagesPath);
-                System.out.println("load CPU part tree");
-                PIMRoot = buildCpuPartTreeFromFile(imagesPath + "PIM_TREE_" + performanceEvaluationNodeCount + ".txt");
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-
-            System.out.println("begin evaluate PIM Tree 500,000 queries performance");
-            totalTimeInMs = 0;
-
-            BatchDispatcher bd1 = new BatchDispatcher();
-
-            if (performanceEvaluationEnableBatchDispatch)
-                UPMEM.beginRecordBatchDispatching(bd1);
-
-            for (int i = 0; i < pimPerformanceEvaluationRepeatTime; i++) {
-                long startTime = System.nanoTime();
-                for (int j = 0; j < queryCount / 10000; j++) {
-                    for (int k = 0; k < 10000; k++) {
-                        int key = keys.get(k);
-                        int v = PIMRoot.search(key);
-                        r += v;
-                    }
-                    System.out.println("avg per time = " + (System.nanoTime() - startTime) / 1000000);
-                }
-                long endTime = System.nanoTime();
-                long timeElapsed = endTime - startTime;
-                System.out.println((i + 1) + "/" + pimPerformanceEvaluationRepeatTime
-                        + " Execution time in milliseconds: " + timeElapsed / 1000000);
-                totalTimeInMs += timeElapsed / 1000000;
-            }
-            if (performanceEvaluationEnableBatchDispatch)
-                UPMEM.endRecordBatchDispatching();
-            System.out.println(
-                    "PIM 500,000 queries average time = " + totalTimeInMs / pimPerformanceEvaluationRepeatTime);
-            System.out.println("single queries average time = "
-                    + totalTimeInMs / pimPerformanceEvaluationRepeatTime / (double) keys.size());
-            System.out.println("end evaluate PIM Tree 500,000 queries performance");
-        }
-    }
-
     public static void main(String[] args) throws RemoteException {
         // parse arguments
         parseParameters(args);
@@ -235,7 +155,8 @@ public class Main {
         UPMEM.setPackageSearchPath("application.bst.");
 
         // Test DPUTreeNode
-        // UPMEM.getInstance().getDPUManager(0).dpuClassFileManager.loadClassToDPU(DPUTreeNode.class);
+        UPMEM.getInstance().getDPUManager(0).dpuClassFileManager.loadClassToDPU(Body.class);
+        UPMEM.getInstance().getDPUManager(0).dpuClassFileManager.loadClassToDPU(Sqrt.class);
         NBodySystem nbs = (NBodySystem) UPMEM.getInstance().createObject(0, NBodySystem.class);
         System.out.println("nbs.test() = " + nbs.test());
 

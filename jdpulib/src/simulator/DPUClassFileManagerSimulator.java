@@ -456,7 +456,7 @@ public class DPUClassFileManagerSimulator extends DPUClassFileManager {
 
         /** resolve each entry item from preprocessed entry table. **/
 
-        for (int i = 0; i < jc.cpItemCount; i++) {
+        for (int i = 0; i < jc.getCpItemCount(); i++) {
             int tag = (int) ((jc.entryItems[i] >> 56) & 0xFF);
             int classIndex;
             int nameAndTypeIndex;

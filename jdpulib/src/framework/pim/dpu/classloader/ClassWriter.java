@@ -26,7 +26,7 @@ public class ClassWriter {
 
     /** encoding DPUJClass to bytes that prepared to be pushed to DPUs **/
 
-    public static byte[] cvtDPUClassStrut2Bytes(DPUJClass ds, int classAddr){
+    public static byte[] cvtDPUClassStrut2Bytes(DPUJClass ds, int classAddr) {
         byte[] bs = new byte[(ds.totalSize + 0b111) & ~(0b111)];
         int pos = 0;
         int entryTablePointer;
@@ -50,7 +50,7 @@ public class ClassWriter {
         BytesUtils.writeU2LittleEndian(bs, ds.cp2BOffset, pos);
         pos += 2;
 
-        BytesUtils.writeU4LittleEndian(bs, ds.cpItemCount, pos);
+        BytesUtils.writeU4LittleEndian(bs, ds.getCpItemCount(), pos);
         pos += 4;
         // entry table pointer
         entryTablePointerPos = pos;
@@ -60,7 +60,6 @@ public class ClassWriter {
         pos += 4;
         fieldPointerPos = pos;
         pos += 4;
-
 
         BytesUtils.writeU4LittleEndian(bs, ds.methodCount, pos);
         pos += 4;
@@ -82,26 +81,26 @@ public class ClassWriter {
         entryTablePointer = classAddr + pos;
         BytesUtils.writeU4LittleEndian(bs, entryTablePointer, entryTablePointerPos);
         classfileLogger.logf("print %x in %x\n", entryTablePointer, entryTablePointerPos);
-        for(int i = 0; i < ds.cpItemCount; i++){
+        for (int i = 0; i < ds.getCpItemCount(); i++) {
             long v = ds.entryItems[i];
-            BytesUtils.writeU4LittleEndian(bs, (int) (((long)v >> 32) & 0xFFFFFFFF),pos);
+            BytesUtils.writeU4LittleEndian(bs, (int) (((long) v >> 32) & 0xFFFFFFFF), pos);
             pos += 4;
-            BytesUtils.writeU4LittleEndian(bs, (int) (((long)v) & 0xFFFFFFFF),pos);
+            BytesUtils.writeU4LittleEndian(bs, (int) (((long) v) & 0xFFFFFFFF), pos);
             pos += 4;
         }
 
-        //fields
+        // fields
         fieldPointer = classAddr + pos;
         BytesUtils.writeU4LittleEndian(bs, fieldPointer, fieldPointerPos);
         // TODO: use field
-        pos += Arrays.stream(ds.fields).map(f -> f.size).reduce((s1, s2) -> s1 + s2).orElseGet( ()->0);
+        pos += Arrays.stream(ds.fields).map(f -> f.size).reduce((s1, s2) -> s1 + s2).orElseGet(() -> 0);
 
-        //method
+        // method
         methodPointer = classAddr + pos;
         BytesUtils.writeU4LittleEndian(bs, methodPointer, methodPointerPos);
         classfileLogger.logf("print 0x%x to %x\n", methodPointer, methodPointerPos);
 
-        for(int i = 0; i < ds.methodCount; i++){
+        for (int i = 0; i < ds.methodCount; i++) {
             classfileLogger.logf("method %d from 0x%x === 0x%x\n", i, pos, ds.methodOffset[i]);
             DPUJMethod dm = ds.methodTable[i];
 
@@ -117,7 +116,7 @@ public class ClassWriter {
             pos += 2;
             BytesUtils.writeU2LittleEndian(bs, dm.methodAttrCode.maxLocals, pos);
             pos += 2;
-            pos += 2; //retained
+            pos += 2; // retained
 
             BytesUtils.writeU4LittleEndian(bs, dm.methodAttrCode.codeLength, pos);
             pos += 4;
@@ -126,7 +125,7 @@ public class ClassWriter {
             BytesUtils.writeU4LittleEndian(bs, classAddr + pos + 4, pos);
             pos += 4;
 
-            for(int k = 0; k < dm.methodAttrCode.codeLength; k++){
+            for (int k = 0; k < dm.methodAttrCode.codeLength; k++) {
                 bs[pos + k] = dm.methodAttrCode.code[k];
             }
 
@@ -137,7 +136,7 @@ public class ClassWriter {
         constantAreaPointer = classAddr + pos;
         BytesUtils.writeU4LittleEndian(bs, constantAreaPointer, constantAreaPointerPos);
 
-        for(int offset = 0; offset < ds.stringINTConstantPoolLength; offset ++){
+        for (int offset = 0; offset < ds.stringINTConstantPoolLength; offset++) {
             bs[pos + offset] = ds.constantBytes[offset];
         }
         pos += (ds.stringINTConstantPoolLength + 0b111) & (~0b111);
@@ -147,37 +146,35 @@ public class ClassWriter {
         BytesUtils.writeU4LittleEndian(bs, virtualTablePointer, virtualTablePointerPos);
 
         // items
-        if(!UPMEM.getConfigurator().isUseSimulator()){
-            for(int i = 0; i < ds.virtualTable.items.size(); i++){
+        if (!UPMEM.getConfigurator().isUseSimulator()) {
+            for (int i = 0; i < ds.virtualTable.items.size(); i++) {
 
-                    VirtualTableItem item = ds.virtualTable.items.get(i);
-                    BytesUtils.writeU4LittleEndian(bs, item.classReferenceAddress , pos);
-                    BytesUtils.writeU4LittleEndian(bs, item.methodReferenceAddress , pos + 4);
+                VirtualTableItem item = ds.virtualTable.items.get(i);
+                BytesUtils.writeU4LittleEndian(bs, item.classReferenceAddress, pos);
+                BytesUtils.writeU4LittleEndian(bs, item.methodReferenceAddress, pos + 4);
                 pos += 8;
 
             }
-        } else{
-                for(int i = 0; i < ds.methodTable.length; i++){
-                    pos += 8;
-                }
-
+        } else {
+            for (int i = 0; i < ds.methodTable.length; i++) {
+                pos += 8;
+            }
 
         }
 
-
         pos = (pos + 0b111) & (~0b111);
 
+        classfileLogger.logf("=============== !Alert pos = %d === total-size = %d ================\n", pos,
+                ds.totalSize);
 
-        classfileLogger.logf("=============== !Alert pos = %d === total-size = %d ================\n", pos, ds.totalSize);
-
-        if(!UPMEM.getConfigurator().isUseSimulator()){
-            if(pos != ds.totalSize)
-            {
-                System.out.println(48 + "jc.cpItemCount = " + ds.cpItemCount  + "* 8 " +
-                        "filed size = " + Arrays.stream(ds.fields).map(e -> e.size).reduce(Integer::sum).orElseGet(()->0)+
-                        "stringINTConstantPoolLength = " + ((ds.stringINTConstantPoolLength)) + " round = " + ((ds.stringINTConstantPoolLength + 0b111) & (~0b111))
-                        + "method_table length = " + ds.methodTable.length
-                );
+        if (!UPMEM.getConfigurator().isUseSimulator()) {
+            if (pos != ds.totalSize) {
+                System.out.println(48 + "jc.getCpItemCount() = " + ds.getCpItemCount() + "* 8 " +
+                        "filed size = "
+                        + Arrays.stream(ds.fields).map(e -> e.size).reduce(Integer::sum).orElseGet(() -> 0) +
+                        "stringINTConstantPoolLength = " + ((ds.stringINTConstantPoolLength)) + " round = "
+                        + ((ds.stringINTConstantPoolLength + 0b111) & (~0b111))
+                        + "method_table length = " + ds.methodTable.length);
                 throw new RuntimeException();
             }
         }

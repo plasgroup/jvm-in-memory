@@ -1,0 +1,10231 @@
+CPU_LAYER_COUNT CPU_LAYER_COUNT=5
+DPU_COUNT DPU_COUNT=1
+QUERIES QUERIES=500
+IMG_PATH IMG_PATH=./imgs/
+NODES NODES=1000
+TYPE TYPE=CPU
+SERIALIZE_TREE SERIALIZE_TREE=0
+PERF_MODE PERF_MODE=1
+CPU_PERF_REPEAT CPU_PERF_REPEAT=1
+PIM_PERF_REPEAT PIM_PERF_REPEAT=1
+EVAL_CPU_PERF EVAL_CPU_PERF=1
+EVAL_PIM_PERF EVAL_PIM_PERF=1
+EVAL_NODES EVAL_NODES=1000
+BATCH_DISPATCH BATCH_DISPATCH=0
+JVM_SIMULATOR JVM_SIMULATOR=0
+BUILD_FROM_IMG BUILD_FROM_IMG=0
+dpu in use = 1
+CPU mode, nodes count = 1000 query count = 500
+cpu tree layer count = 5
+DPUSystem load 1 DPUs
+
+
+ ==========--> Try load class application/bst/Body to dpu#0 <--==========
+
+
+get DPUID = 0 class =  application/bst/Body from cache
+begin preresolve classfile
+
+
+constant table item count = 87
+
+
+====================== Begin analyze constant table item ====================
+
+
+ >> Item 1 
+
+Class
+
+
+	 -> Mark UTF8 index 1: 2
+
+
+ >> Item 2 
+
+UTF8
+
+
+ >> Item 3 
+
+Float
+
+
+ >> Item 4 
+
+Fieldref
+
+
+	 -> Mark Class and NameAndType index 4: 1|5
+
+
+ >> Item 5 
+
+NameAndType
+
+
+	 -> Mark Name and Type in index 5: 6|7
+
+
+ >> Item 6 
+
+UTF8
+
+
+ >> Item 7 
+
+UTF8
+
+
+ >> Item 8 
+
+Fieldref
+
+
+	 -> Mark Class and NameAndType index 8: 1|9
+
+
+ >> Item 9 
+
+NameAndType
+
+
+	 -> Mark Name and Type in index 9: 10|7
+
+
+ >> Item 10 
+
+UTF8
+
+
+ >> Item 11 
+
+Fieldref
+
+
+	 -> Mark Class and NameAndType index 11: 1|12
+
+
+ >> Item 12 
+
+NameAndType
+
+
+	 -> Mark Name and Type in index 12: 13|7
+
+
+ >> Item 13 
+
+UTF8
+
+
+ >> Item 14 
+
+Methodref
+
+
+	 -> Mark Class and NameAndType index 14: 15|16
+
+
+ >> Item 15 
+
+Class
+
+
+	 -> Mark UTF8 index 15: 17
+
+
+ >> Item 16 
+
+NameAndType
+
+
+	 -> Mark Name and Type in index 16: 18|19
+
+
+ >> Item 17 
+
+UTF8
+
+
+ >> Item 18 
+
+UTF8
+
+
+ >> Item 19 
+
+UTF8
+
+
+ >> Item 20 
+
+Float
+
+
+ >> Item 21 
+
+Fieldref
+
+
+	 -> Mark Class and NameAndType index 21: 1|22
+
+
+ >> Item 22 
+
+NameAndType
+
+
+	 -> Mark Name and Type in index 22: 23|7
+
+
+ >> Item 23 
+
+UTF8
+
+
+ >> Item 24 
+
+Fieldref
+
+
+	 -> Mark Class and NameAndType index 24: 1|25
+
+
+ >> Item 25 
+
+NameAndType
+
+
+	 -> Mark Name and Type in index 25: 26|7
+
+
+ >> Item 26 
+
+UTF8
+
+
+ >> Item 27 
+
+Float
+
+
+ >> Item 28 
+
+Fieldref
+
+
+	 -> Mark Class and NameAndType index 28: 1|29
+
+
+ >> Item 29 
+
+NameAndType
+
+
+	 -> Mark Name and Type in index 29: 30|7
+
+
+ >> Item 30 
+
+UTF8
+
+
+ >> Item 31 
+
+Fieldref
+
+
+	 -> Mark Class and NameAndType index 31: 1|32
+
+
+ >> Item 32 
+
+NameAndType
+
+
+	 -> Mark Name and Type in index 32: 33|7
+
+
+ >> Item 33 
+
+UTF8
+
+
+ >> Item 34 
+
+Fieldref
+
+
+	 -> Mark Class and NameAndType index 34: 1|35
+
+
+ >> Item 35 
+
+NameAndType
+
+
+	 -> Mark Name and Type in index 35: 36|7
+
+
+ >> Item 36 
+
+UTF8
+
+
+ >> Item 37 
+
+Fieldref
+
+
+	 -> Mark Class and NameAndType index 37: 1|38
+
+
+ >> Item 38 
+
+NameAndType
+
+
+	 -> Mark Name and Type in index 38: 39|7
+
+
+ >> Item 39 
+
+UTF8
+
+
+ >> Item 40 
+
+Fieldref
+
+
+	 -> Mark Class and NameAndType index 40: 1|41
+
+
+ >> Item 41 
+
+NameAndType
+
+
+	 -> Mark Name and Type in index 41: 42|7
+
+
+ >> Item 42 
+
+UTF8
+
+
+ >> Item 43 
+
+Float
+
+
+ >> Item 44 
+
+Float
+
+
+ >> Item 45 
+
+Float
+
+
+ >> Item 46 
+
+Float
+
+
+ >> Item 47 
+
+Float
+
+
+ >> Item 48 
+
+Float
+
+
+ >> Item 49 
+
+Float
+
+
+ >> Item 50 
+
+Methodref
+
+
+	 -> Mark Class and NameAndType index 50: 1|51
+
+
+ >> Item 51 
+
+NameAndType
+
+
+	 -> Mark Name and Type in index 51: 18|52
+
+
+ >> Item 52 
+
+UTF8
+
+
+ >> Item 53 
+
+Float
+
+
+ >> Item 54 
+
+Float
+
+
+ >> Item 55 
+
+Float
+
+
+ >> Item 56 
+
+Float
+
+
+ >> Item 57 
+
+Float
+
+
+ >> Item 58 
+
+Float
+
+
+ >> Item 59 
+
+Float
+
+
+ >> Item 60 
+
+Float
+
+
+ >> Item 61 
+
+Float
+
+
+ >> Item 62 
+
+Float
+
+
+ >> Item 63 
+
+Float
+
+
+ >> Item 64 
+
+Float
+
+
+ >> Item 65 
+
+Float
+
+
+ >> Item 66 
+
+Float
+
+
+ >> Item 67 
+
+Float
+
+
+ >> Item 68 
+
+Float
+
+
+ >> Item 69 
+
+Float
+
+
+ >> Item 70 
+
+Float
+
+
+ >> Item 71 
+
+Float
+
+
+ >> Item 72 
+
+Float
+
+
+ >> Item 73 
+
+Float
+
+
+ >> Item 74 
+
+UTF8
+
+
+ >> Item 75 
+
+UTF8
+
+
+ >> Item 76 
+
+UTF8
+
+
+ >> Item 77 
+
+UTF8
+
+
+ >> Item 78 
+
+UTF8
+
+
+ >> Item 79 
+
+UTF8
+
+
+ >> Item 80 
+
+UTF8
+
+
+ >> Item 81 
+
+UTF8
+
+
+ >> Item 82 
+
+UTF8
+
+
+ >> Item 83 
+
+UTF8
+
+
+ >> Item 84 
+
+UTF8
+
+
+ >> Item 85 
+
+UTF8
+
+
+ >> Item 86 
+
+UTF8
+
+
+====================== End analyze constant table item ====================
+
+
+
+
+
+==== Entries Table After Resolution Phase 1 - read constant table, and fill information ====
+
+
+
+ - item 1 line =  
+07 00 00 02|00 00 00 02
+
+ - item 2 line =  
+01 00 00 00|00 00 00 14
+
+ - item 3 line =  
+04 00 00 00|00 00 00 00
+
+ - item 4 line =  
+09 00 00 00|00 01 00 05
+
+ - item 5 line =  
+0c 00 00 00|00 06 00 07
+
+ - item 6 line =  
+01 00 00 00|00 00 00 02
+
+ - item 7 line =  
+01 00 00 00|00 00 00 01
+
+ - item 8 line =  
+09 00 00 00|00 01 00 09
+
+ - item 9 line =  
+0c 00 00 00|00 0a 00 07
+
+ - item 10 line =  
+01 00 00 00|00 00 00 02
+
+ - item 11 line =  
+09 00 00 00|00 01 00 0c
+
+ - item 12 line =  
+0c 00 00 00|00 0d 00 07
+
+ - item 13 line =  
+01 00 00 00|00 00 00 02
+
+ - item 14 line =  
+0a 00 00 00|00 0f 00 10
+
+ - item 15 line =  
+07 00 00 11|00 00 00 11
+
+ - item 16 line =  
+0c 00 00 00|00 12 00 13
+
+ - item 17 line =  
+01 00 00 00|00 00 00 10
+
+ - item 18 line =  
+01 00 00 00|00 00 00 06
+
+ - item 19 line =  
+01 00 00 00|00 00 00 03
+
+ - item 20 line =  
+04 00 00 00|00 00 00 00
+
+ - item 21 line =  
+09 00 00 00|00 01 00 16
+
+ - item 22 line =  
+0c 00 00 00|00 17 00 07
+
+ - item 23 line =  
+01 00 00 00|00 00 00 02
+
+ - item 24 line =  
+09 00 00 00|00 01 00 19
+
+ - item 25 line =  
+0c 00 00 00|00 1a 00 07
+
+ - item 26 line =  
+01 00 00 00|00 00 00 0a
+
+ - item 27 line =  
+04 00 00 00|00 00 00 00
+
+ - item 28 line =  
+09 00 00 00|00 01 00 1d
+
+ - item 29 line =  
+0c 00 00 00|00 1e 00 07
+
+ - item 30 line =  
+01 00 00 00|00 00 00 0c
+
+ - item 31 line =  
+09 00 00 00|00 01 00 20
+
+ - item 32 line =  
+0c 00 00 00|00 21 00 07
+
+ - item 33 line =  
+01 00 00 00|00 00 00 01
+
+ - item 34 line =  
+09 00 00 00|00 01 00 23
+
+ - item 35 line =  
+0c 00 00 00|00 24 00 07
+
+ - item 36 line =  
+01 00 00 00|00 00 00 01
+
+ - item 37 line =  
+09 00 00 00|00 01 00 26
+
+ - item 38 line =  
+0c 00 00 00|00 27 00 07
+
+ - item 39 line =  
+01 00 00 00|00 00 00 01
+
+ - item 40 line =  
+09 00 00 00|00 01 00 29
+
+ - item 41 line =  
+0c 00 00 00|00 2a 00 07
+
+ - item 42 line =  
+01 00 00 00|00 00 00 04
+
+ - item 43 line =  
+04 00 00 00|00 00 00 00
+
+ - item 44 line =  
+04 00 00 00|00 00 00 00
+
+ - item 45 line =  
+04 00 00 00|00 00 00 00
+
+ - item 46 line =  
+04 00 00 00|00 00 00 00
+
+ - item 47 line =  
+04 00 00 00|00 00 00 00
+
+ - item 48 line =  
+04 00 00 00|00 00 00 00
+
+ - item 49 line =  
+04 00 00 00|00 00 00 00
+
+ - item 50 line =  
+0a 00 00 00|00 01 00 33
+
+ - item 51 line =  
+0c 00 00 00|00 12 00 34
+
+ - item 52 line =  
+01 00 00 00|00 00 00 0a
+
+ - item 53 line =  
+04 00 00 00|00 00 00 00
+
+ - item 54 line =  
+04 00 00 00|00 00 00 00
+
+ - item 55 line =  
+04 00 00 00|00 00 00 00
+
+ - item 56 line =  
+04 00 00 00|00 00 00 00
+
+ - item 57 line =  
+04 00 00 00|00 00 00 00
+
+ - item 58 line =  
+04 00 00 00|00 00 00 00
+
+ - item 59 line =  
+04 00 00 00|00 00 00 00
+
+ - item 60 line =  
+04 00 00 00|00 00 00 00
+
+ - item 61 line =  
+04 00 00 00|00 00 00 00
+
+ - item 62 line =  
+04 00 00 00|00 00 00 00
+
+ - item 63 line =  
+04 00 00 00|00 00 00 00
+
+ - item 64 line =  
+04 00 00 00|00 00 00 00
+
+ - item 65 line =  
+04 00 00 00|00 00 00 00
+
+ - item 66 line =  
+04 00 00 00|00 00 00 00
+
+ - item 67 line =  
+04 00 00 00|00 00 00 00
+
+ - item 68 line =  
+04 00 00 00|00 00 00 00
+
+ - item 69 line =  
+04 00 00 00|00 00 00 00
+
+ - item 70 line =  
+04 00 00 00|00 00 00 00
+
+ - item 71 line =  
+04 00 00 00|00 00 00 00
+
+ - item 72 line =  
+04 00 00 00|00 00 00 00
+
+ - item 73 line =  
+04 00 00 00|00 00 00 00
+
+ - item 74 line =  
+01 00 00 00|00 00 00 0d
+
+ - item 75 line =  
+01 00 00 00|00 00 00 0e
+
+ - item 76 line =  
+01 00 00 00|00 00 00 06
+
+ - item 77 line =  
+01 00 00 00|00 00 00 04
+
+ - item 78 line =  
+01 00 00 00|00 00 00 0f
+
+ - item 79 line =  
+01 00 00 00|00 00 00 07
+
+ - item 80 line =  
+01 00 00 00|00 00 00 18
+
+ - item 81 line =  
+01 00 00 00|00 00 00 06
+
+ - item 82 line =  
+01 00 00 00|00 00 00 06
+
+ - item 83 line =  
+01 00 00 00|00 00 00 07
+
+ - item 84 line =  
+01 00 00 00|00 00 00 03
+
+ - item 85 line =  
+01 00 00 00|00 00 00 0a
+
+ - item 86 line =  
+01 00 00 00|00 00 00 09
+
+==== ----------------------------------------------------------------------- ====
+
+
+
+
+
+
+access_flag = 0x0031
+
+ - this class = 1
+
+
+tEntries Table After Resolution Phase 1 - read CPs, and mark information. This_class ref index = 0
+
+
+ - super class = 15
+
+
+super_class ref index = 0
+
+
+rescan for filling utf_8 string and number area, total size = 341 bytes
+
+
+>> Entry #2 is UTF8, len = 20
+
+
+Fill UTF8 string in constantArea offset = 0
+
+>> Entry #6 is UTF8, len = 2
+
+
+Fill UTF8 string in constantArea offset = 20
+
+>> Entry #7 is UTF8, len = 1
+
+
+Fill UTF8 string in constantArea offset = 22
+
+>> Entry #10 is UTF8, len = 2
+
+
+Fill UTF8 string in constantArea offset = 23
+
+>> Entry #13 is UTF8, len = 2
+
+
+Fill UTF8 string in constantArea offset = 25
+
+>> Entry #17 is UTF8, len = 16
+
+
+Fill UTF8 string in constantArea offset = 27
+
+>> Entry #18 is UTF8, len = 6
+
+
+Fill UTF8 string in constantArea offset = 43
+
+>> Entry #19 is UTF8, len = 3
+
+
+Fill UTF8 string in constantArea offset = 49
+
+>> Entry #23 is UTF8, len = 2
+
+
+Fill UTF8 string in constantArea offset = 52
+
+>> Entry #26 is UTF8, len = 10
+
+
+Fill UTF8 string in constantArea offset = 54
+
+>> Entry #30 is UTF8, len = 12
+
+
+Fill UTF8 string in constantArea offset = 64
+
+>> Entry #33 is UTF8, len = 1
+
+
+Fill UTF8 string in constantArea offset = 76
+
+>> Entry #36 is UTF8, len = 1
+
+
+Fill UTF8 string in constantArea offset = 77
+
+>> Entry #39 is UTF8, len = 1
+
+
+Fill UTF8 string in constantArea offset = 78
+
+>> Entry #42 is UTF8, len = 4
+
+
+Fill UTF8 string in constantArea offset = 79
+
+>> Entry #52 is UTF8, len = 10
+
+
+Fill UTF8 string in constantArea offset = 83
+
+>> Entry #74 is UTF8, len = 13
+
+
+Fill UTF8 string in constantArea offset = 93
+
+>> Entry #75 is UTF8, len = 14
+
+
+Fill UTF8 string in constantArea offset = 106
+
+>> Entry #76 is UTF8, len = 6
+
+
+Fill UTF8 string in constantArea offset = 120
+
+>> Entry #77 is UTF8, len = 4
+
+
+Fill UTF8 string in constantArea offset = 126
+
+>> Entry #78 is UTF8, len = 15
+
+
+Fill UTF8 string in constantArea offset = 130
+
+>> Entry #79 is UTF8, len = 7
+
+
+Fill UTF8 string in constantArea offset = 145
+
+>> Entry #80 is UTF8, len = 24
+
+
+Fill UTF8 string in constantArea offset = 152
+
+>> Entry #81 is UTF8, len = 6
+
+
+Fill UTF8 string in constantArea offset = 176
+
+>> Entry #82 is UTF8, len = 6
+
+
+Fill UTF8 string in constantArea offset = 182
+
+>> Entry #83 is UTF8, len = 7
+
+
+Fill UTF8 string in constantArea offset = 188
+
+>> Entry #84 is UTF8, len = 3
+
+
+Fill UTF8 string in constantArea offset = 195
+
+>> Entry #85 is UTF8, len = 10
+
+
+Fill UTF8 string in constantArea offset = 198
+
+>> Entry #86 is UTF8, len = 9
+
+
+Fill UTF8 string in constantArea offset = 208
+
+filled 217/341 bytes
+
+==== Entries Table After Resolution Phase 2 - fill constant value to constantDataArea ====
+
+
+
+ - item 1 line =  
+07 00 00 02|00 00 00 02
+
+ - item 2 line =  
+01 00 14 00|00 00 00 00
+
+ - item 3 line =  
+04 00 00 00|00 00 00 00
+
+ - item 4 line =  
+09 00 00 00|00 01 00 05
+
+ - item 5 line =  
+0c 00 00 00|00 06 00 07
+
+ - item 6 line =  
+01 00 02 00|00 00 00 14
+
+ - item 7 line =  
+01 00 01 00|00 00 00 16
+
+ - item 8 line =  
+09 00 00 00|00 01 00 09
+
+ - item 9 line =  
+0c 00 00 00|00 0a 00 07
+
+ - item 10 line =  
+01 00 02 00|00 00 00 17
+
+ - item 11 line =  
+09 00 00 00|00 01 00 0c
+
+ - item 12 line =  
+0c 00 00 00|00 0d 00 07
+
+ - item 13 line =  
+01 00 02 00|00 00 00 19
+
+ - item 14 line =  
+0a 00 00 00|00 0f 00 10
+
+ - item 15 line =  
+07 00 00 11|00 00 00 11
+
+ - item 16 line =  
+0c 00 00 00|00 12 00 13
+
+ - item 17 line =  
+01 00 10 00|00 00 00 1b
+
+ - item 18 line =  
+01 00 06 00|00 00 00 2b
+
+ - item 19 line =  
+01 00 03 00|00 00 00 31
+
+ - item 20 line =  
+04 00 00 00|00 00 00 00
+
+ - item 21 line =  
+09 00 00 00|00 01 00 16
+
+ - item 22 line =  
+0c 00 00 00|00 17 00 07
+
+ - item 23 line =  
+01 00 02 00|00 00 00 34
+
+ - item 24 line =  
+09 00 00 00|00 01 00 19
+
+ - item 25 line =  
+0c 00 00 00|00 1a 00 07
+
+ - item 26 line =  
+01 00 0a 00|00 00 00 36
+
+ - item 27 line =  
+04 00 00 00|00 00 00 00
+
+ - item 28 line =  
+09 00 00 00|00 01 00 1d
+
+ - item 29 line =  
+0c 00 00 00|00 1e 00 07
+
+ - item 30 line =  
+01 00 0c 00|00 00 00 40
+
+ - item 31 line =  
+09 00 00 00|00 01 00 20
+
+ - item 32 line =  
+0c 00 00 00|00 21 00 07
+
+ - item 33 line =  
+01 00 01 00|00 00 00 4c
+
+ - item 34 line =  
+09 00 00 00|00 01 00 23
+
+ - item 35 line =  
+0c 00 00 00|00 24 00 07
+
+ - item 36 line =  
+01 00 01 00|00 00 00 4d
+
+ - item 37 line =  
+09 00 00 00|00 01 00 26
+
+ - item 38 line =  
+0c 00 00 00|00 27 00 07
+
+ - item 39 line =  
+01 00 01 00|00 00 00 4e
+
+ - item 40 line =  
+09 00 00 00|00 01 00 29
+
+ - item 41 line =  
+0c 00 00 00|00 2a 00 07
+
+ - item 42 line =  
+01 00 04 00|00 00 00 4f
+
+ - item 43 line =  
+04 00 00 00|00 00 00 00
+
+ - item 44 line =  
+04 00 00 00|00 00 00 00
+
+ - item 45 line =  
+04 00 00 00|00 00 00 00
+
+ - item 46 line =  
+04 00 00 00|00 00 00 00
+
+ - item 47 line =  
+04 00 00 00|00 00 00 00
+
+ - item 48 line =  
+04 00 00 00|00 00 00 00
+
+ - item 49 line =  
+04 00 00 00|00 00 00 00
+
+ - item 50 line =  
+0a 00 00 00|00 01 00 33
+
+ - item 51 line =  
+0c 00 00 00|00 12 00 34
+
+ - item 52 line =  
+01 00 0a 00|00 00 00 53
+
+ - item 53 line =  
+04 00 00 00|00 00 00 00
+
+ - item 54 line =  
+04 00 00 00|00 00 00 00
+
+ - item 55 line =  
+04 00 00 00|00 00 00 00
+
+ - item 56 line =  
+04 00 00 00|00 00 00 00
+
+ - item 57 line =  
+04 00 00 00|00 00 00 00
+
+ - item 58 line =  
+04 00 00 00|00 00 00 00
+
+ - item 59 line =  
+04 00 00 00|00 00 00 00
+
+ - item 60 line =  
+04 00 00 00|00 00 00 00
+
+ - item 61 line =  
+04 00 00 00|00 00 00 00
+
+ - item 62 line =  
+04 00 00 00|00 00 00 00
+
+ - item 63 line =  
+04 00 00 00|00 00 00 00
+
+ - item 64 line =  
+04 00 00 00|00 00 00 00
+
+ - item 65 line =  
+04 00 00 00|00 00 00 00
+
+ - item 66 line =  
+04 00 00 00|00 00 00 00
+
+ - item 67 line =  
+04 00 00 00|00 00 00 00
+
+ - item 68 line =  
+04 00 00 00|00 00 00 00
+
+ - item 69 line =  
+04 00 00 00|00 00 00 00
+
+ - item 70 line =  
+04 00 00 00|00 00 00 00
+
+ - item 71 line =  
+04 00 00 00|00 00 00 00
+
+ - item 72 line =  
+04 00 00 00|00 00 00 00
+
+ - item 73 line =  
+04 00 00 00|00 00 00 00
+
+ - item 74 line =  
+01 00 0d 00|00 00 00 5d
+
+ - item 75 line =  
+01 00 0e 00|00 00 00 6a
+
+ - item 76 line =  
+01 00 06 00|00 00 00 78
+
+ - item 77 line =  
+01 00 04 00|00 00 00 7e
+
+ - item 78 line =  
+01 00 0f 00|00 00 00 82
+
+ - item 79 line =  
+01 00 07 00|00 00 00 91
+
+ - item 80 line =  
+01 00 18 00|00 00 00 98
+
+ - item 81 line =  
+01 00 06 00|00 00 00 b0
+
+ - item 82 line =  
+01 00 06 00|00 00 00 b6
+
+ - item 83 line =  
+01 00 07 00|00 00 00 bc
+
+ - item 84 line =  
+01 00 03 00|00 00 00 c3
+
+ - item 85 line =  
+01 00 0a 00|00 00 00 c6
+
+ - item 86 line =  
+01 00 09 00|00 00 00 d0
+
+==== ----------------------------------------------------------------------- ====
+
+
+
+
+
+
+interface count = 0
+
+
+field count = 10
+
+
+>> Field 0
+
+
+ -- Mark name index 23 as this class's field name
+
+
+Field >> access_flag = 12, name_index = 23, desc_index = 7, attr_count = 1
+
+>>>> 74
+
+
+>> Field 1
+
+
+ -- Mark name index 26 as this class's field name
+
+
+Field >> access_flag = 12, name_index = 26, desc_index = 7, attr_count = 1
+
+>>>> 74
+
+
+>> Field 2
+
+
+ -- Mark name index 30 as this class's field name
+
+
+Field >> access_flag = 12, name_index = 30, desc_index = 7, attr_count = 1
+
+>>>> 74
+
+
+>> Field 3
+
+
+ -- Mark name index 33 as this class's field name
+
+
+Field >> access_flag = 0, name_index = 33, desc_index = 7, attr_count = 0
+
+>> Field 4
+
+
+ -- Mark name index 36 as this class's field name
+
+
+Field >> access_flag = 0, name_index = 36, desc_index = 7, attr_count = 0
+
+>> Field 5
+
+
+ -- Mark name index 39 as this class's field name
+
+
+Field >> access_flag = 0, name_index = 39, desc_index = 7, attr_count = 0
+
+>> Field 6
+
+
+ -- Mark name index 6 as this class's field name
+
+
+Field >> access_flag = 0, name_index = 6, desc_index = 7, attr_count = 0
+
+>> Field 7
+
+
+ -- Mark name index 10 as this class's field name
+
+
+Field >> access_flag = 0, name_index = 10, desc_index = 7, attr_count = 0
+
+>> Field 8
+
+
+ -- Mark name index 13 as this class's field name
+
+
+Field >> access_flag = 0, name_index = 13, desc_index = 7, attr_count = 0
+
+>> Field 9
+
+
+ -- Mark name index 42 as this class's field name
+
+
+Field >> access_flag = 10, name_index = 42, desc_index = 7, attr_count = 0
+
+======================= Begin Method Analysis ===========================
+
+
+- Method Count = 8
+
+
+-------------------- Method 0 --------------------------
+
+
+ - acc flag = 0
+
+
+ - name_index = 75
+
+
+ - desc_index = 76
+
+
+ - attr count = 1
+
+
+-------------------- Method 0 attr count = 1------------------
+
+
+desc = (FFF)V
+
+
+Attr From Addr: 0x2cf / 0x56f
+
+ --- attr name in index 77 = Code
+
+
+Attribute len = 67 (0x43)
+
+[Code maxStack = 4, maxLocals = 4, codeLen = 31, params_count = 4]
+
+2a	
+0b	
+23	
+12	
+03	
+6e	
+66	
+b5	
+
+
+
+00	
+04	
+2a	
+0b	
+24	
+12	
+03	
+6e	
+
+
+
+66	
+b5	
+00	
+08	
+2a	
+0b	
+25	
+12	
+
+
+
+03	
+6e	
+66	
+b5	
+00	
+0b	
+b1	
+
+
+
+-------------------- Method 1 --------------------------
+
+
+ - acc flag = 0
+
+
+ - name_index = 18
+
+
+ - desc_index = 52
+
+
+ - attr count = 1
+
+
+-------------------- Method 1 attr count = 1------------------
+
+
+desc = (FFFFFFF)V
+
+
+Attr From Addr: 0x320 / 0x56f
+
+ --- attr name in index 77 = Code
+
+
+Attribute len = 142 (0x8e)
+
+[Code maxStack = 3, maxLocals = 8, codeLen = 74, params_count = 8]
+
+2a	
+b7	
+00	
+0e	
+2a	
+12	
+14	
+b5	
+
+
+
+00	
+15	
+2a	
+12	
+03	
+b5	
+00	
+18	
+
+
+
+2a	
+12	
+1b	
+b5	
+00	
+1c	
+2a	
+23	
+
+
+
+b5	
+00	
+1f	
+2a	
+24	
+b5	
+00	
+22	
+
+
+
+2a	
+25	
+b5	
+00	
+25	
+2a	
+17	
+04	
+
+
+
+12	
+1b	
+6a	
+b5	
+00	
+04	
+2a	
+17	
+
+
+
+05	
+12	
+1b	
+6a	
+b5	
+00	
+08	
+2a	
+
+
+
+17	
+06	
+12	
+1b	
+6a	
+b5	
+00	
+0b	
+
+
+
+2a	
+17	
+07	
+12	
+03	
+6a	
+b5	
+00	
+
+
+
+28	
+b1	
+
+
+
+-------------------- Method 2 --------------------------
+
+
+ - acc flag = 0
+
+
+ - name_index = 18
+
+
+ - desc_index = 19
+
+
+ - attr count = 1
+
+
+-------------------- Method 2 attr count = 1------------------
+
+
+desc = ()V
+
+
+Attr From Addr: 0x3bc / 0x56f
+
+ --- attr name in index 77 = Code
+
+
+Attribute len = 126 (0x7e)
+
+[Code maxStack = 2, maxLocals = 1, codeLen = 58, params_count = 1]
+
+2a	
+b7	
+00	
+0e	
+2a	
+12	
+14	
+b5	
+
+
+
+00	
+15	
+2a	
+12	
+03	
+b5	
+00	
+18	
+
+
+
+2a	
+12	
+1b	
+b5	
+00	
+1c	
+2a	
+0b	
+
+
+
+b5	
+00	
+1f	
+2a	
+0b	
+b5	
+00	
+22	
+
+
+
+2a	
+0b	
+b5	
+00	
+25	
+2a	
+0b	
+b5	
+
+
+
+00	
+04	
+2a	
+0b	
+b5	
+00	
+08	
+2a	
+
+
+
+0b	
+b5	
+00	
+0b	
+2a	
+0b	
+b5	
+00	
+
+
+
+28	
+b1	
+
+
+
+-------------------- Method 3 --------------------------
+
+
+ - acc flag = 0
+
+
+ - name_index = 79
+
+
+ - desc_index = 80
+
+
+ - attr count = 1
+
+
+-------------------- Method 3 attr count = 1------------------
+
+
+desc = ()Lapplication/bst/Body;
+
+
+Attr From Addr: 0x448 / 0x56f
+
+ --- attr name in index 77 = Code
+
+
+Attribute len = 46 (0x2e)
+
+[Code maxStack = 9, maxLocals = 1, codeLen = 22, params_count = 1]
+
+bb	
+00	
+01	
+59	
+12	
+2b	
+12	
+2c	
+
+
+
+12	
+2d	
+12	
+2e	
+12	
+2f	
+12	
+30	
+
+
+
+12	
+31	
+b7	
+00	
+32	
+b0	
+
+
+
+-------------------- Method 4 --------------------------
+
+
+ - acc flag = 0
+
+
+ - name_index = 81
+
+
+ - desc_index = 80
+
+
+ - attr count = 1
+
+
+-------------------- Method 4 attr count = 1------------------
+
+
+desc = ()Lapplication/bst/Body;
+
+
+Attr From Addr: 0x484 / 0x56f
+
+ --- attr name in index 77 = Code
+
+
+Attribute len = 46 (0x2e)
+
+[Code maxStack = 9, maxLocals = 1, codeLen = 22, params_count = 1]
+
+bb	
+00	
+01	
+59	
+12	
+35	
+12	
+36	
+
+
+
+12	
+37	
+12	
+38	
+12	
+39	
+12	
+3a	
+
+
+
+12	
+3b	
+b7	
+00	
+32	
+b0	
+
+
+
+-------------------- Method 5 --------------------------
+
+
+ - acc flag = 0
+
+
+ - name_index = 82
+
+
+ - desc_index = 80
+
+
+ - attr count = 1
+
+
+-------------------- Method 5 attr count = 1------------------
+
+
+desc = ()Lapplication/bst/Body;
+
+
+Attr From Addr: 0x4c0 / 0x56f
+
+ --- attr name in index 77 = Code
+
+
+Attribute len = 46 (0x2e)
+
+[Code maxStack = 9, maxLocals = 1, codeLen = 22, params_count = 1]
+
+bb	
+00	
+01	
+59	
+12	
+3c	
+12	
+3d	
+
+
+
+12	
+3e	
+12	
+3f	
+12	
+40	
+12	
+41	
+
+
+
+12	
+42	
+b7	
+00	
+32	
+b0	
+
+
+
+-------------------- Method 6 --------------------------
+
+
+ - acc flag = 0
+
+
+ - name_index = 83
+
+
+ - desc_index = 80
+
+
+ - attr count = 1
+
+
+-------------------- Method 6 attr count = 1------------------
+
+
+desc = ()Lapplication/bst/Body;
+
+
+Attr From Addr: 0x4fc / 0x56f
+
+ --- attr name in index 77 = Code
+
+
+Attribute len = 46 (0x2e)
+
+[Code maxStack = 9, maxLocals = 1, codeLen = 22, params_count = 1]
+
+bb	
+00	
+01	
+59	
+12	
+43	
+12	
+44	
+
+
+
+12	
+45	
+12	
+46	
+12	
+47	
+12	
+48	
+
+
+
+12	
+49	
+b7	
+00	
+32	
+b0	
+
+
+
+-------------------- Method 7 --------------------------
+
+
+ - acc flag = 0
+
+
+ - name_index = 84
+
+
+ - desc_index = 80
+
+
+ - attr count = 1
+
+
+-------------------- Method 7 attr count = 1------------------
+
+
+desc = ()Lapplication/bst/Body;
+
+
+Attr From Addr: 0x538 / 0x56f
+
+ --- attr name in index 77 = Code
+
+
+Attribute len = 39 (0x27)
+
+[Code maxStack = 9, maxLocals = 1, codeLen = 15, params_count = 1]
+
+bb	
+00	
+01	
+59	
+0b	
+0b	
+0b	
+0b	
+
+
+
+0b	
+0b	
+0c	
+b7	
+00	
+32	
+b0	
+
+
+
+======================= End of Method Analysis ===========================
+
+
+ - item 1 line =  
+07 00 00 02|00 00 00 02
+
+ - item 2 line =  
+01 00 14 00|00 00 00 00
+
+ - item 3 line =  
+04 00 00 00|00 00 00 00
+
+ - item 4 line =  
+09 00 00 00|00 01 00 05
+
+ - item 5 line =  
+0c 00 00 00|00 06 00 07
+
+ - item 6 line =  
+01 00 02 00|00 00 00 14
+
+ - item 7 line =  
+01 00 01 00|00 00 00 16
+
+ - item 8 line =  
+09 00 00 00|00 01 00 09
+
+ - item 9 line =  
+0c 00 00 00|00 0a 00 07
+
+ - item 10 line =  
+01 00 02 00|00 00 00 17
+
+ - item 11 line =  
+09 00 00 00|00 01 00 0c
+
+ - item 12 line =  
+0c 00 00 00|00 0d 00 07
+
+ - item 13 line =  
+01 00 02 00|00 00 00 19
+
+ - item 14 line =  
+0a 00 00 00|00 0f 00 10
+
+ - item 15 line =  
+07 00 00 11|00 00 00 11
+
+ - item 16 line =  
+0c 00 00 00|00 12 00 13
+
+ - item 17 line =  
+01 00 10 00|00 00 00 1b
+
+ - item 18 line =  
+01 00 06 00|00 00 00 2b
+
+ - item 19 line =  
+01 00 03 00|00 00 00 31
+
+ - item 20 line =  
+04 00 00 00|00 00 00 00
+
+ - item 21 line =  
+09 00 00 00|00 01 00 16
+
+ - item 22 line =  
+0c 00 00 00|00 17 00 07
+
+ - item 23 line =  
+01 00 02 00|00 00 00 34
+
+ - item 24 line =  
+09 00 00 00|00 01 00 19
+
+ - item 25 line =  
+0c 00 00 00|00 1a 00 07
+
+ - item 26 line =  
+01 00 0a 00|00 00 00 36
+
+ - item 27 line =  
+04 00 00 00|00 00 00 00
+
+ - item 28 line =  
+09 00 00 00|00 01 00 1d
+
+ - item 29 line =  
+0c 00 00 00|00 1e 00 07
+
+ - item 30 line =  
+01 00 0c 00|00 00 00 40
+
+ - item 31 line =  
+09 00 00 00|00 01 00 20
+
+ - item 32 line =  
+0c 00 00 00|00 21 00 07
+
+ - item 33 line =  
+01 00 01 00|00 00 00 4c
+
+ - item 34 line =  
+09 00 00 00|00 01 00 23
+
+ - item 35 line =  
+0c 00 00 00|00 24 00 07
+
+ - item 36 line =  
+01 00 01 00|00 00 00 4d
+
+ - item 37 line =  
+09 00 00 00|00 01 00 26
+
+ - item 38 line =  
+0c 00 00 00|00 27 00 07
+
+ - item 39 line =  
+01 00 01 00|00 00 00 4e
+
+ - item 40 line =  
+09 00 00 00|00 01 00 29
+
+ - item 41 line =  
+0c 00 00 00|00 2a 00 07
+
+ - item 42 line =  
+01 00 04 00|00 00 00 4f
+
+ - item 43 line =  
+04 00 00 00|00 00 00 00
+
+ - item 44 line =  
+04 00 00 00|00 00 00 00
+
+ - item 45 line =  
+04 00 00 00|00 00 00 00
+
+ - item 46 line =  
+04 00 00 00|00 00 00 00
+
+ - item 47 line =  
+04 00 00 00|00 00 00 00
+
+ - item 48 line =  
+04 00 00 00|00 00 00 00
+
+ - item 49 line =  
+04 00 00 00|00 00 00 00
+
+ - item 50 line =  
+0a 00 00 00|00 01 00 33
+
+ - item 51 line =  
+0c 00 00 00|00 12 00 34
+
+ - item 52 line =  
+01 00 0a 00|00 00 00 53
+
+ - item 53 line =  
+04 00 00 00|00 00 00 00
+
+ - item 54 line =  
+04 00 00 00|00 00 00 00
+
+ - item 55 line =  
+04 00 00 00|00 00 00 00
+
+ - item 56 line =  
+04 00 00 00|00 00 00 00
+
+ - item 57 line =  
+04 00 00 00|00 00 00 00
+
+ - item 58 line =  
+04 00 00 00|00 00 00 00
+
+ - item 59 line =  
+04 00 00 00|00 00 00 00
+
+ - item 60 line =  
+04 00 00 00|00 00 00 00
+
+ - item 61 line =  
+04 00 00 00|00 00 00 00
+
+ - item 62 line =  
+04 00 00 00|00 00 00 00
+
+ - item 63 line =  
+04 00 00 00|00 00 00 00
+
+ - item 64 line =  
+04 00 00 00|00 00 00 00
+
+ - item 65 line =  
+04 00 00 00|00 00 00 00
+
+ - item 66 line =  
+04 00 00 00|00 00 00 00
+
+ - item 67 line =  
+04 00 00 00|00 00 00 00
+
+ - item 68 line =  
+04 00 00 00|00 00 00 00
+
+ - item 69 line =  
+04 00 00 00|00 00 00 00
+
+ - item 70 line =  
+04 00 00 00|00 00 00 00
+
+ - item 71 line =  
+04 00 00 00|00 00 00 00
+
+ - item 72 line =  
+04 00 00 00|00 00 00 00
+
+ - item 73 line =  
+04 00 00 00|00 00 00 00
+
+ - item 74 line =  
+01 00 0d 00|00 00 00 5d
+
+ - item 75 line =  
+01 00 0e 00|00 00 00 6a
+
+ - item 76 line =  
+01 00 06 00|00 00 00 78
+
+ - item 77 line =  
+01 00 04 00|00 00 00 7e
+
+ - item 78 line =  
+01 00 0f 00|00 00 00 82
+
+ - item 79 line =  
+01 00 07 00|00 00 00 91
+
+ - item 80 line =  
+01 00 18 00|00 00 00 98
+
+ - item 81 line =  
+01 00 06 00|00 00 00 b0
+
+ - item 82 line =  
+01 00 06 00|00 00 00 b6
+
+ - item 83 line =  
+01 00 07 00|00 00 00 bc
+
+ - item 84 line =  
+01 00 03 00|00 00 00 c3
+
+ - item 85 line =  
+01 00 0a 00|00 00 00 c6
+
+ - item 86 line =  
+01 00 09 00|00 00 00 d0
+
+super class name = java/lang/Object
+
+
+get DPUID = 0 class =  java/lang/Object from cache
+ ---- load super class java/lang/Object, index 17
+
+
+ ==========--> Try load class java/lang/Object to dpu#0 <--==========
+
+
+get DPUID = 0 class =  java/lang/Object from cache
+begin preresolve classfile
+
+
+constant table item count = 92
+
+
+====================== Begin analyze constant table item ====================
+
+
+ >> Item 1 
+
+Class
+
+
+	 -> Mark UTF8 index 1: 2
+
+
+ >> Item 2 
+
+UTF8
+
+
+ >> Item 3 
+
+Methodref
+
+
+	 -> Mark Class and NameAndType index 3: 1|4
+
+
+ >> Item 4 
+
+NameAndType
+
+
+	 -> Mark Name and Type in index 4: 5|6
+
+
+ >> Item 5 
+
+UTF8
+
+
+ >> Item 6 
+
+UTF8
+
+
+ >> Item 7 
+
+Methodref
+
+
+	 -> Mark Class and NameAndType index 7: 8|9
+
+
+ >> Item 8 
+
+Class
+
+
+	 -> Mark UTF8 index 8: 10
+
+
+ >> Item 9 
+
+NameAndType
+
+
+	 -> Mark Name and Type in index 9: 11|12
+
+
+ >> Item 10 
+
+UTF8
+
+
+ >> Item 11 
+
+UTF8
+
+
+ >> Item 12 
+
+UTF8
+
+
+ >> Item 13 
+
+Methodref
+
+
+	 -> Mark Class and NameAndType index 13: 14|15
+
+
+ >> Item 14 
+
+Class
+
+
+	 -> Mark UTF8 index 14: 16
+
+
+ >> Item 15 
+
+NameAndType
+
+
+	 -> Mark Name and Type in index 15: 17|18
+
+
+ >> Item 16 
+
+UTF8
+
+
+ >> Item 17 
+
+UTF8
+
+
+ >> Item 18 
+
+UTF8
+
+
+ >> Item 19 
+
+Methodref
+
+
+	 -> Mark Class and NameAndType index 19: 1|20
+
+
+ >> Item 20 
+
+NameAndType
+
+
+	 -> Mark Name and Type in index 20: 21|22
+
+
+ >> Item 21 
+
+UTF8
+
+
+ >> Item 22 
+
+UTF8
+
+
+ >> Item 23 
+
+String
+
+
+	 -> Mark UTF8 index 23: 24
+
+
+ >> Item 24 
+
+UTF8
+
+
+ >> Item 25 
+
+Methodref
+
+
+	 -> Mark Class and NameAndType index 25: 8|26
+
+
+ >> Item 26 
+
+NameAndType
+
+
+	 -> Mark Name and Type in index 26: 27|28
+
+
+ >> Item 27 
+
+UTF8
+
+
+ >> Item 28 
+
+UTF8
+
+
+ >> Item 29 
+
+Methodref
+
+
+	 -> Mark Class and NameAndType index 29: 30|31
+
+
+ >> Item 30 
+
+Class
+
+
+	 -> Mark UTF8 index 30: 32
+
+
+ >> Item 31 
+
+NameAndType
+
+
+	 -> Mark Name and Type in index 31: 33|34
+
+
+ >> Item 32 
+
+UTF8
+
+
+ >> Item 33 
+
+UTF8
+
+
+ >> Item 34 
+
+UTF8
+
+
+ >> Item 35 
+
+Methodref
+
+
+	 -> Mark Class and NameAndType index 35: 1|36
+
+
+ >> Item 36 
+
+NameAndType
+
+
+	 -> Mark Name and Type in index 36: 37|18
+
+
+ >> Item 37 
+
+UTF8
+
+
+ >> Item 38 
+
+Methodref
+
+
+	 -> Mark Class and NameAndType index 38: 8|39
+
+
+ >> Item 39 
+
+NameAndType
+
+
+	 -> Mark Name and Type in index 39: 40|41
+
+
+ >> Item 40 
+
+UTF8
+
+
+ >> Item 41 
+
+UTF8
+
+
+ >> Item 42 
+
+Class
+
+
+	 -> Mark UTF8 index 42: 43
+
+
+ >> Item 43 
+
+UTF8
+
+
+ >> Item 44 
+
+String
+
+
+	 -> Mark UTF8 index 44: 45
+
+
+ >> Item 45 
+
+UTF8
+
+
+ >> Item 46 
+
+Methodref
+
+
+	 -> Mark Class and NameAndType index 46: 42|47
+
+
+ >> Item 47 
+
+NameAndType
+
+
+	 -> Mark Name and Type in index 47: 5|48
+
+
+ >> Item 48 
+
+UTF8
+
+
+ >> Item 49 
+
+Integer
+
+
+ >> Item 50 
+
+String
+
+
+	 -> Mark UTF8 index 50: 51
+
+
+ >> Item 51 
+
+UTF8
+
+
+ >> Item 52 
+
+Class
+
+
+	 -> Mark UTF8 index 52: 53
+
+
+ >> Item 53 
+
+UTF8
+
+
+ >> Item 54 
+
+Long
+
+
+ >> Item 56 
+
+UTF8
+
+
+ >> Item 57 
+
+UTF8
+
+
+ >> Item 58 
+
+UTF8
+
+
+ >> Item 59 
+
+UTF8
+
+
+ >> Item 60 
+
+UTF8
+
+
+ >> Item 61 
+
+UTF8
+
+
+ >> Item 62 
+
+UTF8
+
+
+ >> Item 63 
+
+UTF8
+
+
+ >> Item 64 
+
+UTF8
+
+
+ >> Item 65 
+
+UTF8
+
+
+ >> Item 66 
+
+UTF8
+
+
+ >> Item 67 
+
+UTF8
+
+
+ >> Item 68 
+
+UTF8
+
+
+ >> Item 69 
+
+UTF8
+
+
+ >> Item 70 
+
+UTF8
+
+
+ >> Item 71 
+
+UTF8
+
+
+ >> Item 72 
+
+Class
+
+
+	 -> Mark UTF8 index 72: 73
+
+
+ >> Item 73 
+
+UTF8
+
+
+ >> Item 74 
+
+UTF8
+
+
+ >> Item 75 
+
+UTF8
+
+
+ >> Item 76 
+
+Class
+
+
+	 -> Mark UTF8 index 76: 77
+
+
+ >> Item 77 
+
+UTF8
+
+
+ >> Item 78 
+
+UTF8
+
+
+ >> Item 79 
+
+UTF8
+
+
+ >> Item 80 
+
+UTF8
+
+
+ >> Item 81 
+
+UTF8
+
+
+ >> Item 82 
+
+UTF8
+
+
+ >> Item 83 
+
+UTF8
+
+
+ >> Item 84 
+
+Class
+
+
+	 -> Mark UTF8 index 84: 85
+
+
+ >> Item 85 
+
+UTF8
+
+
+ >> Item 86 
+
+UTF8
+
+
+ >> Item 87 
+
+UTF8
+
+
+ >> Item 88 
+
+UTF8
+
+
+ >> Item 89 
+
+UTF8
+
+
+ >> Item 90 
+
+UTF8
+
+
+ >> Item 91 
+
+UTF8
+
+
+====================== End analyze constant table item ====================
+
+
+
+
+
+==== Entries Table After Resolution Phase 1 - read constant table, and fill information ====
+
+
+
+ - item 1 line =  
+07 00 00 02|00 00 00 02
+
+ - item 2 line =  
+01 00 00 00|00 00 00 17
+
+ - item 3 line =  
+0a 00 00 00|00 01 00 04
+
+ - item 4 line =  
+0c 00 00 00|00 05 00 06
+
+ - item 5 line =  
+01 00 00 00|00 00 00 06
+
+ - item 6 line =  
+01 00 00 00|00 00 00 03
+
+ - item 7 line =  
+0a 00 00 00|00 08 00 09
+
+ - item 8 line =  
+07 00 00 0a|00 00 00 0a
+
+ - item 9 line =  
+0c 00 00 00|00 0b 00 0c
+
+ - item 10 line =  
+01 00 00 00|00 00 00 10
+
+ - item 11 line =  
+01 00 00 00|00 00 00 08
+
+ - item 12 line =  
+01 00 00 00|00 00 00 13
+
+ - item 13 line =  
+0a 00 00 00|00 0e 00 0f
+
+ - item 14 line =  
+07 00 00 10|00 00 00 10
+
+ - item 15 line =  
+0c 00 00 00|00 11 00 12
+
+ - item 16 line =  
+01 00 00 00|00 00 00 0f
+
+ - item 17 line =  
+01 00 00 00|00 00 00 07
+
+ - item 18 line =  
+01 00 00 00|00 00 00 14
+
+ - item 19 line =  
+0a 00 00 00|00 01 00 14
+
+ - item 20 line =  
+0c 00 00 00|00 15 00 16
+
+ - item 21 line =  
+01 00 00 00|00 00 00 06
+
+ - item 22 line =  
+01 00 00 00|00 00 00 2d
+
+ - item 23 line =  
+00 00 00 00|00 00 00 18
+
+ - item 24 line =  
+01 00 00 00|00 00 00 01
+
+ - item 25 line =  
+0a 00 00 00|00 08 00 1a
+
+ - item 26 line =  
+0c 00 00 00|00 1b 00 1c
+
+ - item 27 line =  
+01 00 00 00|00 00 00 08
+
+ - item 28 line =  
+01 00 00 00|00 00 00 03
+
+ - item 29 line =  
+0a 00 00 00|00 1e 00 1f
+
+ - item 30 line =  
+07 00 00 20|00 00 00 20
+
+ - item 31 line =  
+0c 00 00 00|00 21 00 22
+
+ - item 32 line =  
+01 00 00 00|00 00 00 11
+
+ - item 33 line =  
+01 00 00 00|00 00 00 0b
+
+ - item 34 line =  
+01 00 00 00|00 00 00 15
+
+ - item 35 line =  
+0a 00 00 00|00 01 00 24
+
+ - item 36 line =  
+0c 00 00 00|00 25 00 12
+
+ - item 37 line =  
+01 00 00 00|00 00 00 08
+
+ - item 38 line =  
+0a 00 00 00|00 08 00 27
+
+ - item 39 line =  
+0c 00 00 00|00 28 00 29
+
+ - item 40 line =  
+01 00 00 00|00 00 00 04
+
+ - item 41 line =  
+01 00 00 00|00 00 00 04
+
+ - item 42 line =  
+07 00 00 2b|00 00 00 2b
+
+ - item 43 line =  
+01 00 00 00|00 00 00 22
+
+ - item 44 line =  
+00 00 00 00|00 00 00 2d
+
+ - item 45 line =  
+01 00 00 00|00 00 00 1f
+
+ - item 46 line =  
+0a 00 00 00|00 2a 00 2f
+
+ - item 47 line =  
+0c 00 00 00|00 05 00 30
+
+ - item 48 line =  
+01 00 00 00|00 00 00 15
+
+ - item 49 line =  
+03 00 00 00|00 00 00 00
+
+ - item 50 line =  
+00 00 00 00|00 00 00 33
+
+ - item 51 line =  
+01 00 00 00|00 00 00 25
+
+ - item 52 line =  
+07 00 00 35|00 00 00 35
+
+ - item 53 line =  
+01 00 00 00|00 00 00 0e
+
+ - item 54 line =  
+05 00 00 00|00 00 00 00
+
+ - item 55 line =  
+00 00 00 00|00 00 00 00
+
+ - item 56 line =  
+01 00 00 00|00 00 00 04
+
+ - item 57 line =  
+01 00 00 00|00 00 00 0f
+
+ - item 58 line =  
+01 00 00 00|00 00 00 12
+
+ - item 59 line =  
+01 00 00 00|00 00 00 04
+
+ - item 60 line =  
+01 00 00 00|00 00 00 12
+
+ - item 61 line =  
+01 00 00 00|00 00 00 19
+
+ - item 62 line =  
+01 00 00 00|00 00 00 2f
+
+ - item 63 line =  
+01 00 00 00|00 00 00 09
+
+ - item 64 line =  
+01 00 00 00|00 00 00 16
+
+ - item 65 line =  
+01 00 00 00|00 00 00 06
+
+ - item 66 line =  
+01 00 00 00|00 00 00 15
+
+ - item 67 line =  
+01 00 00 00|00 00 00 03
+
+ - item 68 line =  
+01 00 00 00|00 00 00 0d
+
+ - item 69 line =  
+01 00 00 00|00 00 00 05
+
+ - item 70 line =  
+01 00 00 00|00 00 00 14
+
+ - item 71 line =  
+01 00 00 00|00 00 00 0a
+
+ - item 72 line =  
+07 00 00 49|00 00 00 49
+
+ - item 73 line =  
+01 00 00 00|00 00 00 24
+
+ - item 74 line =  
+01 00 00 00|00 00 00 06
+
+ - item 75 line =  
+01 00 00 00|00 00 00 09
+
+ - item 76 line =  
+07 00 00 4d|00 00 00 4d
+
+ - item 77 line =  
+01 00 00 00|00 00 00 1e
+
+ - item 78 line =  
+01 00 00 00|00 00 00 05
+
+ - item 79 line =  
+01 00 00 00|00 00 00 0d
+
+ - item 80 line =  
+01 00 00 00|00 00 00 01
+
+ - item 81 line =  
+01 00 00 00|00 00 00 05
+
+ - item 82 line =  
+01 00 00 00|00 00 00 01
+
+ - item 83 line =  
+01 00 00 00|00 00 00 08
+
+ - item 84 line =  
+07 00 00 55|00 00 00 55
+
+ - item 85 line =  
+01 00 00 00|00 00 00 13
+
+ - item 86 line =  
+01 00 00 00|00 00 00 0a
+
+ - item 87 line =  
+01 00 00 00|00 00 00 16
+
+ - item 88 line =  
+01 00 00 00|00 00 00 05
+
+ - item 89 line =  
+01 00 00 00|00 00 00 01
+
+ - item 90 line =  
+01 00 00 00|00 00 00 0a
+
+ - item 91 line =  
+01 00 00 00|00 00 00 0b
+
+==== ----------------------------------------------------------------------- ====
+
+
+
+
+
+
+access_flag = 0x0021
+
+ - this class = 8
+
+
+tEntries Table After Resolution Phase 1 - read CPs, and mark information. This_class ref index = 0
+
+
+ - super class = 0
+
+
+super_class ref index = 0
+
+
+rescan for filling utf_8 string and number area, total size = 826 bytes
+
+
+>> Entry #2 is UTF8, len = 23
+
+
+Fill UTF8 string in constantArea offset = 0
+
+>> Entry #5 is UTF8, len = 6
+
+
+Fill UTF8 string in constantArea offset = 23
+
+>> Entry #6 is UTF8, len = 3
+
+
+Fill UTF8 string in constantArea offset = 29
+
+>> Entry #10 is UTF8, len = 16
+
+
+Fill UTF8 string in constantArea offset = 32
+
+>> Entry #11 is UTF8, len = 8
+
+
+Fill UTF8 string in constantArea offset = 48
+
+>> Entry #12 is UTF8, len = 19
+
+
+Fill UTF8 string in constantArea offset = 56
+
+>> Entry #16 is UTF8, len = 15
+
+
+Fill UTF8 string in constantArea offset = 75
+
+>> Entry #17 is UTF8, len = 7
+
+
+Fill UTF8 string in constantArea offset = 90
+
+>> Entry #18 is UTF8, len = 20
+
+
+Fill UTF8 string in constantArea offset = 97
+
+>> Entry #21 is UTF8, len = 6
+
+
+Fill UTF8 string in constantArea offset = 117
+
+>> Entry #22 is UTF8, len = 45
+
+
+Fill UTF8 string in constantArea offset = 123
+
+>> Entry #24 is UTF8, len = 1
+
+
+Fill UTF8 string in constantArea offset = 168
+
+>> Entry #27 is UTF8, len = 8
+
+
+Fill UTF8 string in constantArea offset = 169
+
+>> Entry #28 is UTF8, len = 3
+
+
+Fill UTF8 string in constantArea offset = 177
+
+>> Entry #32 is UTF8, len = 17
+
+
+Fill UTF8 string in constantArea offset = 180
+
+>> Entry #33 is UTF8, len = 11
+
+
+Fill UTF8 string in constantArea offset = 197
+
+>> Entry #34 is UTF8, len = 21
+
+
+Fill UTF8 string in constantArea offset = 208
+
+>> Entry #37 is UTF8, len = 8
+
+
+Fill UTF8 string in constantArea offset = 229
+
+>> Entry #40 is UTF8, len = 4
+
+
+Fill UTF8 string in constantArea offset = 237
+
+>> Entry #41 is UTF8, len = 4
+
+
+Fill UTF8 string in constantArea offset = 241
+
+>> Entry #43 is UTF8, len = 34
+
+
+Fill UTF8 string in constantArea offset = 245
+
+>> Entry #45 is UTF8, len = 31
+
+
+Fill UTF8 string in constantArea offset = 279
+
+>> Entry #48 is UTF8, len = 21
+
+
+Fill UTF8 string in constantArea offset = 310
+
+in entry #49 int, val = 999999
+
+
+Fill int in constantDataArea offset = 331
+
+>> Entry #51 is UTF8, len = 37
+
+
+Fill UTF8 string in constantArea offset = 335
+
+>> Entry #53 is UTF8, len = 14
+
+
+Fill UTF8 string in constantArea offset = 372
+
+in entry #54 double, val = -1
+
+
+Fill long/double in constantDataArea offset = 386
+
+>> Entry #56 is UTF8, len = 4
+
+
+Fill UTF8 string in constantArea offset = 394
+
+>> Entry #57 is UTF8, len = 15
+
+
+Fill UTF8 string in constantArea offset = 398
+
+>> Entry #58 is UTF8, len = 18
+
+
+Fill UTF8 string in constantArea offset = 413
+
+>> Entry #59 is UTF8, len = 4
+
+
+Fill UTF8 string in constantArea offset = 431
+
+>> Entry #60 is UTF8, len = 18
+
+
+Fill UTF8 string in constantArea offset = 435
+
+>> Entry #61 is UTF8, len = 25
+
+
+Fill UTF8 string in constantArea offset = 453
+
+>> Entry #62 is UTF8, len = 47
+
+
+Fill UTF8 string in constantArea offset = 478
+
+>> Entry #63 is UTF8, len = 9
+
+
+Fill UTF8 string in constantArea offset = 525
+
+>> Entry #64 is UTF8, len = 22
+
+
+Fill UTF8 string in constantArea offset = 534
+
+>> Entry #65 is UTF8, len = 6
+
+
+Fill UTF8 string in constantArea offset = 556
+
+>> Entry #66 is UTF8, len = 21
+
+
+Fill UTF8 string in constantArea offset = 562
+
+>> Entry #67 is UTF8, len = 3
+
+
+Fill UTF8 string in constantArea offset = 583
+
+>> Entry #68 is UTF8, len = 13
+
+
+Fill UTF8 string in constantArea offset = 586
+
+>> Entry #69 is UTF8, len = 5
+
+
+Fill UTF8 string in constantArea offset = 599
+
+>> Entry #70 is UTF8, len = 20
+
+
+Fill UTF8 string in constantArea offset = 604
+
+>> Entry #71 is UTF8, len = 10
+
+
+Fill UTF8 string in constantArea offset = 624
+
+>> Entry #73 is UTF8, len = 36
+
+
+Fill UTF8 string in constantArea offset = 634
+
+>> Entry #74 is UTF8, len = 6
+
+
+Fill UTF8 string in constantArea offset = 670
+
+>> Entry #75 is UTF8, len = 9
+
+
+Fill UTF8 string in constantArea offset = 676
+
+>> Entry #77 is UTF8, len = 30
+
+
+Fill UTF8 string in constantArea offset = 685
+
+>> Entry #78 is UTF8, len = 5
+
+
+Fill UTF8 string in constantArea offset = 715
+
+>> Entry #79 is UTF8, len = 13
+
+
+Fill UTF8 string in constantArea offset = 720
+
+>> Entry #80 is UTF8, len = 1
+
+
+Fill UTF8 string in constantArea offset = 733
+
+>> Entry #81 is UTF8, len = 5
+
+
+Fill UTF8 string in constantArea offset = 734
+
+>> Entry #82 is UTF8, len = 1
+
+
+Fill UTF8 string in constantArea offset = 739
+
+>> Entry #83 is UTF8, len = 8
+
+
+Fill UTF8 string in constantArea offset = 740
+
+>> Entry #85 is UTF8, len = 19
+
+
+Fill UTF8 string in constantArea offset = 748
+
+>> Entry #86 is UTF8, len = 10
+
+
+Fill UTF8 string in constantArea offset = 767
+
+>> Entry #87 is UTF8, len = 22
+
+
+Fill UTF8 string in constantArea offset = 777
+
+>> Entry #88 is UTF8, len = 5
+
+
+Fill UTF8 string in constantArea offset = 799
+
+>> Entry #89 is UTF8, len = 1
+
+
+Fill UTF8 string in constantArea offset = 804
+
+>> Entry #90 is UTF8, len = 10
+
+
+Fill UTF8 string in constantArea offset = 805
+
+>> Entry #91 is UTF8, len = 11
+
+
+Fill UTF8 string in constantArea offset = 815
+
+filled 826/826 bytes
+
+==== Entries Table After Resolution Phase 2 - fill constant value to constantDataArea ====
+
+
+
+ - item 1 line =  
+07 00 00 02|00 00 00 02
+
+ - item 2 line =  
+01 00 17 00|00 00 00 00
+
+ - item 3 line =  
+0a 00 00 00|00 01 00 04
+
+ - item 4 line =  
+0c 00 00 00|00 05 00 06
+
+ - item 5 line =  
+01 00 06 00|00 00 00 17
+
+ - item 6 line =  
+01 00 03 00|00 00 00 1d
+
+ - item 7 line =  
+0a 00 00 00|00 08 00 09
+
+ - item 8 line =  
+07 00 00 0a|00 00 00 0a
+
+ - item 9 line =  
+0c 00 00 00|00 0b 00 0c
+
+ - item 10 line =  
+01 00 10 00|00 00 00 20
+
+ - item 11 line =  
+01 00 08 00|00 00 00 30
+
+ - item 12 line =  
+01 00 13 00|00 00 00 38
+
+ - item 13 line =  
+0a 00 00 00|00 0e 00 0f
+
+ - item 14 line =  
+07 00 00 10|00 00 00 10
+
+ - item 15 line =  
+0c 00 00 00|00 11 00 12
+
+ - item 16 line =  
+01 00 0f 00|00 00 00 4b
+
+ - item 17 line =  
+01 00 07 00|00 00 00 5a
+
+ - item 18 line =  
+01 00 14 00|00 00 00 61
+
+ - item 19 line =  
+0a 00 00 00|00 01 00 14
+
+ - item 20 line =  
+0c 00 00 00|00 15 00 16
+
+ - item 21 line =  
+01 00 06 00|00 00 00 75
+
+ - item 22 line =  
+01 00 2d 00|00 00 00 7b
+
+ - item 23 line =  
+00 00 00 00|00 00 00 18
+
+ - item 24 line =  
+01 00 01 00|00 00 00 a8
+
+ - item 25 line =  
+0a 00 00 00|00 08 00 1a
+
+ - item 26 line =  
+0c 00 00 00|00 1b 00 1c
+
+ - item 27 line =  
+01 00 08 00|00 00 00 a9
+
+ - item 28 line =  
+01 00 03 00|00 00 00 b1
+
+ - item 29 line =  
+0a 00 00 00|00 1e 00 1f
+
+ - item 30 line =  
+07 00 00 20|00 00 00 20
+
+ - item 31 line =  
+0c 00 00 00|00 21 00 22
+
+ - item 32 line =  
+01 00 11 00|00 00 00 b4
+
+ - item 33 line =  
+01 00 0b 00|00 00 00 c5
+
+ - item 34 line =  
+01 00 15 00|00 00 00 d0
+
+ - item 35 line =  
+0a 00 00 00|00 01 00 24
+
+ - item 36 line =  
+0c 00 00 00|00 25 00 12
+
+ - item 37 line =  
+01 00 08 00|00 00 00 e5
+
+ - item 38 line =  
+0a 00 00 00|00 08 00 27
+
+ - item 39 line =  
+0c 00 00 00|00 28 00 29
+
+ - item 40 line =  
+01 00 04 00|00 00 00 ed
+
+ - item 41 line =  
+01 00 04 00|00 00 00 f1
+
+ - item 42 line =  
+07 00 00 2b|00 00 00 2b
+
+ - item 43 line =  
+01 00 22 00|00 00 00 f5
+
+ - item 44 line =  
+00 00 00 00|00 00 00 2d
+
+ - item 45 line =  
+01 00 1f 00|00 00 01 17
+
+ - item 46 line =  
+0a 00 00 00|00 2a 00 2f
+
+ - item 47 line =  
+0c 00 00 00|00 05 00 30
+
+ - item 48 line =  
+01 00 15 00|00 00 01 36
+
+ - item 49 line =  
+03 00 00 00|00 00 01 4b
+
+ - item 50 line =  
+00 00 00 00|00 00 00 33
+
+ - item 51 line =  
+01 00 25 00|00 00 01 4f
+
+ - item 52 line =  
+07 00 00 35|00 00 00 35
+
+ - item 53 line =  
+01 00 0e 00|00 00 01 74
+
+ - item 54 line =  
+05 00 00 00|00 00 01 82
+
+ - item 55 line =  
+00 00 00 00|00 00 00 00
+
+ - item 56 line =  
+01 00 04 00|00 00 01 8a
+
+ - item 57 line =  
+01 00 0f 00|00 00 01 8e
+
+ - item 58 line =  
+01 00 12 00|00 00 01 9d
+
+ - item 59 line =  
+01 00 04 00|00 00 01 af
+
+ - item 60 line =  
+01 00 12 00|00 00 01 b3
+
+ - item 61 line =  
+01 00 19 00|00 00 01 c5
+
+ - item 62 line =  
+01 00 2f 00|00 00 01 de
+
+ - item 63 line =  
+01 00 09 00|00 00 02 0d
+
+ - item 64 line =  
+01 00 16 00|00 00 02 16
+
+ - item 65 line =  
+01 00 06 00|00 00 02 2c
+
+ - item 66 line =  
+01 00 15 00|00 00 02 32
+
+ - item 67 line =  
+01 00 03 00|00 00 02 47
+
+ - item 68 line =  
+01 00 0d 00|00 00 02 4a
+
+ - item 69 line =  
+01 00 05 00|00 00 02 57
+
+ - item 70 line =  
+01 00 14 00|00 00 02 5c
+
+ - item 71 line =  
+01 00 0a 00|00 00 02 70
+
+ - item 72 line =  
+07 00 00 49|00 00 00 49
+
+ - item 73 line =  
+01 00 24 00|00 00 02 7a
+
+ - item 74 line =  
+01 00 06 00|00 00 02 9e
+
+ - item 75 line =  
+01 00 09 00|00 00 02 a4
+
+ - item 76 line =  
+07 00 00 4d|00 00 00 4d
+
+ - item 77 line =  
+01 00 1e 00|00 00 02 ad
+
+ - item 78 line =  
+01 00 05 00|00 00 02 cb
+
+ - item 79 line =  
+01 00 0d 00|00 00 02 d0
+
+ - item 80 line =  
+01 00 01 00|00 00 02 dd
+
+ - item 81 line =  
+01 00 05 00|00 00 02 de
+
+ - item 82 line =  
+01 00 01 00|00 00 02 e3
+
+ - item 83 line =  
+01 00 08 00|00 00 02 e4
+
+ - item 84 line =  
+07 00 00 55|00 00 00 55
+
+ - item 85 line =  
+01 00 13 00|00 00 02 ec
+
+ - item 86 line =  
+01 00 0a 00|00 00 02 ff
+
+ - item 87 line =  
+01 00 16 00|00 00 03 09
+
+ - item 88 line =  
+01 00 05 00|00 00 03 1f
+
+ - item 89 line =  
+01 00 01 00|00 00 03 24
+
+ - item 90 line =  
+01 00 0a 00|00 00 03 25
+
+ - item 91 line =  
+01 00 0b 00|00 00 03 2f
+
+==== ----------------------------------------------------------------------- ====
+
+
+
+
+
+
+interface count = 0
+
+
+field count = 0
+
+
+======================= Begin Method Analysis ===========================
+
+
+- Method Count = 12
+
+
+
+
+
+-------------------- Method 0 --------------------------
+
+
+ - acc flag = 1
+
+
+ - name_index = 5
+
+
+ - desc_index = 6
+
+
+ - attr count = 2
+
+
+-------------------- Method 0 attr count = 2------------------
+
+
+desc = ()V
+
+
+Attr From Addr: 0x486 / 0x767
+
+ --- attr name in index 56 = Code
+
+
+Attribute len = 43 (0x2b)
+
+[Code maxStack = 0, maxLocals = 1, codeLen = 1, params_count = 1]
+
+b1	
+
+
+
+Attr From Addr: 0x4b7 / 0x767
+
+ --- attr name in index 61 = RuntimeVisibleAnnotations
+
+
+Attribute len = 6 (0x6)
+
+
+
+
+-------------------- Method 1 --------------------------
+
+
+ - acc flag = 273
+
+
+ - name_index = 11
+
+
+ - desc_index = 12
+
+
+ - attr count = 2
+
+
+-------------------- Method 1 attr count = 2------------------
+
+
+desc = ()Ljava/lang/Class;
+
+
+Attr From Addr: 0x4cb / 0x767
+
+ --- attr name in index 63 = Signature
+
+
+Attribute len = 2 (0x2)
+
+Attr From Addr: 0x4d3 / 0x767
+
+ --- attr name in index 61 = RuntimeVisibleAnnotations
+
+
+Attribute len = 6 (0x6)
+
+
+
+
+-------------------- Method 2 --------------------------
+
+
+ - acc flag = 257
+
+
+ - name_index = 27
+
+
+ - desc_index = 28
+
+
+ - attr count = 1
+
+
+-------------------- Method 2 attr count = 1------------------
+
+
+desc = ()I
+
+
+Attr From Addr: 0x4e7 / 0x767
+
+ --- attr name in index 61 = RuntimeVisibleAnnotations
+
+
+Attribute len = 6 (0x6)
+
+
+
+
+-------------------- Method 3 --------------------------
+
+
+ - acc flag = 1
+
+
+ - name_index = 65
+
+
+ - desc_index = 66
+
+
+ - attr count = 1
+
+
+-------------------- Method 3 attr count = 1------------------
+
+
+desc = (Ljava/lang/Object;)Z
+
+
+Attr From Addr: 0x4fb / 0x767
+
+ --- attr name in index 56 = Code
+
+
+Attribute len = 74 (0x4a)
+
+[Code maxStack = 2, maxLocals = 2, codeLen = 11, params_count = 2]
+
+2a	
+2b	
+a6	
+00	
+07	
+04	
+a7	
+00	
+
+
+
+04	
+03	
+ac	
+
+
+
+
+
+
+-------------------- Method 4 --------------------------
+
+
+ - acc flag = 260
+
+
+ - name_index = 69
+
+
+ - desc_index = 70
+
+
+ - attr count = 2
+
+
+-------------------- Method 4 attr count = 2------------------
+
+
+desc = ()Ljava/lang/Object;
+
+
+Attr From Addr: 0x553 / 0x767
+
+ --- attr name in index 71 = Exceptions
+
+
+Attribute len = 4 (0x4)
+
+Attr From Addr: 0x55d / 0x767
+
+ --- attr name in index 61 = RuntimeVisibleAnnotations
+
+
+Attribute len = 6 (0x6)
+
+
+
+
+-------------------- Method 5 --------------------------
+
+
+ - acc flag = 1
+
+
+ - name_index = 37
+
+
+ - desc_index = 18
+
+
+ - attr count = 1
+
+
+-------------------- Method 5 attr count = 1------------------
+
+
+desc = ()Ljava/lang/String;
+
+
+Attr From Addr: 0x571 / 0x767
+
+ --- attr name in index 56 = Code
+
+
+Attribute len = 78 (0x4e)
+
+[Code maxStack = 2, maxLocals = 1, codeLen = 36, params_count = 1]
+
+bb	
+00	
+01	
+59	
+b7	
+00	
+03	
+2a	
+
+
+
+b6	
+00	
+07	
+b6	
+00	
+0d	
+b6	
+00	
+
+
+
+13	
+12	
+17	
+b6	
+00	
+13	
+2a	
+b6	
+
+
+
+00	
+19	
+b8	
+00	
+1d	
+b6	
+00	
+13	
+
+
+
+b6	
+00	
+23	
+b0	
+
+
+
+
+
+
+-------------------- Method 6 --------------------------
+
+
+ - acc flag = 273
+
+
+ - name_index = 74
+
+
+ - desc_index = 6
+
+
+ - attr count = 1
+
+
+-------------------- Method 6 attr count = 1------------------
+
+
+desc = ()V
+
+
+Attr From Addr: 0x5cd / 0x767
+
+ --- attr name in index 61 = RuntimeVisibleAnnotations
+
+
+Attribute len = 6 (0x6)
+
+
+
+
+-------------------- Method 7 --------------------------
+
+
+ - acc flag = 273
+
+
+ - name_index = 75
+
+
+ - desc_index = 6
+
+
+ - attr count = 1
+
+
+-------------------- Method 7 attr count = 1------------------
+
+
+desc = ()V
+
+
+Attr From Addr: 0x5e1 / 0x767
+
+ --- attr name in index 61 = RuntimeVisibleAnnotations
+
+
+Attribute len = 6 (0x6)
+
+
+
+
+-------------------- Method 8 --------------------------
+
+
+ - acc flag = 17
+
+
+ - name_index = 40
+
+
+ - desc_index = 6
+
+
+ - attr count = 2
+
+
+-------------------- Method 8 attr count = 2------------------
+
+
+desc = ()V
+
+
+Attr From Addr: 0x5f5 / 0x767
+
+ --- attr name in index 56 = Code
+
+
+Attribute len = 52 (0x34)
+
+[Code maxStack = 3, maxLocals = 1, codeLen = 6, params_count = 1]
+
+2a	
+09	
+b6	
+00	
+26	
+b1	
+
+
+
+Attr From Addr: 0x62f / 0x767
+
+ --- attr name in index 71 = Exceptions
+
+
+Attribute len = 4 (0x4)
+
+
+
+
+-------------------- Method 9 --------------------------
+
+
+ - acc flag = 273
+
+
+ - name_index = 40
+
+
+ - desc_index = 41
+
+
+ - attr count = 1
+
+
+-------------------- Method 9 attr count = 1------------------
+
+
+desc = (J)V
+
+
+Attr From Addr: 0x641 / 0x767
+
+ --- attr name in index 71 = Exceptions
+
+
+Attribute len = 4 (0x4)
+
+
+
+
+-------------------- Method 10 --------------------------
+
+
+ - acc flag = 17
+
+
+ - name_index = 40
+
+
+ - desc_index = 78
+
+
+ - attr count = 2
+
+
+-------------------- Method 10 attr count = 2------------------
+
+
+desc = (JI)V
+
+
+Attr From Addr: 0x653 / 0x767
+
+ --- attr name in index 56 = Code
+
+
+Attribute len = 160 (0xa0)
+
+[Code maxStack = 4, maxLocals = 4, codeLen = 58, params_count = 3]
+
+1f	
+09	
+94	
+9c	
+00	
+0d	
+bb	
+00	
+
+
+
+2a	
+59	
+12	
+2c	
+b7	
+00	
+2e	
+bf	
+
+
+
+1d	
+9b	
+00	
+09	
+1d	
+12	
+31	
+a4	
+
+
+
+00	
+0d	
+bb	
+00	
+2a	
+59	
+12	
+32	
+
+
+
+b7	
+00	
+2e	
+bf	
+1d	
+9e	
+00	
+0f	
+
+
+
+1f	
+14	
+00	
+36	
+94	
+9c	
+00	
+07	
+
+
+
+1f	
+0a	
+61	
+40	
+2a	
+1f	
+b6	
+00	
+
+
+
+26	
+b1	
+
+
+
+Attr From Addr: 0x6f9 / 0x767
+
+ --- attr name in index 71 = Exceptions
+
+
+Attribute len = 4 (0x4)
+
+
+
+
+-------------------- Method 11 --------------------------
+
+
+ - acc flag = 4
+
+
+ - name_index = 83
+
+
+ - desc_index = 6
+
+
+ - attr count = 4
+
+
+-------------------- Method 11 attr count = 4------------------
+
+
+desc = ()V
+
+
+Attr From Addr: 0x70b / 0x767
+
+ --- attr name in index 56 = Code
+
+
+Attribute len = 43 (0x2b)
+
+[Code maxStack = 0, maxLocals = 1, codeLen = 1, params_count = 1]
+
+b1	
+
+
+
+Attr From Addr: 0x73c / 0x767
+
+ --- attr name in index 71 = Exceptions
+
+
+Attribute len = 4 (0x4)
+
+Attr From Addr: 0x746 / 0x767
+
+ --- attr name in index 86 = Deprecated
+
+
+Attribute len = 0 (0x0)
+
+Attr From Addr: 0x74c / 0x767
+
+ --- attr name in index 61 = RuntimeVisibleAnnotations
+
+
+Attribute len = 11 (0xb)
+
+======================= End of Method Analysis ===========================
+
+
+ - item 1 line =  
+07 00 00 02|00 00 00 02
+
+ - item 2 line =  
+01 00 17 00|00 00 00 00
+
+ - item 3 line =  
+0a 00 00 00|00 01 00 04
+
+ - item 4 line =  
+0c 00 00 00|00 05 00 06
+
+ - item 5 line =  
+01 00 06 00|00 00 00 17
+
+ - item 6 line =  
+01 00 03 00|00 00 00 1d
+
+ - item 7 line =  
+0a 00 00 00|00 08 00 09
+
+ - item 8 line =  
+07 00 00 0a|00 00 00 0a
+
+ - item 9 line =  
+0c 00 00 00|00 0b 00 0c
+
+ - item 10 line =  
+01 00 10 00|00 00 00 20
+
+ - item 11 line =  
+01 00 08 00|00 00 00 30
+
+ - item 12 line =  
+01 00 13 00|00 00 00 38
+
+ - item 13 line =  
+0a 00 00 00|00 0e 00 0f
+
+ - item 14 line =  
+07 00 00 10|00 00 00 10
+
+ - item 15 line =  
+0c 00 00 00|00 11 00 12
+
+ - item 16 line =  
+01 00 0f 00|00 00 00 4b
+
+ - item 17 line =  
+01 00 07 00|00 00 00 5a
+
+ - item 18 line =  
+01 00 14 00|00 00 00 61
+
+ - item 19 line =  
+0a 00 00 00|00 01 00 14
+
+ - item 20 line =  
+0c 00 00 00|00 15 00 16
+
+ - item 21 line =  
+01 00 06 00|00 00 00 75
+
+ - item 22 line =  
+01 00 2d 00|00 00 00 7b
+
+ - item 23 line =  
+00 00 00 00|00 00 00 18
+
+ - item 24 line =  
+01 00 01 00|00 00 00 a8
+
+ - item 25 line =  
+0a 00 00 00|00 08 00 1a
+
+ - item 26 line =  
+0c 00 00 00|00 1b 00 1c
+
+ - item 27 line =  
+01 00 08 00|00 00 00 a9
+
+ - item 28 line =  
+01 00 03 00|00 00 00 b1
+
+ - item 29 line =  
+0a 00 00 00|00 1e 00 1f
+
+ - item 30 line =  
+07 00 00 20|00 00 00 20
+
+ - item 31 line =  
+0c 00 00 00|00 21 00 22
+
+ - item 32 line =  
+01 00 11 00|00 00 00 b4
+
+ - item 33 line =  
+01 00 0b 00|00 00 00 c5
+
+ - item 34 line =  
+01 00 15 00|00 00 00 d0
+
+ - item 35 line =  
+0a 00 00 00|00 01 00 24
+
+ - item 36 line =  
+0c 00 00 00|00 25 00 12
+
+ - item 37 line =  
+01 00 08 00|00 00 00 e5
+
+ - item 38 line =  
+0a 00 00 00|00 08 00 27
+
+ - item 39 line =  
+0c 00 00 00|00 28 00 29
+
+ - item 40 line =  
+01 00 04 00|00 00 00 ed
+
+ - item 41 line =  
+01 00 04 00|00 00 00 f1
+
+ - item 42 line =  
+07 00 00 2b|00 00 00 2b
+
+ - item 43 line =  
+01 00 22 00|00 00 00 f5
+
+ - item 44 line =  
+00 00 00 00|00 00 00 2d
+
+ - item 45 line =  
+01 00 1f 00|00 00 01 17
+
+ - item 46 line =  
+0a 00 00 00|00 2a 00 2f
+
+ - item 47 line =  
+0c 00 00 00|00 05 00 30
+
+ - item 48 line =  
+01 00 15 00|00 00 01 36
+
+ - item 49 line =  
+03 00 00 00|00 00 01 4b
+
+ - item 50 line =  
+00 00 00 00|00 00 00 33
+
+ - item 51 line =  
+01 00 25 00|00 00 01 4f
+
+ - item 52 line =  
+07 00 00 35|00 00 00 35
+
+ - item 53 line =  
+01 00 0e 00|00 00 01 74
+
+ - item 54 line =  
+05 00 00 00|00 00 01 82
+
+ - item 55 line =  
+00 00 00 00|00 00 00 00
+
+ - item 56 line =  
+01 00 04 00|00 00 01 8a
+
+ - item 57 line =  
+01 00 0f 00|00 00 01 8e
+
+ - item 58 line =  
+01 00 12 00|00 00 01 9d
+
+ - item 59 line =  
+01 00 04 00|00 00 01 af
+
+ - item 60 line =  
+01 00 12 00|00 00 01 b3
+
+ - item 61 line =  
+01 00 19 00|00 00 01 c5
+
+ - item 62 line =  
+01 00 2f 00|00 00 01 de
+
+ - item 63 line =  
+01 00 09 00|00 00 02 0d
+
+ - item 64 line =  
+01 00 16 00|00 00 02 16
+
+ - item 65 line =  
+01 00 06 00|00 00 02 2c
+
+ - item 66 line =  
+01 00 15 00|00 00 02 32
+
+ - item 67 line =  
+01 00 03 00|00 00 02 47
+
+ - item 68 line =  
+01 00 0d 00|00 00 02 4a
+
+ - item 69 line =  
+01 00 05 00|00 00 02 57
+
+ - item 70 line =  
+01 00 14 00|00 00 02 5c
+
+ - item 71 line =  
+01 00 0a 00|00 00 02 70
+
+ - item 72 line =  
+07 00 00 49|00 00 00 49
+
+ - item 73 line =  
+01 00 24 00|00 00 02 7a
+
+ - item 74 line =  
+01 00 06 00|00 00 02 9e
+
+ - item 75 line =  
+01 00 09 00|00 00 02 a4
+
+ - item 76 line =  
+07 00 00 4d|00 00 00 4d
+
+ - item 77 line =  
+01 00 1e 00|00 00 02 ad
+
+ - item 78 line =  
+01 00 05 00|00 00 02 cb
+
+ - item 79 line =  
+01 00 0d 00|00 00 02 d0
+
+ - item 80 line =  
+01 00 01 00|00 00 02 dd
+
+ - item 81 line =  
+01 00 05 00|00 00 02 de
+
+ - item 82 line =  
+01 00 01 00|00 00 02 e3
+
+ - item 83 line =  
+01 00 08 00|00 00 02 e4
+
+ - item 84 line =  
+07 00 00 55|00 00 00 55
+
+ - item 85 line =  
+01 00 13 00|00 00 02 ec
+
+ - item 86 line =  
+01 00 0a 00|00 00 02 ff
+
+ - item 87 line =  
+01 00 16 00|00 00 03 09
+
+ - item 88 line =  
+01 00 05 00|00 00 03 1f
+
+ - item 89 line =  
+01 00 01 00|00 00 03 24
+
+ - item 90 line =  
+01 00 0a 00|00 00 03 25
+
+ - item 91 line =  
+01 00 0b 00|00 00 03 2f
+
+super class name = 
+
+
+ ---- No superclass ----
+
+
+ - Push class java/lang/Object to DPU#0
+
+
+get DPUID = 0 class =  java/lang/Object from cache
+set framework.pim.dpu.java_strut.DPUJClass@377dca04 to com.upmem.dpu.Dpu@728938a9, key=java/lang/Object, val = 3090000 class name = java/lang/Object
+
+set method: <init>:()V of class java/lang/Object to com.upmem.dpu.Dpu@728938a9 v = 3090318
+
+set method: getClass:()Ljava/lang/Class; of class java/lang/Object to com.upmem.dpu.Dpu@728938a9 v = 3090338
+
+set method: hashCode:()I of class java/lang/Object to com.upmem.dpu.Dpu@728938a9 v = 3090350
+
+set method: equals:(Ljava/lang/Object;)Z of class java/lang/Object to com.upmem.dpu.Dpu@728938a9 v = 3090368
+
+set method: clone:()Ljava/lang/Object; of class java/lang/Object to com.upmem.dpu.Dpu@728938a9 v = 3090390
+
+set method: toString:()Ljava/lang/String; of class java/lang/Object to com.upmem.dpu.Dpu@728938a9 v = 30903a8
+
+set method: notify:()V of class java/lang/Object to com.upmem.dpu.Dpu@728938a9 v = 30903e8
+
+set method: notifyAll:()V of class java/lang/Object to com.upmem.dpu.Dpu@728938a9 v = 3090400
+
+set method: wait:()V of class java/lang/Object to com.upmem.dpu.Dpu@728938a9 v = 3090418
+
+set method: wait:(J)V of class java/lang/Object to com.upmem.dpu.Dpu@728938a9 v = 3090438
+
+set method: wait:(JI)V of class java/lang/Object to com.upmem.dpu.Dpu@728938a9 v = 3090450
+
+set method: finalize:()V of class java/lang/Object to com.upmem.dpu.Dpu@728938a9 v = 30904a8
+
+in java class = java/lang/Object
+
+
+ - Add method <init>:()V to Vtable of java/lang/Object, className = java/lang/Object, index = 1
+
+ - Add method getClass:()Ljava/lang/Class; to Vtable of java/lang/Object, className = java/lang/Object, index = 2
+
+ - Add method hashCode:()I to Vtable of java/lang/Object, className = java/lang/Object, index = 3
+
+ - Add method equals:(Ljava/lang/Object;)Z to Vtable of java/lang/Object, className = java/lang/Object, index = 4
+
+ - Add method clone:()Ljava/lang/Object; to Vtable of java/lang/Object, className = java/lang/Object, index = 5
+
+ - Add method toString:()Ljava/lang/String; to Vtable of java/lang/Object, className = java/lang/Object, index = 6
+
+ - Add method notify:()V to Vtable of java/lang/Object, className = java/lang/Object, index = 7
+
+ - Add method notifyAll:()V to Vtable of java/lang/Object, className = java/lang/Object, index = 8
+
+ - Add method wait:()V to Vtable of java/lang/Object, className = java/lang/Object, index = 9
+
+ - Add method wait:(J)V to Vtable of java/lang/Object, className = java/lang/Object, index = 10
+
+ - Add method wait:(JI)V to Vtable of java/lang/Object, className = java/lang/Object, index = 11
+
+ - Add method finalize:()V to Vtable of java/lang/Object, className = java/lang/Object, index = 12
+
+ - #3 is MethodRef, description = java/lang/StringBuilder.<init>:()V
+
+
+get DPUID = 0 class =  java/lang/StringBuilder from cache
+java/lang/StringBuilder is not loaded, skip
+
+
+ - #7 is MethodRef, description = java/lang/Object.getClass:()Ljava/lang/Class;
+
+
+get DPUID = 0 class =  java/lang/Object from cache
+java/lang/Object is loaded
+
+
+ - get method index = 2
+
+
+ - #13 is MethodRef, description = java/lang/Class.getName:()Ljava/lang/String;
+
+
+get DPUID = 0 class =  java/lang/Class from cache
+java/lang/Class is not loaded, skip
+
+
+ - #19 is MethodRef, description = java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+
+get DPUID = 0 class =  java/lang/StringBuilder from cache
+java/lang/StringBuilder is not loaded, skip
+
+
+ - #25 is MethodRef, description = java/lang/Object.hashCode:()I
+
+
+get DPUID = 0 class =  java/lang/Object from cache
+java/lang/Object is loaded
+
+
+ - get method index = 3
+
+
+ - #29 is MethodRef, description = java/lang/Integer.toHexString:(I)Ljava/lang/String;
+
+
+get DPUID = 0 class =  java/lang/Integer from cache
+java/lang/Integer is not loaded, skip
+
+
+ - #35 is MethodRef, description = java/lang/StringBuilder.toString:()Ljava/lang/String;
+
+
+get DPUID = 0 class =  java/lang/StringBuilder from cache
+java/lang/StringBuilder is not loaded, skip
+
+
+ - #38 is MethodRef, description = java/lang/Object.wait:(J)V
+
+
+get DPUID = 0 class =  java/lang/Object from cache
+java/lang/Object is loaded
+
+
+ - get method index = 10
+
+
+ - #46 is MethodRef, description = java/lang/IllegalArgumentException.<init>:(Ljava/lang/String;)V
+
+
+get DPUID = 0 class =  java/lang/IllegalArgumentException from cache
+java/lang/IllegalArgumentException is not loaded, skip
+
+
+framework.pim.dpu.DPULookupTableManagerUPMEM@255316f2
+
+
+get DPUID = 0 method =   of class  from cache
+
+framework.pim.dpu.DPULookupTableManagerUPMEM@255316f2
+
+
+get DPUID = 0 method =  <init>:()V of class java/lang/Object from cache
+
+get DPUID = 0 class =  java/lang/Object from cache
+framework.pim.dpu.DPULookupTableManagerUPMEM@255316f2
+
+
+get DPUID = 0 method =  getClass:()Ljava/lang/Class; of class java/lang/Object from cache
+
+get DPUID = 0 class =  java/lang/Object from cache
+framework.pim.dpu.DPULookupTableManagerUPMEM@255316f2
+
+
+get DPUID = 0 method =  hashCode:()I of class java/lang/Object from cache
+
+get DPUID = 0 class =  java/lang/Object from cache
+framework.pim.dpu.DPULookupTableManagerUPMEM@255316f2
+
+
+get DPUID = 0 method =  equals:(Ljava/lang/Object;)Z of class java/lang/Object from cache
+
+get DPUID = 0 class =  java/lang/Object from cache
+framework.pim.dpu.DPULookupTableManagerUPMEM@255316f2
+
+
+get DPUID = 0 method =  clone:()Ljava/lang/Object; of class java/lang/Object from cache
+
+get DPUID = 0 class =  java/lang/Object from cache
+framework.pim.dpu.DPULookupTableManagerUPMEM@255316f2
+
+
+get DPUID = 0 method =  toString:()Ljava/lang/String; of class java/lang/Object from cache
+
+get DPUID = 0 class =  java/lang/Object from cache
+framework.pim.dpu.DPULookupTableManagerUPMEM@255316f2
+
+
+get DPUID = 0 method =  notify:()V of class java/lang/Object from cache
+
+get DPUID = 0 class =  java/lang/Object from cache
+framework.pim.dpu.DPULookupTableManagerUPMEM@255316f2
+
+
+get DPUID = 0 method =  notifyAll:()V of class java/lang/Object from cache
+
+get DPUID = 0 class =  java/lang/Object from cache
+framework.pim.dpu.DPULookupTableManagerUPMEM@255316f2
+
+
+get DPUID = 0 method =  wait:()V of class java/lang/Object from cache
+
+get DPUID = 0 class =  java/lang/Object from cache
+framework.pim.dpu.DPULookupTableManagerUPMEM@255316f2
+
+
+get DPUID = 0 method =  wait:(J)V of class java/lang/Object from cache
+
+get DPUID = 0 class =  java/lang/Object from cache
+framework.pim.dpu.DPULookupTableManagerUPMEM@255316f2
+
+
+get DPUID = 0 method =  wait:(JI)V of class java/lang/Object from cache
+
+get DPUID = 0 class =  java/lang/Object from cache
+framework.pim.dpu.DPULookupTableManagerUPMEM@255316f2
+
+
+get DPUID = 0 method =  finalize:()V of class java/lang/Object from cache
+
+get DPUID = 0 class =  java/lang/Object from cache
+print 0x33a to 28
+
+print 3090038 in 14
+
+print 0x3090318 to 24
+
+method 0 from 0x318 === 0x0
+
+method 1 from 0x338 === 0x20
+
+method 2 from 0x350 === 0x38
+
+method 3 from 0x368 === 0x50
+
+method 4 from 0x390 === 0x78
+
+method 5 from 0x3a8 === 0x90
+
+method 6 from 0x3e8 === 0xd0
+
+method 7 from 0x400 === 0xe8
+
+method 8 from 0x418 === 0x100
+
+method 9 from 0x438 === 0x120
+
+method 10 from 0x450 === 0x138
+
+method 11 from 0x4a8 === 0x190
+
+=============== !Alert pos = 2160 === total-size = 2160 ================
+
+================= End of load super object ================
+
+
+get DPUID = 0 class =  application/bst/Body from cache
+set framework.pim.dpu.java_strut.DPUJClass@5cb0d902 to com.upmem.dpu.Dpu@728938a9, key=application/bst/Body, val = 3090870 class name = application/bst/Body
+
+set method: offsetMomentum:(FFF)V of class application/bst/Body to com.upmem.dpu.Dpu@728938a9 v = 3090b60
+
+set method: <init>:(FFFFFFF)V of class application/bst/Body to com.upmem.dpu.Dpu@728938a9 v = 3090b98
+
+set method: <init>:()V of class application/bst/Body to com.upmem.dpu.Dpu@728938a9 v = 3090c00
+
+set method: jupiter:()Lapplication/bst/Body; of class application/bst/Body to com.upmem.dpu.Dpu@728938a9 v = 3090c58
+
+set method: saturn:()Lapplication/bst/Body; of class application/bst/Body to com.upmem.dpu.Dpu@728938a9 v = 3090c88
+
+set method: uranus:()Lapplication/bst/Body; of class application/bst/Body to com.upmem.dpu.Dpu@728938a9 v = 3090cb8
+
+set method: neptune:()Lapplication/bst/Body; of class application/bst/Body to com.upmem.dpu.Dpu@728938a9 v = 3090ce8
+
+set method: sun:()Lapplication/bst/Body; of class application/bst/Body to com.upmem.dpu.Dpu@728938a9 v = 3090d18
+
+set field: PI of class application/bst/Body to com.upmem.dpu.Dpu@728938a9 v(index) = 0
+
+set field: SOLAR_MASS of class application/bst/Body to com.upmem.dpu.Dpu@728938a9 v(index) = 1
+
+set field: DAYS_PER_YER of class application/bst/Body to com.upmem.dpu.Dpu@728938a9 v(index) = 2
+
+set field: x of class application/bst/Body to com.upmem.dpu.Dpu@728938a9 v(index) = 3
+
+set field: y of class application/bst/Body to com.upmem.dpu.Dpu@728938a9 v(index) = 4
+
+set field: z of class application/bst/Body to com.upmem.dpu.Dpu@728938a9 v(index) = 5
+
+set field: vx of class application/bst/Body to com.upmem.dpu.Dpu@728938a9 v(index) = 6
+
+set field: vy of class application/bst/Body to com.upmem.dpu.Dpu@728938a9 v(index) = 7
+
+set field: vz of class application/bst/Body to com.upmem.dpu.Dpu@728938a9 v(index) = 8
+
+set field: mass of class application/bst/Body to com.upmem.dpu.Dpu@728938a9 v(index) = 9
+
+in java class = application/bst/Body
+
+
+get DPUID = 0 class =  java/lang/Object from cache
+ - #14 is MethodRef, description = java/lang/Object.<init>:()V
+
+
+set #14 java/lang/Object.<init>:()V index 1
+
+
+ - #50 is MethodRef, description = application/bst/Body.<init>:(FFFFFFF)V
+
+
+set #50 application/bst/Body.<init>:(FFFFFFF)V index 14
+
+
+vtable #0 .
+
+
+vtable #1 java/lang/Object.<init>:()V
+
+
+vtable #2 java/lang/Object.getClass:()Ljava/lang/Class;
+
+
+vtable #3 java/lang/Object.hashCode:()I
+
+
+vtable #4 java/lang/Object.equals:(Ljava/lang/Object;)Z
+
+
+vtable #5 java/lang/Object.clone:()Ljava/lang/Object;
+
+
+vtable #6 java/lang/Object.toString:()Ljava/lang/String;
+
+
+vtable #7 java/lang/Object.notify:()V
+
+
+vtable #8 java/lang/Object.notifyAll:()V
+
+
+vtable #9 java/lang/Object.wait:()V
+
+
+vtable #10 java/lang/Object.wait:(J)V
+
+
+vtable #11 java/lang/Object.wait:(JI)V
+
+
+vtable #12 java/lang/Object.finalize:()V
+
+
+vtable #13 application/bst/Body.offsetMomentum:(FFF)V
+
+
+vtable #14 application/bst/Body.<init>:(FFFFFFF)V
+
+
+vtable #15 application/bst/Body.<init>:()V
+
+
+vtable #16 application/bst/Body.jupiter:()Lapplication/bst/Body;
+
+
+vtable #17 application/bst/Body.saturn:()Lapplication/bst/Body;
+
+
+vtable #18 application/bst/Body.uranus:()Lapplication/bst/Body;
+
+
+vtable #19 application/bst/Body.neptune:()Lapplication/bst/Body;
+
+
+vtable #20 application/bst/Body.sun:()Lapplication/bst/Body;
+
+
+
+
+
+ - item 1 line =  
+07 00 00 02|00 00 00 02
+
+ - item 2 line =  
+01 00 14 00|00 00 00 00
+
+ - item 3 line =  
+04 00 00 00|00 00 00 00
+
+ - item 4 line =  
+09 00 00 00|00 01 00 05
+
+ - item 5 line =  
+0c 00 00 00|00 06 00 07
+
+ - item 6 line =  
+01 00 02 00|00 00 00 14
+
+ - item 7 line =  
+01 00 01 00|00 00 00 16
+
+ - item 8 line =  
+09 00 00 00|00 01 00 09
+
+ - item 9 line =  
+0c 00 00 00|00 0a 00 07
+
+ - item 10 line =  
+01 00 02 00|00 00 00 17
+
+ - item 11 line =  
+09 00 00 00|00 01 00 0c
+
+ - item 12 line =  
+0c 00 00 00|00 0d 00 07
+
+ - item 13 line =  
+01 00 02 00|00 00 00 19
+
+ - item 14 line =  
+0a 00 00 00|00 00 00 01
+
+ - item 15 line =  
+07 00 00 11|00 00 00 11
+
+ - item 16 line =  
+0c 00 00 00|00 12 00 13
+
+ - item 17 line =  
+01 00 10 00|00 00 00 1b
+
+ - item 18 line =  
+01 00 06 00|00 00 00 2b
+
+ - item 19 line =  
+01 00 03 00|00 00 00 31
+
+ - item 20 line =  
+04 00 00 00|00 00 00 00
+
+ - item 21 line =  
+09 00 00 00|00 01 00 16
+
+ - item 22 line =  
+0c 00 00 00|00 17 00 07
+
+ - item 23 line =  
+01 00 02 00|00 00 00 34
+
+ - item 24 line =  
+09 00 00 00|00 01 00 19
+
+ - item 25 line =  
+0c 00 00 00|00 1a 00 07
+
+ - item 26 line =  
+01 00 0a 00|00 00 00 36
+
+ - item 27 line =  
+04 00 00 00|00 00 00 00
+
+ - item 28 line =  
+09 00 00 00|00 01 00 1d
+
+ - item 29 line =  
+0c 00 00 00|00 1e 00 07
+
+ - item 30 line =  
+01 00 0c 00|00 00 00 40
+
+ - item 31 line =  
+09 00 00 00|00 01 00 20
+
+ - item 32 line =  
+0c 00 00 00|00 21 00 07
+
+ - item 33 line =  
+01 00 01 00|00 00 00 4c
+
+ - item 34 line =  
+09 00 00 00|00 01 00 23
+
+ - item 35 line =  
+0c 00 00 00|00 24 00 07
+
+ - item 36 line =  
+01 00 01 00|00 00 00 4d
+
+ - item 37 line =  
+09 00 00 00|00 01 00 26
+
+ - item 38 line =  
+0c 00 00 00|00 27 00 07
+
+ - item 39 line =  
+01 00 01 00|00 00 00 4e
+
+ - item 40 line =  
+09 00 00 00|00 01 00 29
+
+ - item 41 line =  
+0c 00 00 00|00 2a 00 07
+
+ - item 42 line =  
+01 00 04 00|00 00 00 4f
+
+ - item 43 line =  
+04 00 00 00|00 00 00 00
+
+ - item 44 line =  
+04 00 00 00|00 00 00 00
+
+ - item 45 line =  
+04 00 00 00|00 00 00 00
+
+ - item 46 line =  
+04 00 00 00|00 00 00 00
+
+ - item 47 line =  
+04 00 00 00|00 00 00 00
+
+ - item 48 line =  
+04 00 00 00|00 00 00 00
+
+ - item 49 line =  
+04 00 00 00|00 00 00 00
+
+ - item 50 line =  
+0a 00 00 00|00 00 00 0e
+
+ - item 51 line =  
+0c 00 00 00|00 12 00 34
+
+ - item 52 line =  
+01 00 0a 00|00 00 00 53
+
+ - item 53 line =  
+04 00 00 00|00 00 00 00
+
+ - item 54 line =  
+04 00 00 00|00 00 00 00
+
+ - item 55 line =  
+04 00 00 00|00 00 00 00
+
+ - item 56 line =  
+04 00 00 00|00 00 00 00
+
+ - item 57 line =  
+04 00 00 00|00 00 00 00
+
+ - item 58 line =  
+04 00 00 00|00 00 00 00
+
+ - item 59 line =  
+04 00 00 00|00 00 00 00
+
+ - item 60 line =  
+04 00 00 00|00 00 00 00
+
+ - item 61 line =  
+04 00 00 00|00 00 00 00
+
+ - item 62 line =  
+04 00 00 00|00 00 00 00
+
+ - item 63 line =  
+04 00 00 00|00 00 00 00
+
+ - item 64 line =  
+04 00 00 00|00 00 00 00
+
+ - item 65 line =  
+04 00 00 00|00 00 00 00
+
+ - item 66 line =  
+04 00 00 00|00 00 00 00
+
+ - item 67 line =  
+04 00 00 00|00 00 00 00
+
+ - item 68 line =  
+04 00 00 00|00 00 00 00
+
+ - item 69 line =  
+04 00 00 00|00 00 00 00
+
+ - item 70 line =  
+04 00 00 00|00 00 00 00
+
+ - item 71 line =  
+04 00 00 00|00 00 00 00
+
+ - item 72 line =  
+04 00 00 00|00 00 00 00
+
+ - item 73 line =  
+04 00 00 00|00 00 00 00
+
+ - item 74 line =  
+01 00 0d 00|00 00 00 5d
+
+ - item 75 line =  
+01 00 0e 00|00 00 00 6a
+
+ - item 76 line =  
+01 00 06 00|00 00 00 78
+
+ - item 77 line =  
+01 00 04 00|00 00 00 7e
+
+ - item 78 line =  
+01 00 0f 00|00 00 00 82
+
+ - item 79 line =  
+01 00 07 00|00 00 00 91
+
+ - item 80 line =  
+01 00 18 00|00 00 00 98
+
+ - item 81 line =  
+01 00 06 00|00 00 00 b0
+
+ - item 82 line =  
+01 00 06 00|00 00 00 b6
+
+ - item 83 line =  
+01 00 07 00|00 00 00 bc
+
+ - item 84 line =  
+01 00 03 00|00 00 00 c3
+
+ - item 85 line =  
+01 00 0a 00|00 00 00 c6
+
+ - item 86 line =  
+01 00 09 00|00 00 00 d0
+
+ - In class application.bst.Body resolve unknow name
+
+
+In #0 of class 2 application.bst.Body: tag = 0, whole line = 0
+
+
+In #1 of class 2 application.bst.Body: tag = 7, whole line = 700000200000002
+
+
+In #1 ClassRef: 
+
+
+className = application/bst/Body, index = #2
+
+
+class application/bst/Body loaded, mram addr = 0x3090870
+
+In #2 of class 2 application.bst.Body: tag = 1, whole line = 100140000000000
+
+
+In #3 of class 2 application.bst.Body: tag = 4, whole line = 400000000000000
+
+
+In #4 of class 2 application.bst.Body: tag = 9, whole line = 900000000010005
+
+
+In #4 FieldRef: 
+
+
+class name = application/bst/Body
+
+
+class application/bst/Body loaded, mram addr = 0x3090870
+
+fieldName = vx
+
+
+get DPUID = 0 field =  vx, of class application/bst/Body from cache
+
+In #5 of class 2 application.bst.Body: tag = 12, whole line = c00000000060007
+
+
+In #6 of class 2 application.bst.Body: tag = 1, whole line = 100020000000014
+
+
+In #7 of class 2 application.bst.Body: tag = 1, whole line = 100010000000016
+
+
+In #8 of class 2 application.bst.Body: tag = 9, whole line = 900000000010009
+
+
+In #8 FieldRef: 
+
+
+class name = application/bst/Body
+
+
+class application/bst/Body loaded, mram addr = 0x3090870
+
+fieldName = vy
+
+
+get DPUID = 0 field =  vy, of class application/bst/Body from cache
+
+In #9 of class 2 application.bst.Body: tag = 12, whole line = c000000000a0007
+
+
+In #10 of class 2 application.bst.Body: tag = 1, whole line = 100020000000017
+
+
+In #11 of class 2 application.bst.Body: tag = 9, whole line = 90000000001000c
+
+
+In #11 FieldRef: 
+
+
+class name = application/bst/Body
+
+
+class application/bst/Body loaded, mram addr = 0x3090870
+
+fieldName = vz
+
+
+get DPUID = 0 field =  vz, of class application/bst/Body from cache
+
+In #12 of class 2 application.bst.Body: tag = 12, whole line = c000000000d0007
+
+
+In #13 of class 2 application.bst.Body: tag = 1, whole line = 100020000000019
+
+
+In #14 of class 2 application.bst.Body: tag = 10, whole line = a00000000000001
+
+
+In #14 MethodRef: 
+
+
+method Table Index = 1
+
+
+description = java/lang/Object.<init>:()V
+
+
+get DPUID = 0 method =  <init>:()V of class java/lang/Object from cache
+
+class java/lang/Object loaded, mram addr = 0x3090000
+
+get DPUID = 0 class =  java/lang/Object from cache
+methodName = <init>
+
+
+type desc = ()V
+
+
+return val = V
+
+
+params desc = 
+
+
+3090318
+
+In #15 of class 2 application.bst.Body: tag = 7, whole line = 700001100000011
+
+
+In #15 ClassRef: 
+
+
+className = java/lang/Object, index = #17
+
+
+class java/lang/Object loaded, mram addr = 0x3090000
+
+In #16 of class 2 application.bst.Body: tag = 12, whole line = c00000000120013
+
+
+In #17 of class 2 application.bst.Body: tag = 1, whole line = 10010000000001b
+
+
+In #18 of class 2 application.bst.Body: tag = 1, whole line = 10006000000002b
+
+
+In #19 of class 2 application.bst.Body: tag = 1, whole line = 100030000000031
+
+
+In #20 of class 2 application.bst.Body: tag = 4, whole line = 400000000000000
+
+
+In #21 of class 2 application.bst.Body: tag = 9, whole line = 900000000010016
+
+
+In #21 FieldRef: 
+
+
+class name = application/bst/Body
+
+
+class application/bst/Body loaded, mram addr = 0x3090870
+
+fieldName = PI
+
+
+get DPUID = 0 field =  PI, of class application/bst/Body from cache
+
+In #22 of class 2 application.bst.Body: tag = 12, whole line = c00000000170007
+
+
+In #23 of class 2 application.bst.Body: tag = 1, whole line = 100020000000034
+
+
+In #24 of class 2 application.bst.Body: tag = 9, whole line = 900000000010019
+
+
+In #24 FieldRef: 
+
+
+class name = application/bst/Body
+
+
+class application/bst/Body loaded, mram addr = 0x3090870
+
+fieldName = SOLAR_MASS
+
+
+get DPUID = 0 field =  SOLAR_MASS, of class application/bst/Body from cache
+
+In #25 of class 2 application.bst.Body: tag = 12, whole line = c000000001a0007
+
+
+In #26 of class 2 application.bst.Body: tag = 1, whole line = 1000a0000000036
+
+
+In #27 of class 2 application.bst.Body: tag = 4, whole line = 400000000000000
+
+
+In #28 of class 2 application.bst.Body: tag = 9, whole line = 90000000001001d
+
+
+In #28 FieldRef: 
+
+
+class name = application/bst/Body
+
+
+class application/bst/Body loaded, mram addr = 0x3090870
+
+fieldName = DAYS_PER_YER
+
+
+get DPUID = 0 field =  DAYS_PER_YER, of class application/bst/Body from cache
+
+In #29 of class 2 application.bst.Body: tag = 12, whole line = c000000001e0007
+
+
+In #30 of class 2 application.bst.Body: tag = 1, whole line = 1000c0000000040
+
+
+In #31 of class 2 application.bst.Body: tag = 9, whole line = 900000000010020
+
+
+In #31 FieldRef: 
+
+
+class name = application/bst/Body
+
+
+class application/bst/Body loaded, mram addr = 0x3090870
+
+fieldName = x
+
+
+get DPUID = 0 field =  x, of class application/bst/Body from cache
+
+In #32 of class 2 application.bst.Body: tag = 12, whole line = c00000000210007
+
+
+In #33 of class 2 application.bst.Body: tag = 1, whole line = 10001000000004c
+
+
+In #34 of class 2 application.bst.Body: tag = 9, whole line = 900000000010023
+
+
+In #34 FieldRef: 
+
+
+class name = application/bst/Body
+
+
+class application/bst/Body loaded, mram addr = 0x3090870
+
+fieldName = y
+
+
+get DPUID = 0 field =  y, of class application/bst/Body from cache
+
+In #35 of class 2 application.bst.Body: tag = 12, whole line = c00000000240007
+
+
+In #36 of class 2 application.bst.Body: tag = 1, whole line = 10001000000004d
+
+
+In #37 of class 2 application.bst.Body: tag = 9, whole line = 900000000010026
+
+
+In #37 FieldRef: 
+
+
+class name = application/bst/Body
+
+
+class application/bst/Body loaded, mram addr = 0x3090870
+
+fieldName = z
+
+
+get DPUID = 0 field =  z, of class application/bst/Body from cache
+
+In #38 of class 2 application.bst.Body: tag = 12, whole line = c00000000270007
+
+
+In #39 of class 2 application.bst.Body: tag = 1, whole line = 10001000000004e
+
+
+In #40 of class 2 application.bst.Body: tag = 9, whole line = 900000000010029
+
+
+In #40 FieldRef: 
+
+
+class name = application/bst/Body
+
+
+class application/bst/Body loaded, mram addr = 0x3090870
+
+fieldName = mass
+
+
+get DPUID = 0 field =  mass, of class application/bst/Body from cache
+
+In #41 of class 2 application.bst.Body: tag = 12, whole line = c000000002a0007
+
+
+In #42 of class 2 application.bst.Body: tag = 1, whole line = 10004000000004f
+
+
+In #43 of class 2 application.bst.Body: tag = 4, whole line = 400000000000000
+
+
+In #44 of class 2 application.bst.Body: tag = 4, whole line = 400000000000000
+
+
+In #45 of class 2 application.bst.Body: tag = 4, whole line = 400000000000000
+
+
+In #46 of class 2 application.bst.Body: tag = 4, whole line = 400000000000000
+
+
+In #47 of class 2 application.bst.Body: tag = 4, whole line = 400000000000000
+
+
+In #48 of class 2 application.bst.Body: tag = 4, whole line = 400000000000000
+
+
+In #49 of class 2 application.bst.Body: tag = 4, whole line = 400000000000000
+
+
+In #50 of class 2 application.bst.Body: tag = 10, whole line = a0000000000000e
+
+
+In #50 MethodRef: 
+
+
+method Table Index = 14
+
+
+description = application/bst/Body.<init>:(FFFFFFF)V
+
+
+get DPUID = 0 method =  <init>:(FFFFFFF)V of class application/bst/Body from cache
+
+class application/bst/Body loaded, mram addr = 0x3090870
+
+get DPUID = 0 class =  application/bst/Body from cache
+methodName = <init>
+
+
+type desc = (FFFFFFF)V
+
+
+return val = V
+
+
+params desc = FFFFFFF
+
+
+3090b98
+
+In #51 of class 2 application.bst.Body: tag = 12, whole line = c00000000120034
+
+
+In #52 of class 2 application.bst.Body: tag = 1, whole line = 1000a0000000053
+
+
+In #53 of class 2 application.bst.Body: tag = 4, whole line = 400000000000000
+
+
+In #54 of class 2 application.bst.Body: tag = 4, whole line = 400000000000000
+
+
+In #55 of class 2 application.bst.Body: tag = 4, whole line = 400000000000000
+
+
+In #56 of class 2 application.bst.Body: tag = 4, whole line = 400000000000000
+
+
+In #57 of class 2 application.bst.Body: tag = 4, whole line = 400000000000000
+
+
+In #58 of class 2 application.bst.Body: tag = 4, whole line = 400000000000000
+
+
+In #59 of class 2 application.bst.Body: tag = 4, whole line = 400000000000000
+
+
+In #60 of class 2 application.bst.Body: tag = 4, whole line = 400000000000000
+
+
+In #61 of class 2 application.bst.Body: tag = 4, whole line = 400000000000000
+
+
+In #62 of class 2 application.bst.Body: tag = 4, whole line = 400000000000000
+
+
+In #63 of class 2 application.bst.Body: tag = 4, whole line = 400000000000000
+
+
+In #64 of class 2 application.bst.Body: tag = 4, whole line = 400000000000000
+
+
+In #65 of class 2 application.bst.Body: tag = 4, whole line = 400000000000000
+
+
+In #66 of class 2 application.bst.Body: tag = 4, whole line = 400000000000000
+
+
+In #67 of class 2 application.bst.Body: tag = 4, whole line = 400000000000000
+
+
+In #68 of class 2 application.bst.Body: tag = 4, whole line = 400000000000000
+
+
+In #69 of class 2 application.bst.Body: tag = 4, whole line = 400000000000000
+
+
+In #70 of class 2 application.bst.Body: tag = 4, whole line = 400000000000000
+
+
+In #71 of class 2 application.bst.Body: tag = 4, whole line = 400000000000000
+
+
+In #72 of class 2 application.bst.Body: tag = 4, whole line = 400000000000000
+
+
+In #73 of class 2 application.bst.Body: tag = 4, whole line = 400000000000000
+
+
+In #74 of class 2 application.bst.Body: tag = 1, whole line = 1000d000000005d
+
+
+In #75 of class 2 application.bst.Body: tag = 1, whole line = 1000e000000006a
+
+
+In #76 of class 2 application.bst.Body: tag = 1, whole line = 100060000000078
+
+
+In #77 of class 2 application.bst.Body: tag = 1, whole line = 10004000000007e
+
+
+In #78 of class 2 application.bst.Body: tag = 1, whole line = 1000f0000000082
+
+
+In #79 of class 2 application.bst.Body: tag = 1, whole line = 100070000000091
+
+
+In #80 of class 2 application.bst.Body: tag = 1, whole line = 100180000000098
+
+
+In #81 of class 2 application.bst.Body: tag = 1, whole line = 1000600000000b0
+
+
+In #82 of class 2 application.bst.Body: tag = 1, whole line = 1000600000000b6
+
+
+In #83 of class 2 application.bst.Body: tag = 1, whole line = 1000700000000bc
+
+
+In #84 of class 2 application.bst.Body: tag = 1, whole line = 1000300000000c3
+
+
+In #85 of class 2 application.bst.Body: tag = 1, whole line = 1000a00000000c6
+
+
+In #86 of class 2 application.bst.Body: tag = 1, whole line = 1000900000000d0
+
+
+End of for loop: resolve unknow name
+
+
+get DPUID = 0 method =   of class  from cache
+
+get DPUID = 0 method =  <init>:()V of class java/lang/Object from cache
+
+get DPUID = 0 class =  java/lang/Object from cache
+get DPUID = 0 method =  getClass:()Ljava/lang/Class; of class java/lang/Object from cache
+
+get DPUID = 0 class =  java/lang/Object from cache
+get DPUID = 0 method =  hashCode:()I of class java/lang/Object from cache
+
+get DPUID = 0 class =  java/lang/Object from cache
+get DPUID = 0 method =  equals:(Ljava/lang/Object;)Z of class java/lang/Object from cache
+
+get DPUID = 0 class =  java/lang/Object from cache
+get DPUID = 0 method =  clone:()Ljava/lang/Object; of class java/lang/Object from cache
+
+get DPUID = 0 class =  java/lang/Object from cache
+get DPUID = 0 method =  toString:()Ljava/lang/String; of class java/lang/Object from cache
+
+get DPUID = 0 class =  java/lang/Object from cache
+get DPUID = 0 method =  notify:()V of class java/lang/Object from cache
+
+get DPUID = 0 class =  java/lang/Object from cache
+get DPUID = 0 method =  notifyAll:()V of class java/lang/Object from cache
+
+get DPUID = 0 class =  java/lang/Object from cache
+get DPUID = 0 method =  wait:()V of class java/lang/Object from cache
+
+get DPUID = 0 class =  java/lang/Object from cache
+get DPUID = 0 method =  wait:(J)V of class java/lang/Object from cache
+
+get DPUID = 0 class =  java/lang/Object from cache
+get DPUID = 0 method =  wait:(JI)V of class java/lang/Object from cache
+
+get DPUID = 0 class =  java/lang/Object from cache
+get DPUID = 0 method =  finalize:()V of class java/lang/Object from cache
+
+get DPUID = 0 class =  java/lang/Object from cache
+get DPUID = 0 method =  offsetMomentum:(FFF)V of class application/bst/Body from cache
+
+get DPUID = 0 class =  application/bst/Body from cache
+get DPUID = 0 method =  <init>:(FFFFFFF)V of class application/bst/Body from cache
+
+get DPUID = 0 class =  application/bst/Body from cache
+get DPUID = 0 method =  <init>:()V of class application/bst/Body from cache
+
+get DPUID = 0 class =  application/bst/Body from cache
+get DPUID = 0 method =  jupiter:()Lapplication/bst/Body; of class application/bst/Body from cache
+
+get DPUID = 0 class =  application/bst/Body from cache
+get DPUID = 0 method =  saturn:()Lapplication/bst/Body; of class application/bst/Body from cache
+
+get DPUID = 0 class =  application/bst/Body from cache
+get DPUID = 0 method =  uranus:()Lapplication/bst/Body; of class application/bst/Body from cache
+
+get DPUID = 0 class =  application/bst/Body from cache
+get DPUID = 0 method =  neptune:()Lapplication/bst/Body; of class application/bst/Body from cache
+
+get DPUID = 0 class =  application/bst/Body from cache
+get DPUID = 0 method =  sun:()Lapplication/bst/Body; of class application/bst/Body from cache
+
+get DPUID = 0 class =  application/bst/Body from cache
+get DPUID = 0 class =  application/bst/Body from cache
+print 0x155 to 28
+
+print 30908a8 in 14
+
+print 0x3090b60 to 24
+
+method 0 from 0x2f0 === 0x0
+
+method 1 from 0x328 === 0x38
+
+method 2 from 0x390 === 0xa0
+
+method 3 from 0x3e8 === 0xf8
+
+method 4 from 0x418 === 0x128
+
+method 5 from 0x448 === 0x158
+
+method 6 from 0x478 === 0x188
+
+method 7 from 0x4a8 === 0x1b8
+
+=============== !Alert pos = 1744 === total-size = 1744 ================
+
+ ==========--> End of load class application.bst.Body to dpu#0 <--==========
+
+
+ ==========--> Try load class application/bst/Sqrt to dpu#0 <--==========
+
+
+get DPUID = 0 class =  application/bst/Sqrt from cache
+begin preresolve classfile
+
+
+constant table item count = 20
+
+
+====================== Begin analyze constant table item ====================
+
+
+ >> Item 1 
+
+Methodref
+
+
+	 -> Mark Class and NameAndType index 1: 2|3
+
+
+ >> Item 2 
+
+Class
+
+
+	 -> Mark UTF8 index 2: 4
+
+
+ >> Item 3 
+
+NameAndType
+
+
+	 -> Mark Name and Type in index 3: 5|6
+
+
+ >> Item 4 
+
+UTF8
+
+
+ >> Item 5 
+
+UTF8
+
+
+ >> Item 6 
+
+UTF8
+
+
+ >> Item 7 
+
+Float
+
+
+ >> Item 8 
+
+Methodref
+
+
+	 -> Mark Class and NameAndType index 8: 9|10
+
+
+ >> Item 9 
+
+Class
+
+
+	 -> Mark UTF8 index 9: 11
+
+
+ >> Item 10 
+
+NameAndType
+
+
+	 -> Mark Name and Type in index 10: 12|13
+
+
+ >> Item 11 
+
+UTF8
+
+
+ >> Item 12 
+
+UTF8
+
+
+ >> Item 13 
+
+UTF8
+
+
+ >> Item 14 
+
+UTF8
+
+
+ >> Item 15 
+
+UTF8
+
+
+ >> Item 16 
+
+UTF8
+
+
+ >> Item 17 
+
+UTF8
+
+
+ >> Item 18 
+
+UTF8
+
+
+ >> Item 19 
+
+UTF8
+
+
+====================== End analyze constant table item ====================
+
+
+
+
+
+==== Entries Table After Resolution Phase 1 - read constant table, and fill information ====
+
+
+
+ - item 1 line =  
+0a 00 00 00|00 02 00 03
+
+ - item 2 line =  
+07 00 00 04|00 00 00 04
+
+ - item 3 line =  
+0c 00 00 00|00 05 00 06
+
+ - item 4 line =  
+01 00 00 00|00 00 00 10
+
+ - item 5 line =  
+01 00 00 00|00 00 00 06
+
+ - item 6 line =  
+01 00 00 00|00 00 00 03
+
+ - item 7 line =  
+04 00 00 00|00 00 00 00
+
+ - item 8 line =  
+0a 00 00 00|00 09 00 0a
+
+ - item 9 line =  
+07 00 00 0b|00 00 00 0b
+
+ - item 10 line =  
+0c 00 00 00|00 0c 00 0d
+
+ - item 11 line =  
+01 00 00 00|00 00 00 14
+
+ - item 12 line =  
+01 00 00 00|00 00 00 08
+
+ - item 13 line =  
+01 00 00 00|00 00 00 04
+
+ - item 14 line =  
+01 00 00 00|00 00 00 04
+
+ - item 15 line =  
+01 00 00 00|00 00 00 0f
+
+ - item 16 line =  
+01 00 00 00|00 00 00 07
+
+ - item 17 line =  
+01 00 00 00|00 00 00 0d
+
+ - item 18 line =  
+01 00 00 00|00 00 00 0a
+
+ - item 19 line =  
+01 00 00 00|00 00 00 09
+
+==== ----------------------------------------------------------------------- ====
+
+
+
+
+
+
+access_flag = 0x0021
+
+ - this class = 9
+
+
+tEntries Table After Resolution Phase 1 - read CPs, and mark information. This_class ref index = 0
+
+
+ - super class = 2
+
+
+super_class ref index = 0
+
+
+rescan for filling utf_8 string and number area, total size = 119 bytes
+
+
+>> Entry #4 is UTF8, len = 16
+
+
+Fill UTF8 string in constantArea offset = 0
+
+>> Entry #5 is UTF8, len = 6
+
+
+Fill UTF8 string in constantArea offset = 16
+
+>> Entry #6 is UTF8, len = 3
+
+
+Fill UTF8 string in constantArea offset = 22
+
+>> Entry #11 is UTF8, len = 20
+
+
+Fill UTF8 string in constantArea offset = 25
+
+>> Entry #12 is UTF8, len = 8
+
+
+Fill UTF8 string in constantArea offset = 45
+
+>> Entry #13 is UTF8, len = 4
+
+
+Fill UTF8 string in constantArea offset = 53
+
+>> Entry #14 is UTF8, len = 4
+
+
+Fill UTF8 string in constantArea offset = 57
+
+>> Entry #15 is UTF8, len = 15
+
+
+Fill UTF8 string in constantArea offset = 61
+
+>> Entry #16 is UTF8, len = 7
+
+
+Fill UTF8 string in constantArea offset = 76
+
+>> Entry #17 is UTF8, len = 13
+
+
+Fill UTF8 string in constantArea offset = 83
+
+>> Entry #18 is UTF8, len = 10
+
+
+Fill UTF8 string in constantArea offset = 96
+
+>> Entry #19 is UTF8, len = 9
+
+
+Fill UTF8 string in constantArea offset = 106
+
+filled 115/119 bytes
+
+==== Entries Table After Resolution Phase 2 - fill constant value to constantDataArea ====
+
+
+
+ - item 1 line =  
+0a 00 00 00|00 02 00 03
+
+ - item 2 line =  
+07 00 00 04|00 00 00 04
+
+ - item 3 line =  
+0c 00 00 00|00 05 00 06
+
+ - item 4 line =  
+01 00 10 00|00 00 00 00
+
+ - item 5 line =  
+01 00 06 00|00 00 00 10
+
+ - item 6 line =  
+01 00 03 00|00 00 00 16
+
+ - item 7 line =  
+04 00 00 00|00 00 00 00
+
+ - item 8 line =  
+0a 00 00 00|00 09 00 0a
+
+ - item 9 line =  
+07 00 00 0b|00 00 00 0b
+
+ - item 10 line =  
+0c 00 00 00|00 0c 00 0d
+
+ - item 11 line =  
+01 00 14 00|00 00 00 19
+
+ - item 12 line =  
+01 00 08 00|00 00 00 2d
+
+ - item 13 line =  
+01 00 04 00|00 00 00 35
+
+ - item 14 line =  
+01 00 04 00|00 00 00 39
+
+ - item 15 line =  
+01 00 0f 00|00 00 00 3d
+
+ - item 16 line =  
+01 00 07 00|00 00 00 4c
+
+ - item 17 line =  
+01 00 0d 00|00 00 00 53
+
+ - item 18 line =  
+01 00 0a 00|00 00 00 60
+
+ - item 19 line =  
+01 00 09 00|00 00 00 6a
+
+==== ----------------------------------------------------------------------- ====
+
+
+
+
+
+
+interface count = 0
+
+
+field count = 0
+
+
+======================= Begin Method Analysis ===========================
+
+
+- Method Count = 3
+
+
+-------------------- Method 0 --------------------------
+
+
+ - acc flag = 1
+
+
+ - name_index = 5
+
+
+ - desc_index = 6
+
+
+ - attr count = 1
+
+
+-------------------- Method 0 attr count = 1------------------
+
+
+desc = ()V
+
+
+Attr From Addr: 0xd4 / 0x1a5
+
+ --- attr name in index 14 = Code
+
+
+Attribute len = 29 (0x1d)
+
+[Code maxStack = 1, maxLocals = 1, codeLen = 5, params_count = 1]
+
+2a	
+b7	
+00	
+01	
+b1	
+
+
+
+-------------------- Method 1 --------------------------
+
+
+ - acc flag = 1
+
+
+ - name_index = 16
+
+
+ - desc_index = 13
+
+
+ - attr count = 1
+
+
+-------------------- Method 1 attr count = 1------------------
+
+
+desc = (F)F
+
+
+Attr From Addr: 0xff / 0x1a5
+
+ --- attr name in index 14 = Code
+
+
+Attribute len = 88 (0x58)
+
+[Code maxStack = 3, maxLocals = 4, codeLen = 34, params_count = 2]
+
+23	
+0d	
+6e	
+45	
+12	
+07	
+46	
+2a	
+
+
+
+24	
+24	
+6a	
+23	
+66	
+b6	
+00	
+08	
+
+
+
+25	
+95	
+9e	
+00	
+0e	
+24	
+23	
+24	
+
+
+
+6e	
+62	
+0d	
+6e	
+45	
+a7	
+ff	
+ea	
+
+
+
+24	
+ae	
+
+
+
+-------------------- Method 2 --------------------------
+
+
+ - acc flag = 1
+
+
+ - name_index = 12
+
+
+ - desc_index = 13
+
+
+ - attr count = 1
+
+
+-------------------- Method 2 attr count = 1------------------
+
+
+desc = (F)F
+
+
+Attr From Addr: 0x165 / 0x1a5
+
+ --- attr name in index 14 = Code
+
+
+Attribute len = 48 (0x30)
+
+[Code maxStack = 2, maxLocals = 2, codeLen = 13, params_count = 2]
+
+23	
+0b	
+96	
+9c	
+00	
+08	
+23	
+76	
+
+
+
+a7	
+00	
+04	
+23	
+ae	
+
+
+
+======================= End of Method Analysis ===========================
+
+
+ - item 1 line =  
+0a 00 00 00|00 02 00 03
+
+ - item 2 line =  
+07 00 00 04|00 00 00 04
+
+ - item 3 line =  
+0c 00 00 00|00 05 00 06
+
+ - item 4 line =  
+01 00 10 00|00 00 00 00
+
+ - item 5 line =  
+01 00 06 00|00 00 00 10
+
+ - item 6 line =  
+01 00 03 00|00 00 00 16
+
+ - item 7 line =  
+04 00 00 00|00 00 00 00
+
+ - item 8 line =  
+0a 00 00 00|00 09 00 0a
+
+ - item 9 line =  
+07 00 00 0b|00 00 00 0b
+
+ - item 10 line =  
+0c 00 00 00|00 0c 00 0d
+
+ - item 11 line =  
+01 00 14 00|00 00 00 19
+
+ - item 12 line =  
+01 00 08 00|00 00 00 2d
+
+ - item 13 line =  
+01 00 04 00|00 00 00 35
+
+ - item 14 line =  
+01 00 04 00|00 00 00 39
+
+ - item 15 line =  
+01 00 0f 00|00 00 00 3d
+
+ - item 16 line =  
+01 00 07 00|00 00 00 4c
+
+ - item 17 line =  
+01 00 0d 00|00 00 00 53
+
+ - item 18 line =  
+01 00 0a 00|00 00 00 60
+
+ - item 19 line =  
+01 00 09 00|00 00 00 6a
+
+super class name = java/lang/Object
+
+
+get DPUID = 0 class =  java/lang/Object from cache
+================= End of load super object ================
+
+
+get DPUID = 0 class =  application/bst/Sqrt from cache
+set framework.pim.dpu.java_strut.DPUJClass@46ee7fe8 to com.upmem.dpu.Dpu@728938a9, key=application/bst/Sqrt, val = 3090f40 class name = application/bst/Sqrt
+
+set method: <init>:()V of class application/bst/Sqrt to com.upmem.dpu.Dpu@728938a9 v = 3091018
+
+set method: compute:(F)F of class application/bst/Sqrt to com.upmem.dpu.Dpu@728938a9 v = 3091038
+
+set method: absolute:(F)F of class application/bst/Sqrt to com.upmem.dpu.Dpu@728938a9 v = 3091078
+
+in java class = application/bst/Sqrt
+
+
+get DPUID = 0 class =  java/lang/Object from cache
+ - #1 is MethodRef, description = java/lang/Object.<init>:()V
+
+
+set #1 java/lang/Object.<init>:()V index 1
+
+
+ - #8 is MethodRef, description = application/bst/Sqrt.absolute:(F)F
+
+
+set #8 application/bst/Sqrt.absolute:(F)F index 15
+
+
+vtable #0 .
+
+
+vtable #1 java/lang/Object.<init>:()V
+
+
+vtable #2 java/lang/Object.getClass:()Ljava/lang/Class;
+
+
+vtable #3 java/lang/Object.hashCode:()I
+
+
+vtable #4 java/lang/Object.equals:(Ljava/lang/Object;)Z
+
+
+vtable #5 java/lang/Object.clone:()Ljava/lang/Object;
+
+
+vtable #6 java/lang/Object.toString:()Ljava/lang/String;
+
+
+vtable #7 java/lang/Object.notify:()V
+
+
+vtable #8 java/lang/Object.notifyAll:()V
+
+
+vtable #9 java/lang/Object.wait:()V
+
+
+vtable #10 java/lang/Object.wait:(J)V
+
+
+vtable #11 java/lang/Object.wait:(JI)V
+
+
+vtable #12 java/lang/Object.finalize:()V
+
+
+vtable #13 application/bst/Sqrt.<init>:()V
+
+
+vtable #14 application/bst/Sqrt.compute:(F)F
+
+
+vtable #15 application/bst/Sqrt.absolute:(F)F
+
+
+
+
+
+ - item 1 line =  
+0a 00 00 00|00 00 00 01
+
+ - item 2 line =  
+07 00 00 04|00 00 00 04
+
+ - item 3 line =  
+0c 00 00 00|00 05 00 06
+
+ - item 4 line =  
+01 00 10 00|00 00 00 00
+
+ - item 5 line =  
+01 00 06 00|00 00 00 10
+
+ - item 6 line =  
+01 00 03 00|00 00 00 16
+
+ - item 7 line =  
+04 00 00 00|00 00 00 00
+
+ - item 8 line =  
+0a 00 00 00|00 00 00 0f
+
+ - item 9 line =  
+07 00 00 0b|00 00 00 0b
+
+ - item 10 line =  
+0c 00 00 00|00 0c 00 0d
+
+ - item 11 line =  
+01 00 14 00|00 00 00 19
+
+ - item 12 line =  
+01 00 08 00|00 00 00 2d
+
+ - item 13 line =  
+01 00 04 00|00 00 00 35
+
+ - item 14 line =  
+01 00 04 00|00 00 00 39
+
+ - item 15 line =  
+01 00 0f 00|00 00 00 3d
+
+ - item 16 line =  
+01 00 07 00|00 00 00 4c
+
+ - item 17 line =  
+01 00 0d 00|00 00 00 53
+
+ - item 18 line =  
+01 00 0a 00|00 00 00 60
+
+ - item 19 line =  
+01 00 09 00|00 00 00 6a
+
+ - In class application.bst.Sqrt resolve unknow name
+
+
+In #0 of class 11 application.bst.Sqrt: tag = 0, whole line = 0
+
+
+In #1 of class 11 application.bst.Sqrt: tag = 10, whole line = a00000000000001
+
+
+In #1 MethodRef: 
+
+
+method Table Index = 1
+
+
+description = java/lang/Object.<init>:()V
+
+
+get DPUID = 0 method =  <init>:()V of class java/lang/Object from cache
+
+class java/lang/Object loaded, mram addr = 0x3090000
+
+get DPUID = 0 class =  java/lang/Object from cache
+methodName = <init>
+
+
+type desc = ()V
+
+
+return val = V
+
+
+params desc = 
+
+
+3090318
+
+In #2 of class 11 application.bst.Sqrt: tag = 7, whole line = 700000400000004
+
+
+In #2 ClassRef: 
+
+
+className = java/lang/Object, index = #4
+
+
+class java/lang/Object loaded, mram addr = 0x3090000
+
+In #3 of class 11 application.bst.Sqrt: tag = 12, whole line = c00000000050006
+
+
+In #4 of class 11 application.bst.Sqrt: tag = 1, whole line = 100100000000000
+
+
+In #5 of class 11 application.bst.Sqrt: tag = 1, whole line = 100060000000010
+
+
+In #6 of class 11 application.bst.Sqrt: tag = 1, whole line = 100030000000016
+
+
+In #7 of class 11 application.bst.Sqrt: tag = 4, whole line = 400000000000000
+
+
+In #8 of class 11 application.bst.Sqrt: tag = 10, whole line = a0000000000000f
+
+
+In #8 MethodRef: 
+
+
+method Table Index = 15
+
+
+description = application/bst/Sqrt.absolute:(F)F
+
+
+get DPUID = 0 method =  absolute:(F)F of class application/bst/Sqrt from cache
+
+class application/bst/Sqrt loaded, mram addr = 0x3090f40
+
+get DPUID = 0 class =  application/bst/Sqrt from cache
+methodName = absolute
+
+
+type desc = (F)F
+
+
+return val = F
+
+
+params desc = F
+
+
+3091078
+
+In #9 of class 11 application.bst.Sqrt: tag = 7, whole line = 700000b0000000b
+
+
+In #9 ClassRef: 
+
+
+className = application/bst/Sqrt, index = #11
+
+
+class application/bst/Sqrt loaded, mram addr = 0x3090f40
+
+In #10 of class 11 application.bst.Sqrt: tag = 12, whole line = c000000000c000d
+
+
+In #11 of class 11 application.bst.Sqrt: tag = 1, whole line = 100140000000019
+
+
+In #12 of class 11 application.bst.Sqrt: tag = 1, whole line = 10008000000002d
+
+
+In #13 of class 11 application.bst.Sqrt: tag = 1, whole line = 100040000000035
+
+
+In #14 of class 11 application.bst.Sqrt: tag = 1, whole line = 100040000000039
+
+
+In #15 of class 11 application.bst.Sqrt: tag = 1, whole line = 1000f000000003d
+
+
+In #16 of class 11 application.bst.Sqrt: tag = 1, whole line = 10007000000004c
+
+
+In #17 of class 11 application.bst.Sqrt: tag = 1, whole line = 1000d0000000053
+
+
+In #18 of class 11 application.bst.Sqrt: tag = 1, whole line = 1000a0000000060
+
+
+In #19 of class 11 application.bst.Sqrt: tag = 1, whole line = 10009000000006a
+
+
+End of for loop: resolve unknow name
+
+
+get DPUID = 0 method =   of class  from cache
+
+get DPUID = 0 method =  <init>:()V of class java/lang/Object from cache
+
+get DPUID = 0 class =  java/lang/Object from cache
+get DPUID = 0 method =  getClass:()Ljava/lang/Class; of class java/lang/Object from cache
+
+get DPUID = 0 class =  java/lang/Object from cache
+get DPUID = 0 method =  hashCode:()I of class java/lang/Object from cache
+
+get DPUID = 0 class =  java/lang/Object from cache
+get DPUID = 0 method =  equals:(Ljava/lang/Object;)Z of class java/lang/Object from cache
+
+get DPUID = 0 class =  java/lang/Object from cache
+get DPUID = 0 method =  clone:()Ljava/lang/Object; of class java/lang/Object from cache
+
+get DPUID = 0 class =  java/lang/Object from cache
+get DPUID = 0 method =  toString:()Ljava/lang/String; of class java/lang/Object from cache
+
+get DPUID = 0 class =  java/lang/Object from cache
+get DPUID = 0 method =  notify:()V of class java/lang/Object from cache
+
+get DPUID = 0 class =  java/lang/Object from cache
+get DPUID = 0 method =  notifyAll:()V of class java/lang/Object from cache
+
+get DPUID = 0 class =  java/lang/Object from cache
+get DPUID = 0 method =  wait:()V of class java/lang/Object from cache
+
+get DPUID = 0 class =  java/lang/Object from cache
+get DPUID = 0 method =  wait:(J)V of class java/lang/Object from cache
+
+get DPUID = 0 class =  java/lang/Object from cache
+get DPUID = 0 method =  wait:(JI)V of class java/lang/Object from cache
+
+get DPUID = 0 class =  java/lang/Object from cache
+get DPUID = 0 method =  finalize:()V of class java/lang/Object from cache
+
+get DPUID = 0 class =  java/lang/Object from cache
+get DPUID = 0 method =  <init>:()V of class application/bst/Sqrt from cache
+
+get DPUID = 0 class =  application/bst/Sqrt from cache
+get DPUID = 0 method =  compute:(F)F of class application/bst/Sqrt from cache
+
+get DPUID = 0 class =  application/bst/Sqrt from cache
+get DPUID = 0 method =  absolute:(F)F of class application/bst/Sqrt from cache
+
+get DPUID = 0 class =  application/bst/Sqrt from cache
+get DPUID = 0 class =  application/bst/Sqrt from cache
+print 0x77 to 28
+
+print 3090f78 in 14
+
+print 0x3091018 to 24
+
+method 0 from 0xd8 === 0x0
+
+method 1 from 0xf8 === 0x20
+
+method 2 from 0x138 === 0x60
+
+=============== !Alert pos = 600 === total-size = 600 ================
+
+ ==========--> End of load class application.bst.Sqrt to dpu#0 <--==========
+
+
+get DPUID = 0 class =  application/bst/NBodySystem from cache
+ ==========--> Try load class application/bst/NBodySystem to dpu#0 <--==========
+
+
+get DPUID = 0 class =  application/bst/NBodySystem from cache
+begin preresolve classfile
+
+
+constant table item count = 91
+
+
+====================== Begin analyze constant table item ====================
+
+
+ >> Item 1 
+
+Methodref
+
+
+	 -> Mark Class and NameAndType index 1: 2|3
+
+
+ >> Item 2 
+
+Class
+
+
+	 -> Mark UTF8 index 2: 4
+
+
+ >> Item 3 
+
+NameAndType
+
+
+	 -> Mark Name and Type in index 3: 5|6
+
+
+ >> Item 4 
+
+UTF8
+
+
+ >> Item 5 
+
+UTF8
+
+
+ >> Item 6 
+
+UTF8
+
+
+ >> Item 7 
+
+Fieldref
+
+
+	 -> Mark Class and NameAndType index 7: 8|9
+
+
+ >> Item 8 
+
+Class
+
+
+	 -> Mark UTF8 index 8: 10
+
+
+ >> Item 9 
+
+NameAndType
+
+
+	 -> Mark Name and Type in index 9: 11|12
+
+
+ >> Item 10 
+
+UTF8
+
+
+ >> Item 11 
+
+UTF8
+
+
+ >> Item 12 
+
+UTF8
+
+
+ >> Item 13 
+
+Class
+
+
+	 -> Mark UTF8 index 13: 14
+
+
+ >> Item 14 
+
+UTF8
+
+
+ >> Item 15 
+
+Methodref
+
+
+	 -> Mark Class and NameAndType index 15: 13|3
+
+
+ >> Item 16 
+
+Fieldref
+
+
+	 -> Mark Class and NameAndType index 16: 8|17
+
+
+ >> Item 17 
+
+NameAndType
+
+
+	 -> Mark Name and Type in index 17: 18|19
+
+
+ >> Item 18 
+
+UTF8
+
+
+ >> Item 19 
+
+UTF8
+
+
+ >> Item 20 
+
+Class
+
+
+	 -> Mark UTF8 index 20: 21
+
+
+ >> Item 21 
+
+UTF8
+
+
+ >> Item 22 
+
+Methodref
+
+
+	 -> Mark Class and NameAndType index 22: 20|3
+
+
+ >> Item 23 
+
+Fieldref
+
+
+	 -> Mark Class and NameAndType index 23: 8|24
+
+
+ >> Item 24 
+
+NameAndType
+
+
+	 -> Mark Name and Type in index 24: 25|26
+
+
+ >> Item 25 
+
+UTF8
+
+
+ >> Item 26 
+
+UTF8
+
+
+ >> Item 27 
+
+Methodref
+
+
+	 -> Mark Class and NameAndType index 27: 20|28
+
+
+ >> Item 28 
+
+NameAndType
+
+
+	 -> Mark Name and Type in index 28: 29|30
+
+
+ >> Item 29 
+
+UTF8
+
+
+ >> Item 30 
+
+UTF8
+
+
+ >> Item 31 
+
+Methodref
+
+
+	 -> Mark Class and NameAndType index 31: 20|32
+
+
+ >> Item 32 
+
+NameAndType
+
+
+	 -> Mark Name and Type in index 32: 33|30
+
+
+ >> Item 33 
+
+UTF8
+
+
+ >> Item 34 
+
+Methodref
+
+
+	 -> Mark Class and NameAndType index 34: 20|35
+
+
+ >> Item 35 
+
+NameAndType
+
+
+	 -> Mark Name and Type in index 35: 36|30
+
+
+ >> Item 36 
+
+UTF8
+
+
+ >> Item 37 
+
+Methodref
+
+
+	 -> Mark Class and NameAndType index 37: 20|38
+
+
+ >> Item 38 
+
+NameAndType
+
+
+	 -> Mark Name and Type in index 38: 39|30
+
+
+ >> Item 39 
+
+UTF8
+
+
+ >> Item 40 
+
+Methodref
+
+
+	 -> Mark Class and NameAndType index 40: 20|41
+
+
+ >> Item 41 
+
+NameAndType
+
+
+	 -> Mark Name and Type in index 41: 42|30
+
+
+ >> Item 42 
+
+UTF8
+
+
+ >> Item 43 
+
+Fieldref
+
+
+	 -> Mark Class and NameAndType index 43: 20|44
+
+
+ >> Item 44 
+
+NameAndType
+
+
+	 -> Mark Name and Type in index 44: 45|46
+
+
+ >> Item 45 
+
+UTF8
+
+
+ >> Item 46 
+
+UTF8
+
+
+ >> Item 47 
+
+Fieldref
+
+
+	 -> Mark Class and NameAndType index 47: 20|48
+
+
+ >> Item 48 
+
+NameAndType
+
+
+	 -> Mark Name and Type in index 48: 49|46
+
+
+ >> Item 49 
+
+UTF8
+
+
+ >> Item 50 
+
+Fieldref
+
+
+	 -> Mark Class and NameAndType index 50: 20|51
+
+
+ >> Item 51 
+
+NameAndType
+
+
+	 -> Mark Name and Type in index 51: 52|46
+
+
+ >> Item 52 
+
+UTF8
+
+
+ >> Item 53 
+
+Fieldref
+
+
+	 -> Mark Class and NameAndType index 53: 20|54
+
+
+ >> Item 54 
+
+NameAndType
+
+
+	 -> Mark Name and Type in index 54: 55|46
+
+
+ >> Item 55 
+
+UTF8
+
+
+ >> Item 56 
+
+Methodref
+
+
+	 -> Mark Class and NameAndType index 56: 20|57
+
+
+ >> Item 57 
+
+NameAndType
+
+
+	 -> Mark Name and Type in index 57: 58|59
+
+
+ >> Item 58 
+
+UTF8
+
+
+ >> Item 59 
+
+UTF8
+
+
+ >> Item 60 
+
+Fieldref
+
+
+	 -> Mark Class and NameAndType index 60: 20|61
+
+
+ >> Item 61 
+
+NameAndType
+
+
+	 -> Mark Name and Type in index 61: 62|46
+
+
+ >> Item 62 
+
+UTF8
+
+
+ >> Item 63 
+
+Fieldref
+
+
+	 -> Mark Class and NameAndType index 63: 20|64
+
+
+ >> Item 64 
+
+NameAndType
+
+
+	 -> Mark Name and Type in index 64: 65|46
+
+
+ >> Item 65 
+
+UTF8
+
+
+ >> Item 66 
+
+Fieldref
+
+
+	 -> Mark Class and NameAndType index 66: 20|67
+
+
+ >> Item 67 
+
+NameAndType
+
+
+	 -> Mark Name and Type in index 67: 68|46
+
+
+ >> Item 68 
+
+UTF8
+
+
+ >> Item 69 
+
+Methodref
+
+
+	 -> Mark Class and NameAndType index 69: 13|70
+
+
+ >> Item 70 
+
+NameAndType
+
+
+	 -> Mark Name and Type in index 70: 71|72
+
+
+ >> Item 71 
+
+UTF8
+
+
+ >> Item 72 
+
+UTF8
+
+
+ >> Item 73 
+
+Float
+
+
+ >> Item 74 
+
+Methodref
+
+
+	 -> Mark Class and NameAndType index 74: 8|3
+
+
+ >> Item 75 
+
+UTF8
+
+
+ >> Item 76 
+
+UTF8
+
+
+ >> Item 77 
+
+UTF8
+
+
+ >> Item 78 
+
+UTF8
+
+
+ >> Item 79 
+
+UTF8
+
+
+ >> Item 80 
+
+UTF8
+
+
+ >> Item 81 
+
+UTF8
+
+
+ >> Item 82 
+
+Class
+
+
+	 -> Mark UTF8 index 82: 12
+
+
+ >> Item 83 
+
+UTF8
+
+
+ >> Item 84 
+
+UTF8
+
+
+ >> Item 85 
+
+UTF8
+
+
+ >> Item 86 
+
+UTF8
+
+
+ >> Item 87 
+
+UTF8
+
+
+ >> Item 88 
+
+UTF8
+
+
+ >> Item 89 
+
+UTF8
+
+
+ >> Item 90 
+
+UTF8
+
+
+====================== End analyze constant table item ====================
+
+
+
+
+
+==== Entries Table After Resolution Phase 1 - read constant table, and fill information ====
+
+
+
+ - item 1 line =  
+0a 00 00 00|00 02 00 03
+
+ - item 2 line =  
+07 00 00 04|00 00 00 04
+
+ - item 3 line =  
+0c 00 00 00|00 05 00 06
+
+ - item 4 line =  
+01 00 00 00|00 00 00 10
+
+ - item 5 line =  
+01 00 00 00|00 00 00 06
+
+ - item 6 line =  
+01 00 00 00|00 00 00 03
+
+ - item 7 line =  
+09 00 00 00|00 08 00 09
+
+ - item 8 line =  
+07 00 00 0a|00 00 00 0a
+
+ - item 9 line =  
+0c 00 00 00|00 0b 00 0c
+
+ - item 10 line =  
+01 00 00 00|00 00 00 1b
+
+ - item 11 line =  
+01 00 00 00|00 00 00 06
+
+ - item 12 line =  
+01 00 00 00|00 00 00 17
+
+ - item 13 line =  
+07 00 00 0e|00 00 00 0e
+
+ - item 14 line =  
+01 00 00 00|00 00 00 14
+
+ - item 15 line =  
+0a 00 00 00|00 0d 00 03
+
+ - item 16 line =  
+09 00 00 00|00 08 00 11
+
+ - item 17 line =  
+0c 00 00 00|00 12 00 13
+
+ - item 18 line =  
+01 00 00 00|00 00 00 04
+
+ - item 19 line =  
+01 00 00 00|00 00 00 16
+
+ - item 20 line =  
+07 00 00 15|00 00 00 15
+
+ - item 21 line =  
+01 00 00 00|00 00 00 14
+
+ - item 22 line =  
+0a 00 00 00|00 14 00 03
+
+ - item 23 line =  
+09 00 00 00|00 08 00 18
+
+ - item 24 line =  
+0c 00 00 00|00 19 00 1a
+
+ - item 25 line =  
+01 00 00 00|00 00 00 04
+
+ - item 26 line =  
+01 00 00 00|00 00 00 16
+
+ - item 27 line =  
+0a 00 00 00|00 14 00 1c
+
+ - item 28 line =  
+0c 00 00 00|00 1d 00 1e
+
+ - item 29 line =  
+01 00 00 00|00 00 00 03
+
+ - item 30 line =  
+01 00 00 00|00 00 00 18
+
+ - item 31 line =  
+0a 00 00 00|00 14 00 20
+
+ - item 32 line =  
+0c 00 00 00|00 21 00 1e
+
+ - item 33 line =  
+01 00 00 00|00 00 00 07
+
+ - item 34 line =  
+0a 00 00 00|00 14 00 23
+
+ - item 35 line =  
+0c 00 00 00|00 24 00 1e
+
+ - item 36 line =  
+01 00 00 00|00 00 00 06
+
+ - item 37 line =  
+0a 00 00 00|00 14 00 26
+
+ - item 38 line =  
+0c 00 00 00|00 27 00 1e
+
+ - item 39 line =  
+01 00 00 00|00 00 00 06
+
+ - item 40 line =  
+0a 00 00 00|00 14 00 29
+
+ - item 41 line =  
+0c 00 00 00|00 2a 00 1e
+
+ - item 42 line =  
+01 00 00 00|00 00 00 07
+
+ - item 43 line =  
+09 00 00 00|00 14 00 2c
+
+ - item 44 line =  
+0c 00 00 00|00 2d 00 2e
+
+ - item 45 line =  
+01 00 00 00|00 00 00 02
+
+ - item 46 line =  
+01 00 00 00|00 00 00 01
+
+ - item 47 line =  
+09 00 00 00|00 14 00 30
+
+ - item 48 line =  
+0c 00 00 00|00 31 00 2e
+
+ - item 49 line =  
+01 00 00 00|00 00 00 04
+
+ - item 50 line =  
+09 00 00 00|00 14 00 33
+
+ - item 51 line =  
+0c 00 00 00|00 34 00 2e
+
+ - item 52 line =  
+01 00 00 00|00 00 00 02
+
+ - item 53 line =  
+09 00 00 00|00 14 00 36
+
+ - item 54 line =  
+0c 00 00 00|00 37 00 2e
+
+ - item 55 line =  
+01 00 00 00|00 00 00 02
+
+ - item 56 line =  
+0a 00 00 00|00 14 00 39
+
+ - item 57 line =  
+0c 00 00 00|00 3a 00 3b
+
+ - item 58 line =  
+01 00 00 00|00 00 00 0e
+
+ - item 59 line =  
+01 00 00 00|00 00 00 06
+
+ - item 60 line =  
+09 00 00 00|00 14 00 3d
+
+ - item 61 line =  
+0c 00 00 00|00 3e 00 2e
+
+ - item 62 line =  
+01 00 00 00|00 00 00 01
+
+ - item 63 line =  
+09 00 00 00|00 14 00 40
+
+ - item 64 line =  
+0c 00 00 00|00 41 00 2e
+
+ - item 65 line =  
+01 00 00 00|00 00 00 01
+
+ - item 66 line =  
+09 00 00 00|00 14 00 43
+
+ - item 67 line =  
+0c 00 00 00|00 44 00 2e
+
+ - item 68 line =  
+01 00 00 00|00 00 00 01
+
+ - item 69 line =  
+0a 00 00 00|00 0d 00 46
+
+ - item 70 line =  
+0c 00 00 00|00 47 00 48
+
+ - item 71 line =  
+01 00 00 00|00 00 00 07
+
+ - item 72 line =  
+01 00 00 00|00 00 00 04
+
+ - item 73 line =  
+04 00 00 00|00 00 00 00
+
+ - item 74 line =  
+0a 00 00 00|00 08 00 03
+
+ - item 75 line =  
+01 00 00 00|00 00 00 04
+
+ - item 76 line =  
+01 00 00 00|00 00 00 0f
+
+ - item 77 line =  
+01 00 00 00|00 00 00 04
+
+ - item 78 line =  
+01 00 00 00|00 00 00 03
+
+ - item 79 line =  
+01 00 00 00|00 00 00 0c
+
+ - item 80 line =  
+01 00 00 00|00 00 00 19
+
+ - item 81 line =  
+01 00 00 00|00 00 00 0d
+
+ - item 82 line =  
+07 00 00 0c|00 00 00 0c
+
+ - item 83 line =  
+01 00 00 00|00 00 00 07
+
+ - item 84 line =  
+01 00 00 00|00 00 00 04
+
+ - item 85 line =  
+01 00 00 00|00 00 00 06
+
+ - item 86 line =  
+01 00 00 00|00 00 00 03
+
+ - item 87 line =  
+01 00 00 00|00 00 00 04
+
+ - item 88 line =  
+01 00 00 00|00 00 00 1f
+
+ - item 89 line =  
+01 00 00 00|00 00 00 0a
+
+ - item 90 line =  
+01 00 00 00|00 00 00 10
+
+==== ----------------------------------------------------------------------- ====
+
+
+
+
+
+
+access_flag = 0x0021
+
+ - this class = 8
+
+
+tEntries Table After Resolution Phase 1 - read CPs, and mark information. This_class ref index = 0
+
+
+ - super class = 2
+
+
+super_class ref index = 0
+
+
+rescan for filling utf_8 string and number area, total size = 432 bytes
+
+
+>> Entry #4 is UTF8, len = 16
+
+
+Fill UTF8 string in constantArea offset = 0
+
+>> Entry #5 is UTF8, len = 6
+
+
+Fill UTF8 string in constantArea offset = 16
+
+>> Entry #6 is UTF8, len = 3
+
+
+Fill UTF8 string in constantArea offset = 22
+
+>> Entry #10 is UTF8, len = 27
+
+
+Fill UTF8 string in constantArea offset = 25
+
+>> Entry #11 is UTF8, len = 6
+
+
+Fill UTF8 string in constantArea offset = 52
+
+>> Entry #12 is UTF8, len = 23
+
+
+Fill UTF8 string in constantArea offset = 58
+
+>> Entry #14 is UTF8, len = 20
+
+
+Fill UTF8 string in constantArea offset = 81
+
+>> Entry #18 is UTF8, len = 4
+
+
+Fill UTF8 string in constantArea offset = 101
+
+>> Entry #19 is UTF8, len = 22
+
+
+Fill UTF8 string in constantArea offset = 105
+
+>> Entry #21 is UTF8, len = 20
+
+
+Fill UTF8 string in constantArea offset = 127
+
+>> Entry #25 is UTF8, len = 4
+
+
+Fill UTF8 string in constantArea offset = 147
+
+>> Entry #26 is UTF8, len = 22
+
+
+Fill UTF8 string in constantArea offset = 151
+
+>> Entry #29 is UTF8, len = 3
+
+
+Fill UTF8 string in constantArea offset = 173
+
+>> Entry #30 is UTF8, len = 24
+
+
+Fill UTF8 string in constantArea offset = 176
+
+>> Entry #33 is UTF8, len = 7
+
+
+Fill UTF8 string in constantArea offset = 200
+
+>> Entry #36 is UTF8, len = 6
+
+
+Fill UTF8 string in constantArea offset = 207
+
+>> Entry #39 is UTF8, len = 6
+
+
+Fill UTF8 string in constantArea offset = 213
+
+>> Entry #42 is UTF8, len = 7
+
+
+Fill UTF8 string in constantArea offset = 219
+
+>> Entry #45 is UTF8, len = 2
+
+
+Fill UTF8 string in constantArea offset = 226
+
+>> Entry #46 is UTF8, len = 1
+
+
+Fill UTF8 string in constantArea offset = 228
+
+>> Entry #49 is UTF8, len = 4
+
+
+Fill UTF8 string in constantArea offset = 229
+
+>> Entry #52 is UTF8, len = 2
+
+
+Fill UTF8 string in constantArea offset = 233
+
+>> Entry #55 is UTF8, len = 2
+
+
+Fill UTF8 string in constantArea offset = 235
+
+>> Entry #58 is UTF8, len = 14
+
+
+Fill UTF8 string in constantArea offset = 237
+
+>> Entry #59 is UTF8, len = 6
+
+
+Fill UTF8 string in constantArea offset = 251
+
+>> Entry #62 is UTF8, len = 1
+
+
+Fill UTF8 string in constantArea offset = 257
+
+>> Entry #65 is UTF8, len = 1
+
+
+Fill UTF8 string in constantArea offset = 258
+
+>> Entry #68 is UTF8, len = 1
+
+
+Fill UTF8 string in constantArea offset = 259
+
+>> Entry #71 is UTF8, len = 7
+
+
+Fill UTF8 string in constantArea offset = 260
+
+>> Entry #72 is UTF8, len = 4
+
+
+Fill UTF8 string in constantArea offset = 267
+
+>> Entry #75 is UTF8, len = 4
+
+
+Fill UTF8 string in constantArea offset = 271
+
+>> Entry #76 is UTF8, len = 15
+
+
+Fill UTF8 string in constantArea offset = 275
+
+>> Entry #77 is UTF8, len = 4
+
+
+Fill UTF8 string in constantArea offset = 290
+
+>> Entry #78 is UTF8, len = 3
+
+
+Fill UTF8 string in constantArea offset = 294
+
+>> Entry #79 is UTF8, len = 12
+
+
+Fill UTF8 string in constantArea offset = 297
+
+>> Entry #80 is UTF8, len = 25
+
+
+Fill UTF8 string in constantArea offset = 309
+
+>> Entry #81 is UTF8, len = 13
+
+
+Fill UTF8 string in constantArea offset = 334
+
+>> Entry #83 is UTF8, len = 7
+
+
+Fill UTF8 string in constantArea offset = 347
+
+>> Entry #84 is UTF8, len = 4
+
+
+Fill UTF8 string in constantArea offset = 354
+
+>> Entry #85 is UTF8, len = 6
+
+
+Fill UTF8 string in constantArea offset = 358
+
+>> Entry #86 is UTF8, len = 3
+
+
+Fill UTF8 string in constantArea offset = 364
+
+>> Entry #87 is UTF8, len = 4
+
+
+Fill UTF8 string in constantArea offset = 367
+
+>> Entry #88 is UTF8, len = 31
+
+
+Fill UTF8 string in constantArea offset = 371
+
+>> Entry #89 is UTF8, len = 10
+
+
+Fill UTF8 string in constantArea offset = 402
+
+>> Entry #90 is UTF8, len = 16
+
+
+Fill UTF8 string in constantArea offset = 412
+
+filled 428/432 bytes
+
+==== Entries Table After Resolution Phase 2 - fill constant value to constantDataArea ====
+
+
+
+ - item 1 line =  
+0a 00 00 00|00 02 00 03
+
+ - item 2 line =  
+07 00 00 04|00 00 00 04
+
+ - item 3 line =  
+0c 00 00 00|00 05 00 06
+
+ - item 4 line =  
+01 00 10 00|00 00 00 00
+
+ - item 5 line =  
+01 00 06 00|00 00 00 10
+
+ - item 6 line =  
+01 00 03 00|00 00 00 16
+
+ - item 7 line =  
+09 00 00 00|00 08 00 09
+
+ - item 8 line =  
+07 00 00 0a|00 00 00 0a
+
+ - item 9 line =  
+0c 00 00 00|00 0b 00 0c
+
+ - item 10 line =  
+01 00 1b 00|00 00 00 19
+
+ - item 11 line =  
+01 00 06 00|00 00 00 34
+
+ - item 12 line =  
+01 00 17 00|00 00 00 3a
+
+ - item 13 line =  
+07 00 00 0e|00 00 00 0e
+
+ - item 14 line =  
+01 00 14 00|00 00 00 51
+
+ - item 15 line =  
+0a 00 00 00|00 0d 00 03
+
+ - item 16 line =  
+09 00 00 00|00 08 00 11
+
+ - item 17 line =  
+0c 00 00 00|00 12 00 13
+
+ - item 18 line =  
+01 00 04 00|00 00 00 65
+
+ - item 19 line =  
+01 00 16 00|00 00 00 69
+
+ - item 20 line =  
+07 00 00 15|00 00 00 15
+
+ - item 21 line =  
+01 00 14 00|00 00 00 7f
+
+ - item 22 line =  
+0a 00 00 00|00 14 00 03
+
+ - item 23 line =  
+09 00 00 00|00 08 00 18
+
+ - item 24 line =  
+0c 00 00 00|00 19 00 1a
+
+ - item 25 line =  
+01 00 04 00|00 00 00 93
+
+ - item 26 line =  
+01 00 16 00|00 00 00 97
+
+ - item 27 line =  
+0a 00 00 00|00 14 00 1c
+
+ - item 28 line =  
+0c 00 00 00|00 1d 00 1e
+
+ - item 29 line =  
+01 00 03 00|00 00 00 ad
+
+ - item 30 line =  
+01 00 18 00|00 00 00 b0
+
+ - item 31 line =  
+0a 00 00 00|00 14 00 20
+
+ - item 32 line =  
+0c 00 00 00|00 21 00 1e
+
+ - item 33 line =  
+01 00 07 00|00 00 00 c8
+
+ - item 34 line =  
+0a 00 00 00|00 14 00 23
+
+ - item 35 line =  
+0c 00 00 00|00 24 00 1e
+
+ - item 36 line =  
+01 00 06 00|00 00 00 cf
+
+ - item 37 line =  
+0a 00 00 00|00 14 00 26
+
+ - item 38 line =  
+0c 00 00 00|00 27 00 1e
+
+ - item 39 line =  
+01 00 06 00|00 00 00 d5
+
+ - item 40 line =  
+0a 00 00 00|00 14 00 29
+
+ - item 41 line =  
+0c 00 00 00|00 2a 00 1e
+
+ - item 42 line =  
+01 00 07 00|00 00 00 db
+
+ - item 43 line =  
+09 00 00 00|00 14 00 2c
+
+ - item 44 line =  
+0c 00 00 00|00 2d 00 2e
+
+ - item 45 line =  
+01 00 02 00|00 00 00 e2
+
+ - item 46 line =  
+01 00 01 00|00 00 00 e4
+
+ - item 47 line =  
+09 00 00 00|00 14 00 30
+
+ - item 48 line =  
+0c 00 00 00|00 31 00 2e
+
+ - item 49 line =  
+01 00 04 00|00 00 00 e5
+
+ - item 50 line =  
+09 00 00 00|00 14 00 33
+
+ - item 51 line =  
+0c 00 00 00|00 34 00 2e
+
+ - item 52 line =  
+01 00 02 00|00 00 00 e9
+
+ - item 53 line =  
+09 00 00 00|00 14 00 36
+
+ - item 54 line =  
+0c 00 00 00|00 37 00 2e
+
+ - item 55 line =  
+01 00 02 00|00 00 00 eb
+
+ - item 56 line =  
+0a 00 00 00|00 14 00 39
+
+ - item 57 line =  
+0c 00 00 00|00 3a 00 3b
+
+ - item 58 line =  
+01 00 0e 00|00 00 00 ed
+
+ - item 59 line =  
+01 00 06 00|00 00 00 fb
+
+ - item 60 line =  
+09 00 00 00|00 14 00 3d
+
+ - item 61 line =  
+0c 00 00 00|00 3e 00 2e
+
+ - item 62 line =  
+01 00 01 00|00 00 01 01
+
+ - item 63 line =  
+09 00 00 00|00 14 00 40
+
+ - item 64 line =  
+0c 00 00 00|00 41 00 2e
+
+ - item 65 line =  
+01 00 01 00|00 00 01 02
+
+ - item 66 line =  
+09 00 00 00|00 14 00 43
+
+ - item 67 line =  
+0c 00 00 00|00 44 00 2e
+
+ - item 68 line =  
+01 00 01 00|00 00 01 03
+
+ - item 69 line =  
+0a 00 00 00|00 0d 00 46
+
+ - item 70 line =  
+0c 00 00 00|00 47 00 48
+
+ - item 71 line =  
+01 00 07 00|00 00 01 04
+
+ - item 72 line =  
+01 00 04 00|00 00 01 0b
+
+ - item 73 line =  
+04 00 00 00|00 00 00 00
+
+ - item 74 line =  
+0a 00 00 00|00 08 00 03
+
+ - item 75 line =  
+01 00 04 00|00 00 01 0f
+
+ - item 76 line =  
+01 00 0f 00|00 00 01 13
+
+ - item 77 line =  
+01 00 04 00|00 00 01 22
+
+ - item 78 line =  
+01 00 03 00|00 00 01 26
+
+ - item 79 line =  
+01 00 0c 00|00 00 01 29
+
+ - item 80 line =  
+01 00 19 00|00 00 01 35
+
+ - item 81 line =  
+01 00 0d 00|00 00 01 4e
+
+ - item 82 line =  
+07 00 00 0c|00 00 00 0c
+
+ - item 83 line =  
+01 00 07 00|00 00 01 5b
+
+ - item 84 line =  
+01 00 04 00|00 00 01 62
+
+ - item 85 line =  
+01 00 06 00|00 00 01 66
+
+ - item 86 line =  
+01 00 03 00|00 00 01 6c
+
+ - item 87 line =  
+01 00 04 00|00 00 01 6f
+
+ - item 88 line =  
+01 00 1f 00|00 00 01 73
+
+ - item 89 line =  
+01 00 0a 00|00 00 01 92
+
+ - item 90 line =  
+01 00 10 00|00 00 01 9c
+
+==== ----------------------------------------------------------------------- ====
+
+
+
+
+
+
+interface count = 0
+
+
+field count = 3
+
+
+>> Field 0
+
+
+ -- Mark name index 11 as this class's field name
+
+
+Field >> access_flag = 12, name_index = 11, desc_index = 12, attr_count = 0
+
+>> Field 1
+
+
+ -- Mark name index 18 as this class's field name
+
+
+Field >> access_flag = 12, name_index = 18, desc_index = 19, attr_count = 0
+
+>> Field 2
+
+
+ -- Mark name index 25 as this class's field name
+
+
+Field >> access_flag = 12, name_index = 25, desc_index = 26, attr_count = 0
+
+======================= Begin Method Analysis ===========================
+
+
+- Method Count = 6
+
+
+-------------------- Method 0 --------------------------
+
+
+ - acc flag = 1
+
+
+ - name_index = 5
+
+
+ - desc_index = 6
+
+
+ - attr count = 1
+
+
+-------------------- Method 0 attr count = 1------------------
+
+
+desc = ()V
+
+
+Attr From Addr: 0x340 / 0x81b
+
+ --- attr name in index 75 = Code
+
+
+Attribute len = 72 (0x48)
+
+[Code maxStack = 3, maxLocals = 1, codeLen = 32, params_count = 1]
+
+2a	
+b7	
+00	
+01	
+2a	
+01	
+b5	
+00	
+
+
+
+07	
+2a	
+bb	
+00	
+0d	
+59	
+b7	
+00	
+
+
+
+0f	
+b5	
+00	
+10	
+2a	
+bb	
+00	
+14	
+
+
+
+59	
+b7	
+00	
+16	
+b5	
+00	
+17	
+b1	
+
+
+
+-------------------- Method 1 --------------------------
+
+
+ - acc flag = 1
+
+
+ - name_index = 77
+
+
+ - desc_index = 78
+
+
+ - attr count = 1
+
+
+-------------------- Method 1 attr count = 1------------------
+
+
+desc = ()I
+
+
+Attr From Addr: 0x396 / 0x81b
+
+ --- attr name in index 75 = Code
+
+
+Attribute len = 26 (0x1a)
+
+[Code maxStack = 1, maxLocals = 1, codeLen = 2, params_count = 1]
+
+04	
+ac	
+
+
+
+-------------------- Method 2 --------------------------
+
+
+ - acc flag = 1
+
+
+ - name_index = 79
+
+
+ - desc_index = 80
+
+
+ - attr count = 1
+
+
+-------------------- Method 2 attr count = 1------------------
+
+
+desc = ()[Lapplication/bst/Body;
+
+
+Attr From Addr: 0x3be / 0x81b
+
+ --- attr name in index 75 = Code
+
+
+Attribute len = 261 (0x105)
+
+[Code maxStack = 4, maxLocals = 9, codeLen = 149, params_count = 1]
+
+08	
+bd	
+00	
+14	
+59	
+03	
+2a	
+b4	
+
+
+
+00	
+17	
+b6	
+00	
+1b	
+53	
+59	
+04	
+
+
+
+2a	
+b4	
+00	
+17	
+b6	
+00	
+1f	
+53	
+
+
+
+59	
+05	
+2a	
+b4	
+00	
+17	
+b6	
+00	
+
+
+
+22	
+53	
+59	
+06	
+2a	
+b4	
+00	
+17	
+
+
+
+b6	
+00	
+25	
+53	
+59	
+07	
+2a	
+b4	
+
+
+
+00	
+17	
+b6	
+00	
+28	
+53	
+4c	
+0b	
+
+
+
+45	
+0b	
+46	
+0b	
+38	
+04	
+2b	
+3a	
+
+
+
+05	
+19	
+05	
+be	
+36	
+06	
+03	
+36	
+
+
+
+07	
+15	
+07	
+15	
+06	
+a2	
+00	
+3c	
+
+
+
+19	
+05	
+15	
+07	
+32	
+3a	
+08	
+24	
+
+
+
+19	
+08	
+b4	
+00	
+2b	
+19	
+08	
+b4	
+
+
+
+00	
+2f	
+6a	
+62	
+45	
+25	
+19	
+08	
+
+
+
+b4	
+00	
+32	
+19	
+08	
+b4	
+00	
+2f	
+
+
+
+6a	
+62	
+46	
+17	
+04	
+19	
+08	
+b4	
+
+
+
+00	
+35	
+19	
+08	
+b4	
+00	
+2f	
+6a	
+
+
+
+62	
+38	
+04	
+84	
+07	
+01	
+a7	
+ff	
+
+
+
+c3	
+2b	
+03	
+32	
+24	
+25	
+17	
+04	
+
+
+
+b6	
+00	
+38	
+2b	
+b0	
+
+
+
+-------------------- Method 3 --------------------------
+
+
+ - acc flag = 1
+
+
+ - name_index = 83
+
+
+ - desc_index = 84
+
+
+ - attr count = 1
+
+
+-------------------- Method 3 attr count = 1------------------
+
+
+desc = (F)V
+
+
+Attr From Addr: 0x4d1 / 0x81b
+
+ --- attr name in index 75 = Code
+
+
+Attribute len = 488 (0x1e8)
+
+[Code maxStack = 4, maxLocals = 12, codeLen = 336, params_count = 2]
+
+03	
+3d	
+1c	
+2a	
+b4	
+00	
+07	
+be	
+
+
+
+a2	
+00	
+f4	
+2a	
+b4	
+00	
+07	
+1c	
+
+
+
+32	
+4e	
+1c	
+04	
+60	
+36	
+04	
+15	
+
+
+
+04	
+2a	
+b4	
+00	
+07	
+be	
+a2	
+00	
+
+
+
+d8	
+2a	
+b4	
+00	
+07	
+15	
+04	
+32	
+
+
+
+3a	
+05	
+2d	
+b4	
+00	
+3c	
+19	
+05	
+
+
+
+b4	
+00	
+3c	
+66	
+38	
+06	
+2d	
+b4	
+
+
+
+00	
+3f	
+19	
+05	
+b4	
+00	
+3f	
+66	
+
+
+
+38	
+07	
+2d	
+b4	
+00	
+42	
+19	
+05	
+
+
+
+b4	
+00	
+42	
+66	
+38	
+08	
+17	
+06	
+
+
+
+17	
+06	
+6a	
+17	
+07	
+17	
+07	
+6a	
+
+
+
+62	
+17	
+08	
+17	
+08	
+6a	
+62	
+38	
+
+
+
+09	
+2a	
+b4	
+00	
+10	
+17	
+09	
+b6	
+
+
+
+00	
+45	
+38	
+0a	
+23	
+17	
+09	
+17	
+
+
+
+0a	
+6a	
+6e	
+38	
+0b	
+2d	
+2d	
+b4	
+
+
+
+00	
+2b	
+17	
+06	
+19	
+05	
+b4	
+00	
+
+
+
+2f	
+6a	
+17	
+0b	
+6a	
+66	
+b5	
+00	
+
+
+
+2b	
+2d	
+2d	
+b4	
+00	
+32	
+17	
+07	
+
+
+
+19	
+05	
+b4	
+00	
+2f	
+6a	
+17	
+0b	
+
+
+
+6a	
+66	
+b5	
+00	
+32	
+2d	
+2d	
+b4	
+
+
+
+00	
+35	
+17	
+08	
+19	
+05	
+b4	
+00	
+
+
+
+2f	
+6a	
+17	
+0b	
+6a	
+66	
+b5	
+00	
+
+
+
+35	
+19	
+05	
+19	
+05	
+b4	
+00	
+2b	
+
+
+
+17	
+06	
+2d	
+b4	
+00	
+2f	
+6a	
+17	
+
+
+
+0b	
+6a	
+62	
+b5	
+00	
+2b	
+19	
+05	
+
+
+
+19	
+05	
+b4	
+00	
+32	
+17	
+07	
+2d	
+
+
+
+b4	
+00	
+2f	
+6a	
+17	
+0b	
+6a	
+62	
+
+
+
+b5	
+00	
+32	
+19	
+05	
+19	
+05	
+b4	
+
+
+
+00	
+35	
+17	
+08	
+2d	
+b4	
+00	
+2f	
+
+
+
+6a	
+17	
+0b	
+6a	
+62	
+b5	
+00	
+35	
+
+
+
+84	
+04	
+01	
+a7	
+ff	
+24	
+84	
+02	
+
+
+
+01	
+a7	
+ff	
+09	
+2a	
+b4	
+00	
+07	
+
+
+
+4d	
+2c	
+be	
+3e	
+03	
+36	
+04	
+15	
+
+
+
+04	
+1d	
+a2	
+00	
+45	
+2c	
+15	
+04	
+
+
+
+32	
+3a	
+05	
+19	
+05	
+19	
+05	
+b4	
+
+
+
+00	
+3c	
+23	
+19	
+05	
+b4	
+00	
+2b	
+
+
+
+6a	
+62	
+b5	
+00	
+3c	
+19	
+05	
+19	
+
+
+
+05	
+b4	
+00	
+3f	
+23	
+19	
+05	
+b4	
+
+
+
+00	
+32	
+6a	
+62	
+b5	
+00	
+3f	
+19	
+
+
+
+05	
+19	
+05	
+b4	
+00	
+42	
+23	
+19	
+
+
+
+05	
+b4	
+00	
+35	
+6a	
+62	
+b5	
+00	
+
+
+
+42	
+84	
+04	
+01	
+a7	
+ff	
+bb	
+b1	
+
+
+
+-------------------- Method 4 --------------------------
+
+
+ - acc flag = 1
+
+
+ - name_index = 85
+
+
+ - desc_index = 86
+
+
+ - attr count = 1
+
+
+-------------------- Method 4 attr count = 1------------------
+
+
+desc = ()F
+
+
+Attr From Addr: 0x6c7 / 0x81b
+
+ --- attr name in index 75 = Code
+
+
+Attribute len = 278 (0x116)
+
+[Code maxStack = 5, maxLocals = 10, codeLen = 176, params_count = 1]
+
+0b	
+44	
+03	
+3d	
+1c	
+2a	
+b4	
+00	
+
+
+
+07	
+be	
+a2	
+00	
+a4	
+2a	
+b4	
+00	
+
+
+
+07	
+1c	
+32	
+4e	
+23	
+12	
+49	
+2d	
+
+
+
+b4	
+00	
+2f	
+6a	
+2d	
+b4	
+00	
+2b	
+
+
+
+2d	
+b4	
+00	
+2b	
+6a	
+2d	
+b4	
+00	
+
+
+
+32	
+2d	
+b4	
+00	
+32	
+6a	
+62	
+2d	
+
+
+
+b4	
+00	
+35	
+2d	
+b4	
+00	
+35	
+6a	
+
+
+
+62	
+6a	
+62	
+44	
+1c	
+04	
+60	
+36	
+
+
+
+04	
+15	
+04	
+2a	
+b4	
+00	
+07	
+be	
+
+
+
+a2	
+00	
+60	
+2a	
+b4	
+00	
+07	
+15	
+
+
+
+04	
+32	
+3a	
+05	
+2d	
+b4	
+00	
+3c	
+
+
+
+19	
+05	
+b4	
+00	
+3c	
+66	
+38	
+06	
+
+
+
+2d	
+b4	
+00	
+3f	
+19	
+05	
+b4	
+00	
+
+
+
+3f	
+66	
+38	
+07	
+2d	
+b4	
+00	
+42	
+
+
+
+19	
+05	
+b4	
+00	
+42	
+66	
+38	
+08	
+
+
+
+2a	
+b4	
+00	
+10	
+17	
+06	
+17	
+06	
+
+
+
+6a	
+17	
+07	
+17	
+07	
+6a	
+62	
+17	
+
+
+
+08	
+17	
+08	
+6a	
+62	
+b6	
+00	
+45	
+
+
+
+38	
+09	
+23	
+2d	
+b4	
+00	
+2f	
+19	
+
+
+
+05	
+b4	
+00	
+2f	
+6a	
+17	
+09	
+6e	
+
+
+
+66	
+44	
+84	
+04	
+01	
+a7	
+ff	
+9c	
+
+
+
+84	
+02	
+01	
+a7	
+ff	
+59	
+23	
+ae	
+
+
+
+-------------------- Method 5 --------------------------
+
+
+ - acc flag = 1
+
+
+ - name_index = 87
+
+
+ - desc_index = 88
+
+
+ - attr count = 1
+
+
+-------------------- Method 5 attr count = 1------------------
+
+
+desc = ()Lapplication/bst/NBodySystem;
+
+
+Attr From Addr: 0x7eb / 0x81b
+
+ --- attr name in index 75 = Code
+
+
+Attribute len = 32 (0x20)
+
+[Code maxStack = 2, maxLocals = 1, codeLen = 8, params_count = 1]
+
+bb	
+00	
+08	
+59	
+b7	
+00	
+4a	
+b0	
+
+
+
+======================= End of Method Analysis ===========================
+
+
+ - item 1 line =  
+0a 00 00 00|00 02 00 03
+
+ - item 2 line =  
+07 00 00 04|00 00 00 04
+
+ - item 3 line =  
+0c 00 00 00|00 05 00 06
+
+ - item 4 line =  
+01 00 10 00|00 00 00 00
+
+ - item 5 line =  
+01 00 06 00|00 00 00 10
+
+ - item 6 line =  
+01 00 03 00|00 00 00 16
+
+ - item 7 line =  
+09 00 00 00|00 08 00 09
+
+ - item 8 line =  
+07 00 00 0a|00 00 00 0a
+
+ - item 9 line =  
+0c 00 00 00|00 0b 00 0c
+
+ - item 10 line =  
+01 00 1b 00|00 00 00 19
+
+ - item 11 line =  
+01 00 06 00|00 00 00 34
+
+ - item 12 line =  
+01 00 17 00|00 00 00 3a
+
+ - item 13 line =  
+07 00 00 0e|00 00 00 0e
+
+ - item 14 line =  
+01 00 14 00|00 00 00 51
+
+ - item 15 line =  
+0a 00 00 00|00 0d 00 03
+
+ - item 16 line =  
+09 00 00 00|00 08 00 11
+
+ - item 17 line =  
+0c 00 00 00|00 12 00 13
+
+ - item 18 line =  
+01 00 04 00|00 00 00 65
+
+ - item 19 line =  
+01 00 16 00|00 00 00 69
+
+ - item 20 line =  
+07 00 00 15|00 00 00 15
+
+ - item 21 line =  
+01 00 14 00|00 00 00 7f
+
+ - item 22 line =  
+0a 00 00 00|00 14 00 03
+
+ - item 23 line =  
+09 00 00 00|00 08 00 18
+
+ - item 24 line =  
+0c 00 00 00|00 19 00 1a
+
+ - item 25 line =  
+01 00 04 00|00 00 00 93
+
+ - item 26 line =  
+01 00 16 00|00 00 00 97
+
+ - item 27 line =  
+0a 00 00 00|00 14 00 1c
+
+ - item 28 line =  
+0c 00 00 00|00 1d 00 1e
+
+ - item 29 line =  
+01 00 03 00|00 00 00 ad
+
+ - item 30 line =  
+01 00 18 00|00 00 00 b0
+
+ - item 31 line =  
+0a 00 00 00|00 14 00 20
+
+ - item 32 line =  
+0c 00 00 00|00 21 00 1e
+
+ - item 33 line =  
+01 00 07 00|00 00 00 c8
+
+ - item 34 line =  
+0a 00 00 00|00 14 00 23
+
+ - item 35 line =  
+0c 00 00 00|00 24 00 1e
+
+ - item 36 line =  
+01 00 06 00|00 00 00 cf
+
+ - item 37 line =  
+0a 00 00 00|00 14 00 26
+
+ - item 38 line =  
+0c 00 00 00|00 27 00 1e
+
+ - item 39 line =  
+01 00 06 00|00 00 00 d5
+
+ - item 40 line =  
+0a 00 00 00|00 14 00 29
+
+ - item 41 line =  
+0c 00 00 00|00 2a 00 1e
+
+ - item 42 line =  
+01 00 07 00|00 00 00 db
+
+ - item 43 line =  
+09 00 00 00|00 14 00 2c
+
+ - item 44 line =  
+0c 00 00 00|00 2d 00 2e
+
+ - item 45 line =  
+01 00 02 00|00 00 00 e2
+
+ - item 46 line =  
+01 00 01 00|00 00 00 e4
+
+ - item 47 line =  
+09 00 00 00|00 14 00 30
+
+ - item 48 line =  
+0c 00 00 00|00 31 00 2e
+
+ - item 49 line =  
+01 00 04 00|00 00 00 e5
+
+ - item 50 line =  
+09 00 00 00|00 14 00 33
+
+ - item 51 line =  
+0c 00 00 00|00 34 00 2e
+
+ - item 52 line =  
+01 00 02 00|00 00 00 e9
+
+ - item 53 line =  
+09 00 00 00|00 14 00 36
+
+ - item 54 line =  
+0c 00 00 00|00 37 00 2e
+
+ - item 55 line =  
+01 00 02 00|00 00 00 eb
+
+ - item 56 line =  
+0a 00 00 00|00 14 00 39
+
+ - item 57 line =  
+0c 00 00 00|00 3a 00 3b
+
+ - item 58 line =  
+01 00 0e 00|00 00 00 ed
+
+ - item 59 line =  
+01 00 06 00|00 00 00 fb
+
+ - item 60 line =  
+09 00 00 00|00 14 00 3d
+
+ - item 61 line =  
+0c 00 00 00|00 3e 00 2e
+
+ - item 62 line =  
+01 00 01 00|00 00 01 01
+
+ - item 63 line =  
+09 00 00 00|00 14 00 40
+
+ - item 64 line =  
+0c 00 00 00|00 41 00 2e
+
+ - item 65 line =  
+01 00 01 00|00 00 01 02
+
+ - item 66 line =  
+09 00 00 00|00 14 00 43
+
+ - item 67 line =  
+0c 00 00 00|00 44 00 2e
+
+ - item 68 line =  
+01 00 01 00|00 00 01 03
+
+ - item 69 line =  
+0a 00 00 00|00 0d 00 46
+
+ - item 70 line =  
+0c 00 00 00|00 47 00 48
+
+ - item 71 line =  
+01 00 07 00|00 00 01 04
+
+ - item 72 line =  
+01 00 04 00|00 00 01 0b
+
+ - item 73 line =  
+04 00 00 00|00 00 00 00
+
+ - item 74 line =  
+0a 00 00 00|00 08 00 03
+
+ - item 75 line =  
+01 00 04 00|00 00 01 0f
+
+ - item 76 line =  
+01 00 0f 00|00 00 01 13
+
+ - item 77 line =  
+01 00 04 00|00 00 01 22
+
+ - item 78 line =  
+01 00 03 00|00 00 01 26
+
+ - item 79 line =  
+01 00 0c 00|00 00 01 29
+
+ - item 80 line =  
+01 00 19 00|00 00 01 35
+
+ - item 81 line =  
+01 00 0d 00|00 00 01 4e
+
+ - item 82 line =  
+07 00 00 0c|00 00 00 0c
+
+ - item 83 line =  
+01 00 07 00|00 00 01 5b
+
+ - item 84 line =  
+01 00 04 00|00 00 01 62
+
+ - item 85 line =  
+01 00 06 00|00 00 01 66
+
+ - item 86 line =  
+01 00 03 00|00 00 01 6c
+
+ - item 87 line =  
+01 00 04 00|00 00 01 6f
+
+ - item 88 line =  
+01 00 1f 00|00 00 01 73
+
+ - item 89 line =  
+01 00 0a 00|00 00 01 92
+
+ - item 90 line =  
+01 00 10 00|00 00 01 9c
+
+super class name = java/lang/Object
+
+
+get DPUID = 0 class =  java/lang/Object from cache
+================= End of load super object ================
+
+
+get DPUID = 0 class =  application/bst/NBodySystem from cache
+set framework.pim.dpu.java_strut.DPUJClass@4f2410ac to com.upmem.dpu.Dpu@728938a9, key=application/bst/NBodySystem, val = 3091198 class name = application/bst/NBodySystem
+
+set method: <init>:()V of class application/bst/NBodySystem to com.upmem.dpu.Dpu@728938a9 v = 30914a8
+
+set method: test:()I of class application/bst/NBodySystem to com.upmem.dpu.Dpu@728938a9 v = 30914e0
+
+set method: createBodies:()[Lapplication/bst/Body; of class application/bst/NBodySystem to com.upmem.dpu.Dpu@728938a9 v = 3091500
+
+set method: advance:(F)V of class application/bst/NBodySystem to com.upmem.dpu.Dpu@728938a9 v = 30915b0
+
+set method: energy:()F of class application/bst/NBodySystem to com.upmem.dpu.Dpu@728938a9 v = 3091718
+
+set method: _new:()Lapplication/bst/NBodySystem; of class application/bst/NBodySystem to com.upmem.dpu.Dpu@728938a9 v = 30917e0
+
+set field: bodies of class application/bst/NBodySystem to com.upmem.dpu.Dpu@728938a9 v(index) = 0
+
+set field: sqrt of class application/bst/NBodySystem to com.upmem.dpu.Dpu@728938a9 v(index) = 1
+
+set field: body of class application/bst/NBodySystem to com.upmem.dpu.Dpu@728938a9 v(index) = 2
+
+in java class = application/bst/NBodySystem
+
+
+get DPUID = 0 class =  java/lang/Object from cache
+ - #1 is MethodRef, description = java/lang/Object.<init>:()V
+
+
+set #1 java/lang/Object.<init>:()V index 1
+
+
+ - #15 is MethodRef, description = application/bst/Sqrt.<init>:()V
+
+
+set #15 application/bst/Sqrt.<init>:()V index 13
+
+
+ - #22 is MethodRef, description = application/bst/Body.<init>:()V
+
+
+set #22 application/bst/Body.<init>:()V index 15
+
+
+ - #27 is MethodRef, description = application/bst/Body.sun:()Lapplication/bst/Body;
+
+
+set #27 application/bst/Body.sun:()Lapplication/bst/Body; index 20
+
+
+ - #31 is MethodRef, description = application/bst/Body.jupiter:()Lapplication/bst/Body;
+
+
+set #31 application/bst/Body.jupiter:()Lapplication/bst/Body; index 16
+
+
+ - #34 is MethodRef, description = application/bst/Body.saturn:()Lapplication/bst/Body;
+
+
+set #34 application/bst/Body.saturn:()Lapplication/bst/Body; index 17
+
+
+ - #37 is MethodRef, description = application/bst/Body.uranus:()Lapplication/bst/Body;
+
+
+set #37 application/bst/Body.uranus:()Lapplication/bst/Body; index 18
+
+
+ - #40 is MethodRef, description = application/bst/Body.neptune:()Lapplication/bst/Body;
+
+
+set #40 application/bst/Body.neptune:()Lapplication/bst/Body; index 19
+
+
+ - #56 is MethodRef, description = application/bst/Body.offsetMomentum:(FFF)V
+
+
+set #56 application/bst/Body.offsetMomentum:(FFF)V index 13
+
+
+ - #69 is MethodRef, description = application/bst/Sqrt.compute:(F)F
+
+
+set #69 application/bst/Sqrt.compute:(F)F index 14
+
+
+ - #74 is MethodRef, description = application/bst/NBodySystem.<init>:()V
+
+
+set #74 application/bst/NBodySystem.<init>:()V index 13
+
+
+vtable #0 .
+
+
+vtable #1 java/lang/Object.<init>:()V
+
+
+vtable #2 java/lang/Object.getClass:()Ljava/lang/Class;
+
+
+vtable #3 java/lang/Object.hashCode:()I
+
+
+vtable #4 java/lang/Object.equals:(Ljava/lang/Object;)Z
+
+
+vtable #5 java/lang/Object.clone:()Ljava/lang/Object;
+
+
+vtable #6 java/lang/Object.toString:()Ljava/lang/String;
+
+
+vtable #7 java/lang/Object.notify:()V
+
+
+vtable #8 java/lang/Object.notifyAll:()V
+
+
+vtable #9 java/lang/Object.wait:()V
+
+
+vtable #10 java/lang/Object.wait:(J)V
+
+
+vtable #11 java/lang/Object.wait:(JI)V
+
+
+vtable #12 java/lang/Object.finalize:()V
+
+
+vtable #13 application/bst/NBodySystem.<init>:()V
+
+
+vtable #14 application/bst/NBodySystem.test:()I
+
+
+vtable #15 application/bst/NBodySystem.createBodies:()[Lapplication/bst/Body;
+
+
+vtable #16 application/bst/NBodySystem.advance:(F)V
+
+
+vtable #17 application/bst/NBodySystem.energy:()F
+
+
+vtable #18 application/bst/NBodySystem._new:()Lapplication/bst/NBodySystem;
+
+
+
+
+
+ - item 1 line =  
+0a 00 00 00|00 00 00 01
+
+ - item 2 line =  
+07 00 00 04|00 00 00 04
+
+ - item 3 line =  
+0c 00 00 00|00 05 00 06
+
+ - item 4 line =  
+01 00 10 00|00 00 00 00
+
+ - item 5 line =  
+01 00 06 00|00 00 00 10
+
+ - item 6 line =  
+01 00 03 00|00 00 00 16
+
+ - item 7 line =  
+09 00 00 00|00 08 00 09
+
+ - item 8 line =  
+07 00 00 0a|00 00 00 0a
+
+ - item 9 line =  
+0c 00 00 00|00 0b 00 0c
+
+ - item 10 line =  
+01 00 1b 00|00 00 00 19
+
+ - item 11 line =  
+01 00 06 00|00 00 00 34
+
+ - item 12 line =  
+01 00 17 00|00 00 00 3a
+
+ - item 13 line =  
+07 00 00 0e|00 00 00 0e
+
+ - item 14 line =  
+01 00 14 00|00 00 00 51
+
+ - item 15 line =  
+0a 00 00 00|00 00 00 0d
+
+ - item 16 line =  
+09 00 00 00|00 08 00 11
+
+ - item 17 line =  
+0c 00 00 00|00 12 00 13
+
+ - item 18 line =  
+01 00 04 00|00 00 00 65
+
+ - item 19 line =  
+01 00 16 00|00 00 00 69
+
+ - item 20 line =  
+07 00 00 15|00 00 00 15
+
+ - item 21 line =  
+01 00 14 00|00 00 00 7f
+
+ - item 22 line =  
+0a 00 00 00|00 00 00 0f
+
+ - item 23 line =  
+09 00 00 00|00 08 00 18
+
+ - item 24 line =  
+0c 00 00 00|00 19 00 1a
+
+ - item 25 line =  
+01 00 04 00|00 00 00 93
+
+ - item 26 line =  
+01 00 16 00|00 00 00 97
+
+ - item 27 line =  
+0a 00 00 00|00 00 00 14
+
+ - item 28 line =  
+0c 00 00 00|00 1d 00 1e
+
+ - item 29 line =  
+01 00 03 00|00 00 00 ad
+
+ - item 30 line =  
+01 00 18 00|00 00 00 b0
+
+ - item 31 line =  
+0a 00 00 00|00 00 00 10
+
+ - item 32 line =  
+0c 00 00 00|00 21 00 1e
+
+ - item 33 line =  
+01 00 07 00|00 00 00 c8
+
+ - item 34 line =  
+0a 00 00 00|00 00 00 11
+
+ - item 35 line =  
+0c 00 00 00|00 24 00 1e
+
+ - item 36 line =  
+01 00 06 00|00 00 00 cf
+
+ - item 37 line =  
+0a 00 00 00|00 00 00 12
+
+ - item 38 line =  
+0c 00 00 00|00 27 00 1e
+
+ - item 39 line =  
+01 00 06 00|00 00 00 d5
+
+ - item 40 line =  
+0a 00 00 00|00 00 00 13
+
+ - item 41 line =  
+0c 00 00 00|00 2a 00 1e
+
+ - item 42 line =  
+01 00 07 00|00 00 00 db
+
+ - item 43 line =  
+09 00 00 00|00 14 00 2c
+
+ - item 44 line =  
+0c 00 00 00|00 2d 00 2e
+
+ - item 45 line =  
+01 00 02 00|00 00 00 e2
+
+ - item 46 line =  
+01 00 01 00|00 00 00 e4
+
+ - item 47 line =  
+09 00 00 00|00 14 00 30
+
+ - item 48 line =  
+0c 00 00 00|00 31 00 2e
+
+ - item 49 line =  
+01 00 04 00|00 00 00 e5
+
+ - item 50 line =  
+09 00 00 00|00 14 00 33
+
+ - item 51 line =  
+0c 00 00 00|00 34 00 2e
+
+ - item 52 line =  
+01 00 02 00|00 00 00 e9
+
+ - item 53 line =  
+09 00 00 00|00 14 00 36
+
+ - item 54 line =  
+0c 00 00 00|00 37 00 2e
+
+ - item 55 line =  
+01 00 02 00|00 00 00 eb
+
+ - item 56 line =  
+0a 00 00 00|00 00 00 0d
+
+ - item 57 line =  
+0c 00 00 00|00 3a 00 3b
+
+ - item 58 line =  
+01 00 0e 00|00 00 00 ed
+
+ - item 59 line =  
+01 00 06 00|00 00 00 fb
+
+ - item 60 line =  
+09 00 00 00|00 14 00 3d
+
+ - item 61 line =  
+0c 00 00 00|00 3e 00 2e
+
+ - item 62 line =  
+01 00 01 00|00 00 01 01
+
+ - item 63 line =  
+09 00 00 00|00 14 00 40
+
+ - item 64 line =  
+0c 00 00 00|00 41 00 2e
+
+ - item 65 line =  
+01 00 01 00|00 00 01 02
+
+ - item 66 line =  
+09 00 00 00|00 14 00 43
+
+ - item 67 line =  
+0c 00 00 00|00 44 00 2e
+
+ - item 68 line =  
+01 00 01 00|00 00 01 03
+
+ - item 69 line =  
+0a 00 00 00|00 00 00 0e
+
+ - item 70 line =  
+0c 00 00 00|00 47 00 48
+
+ - item 71 line =  
+01 00 07 00|00 00 01 04
+
+ - item 72 line =  
+01 00 04 00|00 00 01 0b
+
+ - item 73 line =  
+04 00 00 00|00 00 00 00
+
+ - item 74 line =  
+0a 00 00 00|00 00 00 0d
+
+ - item 75 line =  
+01 00 04 00|00 00 01 0f
+
+ - item 76 line =  
+01 00 0f 00|00 00 01 13
+
+ - item 77 line =  
+01 00 04 00|00 00 01 22
+
+ - item 78 line =  
+01 00 03 00|00 00 01 26
+
+ - item 79 line =  
+01 00 0c 00|00 00 01 29
+
+ - item 80 line =  
+01 00 19 00|00 00 01 35
+
+ - item 81 line =  
+01 00 0d 00|00 00 01 4e
+
+ - item 82 line =  
+07 00 00 0c|00 00 00 0c
+
+ - item 83 line =  
+01 00 07 00|00 00 01 5b
+
+ - item 84 line =  
+01 00 04 00|00 00 01 62
+
+ - item 85 line =  
+01 00 06 00|00 00 01 66
+
+ - item 86 line =  
+01 00 03 00|00 00 01 6c
+
+ - item 87 line =  
+01 00 04 00|00 00 01 6f
+
+ - item 88 line =  
+01 00 1f 00|00 00 01 73
+
+ - item 89 line =  
+01 00 0a 00|00 00 01 92
+
+ - item 90 line =  
+01 00 10 00|00 00 01 9c
+
+ - In class application.bst.NBodySystem resolve unknow name
+
+
+In #0 of class 10 application.bst.NBodySystem: tag = 0, whole line = 0
+
+
+In #1 of class 10 application.bst.NBodySystem: tag = 10, whole line = a00000000000001
+
+
+In #1 MethodRef: 
+
+
+method Table Index = 1
+
+
+description = java/lang/Object.<init>:()V
+
+
+get DPUID = 0 method =  <init>:()V of class java/lang/Object from cache
+
+class java/lang/Object loaded, mram addr = 0x3090000
+
+get DPUID = 0 class =  java/lang/Object from cache
+methodName = <init>
+
+
+type desc = ()V
+
+
+return val = V
+
+
+params desc = 
+
+
+3090318
+
+In #2 of class 10 application.bst.NBodySystem: tag = 7, whole line = 700000400000004
+
+
+In #2 ClassRef: 
+
+
+className = java/lang/Object, index = #4
+
+
+class java/lang/Object loaded, mram addr = 0x3090000
+
+In #3 of class 10 application.bst.NBodySystem: tag = 12, whole line = c00000000050006
+
+
+In #4 of class 10 application.bst.NBodySystem: tag = 1, whole line = 100100000000000
+
+
+In #5 of class 10 application.bst.NBodySystem: tag = 1, whole line = 100060000000010
+
+
+In #6 of class 10 application.bst.NBodySystem: tag = 1, whole line = 100030000000016
+
+
+In #7 of class 10 application.bst.NBodySystem: tag = 9, whole line = 900000000080009
+
+
+In #7 FieldRef: 
+
+
+class name = application/bst/NBodySystem
+
+
+class application/bst/NBodySystem loaded, mram addr = 0x3091198
+
+fieldName = bodies
+
+
+get DPUID = 0 field =  bodies, of class application/bst/NBodySystem from cache
+
+In #8 of class 10 application.bst.NBodySystem: tag = 7, whole line = 700000a0000000a
+
+
+In #8 ClassRef: 
+
+
+className = application/bst/NBodySystem, index = #10
+
+
+class application/bst/NBodySystem loaded, mram addr = 0x3091198
+
+In #9 of class 10 application.bst.NBodySystem: tag = 12, whole line = c000000000b000c
+
+
+In #10 of class 10 application.bst.NBodySystem: tag = 1, whole line = 1001b0000000019
+
+
+In #11 of class 10 application.bst.NBodySystem: tag = 1, whole line = 100060000000034
+
+
+In #12 of class 10 application.bst.NBodySystem: tag = 1, whole line = 10017000000003a
+
+
+In #13 of class 10 application.bst.NBodySystem: tag = 7, whole line = 700000e0000000e
+
+
+In #13 ClassRef: 
+
+
+className = application/bst/Sqrt, index = #14
+
+
+class application/bst/Sqrt loaded, mram addr = 0x3090f40
+
+In #14 of class 10 application.bst.NBodySystem: tag = 1, whole line = 100140000000051
+
+
+In #15 of class 10 application.bst.NBodySystem: tag = 10, whole line = a0000000000000d
+
+
+In #15 MethodRef: 
+
+
+method Table Index = 13
+
+
+description = application/bst/NBodySystem.<init>:()V
+
+
+get DPUID = 0 method =  <init>:()V of class application/bst/NBodySystem from cache
+
+class application/bst/NBodySystem loaded, mram addr = 0x3091198
+
+get DPUID = 0 class =  application/bst/NBodySystem from cache
+methodName = <init>
+
+
+type desc = ()V
+
+
+return val = V
+
+
+params desc = 
+
+
+30914a8
+
+In #16 of class 10 application.bst.NBodySystem: tag = 9, whole line = 900000000080011
+
+
+In #16 FieldRef: 
+
+
+class name = application/bst/NBodySystem
+
+
+class application/bst/NBodySystem loaded, mram addr = 0x3091198
+
+fieldName = sqrt
+
+
+get DPUID = 0 field =  sqrt, of class application/bst/NBodySystem from cache
+
+In #17 of class 10 application.bst.NBodySystem: tag = 12, whole line = c00000000120013
+
+
+In #18 of class 10 application.bst.NBodySystem: tag = 1, whole line = 100040000000065
+
+
+In #19 of class 10 application.bst.NBodySystem: tag = 1, whole line = 100160000000069
+
+
+In #20 of class 10 application.bst.NBodySystem: tag = 7, whole line = 700001500000015
+
+
+In #20 ClassRef: 
+
+
+className = application/bst/Body, index = #21
+
+
+class application/bst/Body loaded, mram addr = 0x3090870
+
+In #21 of class 10 application.bst.NBodySystem: tag = 1, whole line = 10014000000007f
+
+
+In #22 of class 10 application.bst.NBodySystem: tag = 10, whole line = a0000000000000f
+
+
+In #22 MethodRef: 
+
+
+method Table Index = 15
+
+
+description = application/bst/NBodySystem.createBodies:()[Lapplication/bst/Body;
+
+
+get DPUID = 0 method =  createBodies:()[Lapplication/bst/Body; of class application/bst/NBodySystem from cache
+
+class application/bst/NBodySystem loaded, mram addr = 0x3091198
+
+get DPUID = 0 class =  application/bst/NBodySystem from cache
+methodName = createBodies
+
+
+type desc = ()[Lapplication/bst/Body;
+
+
+return val = [Lapplication/bst/Body;
+
+
+params desc = 
+
+
+3091500
+
+In #23 of class 10 application.bst.NBodySystem: tag = 9, whole line = 900000000080018
+
+
+In #23 FieldRef: 
+
+
+class name = application/bst/NBodySystem
+
+
+class application/bst/NBodySystem loaded, mram addr = 0x3091198
+
+fieldName = body
+
+
+get DPUID = 0 field =  body, of class application/bst/NBodySystem from cache
+
+In #24 of class 10 application.bst.NBodySystem: tag = 12, whole line = c0000000019001a
+
+
+In #25 of class 10 application.bst.NBodySystem: tag = 1, whole line = 100040000000093
+
+
+In #26 of class 10 application.bst.NBodySystem: tag = 1, whole line = 100160000000097
+
+
+In #27 of class 10 application.bst.NBodySystem: tag = 10, whole line = a00000000000014
+
+
+In #27 MethodRef: 
+
+
+method Table Index = 20
+
+

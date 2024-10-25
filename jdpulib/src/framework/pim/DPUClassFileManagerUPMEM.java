@@ -145,7 +145,10 @@ public class DPUClassFileManagerUPMEM extends DPUClassFileManager {
                             DPUClassFileLookupTableItem methodReferenceJc = UPMEM.getInstance()
                                     .getDPUManager(dpuID).classCacheManager.getClassLookupTableItem(className);
                             if (methodReferenceJc == null) {
+                                classfileLogger.logln(className + " not found in cache");
                                 break;
+                            } else {
+                                classfileLogger.logln("got " + className + " from cache");
                             }
 
                             if (methodReferenceJc.dpuClassStructure.superClassNameIndex != 0) {
@@ -170,7 +173,7 @@ public class DPUClassFileManagerUPMEM extends DPUClassFileManager {
             ClassFileAnalyzer.printEntryTable(jc);
         }
 
-        jc.totalSize = 48 + jc.cpItemCount * 8 + 8 +
+        jc.totalSize = 48 + jc.getCpItemCount() * 8 + 8 +
                 Arrays.stream(jc.fields).map(e -> e.size).reduce(Integer::sum).orElseGet(() -> 0) +
                 Arrays.stream(jc.methodTable).map(e -> e.size).reduce(Integer::sum).orElseGet(() -> 0)
                 + ((jc.stringINTConstantPoolLength + 0b111) & (~0b111))
@@ -193,7 +196,7 @@ public class DPUClassFileManagerUPMEM extends DPUClassFileManager {
                             getUTF8(jc, jc.methodTable[mIndex].nameIndex) + ":"
                                     + getUTF8(jc, jc.methodTable[mIndex].descriptorIndex),
                             jc.methodOffset[mIndex] + 48 + 8 +
-                                    +8 * jc.cpItemCount +
+                                    +8 * jc.getCpItemCount() +
                                     Arrays.stream(jc.fields).map(e -> e.size).reduce(Integer::sum).orElse(0)
                                     + classAddr,
                             jc.methodTable[mIndex]);
@@ -342,10 +345,14 @@ public class DPUClassFileManagerUPMEM extends DPUClassFileManager {
 
         // resolve each entry item from preprocessed entry table.
 
-        for (int i = 0; i < jc.cpItemCount; i++) {
+        for (int i = 0; i < jc.getCpItemCount(); i++) {
             int tag = (int) ((jc.entryItems[i] >> 56) & 0xFF);
             int classIndex;
             int nameAndTypeIndex;
+            classfileLogger.logln(
+                    "In #" + (i) + " of class " + jc.thisClassNameIndex + " " + c.getName() + ":" + " tag = " + tag
+                            + ", whole line = " + Long.toHexString(jc.entryItems[i]));
+            // ClassFileAnalyzer.printEntryTable(jc);
             switch (tag) {
                 case ClassFileAnalyzerConstants.CT_Class:
                     classfileLogger.logln("In #" + (i) + " ClassRef: ");
@@ -549,6 +556,8 @@ public class DPUClassFileManagerUPMEM extends DPUClassFileManager {
             }
         }
 
+        classfileLogger.logln("End of for loop: resolve unknow name");
+
         // update virtual table
         for (int i = 0; i < jc.virtualTable.items.size(); i++) {
             String vClassName = jc.virtualTable.items.get(i).className;
@@ -571,6 +580,9 @@ public class DPUClassFileManagerUPMEM extends DPUClassFileManager {
         } catch (DpuException e) {
             throw new RuntimeException(e);
         }
+
+        classfileLogger
+                .logln(" ==========--> End of load class " + c.getName() + " to dpu#" + dpuID + " <--==========");
 
         return jc;
     }

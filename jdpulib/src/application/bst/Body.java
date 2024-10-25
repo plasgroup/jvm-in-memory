@@ -5,7 +5,7 @@
  */
 package application.bst;
 
-final class Body {
+public final class Body {
     private final float PI = (float) 3.141592653589793;
     private final float SOLAR_MASS = 4 * PI * PI;
     private final float DAYS_PER_YER = (float) 365.24;
