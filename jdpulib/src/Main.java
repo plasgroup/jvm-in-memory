@@ -157,15 +157,15 @@ public class Main {
         UPMEM.setPackageSearchPath("application.bst.");
 
         // Test DPUTreeNode
-        // UPMEM.getInstance().getDPUManager(0).dpuClassFileManager.loadClassToDPU(Body.class);
-        // UPMEM.getInstance().getDPUManager(0).dpuClassFileManager.loadClassToDPU(Sqrt.class);
-        // NBodySystemProxy nbs = (NBodySystemProxy) UPMEM.getInstance().createObject(0,
-        // NBodySystem.class);
-        // System.out.println("nbs.test() = " + nbs.test());
+        UPMEM.getInstance().getDPUManager(0).dpuClassFileManager.loadClassToDPU(Body.class);
+        UPMEM.getInstance().getDPUManager(0).dpuClassFileManager.loadClassToDPU(Sqrt.class);
+        NBodySystemProxy nbs = (NBodySystemProxy) UPMEM.getInstance().createObject(0,
+                NBodySystem.class);
+        System.out.println("nbs.test() = " + nbs.test());
 
-        DPUTreeNodeProxy dpuTreeNode = (DPUTreeNodeProxy) UPMEM.getInstance().createObject(0, DPUTreeNode.class, 1, 1);
-        dpuTreeNode.insert(3, 3);
-        ;
+        // DPUTreeNodeProxy dpuTreeNode = (DPUTreeNodeProxy)
+        // UPMEM.getInstance().createObject(0, DPUTreeNode.class, 1, 1);
+        // dpuTreeNode.insert(3, 3);
 
         // // Evaluate performance. In performance evaluation mode, the execution time
         // would be measured.

@@ -6,15 +6,15 @@
 package application.bst;
 
 public class NBodySystem {
-    // private final Body[] bodies = null;
-    // private final Sqrt sqrt;
-    // private final Body body = null;
+    // private final Body[] bodies;
+    private final Sqrt sqrt;
+    private final Body body;
 
-    // public NBodySystem() {
-    // sqrt = new Sqrt();
-    // // body = new Body();
-    // // bodies = createBodies();
-    // }
+    public NBodySystem() {
+        body = new Body();
+        sqrt = new Sqrt();
+        // bodies = createBodies();
+    }
 
     public int test() {
         return 1;
