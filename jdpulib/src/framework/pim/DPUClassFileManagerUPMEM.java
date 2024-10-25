@@ -16,7 +16,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Dictionary;
+import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Map;
 
 import static framework.pim.dpu.classloader.ClassWriter.pushJClassToDPU;
 import static framework.pim.utils.ClassLoaderUtils.*;
@@ -26,6 +28,28 @@ public class DPUClassFileManagerUPMEM extends DPUClassFileManager {
     public DPUClassFileManagerUPMEM(int dpuID, Dpu dpu) {
         this.dpuID = dpuID;
         this.dpu = dpu;
+    }
+
+    // vtable まわりの実装がバグっているので、応急処置
+    int globalClassIdCurrent = 0;
+    Map<String, Integer> globalClassIdTable = new HashMap<>();
+
+    void putGlobalClassId(String className) {
+        if (globalClassIdTable.putIfAbsent(className, globalClassIdCurrent) == null)
+            globalClassIdCurrent++;
+    }
+
+    int getGlobalClassId(String className) {
+        return globalClassIdTable.get(className);
+    }
+
+    String getClassNameFromGlobalClassId(int globalClassId) {
+        for (var entry : globalClassIdTable.entrySet()) {
+            if (entry.getValue() == globalClassId) {
+                return entry.getKey();
+            }
+        }
+        return null;
     }
 
     private void createVirtualTable(DPUJClass jc, byte[] classBytes) {
@@ -64,8 +88,9 @@ public class DPUClassFileManagerUPMEM extends DPUClassFileManager {
                         classfileLogger.logln(className + " is loaded");
                         int index = globalVirtualTableIndexCache.get(className + "." + descriptor);
                         classfileLogger.logln(" - get method index = " + index);
+                        putGlobalClassId(className);
                         jc.entryItems[i] &= 0xFFFFFFFF00000000L;
-                        jc.entryItems[i] |= index;
+                        jc.entryItems[i] |= index + (getGlobalClassId(className) << 16);
                     } else {
                         classfileLogger.logln(className + " is not loaded, skip");
                     }
@@ -137,8 +162,9 @@ public class DPUClassFileManagerUPMEM extends DPUClassFileManager {
                         if (globalVirtualTableIndexCache.get(className + "." + descriptor) != null) {
                             Integer index = globalVirtualTableIndexCache.get(className + "." + descriptor);
                             classfileLogger.logln("set #" + i + " " + className + "." + descriptor + " index " + index);
+                            putGlobalClassId(className);
                             jc.entryItems[i] &= 0xFFFFFFFF00000000L;
-                            jc.entryItems[i] |= index;
+                            jc.entryItems[i] |= index + (getGlobalClassId(className) << 16);
                             break;
                         } else {
                             classfileLogger.logln("try get " + className);
@@ -233,12 +259,17 @@ public class DPUClassFileManagerUPMEM extends DPUClassFileManager {
     }
 
     static {
-        classfileLogger.setEnable(true);
+        classfileLogger.setEnable(false);
     }
 
     @Override
     public DPUJClass loadClassToDPU(Class c) {
         String className = formalClassName(c.getName());
+        // Ignore Array of objects
+        if (className.charAt(0) == '[') {
+            return null;
+        }
+
         classfileLogger.logln(" ==========--> Try load class " + className + " to dpu#" + dpuID + " <--==========");
 
         // query cache
@@ -417,12 +448,22 @@ public class DPUClassFileManagerUPMEM extends DPUClassFileManager {
                 case ClassFileAnalyzerConstants.CT_Methodref:
                     classfileLogger.logln("In #" + (i) + " MethodRef: ");
 
-                    int methodTableIndex = (int) ((jc.entryItems[i]) & 0xFFFFFFFF);
+                    int methodTableIndex = (int) ((jc.entryItems[i]) & 0xFFFF);
+                    int globalClassIndex = (int) ((jc.entryItems[i] >> 16) & 0xFFFF);
                     classfileLogger.logln("method Table Index = " + methodTableIndex);
+                    classfileLogger.logln("global class Index = " + globalClassIndex);
 
                     if (methodTableIndex == 0)
                         continue;
-                    VirtualTableItem vItem = jc.virtualTable.items.get(methodTableIndex);
+                    // debug
+                    // classfileLogger.logln("virtual table items:");
+                    // for (var item : jc.virtualTable.items) {
+                    // classfileLogger.logln("item = " + item.className + "." + item.descriptor);
+                    // }
+
+                    String declaredClassName = getClassNameFromGlobalClassId(globalClassIndex);
+                    DPUJClass declaredClass = getLoadedClassRecord(declaredClassName).dpuClassStructure;
+                    VirtualTableItem vItem = declaredClass.virtualTable.items.get(methodTableIndex);
                     classfileLogger.logln("description = " + vItem.className + "." + vItem.descriptor);
 
                     DPUMethodLookupTableItem methodCacheItem = UPMEM.getInstance()
