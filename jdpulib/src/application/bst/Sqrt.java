@@ -14,7 +14,7 @@ public class Sqrt {
         return guess;
     }
 
-    private float absolute(float value) {
+    public float absolute(float value) {
         return value < (float) 0.0 ? -value : value;
     }
 }
