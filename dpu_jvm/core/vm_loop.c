@@ -106,26 +106,38 @@ void interp(struct function_thunk func_thunk)
 
         case ICONST_0:
             DEBUG_OUT_INSN_PARSED("ICONST_0")
-            DEBUG_PRINT(" - push const 0 to stack\n");
+            // DEBUG_PRINT(" - push const 0 to stack\n");
             PUSH_EVAL_STACK(0);
             break;
         case ICONST_1:
             DEBUG_OUT_INSN_PARSED("ICONST_1")
-            DEBUG_PRINT(" - push const 1 to stack\n");
+            // DEBUG_PRINT(" - push const 1 to stack\n");
             ;
             PUSH_EVAL_STACK(1);
             break;
         case ICONST_2:
             DEBUG_OUT_INSN_PARSED("ICONST_2")
-            DEBUG_PRINT(" - push const 2 to stack\n");
+            // DEBUG_PRINT(" - push const 2 to stack\n");
             ;
             PUSH_EVAL_STACK(2);
             break;
         case ICONST_3:
             DEBUG_OUT_INSN_PARSED("ICONST_3")
-            DEBUG_PRINT(" - push const 3 to stack\n");
+            // DEBUG_PRINT(" - push const 3 to stack\n");
             ;
             PUSH_EVAL_STACK(3);
+            break;
+        case ICONST_4:
+            DEBUG_OUT_INSN_PARSED("ICONST_4")
+            // DEBUG_PRINT(" - push const 4 to stack\n");
+            ;
+            PUSH_EVAL_STACK(4);
+            break;
+        case ICONST_5:
+            DEBUG_OUT_INSN_PARSED("ICONST_5")
+            // DEBUG_PRINT(" - push const 5 to stack\n");
+            ;
+            PUSH_EVAL_STACK(5);
             break;
         // case ICONST_M1:
         //     DEBUG_OUT_INSN_PARSED("ICONST_M1")
@@ -351,22 +363,22 @@ void interp(struct function_thunk func_thunk)
         case DUP:
             DEBUG_OUT_INSN_PARSED("DUP")
             op1 = EVAL_STACK_TOPSLOT_VALUE;
-            DEBUG_PRINT(" - dup %d(hex: %x)\n", op1, op1);
+            // DEBUG_PRINT(" - dup %d(hex: %x)\n", op1, op1);
             PUSH_EVAL_STACK(op1);
             break;
         case RETURN:
             DEBUG_OUT_INSN_PARSED("RETURN")
-            DEBUG_PRINT("return");
-            DEBUG_PRINT(" - last-sp = %p\n", FRAME_GET_OLDSP(current_fp[tasklet_id]));
-            DEBUG_PRINT(" - last-fp = %p\n", FRAME_GET_OLDFP(current_fp[tasklet_id]));
-            DEBUG_PRINT(" - return-pc = %p\n", FRAME_GET_RETPC(current_fp[tasklet_id]));
+            // DEBUG_PRINT("return");
+            // DEBUG_PRINT(" - last-sp = %p\n", FRAME_GET_OLDSP(current_fp[tasklet_id]));
+            // DEBUG_PRINT(" - last-fp = %p\n", FRAME_GET_OLDFP(current_fp[tasklet_id]));
+            // DEBUG_PRINT(" - return-pc = %p\n", FRAME_GET_RETPC(current_fp[tasklet_id]));
 
             op2 = FRAME_GET_OLDSP(current_fp[tasklet_id]);
             op3 = FRAME_GET_OLDFP(current_fp[tasklet_id]);
             op4 = FRAME_GET_RETPC(current_fp[tasklet_id]);
             if (op3 == NULL)
             {
-                DEBUG_PRINT(" - >> final frame\n");
+                // DEBUG_PRINT(" - >> final frame\n");
                 return_val = 0;
                 current_fp[tasklet_id] = 0;
                 current_sp[tasklet_id] = wram_data_space + tasklet_id * (WRAM_DATA_SPACE_SIZE / 24) - 4;
@@ -374,16 +386,16 @@ void interp(struct function_thunk func_thunk)
                 return;
             }
             current_sp[tasklet_id] = op2;
-            DEBUG_PRINT(" - change sp to %p\n", op2);
-            DEBUG_PRINT(" - reset pc to 0x%02x\n", op4);
+            // DEBUG_PRINT(" - change sp to %p\n", op2);
+            // DEBUG_PRINT(" - reset pc to 0x%02x\n", op4);
 
             func = FRAME_GET_METHOD(op3);
-            DEBUG_PRINT(" - reset func pt to 0x%08x\n", func);
+            // DEBUG_PRINT(" - reset func pt to 0x%08x\n", func);
             current_fp[tasklet_id] = op3;
             code_buffer = func->bytecodes;
             jc = FRAME_GET_CLASS(op3);
             pc = op4;
-            DEBUG_PRINT(" - bytecodes addr: %08x\n", func->bytecodes);
+            // DEBUG_PRINT(" - bytecodes addr: %08x\n", func->bytecodes);
             func_thunk.func = func;
             func_thunk.jc = jc;
 
@@ -393,17 +405,17 @@ void interp(struct function_thunk func_thunk)
             if (FRAME_GET_OPERAND_STACK_SIZE(current_fp[tasklet_id], current_sp[tasklet_id]) >= 0)
             {
                 POP_EVAL_STACK(op1);
-                DEBUG_PRINT(" - ret val = %d\n", op1);
+                // DEBUG_PRINT(" - ret val = %d\n", op1);
             }
-            DEBUG_PRINT(" - last-sp = %p\n", FRAME_GET_OLDSP(current_fp[tasklet_id]));
-            DEBUG_PRINT(" - last-fp = %p\n", FRAME_GET_OLDFP(current_fp[tasklet_id]));
-            DEBUG_PRINT(" - return-pc = %p\n", FRAME_GET_RETPC(current_fp[tasklet_id]));
+            // DEBUG_PRINT(" - last-sp = %p\n", FRAME_GET_OLDSP(current_fp[tasklet_id]));
+            // DEBUG_PRINT(" - last-fp = %p\n", FRAME_GET_OLDFP(current_fp[tasklet_id]));
+            // DEBUG_PRINT(" - return-pc = %p\n", FRAME_GET_RETPC(current_fp[tasklet_id]));
             op2 = FRAME_GET_OLDSP(current_fp[tasklet_id]);
             op3 = FRAME_GET_OLDFP(current_fp[tasklet_id]);
             op4 = FRAME_GET_RETPC(current_fp[tasklet_id]);
             if (op3 == NULL)
             {
-                DEBUG_PRINT(" - >> final frame\n");
+                // DEBUG_PRINT(" - >> final frame\n");
                 return_val = op1;
                 current_fp[tasklet_id] = 0;
                 current_sp[tasklet_id] = wram_data_space + tasklet_id * (WRAM_DATA_SPACE_SIZE / 24) - 4;
@@ -411,18 +423,18 @@ void interp(struct function_thunk func_thunk)
                 return;
             }
             current_sp[tasklet_id] = op2;
-            DEBUG_PRINT(" - change sp to %p\n", op2);
-            DEBUG_PRINT(" - push ret val %d\n", op1);
+            // DEBUG_PRINT(" - change sp to %p\n", op2);
+            // DEBUG_PRINT(" - push ret val %d\n", op1);
             PUSH_EVAL_STACK(op1)
-            DEBUG_PRINT(" - reset pc to 0x%02x\n", op4);
+            // DEBUG_PRINT(" - reset pc to 0x%02x\n", op4);
 
             func = FRAME_GET_METHOD(op3);
-            DEBUG_PRINT(" - reset func pt to 0x%08x\n", func);
+            // DEBUG_PRINT(" - reset func pt to 0x%08x\n", func);
             current_fp[tasklet_id] = op3;
             code_buffer = func->bytecodes;
             jc = FRAME_GET_CLASS(op3);
             pc = op4;
-            DEBUG_PRINT(" - bytecodes addr: %08x\n", func->bytecodes);
+            // DEBUG_PRINT(" - bytecodes addr: %08x\n", func->bytecodes);
             func_thunk.func = func;
             func_thunk.jc = jc;
             break;
@@ -431,17 +443,17 @@ void interp(struct function_thunk func_thunk)
             if (FRAME_GET_OPERAND_STACK_SIZE(current_fp[tasklet_id], current_sp[tasklet_id]) >= 0)
             {
                 POP_EVAL_STACK(op1);
-                DEBUG_PRINT(" - ret val = %d\n", op1);
+                // DEBUG_PRINT(" - ret val = %d\n", op1);
             }
-            DEBUG_PRINT(" - last-sp = %p\n", FRAME_GET_OLDSP(current_fp[tasklet_id]));
-            DEBUG_PRINT(" - last-fp = %p\n", FRAME_GET_OLDFP(current_fp[tasklet_id]));
-            DEBUG_PRINT(" - return-pc = %p\n", FRAME_GET_RETPC(current_fp[tasklet_id]));
+            // DEBUG_PRINT(" - last-sp = %p\n", FRAME_GET_OLDSP(current_fp[tasklet_id]));
+            // DEBUG_PRINT(" - last-fp = %p\n", FRAME_GET_OLDFP(current_fp[tasklet_id]));
+            // DEBUG_PRINT(" - return-pc = %p\n", FRAME_GET_RETPC(current_fp[tasklet_id]));
             op2 = FRAME_GET_OLDSP(current_fp[tasklet_id]);
             op3 = FRAME_GET_OLDFP(current_fp[tasklet_id]);
             op4 = FRAME_GET_RETPC(current_fp[tasklet_id]);
             if (op3 == NULL)
             {
-                DEBUG_PRINT(" - >> final frame\n");
+                // DEBUG_PRINT(" - >> final frame\n");
                 return_val = op1;
                 current_fp[tasklet_id] = 0;
                 current_sp[tasklet_id] = wram_data_space + tasklet_id * (WRAM_DATA_SPACE_SIZE / 24) - 4;
@@ -449,18 +461,18 @@ void interp(struct function_thunk func_thunk)
                 return;
             }
             current_sp[tasklet_id] = op2;
-            DEBUG_PRINT(" - change sp to %p\n", op2);
-            DEBUG_PRINT(" - push ret val %d\n", op1);
+            // DEBUG_PRINT(" - change sp to %p\n", op2);
+            // DEBUG_PRINT(" - push ret val %d\n", op1);
             PUSH_EVAL_STACK(op1)
-            DEBUG_PRINT(" - reset pc to 0x%02x\n", op4);
+            // DEBUG_PRINT(" - reset pc to 0x%02x\n", op4);
 
             func = FRAME_GET_METHOD(op3);
-            DEBUG_PRINT(" - reset func pt to 0x%08x\n", func);
+            // DEBUG_PRINT(" - reset func pt to 0x%08x\n", func);
             current_fp[tasklet_id] = op3;
             code_buffer = func->bytecodes;
             jc = FRAME_GET_CLASS(op3);
             pc = op4;
-            DEBUG_PRINT(" - bytecodes addr: %08x\n", func->bytecodes);
+            // DEBUG_PRINT(" - bytecodes addr: %08x\n", func->bytecodes);
             func_thunk.func = func;
             func_thunk.jc = jc;
             break;
@@ -572,6 +584,7 @@ void interp(struct function_thunk func_thunk)
 
         //     break;
         case NEWARRAY:
+            DEBUG_OUT_INSN_PARSED("NEWARRAY")
             /*bytecord format: newarray atype*/
             /* The atype is a code that indicates the type of array to create. It must take one of the following values:
           From <https://docs.oracle.com/javase/specs/jvms/se14/html/jvms-6.html#jvms-6.5.new>
@@ -608,6 +621,7 @@ void interp(struct function_thunk func_thunk)
 
             break;
         case ANEWARRAY:
+            DEBUG_OUT_INSN_PARSED("ANEWARRAY")
             /*bytecord format: anewarray classindexbyte1 classindexbyte2*/
 
             /*1. read class index (2 bytes)*/

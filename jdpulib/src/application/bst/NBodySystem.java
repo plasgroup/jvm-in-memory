@@ -6,7 +6,7 @@
 package application.bst;
 
 public class NBodySystem {
-    // private final Body[] bodies;
+    private final Body[] bodies;
     // private final Sqrt sqrt;
     private final Body body;
     // private final IBody body;
@@ -15,34 +15,34 @@ public class NBodySystem {
         // body = new IBody();
         body = new Body();
         // sqrt = new Sqrt();
-        // bodies = createBodies();
+        bodies = createBodies();
     }
 
     public int test() {
         return 1;
     }
 
-    // public Body[] createBodies() {
-    // Body[] bodies = new Body[] { body.sun(),
-    // body.jupiter(),
-    // body.saturn(),
-    // body.uranus(),
-    // body.neptune() };
+    public Body[] createBodies() {
+        Body[] bodies = new Body[] { body.sun(),
+                body.jupiter(),
+                body.saturn(),
+                body.uranus(),
+                body.neptune() };
 
-    // float px = (float) 0.0;
-    // float py = (float) 0.0;
-    // float pz = (float) 0.0;
+        float px = (float) 0.0;
+        float py = (float) 0.0;
+        float pz = (float) 0.0;
 
-    // for (Body b : bodies) {
-    // px += b.vx * b.mass;
-    // py += b.vy * b.mass;
-    // pz += b.vz * b.mass;
-    // }
+        for (Body b : bodies) {
+            px += b.vx * b.mass;
+            py += b.vy * b.mass;
+            pz += b.vz * b.mass;
+        }
 
-    // bodies[0].offsetMomentum(px, py, pz);
+        bodies[0].offsetMomentum(px, py, pz);
 
-    // return bodies;
-    // }
+        return bodies;
+    }
 
     public void advance(final float dt) {
 
