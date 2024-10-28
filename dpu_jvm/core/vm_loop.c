@@ -280,8 +280,8 @@ void interp(struct function_thunk func_thunk)
             func = callee.func;
             code_buffer = func->bytecodes;
             jc = callee.jc;
-            last_func = func_thunk;
-            func_thunk = callee;
+            // last_func = func_thunk;
+            // func_thunk = callee;
             break;
 
         case NEW:
@@ -480,8 +480,8 @@ void interp(struct function_thunk func_thunk)
             func = callee.func;
             code_buffer = func->bytecodes;
             jc = callee.jc;
-            last_func = func_thunk;
-            func_thunk = callee;
+            // last_func = func_thunk;
+            // func_thunk = callee;
 
             break;
         case GOTO:
