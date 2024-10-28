@@ -611,7 +611,8 @@ void interp(struct function_thunk func_thunk)
         default:
             DEBUG_OUT_INSN_PARSED("UNKNOW")
             DEBUG_PRINT(code_buffer[pc]);
-            break;
+            // break;
+            abort();
         }
 
         times++;

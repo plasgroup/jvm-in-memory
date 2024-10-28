@@ -7,12 +7,14 @@ package application.bst;
 
 public class NBodySystem {
     // private final Body[] bodies;
-    private final Sqrt sqrt;
-    // private final Body body;
+    // private final Sqrt sqrt;
+    private final Body body;
+    // private final IBody body;
 
     public NBodySystem() {
-        // body = new Body();
-        sqrt = new Sqrt();
+        // body = new IBody();
+        body = new Body();
+        // sqrt = new Sqrt();
         // bodies = createBodies();
     }
 

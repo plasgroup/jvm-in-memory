@@ -9,6 +9,7 @@ import application.bst.DPUTreeNodeProxy;
 import application.bst.NBodySystem;
 import application.bst.NBodySystemProxy;
 import application.bst.TreeNode;
+import application.bst.IBody;
 import application.bst.Body;
 import application.bst.Sqrt;
 
@@ -157,6 +158,8 @@ public class Main {
         UPMEM.setPackageSearchPath("application.bst.");
 
         // Test DPUTreeNode
+        UPMEM.getInstance().getDPUManager(0).dpuClassFileManager.loadClassToDPU(DPUTreeNode.class);
+        // UPMEM.getInstance().getDPUManager(0).dpuClassFileManager.loadClassToDPU(IBody.class);
         UPMEM.getInstance().getDPUManager(0).dpuClassFileManager.loadClassToDPU(Body.class);
         UPMEM.getInstance().getDPUManager(0).dpuClassFileManager.loadClassToDPU(Sqrt.class);
         NBodySystemProxy nbs = (NBodySystemProxy) UPMEM.getInstance().createObject(0,
