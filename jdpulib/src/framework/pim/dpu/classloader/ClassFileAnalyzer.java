@@ -141,6 +141,10 @@ public class ClassFileAnalyzer {
             case ClassFileAnalyzerConstants.CT_Float:
                 classfileAnalyzerLogger.logln("Float");
                 constantAreaSize += 4;
+                jc.entryItems[i] |= BytesUtils.readU4BigEndian(classFileBytes, offset + 1);
+                classfileAnalyzerLogger.logln(
+                        "\t -> value " + i + ": "
+                                + Float.intBitsToFloat(BytesUtils.readU4BigEndian(classFileBytes, offset + 1)));
                 return 5;
             case ClassFileAnalyzerConstants.CT_Long:
                 classfileAnalyzerLogger.logln("Long");

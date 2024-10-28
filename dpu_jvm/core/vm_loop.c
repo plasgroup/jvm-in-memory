@@ -48,21 +48,21 @@ void interp(struct function_thunk func_thunk)
     {
         switch (code_buffer[pc++])
         {
-        case NOP:
-            DEBUG_OUT_INSN_PARSED("NOP");
-            break;
-        case ILOAD_1:
-            DEBUG_OUT_INSN_PARSED("ILOAD_1");
-            op1 = FRAME_GET_LOCALS(current_fp[tasklet_id], func->max_locals, 1);
-            DEBUG_PRINT(" - Load INT %d to stack\n", op1);
-            PUSH_EVAL_STACK(op1)
-            break;
-        case ILOAD_2:
-            DEBUG_OUT_INSN_PARSED("ILOAD_2")
-            op1 = FRAME_GET_LOCALS(current_fp[tasklet_id], func->max_locals, 2);
-            DEBUG_PRINT(" - Load INT %d to stack\n", op1);
-            PUSH_EVAL_STACK(op1)
-            break;
+            // case NOP:
+            //     DEBUG_OUT_INSN_PARSED("NOP");
+            //     break;
+            // case ILOAD_1:
+            //     DEBUG_OUT_INSN_PARSED("ILOAD_1");
+            //     op1 = FRAME_GET_LOCALS(current_fp[tasklet_id], func->max_locals, 1);
+            //     DEBUG_PRINT(" - Load INT %d to stack\n", op1);
+            //     PUSH_EVAL_STACK(op1)
+            //     break;
+            // case ILOAD_2:
+            //     DEBUG_OUT_INSN_PARSED("ILOAD_2")
+            //     op1 = FRAME_GET_LOCALS(current_fp[tasklet_id], func->max_locals, 2);
+            //     DEBUG_PRINT(" - Load INT %d to stack\n", op1);
+            //     PUSH_EVAL_STACK(op1)
+            //     break;
 
         case ALOAD_0:
             DEBUG_OUT_INSN_PARSED("ALOAD_0")
@@ -78,6 +78,31 @@ void interp(struct function_thunk func_thunk)
             DEBUG_PRINT(" - Load ref %p to stack\n", op1);
             PUSH_EVAL_STACK(op1)
             break;
+
+            // case FLOAD_0:
+            //     DEBUG_OUT_INSN_PARSED("FLOAD_0")
+            //     op1 = FRAME_GET_LOCALS(current_fp[tasklet_id], func->params_count, 0);
+            //     DEBUG_PRINT(" - Load float %f to stack\n", *(float *)&op1);
+            //     PUSH_EVAL_STACK(op1)
+            //     break;
+            // case FLOAD_1:
+            //     DEBUG_OUT_INSN_PARSED("FLOAD_1")
+            //     op1 = FRAME_GET_LOCALS(current_fp[tasklet_id], func->params_count, 1);
+            //     DEBUG_PRINT(" - Load float %f to stack\n", *(float *)&op1);
+            //     PUSH_EVAL_STACK(op1)
+            //     break;
+            // case FLOAD_2:
+            //     DEBUG_OUT_INSN_PARSED("FLOAD_2")
+            //     op1 = FRAME_GET_LOCALS(current_fp[tasklet_id], func->params_count, 2);
+            //     DEBUG_PRINT(" - Load float %f to stack\n", *(float *)&op1);
+            //     PUSH_EVAL_STACK(op1)
+            //     break;
+            // case FLOAD_3:
+            //     DEBUG_OUT_INSN_PARSED("FLOAD_3")
+            //     op1 = FRAME_GET_LOCALS(current_fp[tasklet_id], func->params_count, 3);
+            //     DEBUG_PRINT(" - Load float %f to stack\n", *(float *)&op1);
+            //     PUSH_EVAL_STACK(op1)
+            //     break;
 
         case ICONST_0:
             DEBUG_OUT_INSN_PARSED("ICONST_0")
@@ -102,15 +127,21 @@ void interp(struct function_thunk func_thunk)
             ;
             PUSH_EVAL_STACK(3);
             break;
-        case ICONST_M1:
-            DEBUG_OUT_INSN_PARSED("ICONST_M1")
-            DEBUG_PRINT(" - push const -1 to stack\n");
-            ;
-            PUSH_EVAL_STACK(-1);
-            break;
+        // case ICONST_M1:
+        //     DEBUG_OUT_INSN_PARSED("ICONST_M1")
+        //     DEBUG_PRINT(" - push const -1 to stack\n");
+        //     ;
+        //     PUSH_EVAL_STACK(-1);
+        //     break;
         case ACONST_NULL:
             DEBUG_OUT_INSN_PARSED("ACONST_NULL")
             DEBUG_PRINT(" - push const NULL to stack\n");
+            ;
+            PUSH_EVAL_STACK(0);
+            break;
+        case FCONST_0:
+            DEBUG_OUT_INSN_PARSED("FCONST_0")
+            DEBUG_PRINT(" - push const 0.0 to stack\n");
             ;
             PUSH_EVAL_STACK(0);
             break;
@@ -528,18 +559,18 @@ void interp(struct function_thunk func_thunk)
             *(uint32_t __mram_ptr *)(op3 + 8 + 4 + 4 * op2) = op1;
 
             break;
-        case ARRAYLENGTH:
-            DEBUG_OUT_INSN_PARSED("ARRAYLENGTH")
+        // case ARRAYLENGTH:
+        //     DEBUG_OUT_INSN_PARSED("ARRAYLENGTH")
 
-            // array address
-            POP_EVAL_STACK(op1)
+        //     // array address
+        //     POP_EVAL_STACK(op1)
 
-            // read array length
-            op2 = *(uint32_t __mram_ptr *)(op2 + 8);
+        //     // read array length
+        //     op2 = *(uint32_t __mram_ptr *)(op2 + 8);
 
-            PUSH_EVAL_STACK(op2);
+        //     PUSH_EVAL_STACK(op2);
 
-            break;
+        //     break;
         case NEWARRAY:
             /*bytecord format: newarray atype*/
             /* The atype is a code that indicates the type of array to create. It must take one of the following values:
@@ -608,6 +639,16 @@ void interp(struct function_thunk func_thunk)
             mram_heap_pt += 8 + 4 + op1 * 4;
 
             break;
+        case LDC:
+            DEBUG_OUT_INSN_PARSED("LDC")
+            op1 = code_buffer[pc]; // constant table index
+            DEBUG_PRINT(" - constant table index = %d\n", op1);
+            pc += 1;
+            op2 = (jc->items[op1].direct_value & 0xFFFFFFFF);
+            DEBUG_PRINT(" - constant value = %f\n", *(float *)&op2);
+            PUSH_EVAL_STACK(op2);
+            break;
+
         default:
             DEBUG_OUT_INSN_PARSED("UNKNOW")
             DEBUG_PRINT(code_buffer[pc]);
