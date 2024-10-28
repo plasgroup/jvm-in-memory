@@ -46,7 +46,6 @@ void interp(struct function_thunk func_thunk)
 
     while (1)
     {
-
         switch (code_buffer[pc++])
         {
         case NOP:
@@ -244,11 +243,11 @@ void interp(struct function_thunk func_thunk)
             DEBUG_OUT_INSN_PARSED("INVOKEVIRTUAL")
 
             op1 = (uint8_t)(code_buffer[pc] << 8) | code_buffer[pc + 1]; // constant table index to methoderef
+            op2 = func_thunk.jc->items[op1].direct_value;
 
             DEBUG_PRINT(" - current-class-ref = %p\n", func_thunk.jc);
             DEBUG_PRINT(" - method-ref-cp-index = %d\n", op1);
 
-            op2 = func_thunk.jc->items[op1].direct_value;
             DEBUG_PRINT(" - v-index = %p\n", op2);
 
             callee.func = func_thunk.jc->virtual_table[op2].methodref;
@@ -280,8 +279,10 @@ void interp(struct function_thunk func_thunk)
             func = callee.func;
             code_buffer = func->bytecodes;
             jc = callee.jc;
-            // last_func = func_thunk;
-            // func_thunk = callee;
+
+            func_thunk.func = func;
+            func_thunk.jc = jc;
+
             break;
 
         case NEW:
@@ -457,16 +458,18 @@ void interp(struct function_thunk func_thunk)
             DEBUG_OUT_INSN_PARSED("INVOKESPECIAL")
 
             op1 = (code_buffer[pc] << 8) | code_buffer[pc + 1]; // constant table index to methoderef
-            DEBUG_PRINT(" - method-ref-cp-index = %d\n", op1);
-            DEBUG_PRINT(" - jmethod-v-index = %p\n", func_thunk.jc->items[op1].direct_value);
-            op4 = func_thunk.jc->items[op1].direct_value;
-            DEBUG_PRINT(" - jmethod-ref = %p\n", func_thunk.jc->virtual_table[op4].methodref);
-
-            callee.func = func_thunk.jc->virtual_table[op4].methodref;
             op2 = (func_thunk.jc->items[op1].info >> 16) & 0xFFFF;
             DEBUG_PRINT(" - class-ref-cp-index = %d\n", op2);
             DEBUG_PRINT(" - jclass-ref = %p\n", func_thunk.jc->items[op2].direct_value);
             callee.jc = func_thunk.jc->items[op2].direct_value;
+
+            DEBUG_PRINT(" - method-ref-cp-index = %d, current_jc = %x, target_jc = %x\n", op1, func_thunk.jc, callee.jc);
+            DEBUG_PRINT(" - jmethod-v-index = %p\n", func_thunk.jc->items[op1].direct_value);
+            op4 = func_thunk.jc->items[op1].direct_value;
+            DEBUG_PRINT(" - jmethod-ref = %p\n", callee.jc->virtual_table[op4].methodref);
+
+            callee.func = callee.jc->virtual_table[op4].methodref;
+
             callee.params = current_sp[tasklet_id];
             current_sp[tasklet_id] -= 4 * callee.func->params_count;
             DEBUG_PRINT(" - pop %d elements from operand stack\n", callee.func->params_count);
@@ -480,9 +483,7 @@ void interp(struct function_thunk func_thunk)
             func = callee.func;
             code_buffer = func->bytecodes;
             jc = callee.jc;
-            // last_func = func_thunk;
-            // func_thunk = callee;
-
+            func_thunk = callee;
             break;
         case GOTO:
             DEBUG_OUT_INSN_PARSED("GOTO")

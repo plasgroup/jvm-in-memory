@@ -6734,7 +6734,7 @@ get DPUID = 0 class =  application/bst/NBodySystem from cache
 begin preresolve classfile
 
 
-constant table item count = 36
+constant table item count = 29
 
 
 ====================== Begin analyze constant table item ====================
@@ -6841,10 +6841,10 @@ UTF8
 
  >> Item 16 
 
-Class
+Methodref
 
 
-	 -> Mark UTF8 index 16: 17
+	 -> Mark Class and NameAndType index 16: 11|3
 
 
  >> Item 17 
@@ -6854,26 +6854,17 @@ UTF8
 
  >> Item 18 
 
-Methodref
-
-
-	 -> Mark Class and NameAndType index 18: 16|3
+UTF8
 
 
  >> Item 19 
 
-Fieldref
-
-
-	 -> Mark Class and NameAndType index 19: 11|20
+UTF8
 
 
  >> Item 20 
 
-NameAndType
-
-
-	 -> Mark Name and Type in index 20: 21|22
+UTF8
 
 
  >> Item 21 
@@ -6888,10 +6879,7 @@ UTF8
 
  >> Item 23 
 
-Methodref
-
-
-	 -> Mark Class and NameAndType index 23: 11|3
+UTF8
 
 
  >> Item 24 
@@ -6915,41 +6903,6 @@ UTF8
 
 
  >> Item 28 
-
-UTF8
-
-
- >> Item 29 
-
-UTF8
-
-
- >> Item 30 
-
-UTF8
-
-
- >> Item 31 
-
-UTF8
-
-
- >> Item 32 
-
-UTF8
-
-
- >> Item 33 
-
-UTF8
-
-
- >> Item 34 
-
-UTF8
-
-
- >> Item 35 
 
 UTF8
 
@@ -7010,63 +6963,42 @@ UTF8
 01 00 00 00|00 00 00 16
 
  - item 16 line =  
-07 00 00 11|00 00 00 11
-
- - item 17 line =  
-01 00 00 00|00 00 00 14
-
- - item 18 line =  
-0a 00 00 00|00 10 00 03
-
- - item 19 line =  
-09 00 00 00|00 0b 00 14
-
- - item 20 line =  
-0c 00 00 00|00 15 00 16
-
- - item 21 line =  
-01 00 00 00|00 00 00 04
-
- - item 22 line =  
-01 00 00 00|00 00 00 16
-
- - item 23 line =  
 0a 00 00 00|00 0b 00 03
 
- - item 24 line =  
+ - item 17 line =  
 01 00 00 00|00 00 00 04
 
- - item 25 line =  
+ - item 18 line =  
 01 00 00 00|00 00 00 0f
 
- - item 26 line =  
+ - item 19 line =  
 01 00 00 00|00 00 00 04
 
- - item 27 line =  
+ - item 20 line =  
 01 00 00 00|00 00 00 03
 
- - item 28 line =  
+ - item 21 line =  
 01 00 00 00|00 00 00 07
 
- - item 29 line =  
+ - item 22 line =  
 01 00 00 00|00 00 00 04
 
- - item 30 line =  
+ - item 23 line =  
 01 00 00 00|00 00 00 06
 
- - item 31 line =  
+ - item 24 line =  
 01 00 00 00|00 00 00 03
 
- - item 32 line =  
+ - item 25 line =  
 01 00 00 00|00 00 00 04
 
- - item 33 line =  
+ - item 26 line =  
 01 00 00 00|00 00 00 1f
 
- - item 34 line =  
+ - item 27 line =  
 01 00 00 00|00 00 00 0a
 
- - item 35 line =  
+ - item 28 line =  
 01 00 00 00|00 00 00 10
 
 ==== ----------------------------------------------------------------------- ====
@@ -7096,7 +7028,7 @@ thisClassName:  superClassName:
 thisClassNameIndex: 13 superClassNameIndex: 4
 
 
-rescan for filling utf_8 string and number area, total size = 251 bytes
+rescan for filling utf_8 string and number area, total size = 205 bytes
 
 
 >> Entry #4 is UTF8, len = 16
@@ -7134,82 +7066,67 @@ Fill UTF8 string in constantArea offset = 72
 
 Fill UTF8 string in constantArea offset = 76
 
->> Entry #17 is UTF8, len = 20
+>> Entry #17 is UTF8, len = 4
 
 
 Fill UTF8 string in constantArea offset = 98
 
->> Entry #21 is UTF8, len = 4
+>> Entry #18 is UTF8, len = 15
 
 
-Fill UTF8 string in constantArea offset = 118
+Fill UTF8 string in constantArea offset = 102
 
->> Entry #22 is UTF8, len = 22
+>> Entry #19 is UTF8, len = 4
 
 
-Fill UTF8 string in constantArea offset = 122
+Fill UTF8 string in constantArea offset = 117
 
->> Entry #24 is UTF8, len = 4
+>> Entry #20 is UTF8, len = 3
+
+
+Fill UTF8 string in constantArea offset = 121
+
+>> Entry #21 is UTF8, len = 7
+
+
+Fill UTF8 string in constantArea offset = 124
+
+>> Entry #22 is UTF8, len = 4
+
+
+Fill UTF8 string in constantArea offset = 131
+
+>> Entry #23 is UTF8, len = 6
+
+
+Fill UTF8 string in constantArea offset = 135
+
+>> Entry #24 is UTF8, len = 3
+
+
+Fill UTF8 string in constantArea offset = 141
+
+>> Entry #25 is UTF8, len = 4
 
 
 Fill UTF8 string in constantArea offset = 144
 
->> Entry #25 is UTF8, len = 15
+>> Entry #26 is UTF8, len = 31
 
 
 Fill UTF8 string in constantArea offset = 148
 
->> Entry #26 is UTF8, len = 4
+>> Entry #27 is UTF8, len = 10
 
 
-Fill UTF8 string in constantArea offset = 163
+Fill UTF8 string in constantArea offset = 179
 
->> Entry #27 is UTF8, len = 3
-
-
-Fill UTF8 string in constantArea offset = 167
-
->> Entry #28 is UTF8, len = 7
+>> Entry #28 is UTF8, len = 16
 
 
-Fill UTF8 string in constantArea offset = 170
+Fill UTF8 string in constantArea offset = 189
 
->> Entry #29 is UTF8, len = 4
-
-
-Fill UTF8 string in constantArea offset = 177
-
->> Entry #30 is UTF8, len = 6
-
-
-Fill UTF8 string in constantArea offset = 181
-
->> Entry #31 is UTF8, len = 3
-
-
-Fill UTF8 string in constantArea offset = 187
-
->> Entry #32 is UTF8, len = 4
-
-
-Fill UTF8 string in constantArea offset = 190
-
->> Entry #33 is UTF8, len = 31
-
-
-Fill UTF8 string in constantArea offset = 194
-
->> Entry #34 is UTF8, len = 10
-
-
-Fill UTF8 string in constantArea offset = 225
-
->> Entry #35 is UTF8, len = 16
-
-
-Fill UTF8 string in constantArea offset = 235
-
-filled 251/251 bytes
+filled 205/205 bytes
 
 ==== Entries Table After Resolution Phase 2 - fill constant value to constantDataArea ====
 
@@ -7261,64 +7178,43 @@ filled 251/251 bytes
 01 00 16 00|00 00 00 4c
 
  - item 16 line =  
-07 00 00 11|00 00 00 11
-
- - item 17 line =  
-01 00 14 00|00 00 00 62
-
- - item 18 line =  
-0a 00 00 00|00 10 00 03
-
- - item 19 line =  
-09 00 00 00|00 0b 00 14
-
- - item 20 line =  
-0c 00 00 00|00 15 00 16
-
- - item 21 line =  
-01 00 04 00|00 00 00 76
-
- - item 22 line =  
-01 00 16 00|00 00 00 7a
-
- - item 23 line =  
 0a 00 00 00|00 0b 00 03
 
+ - item 17 line =  
+01 00 04 00|00 00 00 62
+
+ - item 18 line =  
+01 00 0f 00|00 00 00 66
+
+ - item 19 line =  
+01 00 04 00|00 00 00 75
+
+ - item 20 line =  
+01 00 03 00|00 00 00 79
+
+ - item 21 line =  
+01 00 07 00|00 00 00 7c
+
+ - item 22 line =  
+01 00 04 00|00 00 00 83
+
+ - item 23 line =  
+01 00 06 00|00 00 00 87
+
  - item 24 line =  
-01 00 04 00|00 00 00 90
+01 00 03 00|00 00 00 8d
 
  - item 25 line =  
-01 00 0f 00|00 00 00 94
+01 00 04 00|00 00 00 90
 
  - item 26 line =  
-01 00 04 00|00 00 00 a3
+01 00 1f 00|00 00 00 94
 
  - item 27 line =  
-01 00 03 00|00 00 00 a7
+01 00 0a 00|00 00 00 b3
 
  - item 28 line =  
-01 00 07 00|00 00 00 aa
-
- - item 29 line =  
-01 00 04 00|00 00 00 b1
-
- - item 30 line =  
-01 00 06 00|00 00 00 b5
-
- - item 31 line =  
-01 00 03 00|00 00 00 bb
-
- - item 32 line =  
-01 00 04 00|00 00 00 be
-
- - item 33 line =  
-01 00 1f 00|00 00 00 c2
-
- - item 34 line =  
-01 00 0a 00|00 00 00 e1
-
- - item 35 line =  
-01 00 10 00|00 00 00 eb
+01 00 10 00|00 00 00 bd
 
 ==== ----------------------------------------------------------------------- ====
 
@@ -7330,18 +7226,10 @@ filled 251/251 bytes
 interface count = 0
 
 
-field count = 2
+field count = 1
 
 
 >> Field 0
-
-
- -- Mark name index 21 as this class's field name
-
-
-Field >> access_flag = 12, name_index = 21, desc_index = 22, attr_count = 0
-
->> Field 1
 
 
  -- Mark name index 14 as this class's field name
@@ -7376,14 +7264,14 @@ Field >> access_flag = 12, name_index = 14, desc_index = 15, attr_count = 0
 desc = ()V
 
 
-Attr From Addr: 0x1a4 / 0x29e
+Attr From Addr: 0x153 / 0x23e
 
- --- attr name in index 24 = Code
+ --- attr name in index 17 = Code
 
 
-Attribute len = 63 (0x3f)
+Attribute len = 48 (0x30)
 
-[Code maxStack = 3, maxLocals = 1, codeLen = 27, params_count = 1]
+[Code maxStack = 3, maxLocals = 1, codeLen = 16, params_count = 1]
 
 2a	
 b7	
@@ -7403,23 +7291,6 @@ b7
 b5	
 00	
 0a	
-2a	
-
-
-
-bb	
-00	
-10	
-59	
-b7	
-00	
-12	
-b5	
-
-
-
-00	
-13	
 b1	
 
 
@@ -7430,10 +7301,10 @@ b1
  - acc flag = 1
 
 
- - name_index = 26
+ - name_index = 19
 
 
- - desc_index = 27
+ - desc_index = 20
 
 
  - attr count = 1
@@ -7445,9 +7316,9 @@ b1
 desc = ()I
 
 
-Attr From Addr: 0x1f1 / 0x29e
+Attr From Addr: 0x191 / 0x23e
 
- --- attr name in index 24 = Code
+ --- attr name in index 17 = Code
 
 
 Attribute len = 26 (0x1a)
@@ -7465,10 +7336,10 @@ ac
  - acc flag = 1
 
 
- - name_index = 28
+ - name_index = 21
 
 
- - desc_index = 29
+ - desc_index = 22
 
 
  - attr count = 1
@@ -7480,9 +7351,9 @@ ac
 desc = (F)V
 
 
-Attr From Addr: 0x219 / 0x29e
+Attr From Addr: 0x1b9 / 0x23e
 
- --- attr name in index 24 = Code
+ --- attr name in index 17 = Code
 
 
 Attribute len = 25 (0x19)
@@ -7499,10 +7370,10 @@ b1
  - acc flag = 1
 
 
- - name_index = 30
+ - name_index = 23
 
 
- - desc_index = 31
+ - desc_index = 24
 
 
  - attr count = 1
@@ -7514,9 +7385,9 @@ b1
 desc = ()F
 
 
-Attr From Addr: 0x240 / 0x29e
+Attr From Addr: 0x1e0 / 0x23e
 
- --- attr name in index 24 = Code
+ --- attr name in index 17 = Code
 
 
 Attribute len = 32 (0x20)
@@ -7536,10 +7407,10 @@ ae
  - acc flag = 1
 
 
- - name_index = 32
+ - name_index = 25
 
 
- - desc_index = 33
+ - desc_index = 26
 
 
  - attr count = 1
@@ -7551,9 +7422,9 @@ ae
 desc = ()Lapplication/bst/NBodySystem;
 
 
-Attr From Addr: 0x26e / 0x29e
+Attr From Addr: 0x20e / 0x23e
 
- --- attr name in index 24 = Code
+ --- attr name in index 17 = Code
 
 
 Attribute len = 32 (0x20)
@@ -7566,7 +7437,7 @@ bb
 59	
 b7	
 00	
-17	
+10	
 b0	
 
 
@@ -7620,64 +7491,43 @@ b0
 01 00 16 00|00 00 00 4c
 
  - item 16 line =  
-07 00 00 11|00 00 00 11
-
- - item 17 line =  
-01 00 14 00|00 00 00 62
-
- - item 18 line =  
-0a 00 00 00|00 10 00 03
-
- - item 19 line =  
-09 00 00 00|00 0b 00 14
-
- - item 20 line =  
-0c 00 00 00|00 15 00 16
-
- - item 21 line =  
-01 00 04 00|00 00 00 76
-
- - item 22 line =  
-01 00 16 00|00 00 00 7a
-
- - item 23 line =  
 0a 00 00 00|00 0b 00 03
 
+ - item 17 line =  
+01 00 04 00|00 00 00 62
+
+ - item 18 line =  
+01 00 0f 00|00 00 00 66
+
+ - item 19 line =  
+01 00 04 00|00 00 00 75
+
+ - item 20 line =  
+01 00 03 00|00 00 00 79
+
+ - item 21 line =  
+01 00 07 00|00 00 00 7c
+
+ - item 22 line =  
+01 00 04 00|00 00 00 83
+
+ - item 23 line =  
+01 00 06 00|00 00 00 87
+
  - item 24 line =  
-01 00 04 00|00 00 00 90
+01 00 03 00|00 00 00 8d
 
  - item 25 line =  
-01 00 0f 00|00 00 00 94
+01 00 04 00|00 00 00 90
 
  - item 26 line =  
-01 00 04 00|00 00 00 a3
+01 00 1f 00|00 00 00 94
 
  - item 27 line =  
-01 00 03 00|00 00 00 a7
+01 00 0a 00|00 00 00 b3
 
  - item 28 line =  
-01 00 07 00|00 00 00 aa
-
- - item 29 line =  
-01 00 04 00|00 00 00 b1
-
- - item 30 line =  
-01 00 06 00|00 00 00 b5
-
- - item 31 line =  
-01 00 03 00|00 00 00 bb
-
- - item 32 line =  
-01 00 04 00|00 00 00 be
-
- - item 33 line =  
-01 00 1f 00|00 00 00 c2
-
- - item 34 line =  
-01 00 0a 00|00 00 00 e1
-
- - item 35 line =  
-01 00 10 00|00 00 00 eb
+01 00 10 00|00 00 00 bd
 
 super class name = java/lang/Object
 
@@ -7689,19 +7539,17 @@ get DPUID = 0 class =  java/lang/Object from cache
 get DPUID = 0 class =  application/bst/NBodySystem from cache
 set framework.pim.dpu.java_strut.DPUJClass@4f2410ac to com.upmem.dpu.Dpu@728938a9, key=application/bst/NBodySystem, val = 3091198 class name = application/bst/NBodySystem
 
-set method: <init>:()V of class application/bst/NBodySystem to com.upmem.dpu.Dpu@728938a9 v = 30912f0
+set method: <init>:()V of class application/bst/NBodySystem to com.upmem.dpu.Dpu@728938a9 v = 30912b8
 
-set method: test:()I of class application/bst/NBodySystem to com.upmem.dpu.Dpu@728938a9 v = 3091328
+set method: test:()I of class application/bst/NBodySystem to com.upmem.dpu.Dpu@728938a9 v = 30912e0
 
-set method: advance:(F)V of class application/bst/NBodySystem to com.upmem.dpu.Dpu@728938a9 v = 3091348
+set method: advance:(F)V of class application/bst/NBodySystem to com.upmem.dpu.Dpu@728938a9 v = 3091300
 
-set method: energy:()F of class application/bst/NBodySystem to com.upmem.dpu.Dpu@728938a9 v = 3091368
+set method: energy:()F of class application/bst/NBodySystem to com.upmem.dpu.Dpu@728938a9 v = 3091320
 
-set method: _new:()Lapplication/bst/NBodySystem; of class application/bst/NBodySystem to com.upmem.dpu.Dpu@728938a9 v = 3091388
+set method: _new:()Lapplication/bst/NBodySystem; of class application/bst/NBodySystem to com.upmem.dpu.Dpu@728938a9 v = 3091340
 
 set field: sqrt of class application/bst/NBodySystem to com.upmem.dpu.Dpu@728938a9 v(index) = 0
-
-set field: body of class application/bst/NBodySystem to com.upmem.dpu.Dpu@728938a9 v(index) = 1
 
 in java class = application/bst/NBodySystem
 
@@ -7713,22 +7561,16 @@ get DPUID = 0 class =  java/lang/Object from cache
 set #1 java/lang/Object.<init>:()V index 1
 
 
- - #9 is MethodRef, description = application/bst/Body.<init>:()V
+ - #9 is MethodRef, description = application/bst/Sqrt.<init>:()V
 
 
-set #9 application/bst/Body.<init>:()V index 15
+set #9 application/bst/Sqrt.<init>:()V index 13
 
 
- - #18 is MethodRef, description = application/bst/Sqrt.<init>:()V
+ - #16 is MethodRef, description = application/bst/NBodySystem.<init>:()V
 
 
-set #18 application/bst/Sqrt.<init>:()V index 13
-
-
- - #23 is MethodRef, description = application/bst/NBodySystem.<init>:()V
-
-
-set #23 application/bst/NBodySystem.<init>:()V index 13
+set #16 application/bst/NBodySystem.<init>:()V index 13
 
 
 vtable #0 .
@@ -7813,7 +7655,7 @@ vtable #17 application/bst/NBodySystem._new:()Lapplication/bst/NBodySystem;
 01 00 14 00|00 00 00 19
 
  - item 9 line =  
-0a 00 00 00|00 01 00 0f
+0a 00 00 00|00 02 00 0d
 
  - item 10 line =  
 09 00 00 00|00 0b 00 0c
@@ -7834,64 +7676,43 @@ vtable #17 application/bst/NBodySystem._new:()Lapplication/bst/NBodySystem;
 01 00 16 00|00 00 00 4c
 
  - item 16 line =  
-07 00 00 11|00 00 00 11
-
- - item 17 line =  
-01 00 14 00|00 00 00 62
-
- - item 18 line =  
-0a 00 00 00|00 02 00 0d
-
- - item 19 line =  
-09 00 00 00|00 0b 00 14
-
- - item 20 line =  
-0c 00 00 00|00 15 00 16
-
- - item 21 line =  
-01 00 04 00|00 00 00 76
-
- - item 22 line =  
-01 00 16 00|00 00 00 7a
-
- - item 23 line =  
 0a 00 00 00|00 03 00 0d
 
+ - item 17 line =  
+01 00 04 00|00 00 00 62
+
+ - item 18 line =  
+01 00 0f 00|00 00 00 66
+
+ - item 19 line =  
+01 00 04 00|00 00 00 75
+
+ - item 20 line =  
+01 00 03 00|00 00 00 79
+
+ - item 21 line =  
+01 00 07 00|00 00 00 7c
+
+ - item 22 line =  
+01 00 04 00|00 00 00 83
+
+ - item 23 line =  
+01 00 06 00|00 00 00 87
+
  - item 24 line =  
-01 00 04 00|00 00 00 90
+01 00 03 00|00 00 00 8d
 
  - item 25 line =  
-01 00 0f 00|00 00 00 94
+01 00 04 00|00 00 00 90
 
  - item 26 line =  
-01 00 04 00|00 00 00 a3
+01 00 1f 00|00 00 00 94
 
  - item 27 line =  
-01 00 03 00|00 00 00 a7
+01 00 0a 00|00 00 00 b3
 
  - item 28 line =  
-01 00 07 00|00 00 00 aa
-
- - item 29 line =  
-01 00 04 00|00 00 00 b1
-
- - item 30 line =  
-01 00 06 00|00 00 00 b5
-
- - item 31 line =  
-01 00 03 00|00 00 00 bb
-
- - item 32 line =  
-01 00 04 00|00 00 00 be
-
- - item 33 line =  
-01 00 1f 00|00 00 00 c2
-
- - item 34 line =  
-01 00 0a 00|00 00 00 e1
-
- - item 35 line =  
-01 00 10 00|00 00 00 eb
+01 00 10 00|00 00 00 bd
 
  - In class application.bst.NBodySystem resolve unknow name
 
@@ -7963,106 +7784,18 @@ In #7 of class 13 application.bst.NBodySystem: tag = 7, whole line = 70000080000
 In #7 ClassRef: 
 
 
-className = application/bst/Body, index = #8
-
-
-class application/bst/Body loaded, mram addr = 0x3090870
-
-In #8 of class 13 application.bst.NBodySystem: tag = 1, whole line = 100140000000019
-
-
-In #9 of class 13 application.bst.NBodySystem: tag = 10, whole line = a0000000001000f
-
-
-In #9 MethodRef: 
-
-
-method Table Index = 15
-
-
-global class Index = 1
-
-
-get DPUID = 0 class =  application/bst/Body from cache
-description = application/bst/Body.<init>:()V
-
-
-get DPUID = 0 method =  <init>:()V of class application/bst/Body from cache
-
-class application/bst/Body loaded, mram addr = 0x3090870
-
-get DPUID = 0 class =  application/bst/Body from cache
-methodName = <init>
-
-
-type desc = ()V
-
-
-return val = V
-
-
-params desc = 
-
-
-3090c00
-
-In #10 of class 13 application.bst.NBodySystem: tag = 9, whole line = 9000000000b000c
-
-
-In #10 FieldRef: 
-
-
-class name = application/bst/NBodySystem
-
-
-class application/bst/NBodySystem loaded, mram addr = 0x3091198
-
-fieldName = body
-
-
-get DPUID = 0 field =  body, of class application/bst/NBodySystem from cache
-
-In #11 of class 13 application.bst.NBodySystem: tag = 7, whole line = 700000d0000000d
-
-
-In #11 ClassRef: 
-
-
-className = application/bst/NBodySystem, index = #13
-
-
-class application/bst/NBodySystem loaded, mram addr = 0x3091198
-
-In #12 of class 13 application.bst.NBodySystem: tag = 12, whole line = c000000000e000f
-
-
-In #13 of class 13 application.bst.NBodySystem: tag = 1, whole line = 1001b000000002d
-
-
-In #14 of class 13 application.bst.NBodySystem: tag = 1, whole line = 100040000000048
-
-
-In #15 of class 13 application.bst.NBodySystem: tag = 1, whole line = 10016000000004c
-
-
-In #16 of class 13 application.bst.NBodySystem: tag = 7, whole line = 700001100000011
-
-
-In #16 ClassRef: 
-
-
-className = application/bst/Sqrt, index = #17
+className = application/bst/Sqrt, index = #8
 
 
 class application/bst/Sqrt loaded, mram addr = 0x3090f40
 
-In #17 of class 13 application.bst.NBodySystem: tag = 1, whole line = 100140000000062
+In #8 of class 13 application.bst.NBodySystem: tag = 1, whole line = 100140000000019
 
 
-In #18 of class 13 application.bst.NBodySystem: tag = 10, whole line = a0000000002000d
+In #9 of class 13 application.bst.NBodySystem: tag = 10, whole line = a0000000002000d
 
 
-In #18 MethodRef: 
+In #9 MethodRef: 
 
 
 method Table Index = 13
@@ -8094,10 +7827,10 @@ params desc =
 
 3091018
 
-In #19 of class 13 application.bst.NBodySystem: tag = 9, whole line = 9000000000b0014
+In #10 of class 13 application.bst.NBodySystem: tag = 9, whole line = 9000000000b000c
 
 
-In #19 FieldRef: 
+In #10 FieldRef: 
 
 
 class name = application/bst/NBodySystem
@@ -8110,19 +7843,33 @@ fieldName = sqrt
 
 get DPUID = 0 field =  sqrt, of class application/bst/NBodySystem from cache
 
-In #20 of class 13 application.bst.NBodySystem: tag = 12, whole line = c00000000150016
+In #11 of class 13 application.bst.NBodySystem: tag = 7, whole line = 700000d0000000d
 
 
-In #21 of class 13 application.bst.NBodySystem: tag = 1, whole line = 100040000000076
+In #11 ClassRef: 
 
 
-In #22 of class 13 application.bst.NBodySystem: tag = 1, whole line = 10016000000007a
+className = application/bst/NBodySystem, index = #13
 
 
-In #23 of class 13 application.bst.NBodySystem: tag = 10, whole line = a0000000003000d
+class application/bst/NBodySystem loaded, mram addr = 0x3091198
+
+In #12 of class 13 application.bst.NBodySystem: tag = 12, whole line = c000000000e000f
 
 
-In #23 MethodRef: 
+In #13 of class 13 application.bst.NBodySystem: tag = 1, whole line = 1001b000000002d
+
+
+In #14 of class 13 application.bst.NBodySystem: tag = 1, whole line = 100040000000048
+
+
+In #15 of class 13 application.bst.NBodySystem: tag = 1, whole line = 10016000000004c
+
+
+In #16 of class 13 application.bst.NBodySystem: tag = 10, whole line = a0000000003000d
+
+
+In #16 MethodRef: 
 
 
 method Table Index = 13
@@ -8152,42 +7899,42 @@ return val = V
 params desc = 
 
 
-30912f0
+30912b8
 
-In #24 of class 13 application.bst.NBodySystem: tag = 1, whole line = 100040000000090
-
-
-In #25 of class 13 application.bst.NBodySystem: tag = 1, whole line = 1000f0000000094
+In #17 of class 13 application.bst.NBodySystem: tag = 1, whole line = 100040000000062
 
 
-In #26 of class 13 application.bst.NBodySystem: tag = 1, whole line = 1000400000000a3
+In #18 of class 13 application.bst.NBodySystem: tag = 1, whole line = 1000f0000000066
 
 
-In #27 of class 13 application.bst.NBodySystem: tag = 1, whole line = 1000300000000a7
+In #19 of class 13 application.bst.NBodySystem: tag = 1, whole line = 100040000000075
 
 
-In #28 of class 13 application.bst.NBodySystem: tag = 1, whole line = 1000700000000aa
+In #20 of class 13 application.bst.NBodySystem: tag = 1, whole line = 100030000000079
 
 
-In #29 of class 13 application.bst.NBodySystem: tag = 1, whole line = 1000400000000b1
+In #21 of class 13 application.bst.NBodySystem: tag = 1, whole line = 10007000000007c
 
 
-In #30 of class 13 application.bst.NBodySystem: tag = 1, whole line = 1000600000000b5
+In #22 of class 13 application.bst.NBodySystem: tag = 1, whole line = 100040000000083
 
 
-In #31 of class 13 application.bst.NBodySystem: tag = 1, whole line = 1000300000000bb
+In #23 of class 13 application.bst.NBodySystem: tag = 1, whole line = 100060000000087
 
 
-In #32 of class 13 application.bst.NBodySystem: tag = 1, whole line = 1000400000000be
+In #24 of class 13 application.bst.NBodySystem: tag = 1, whole line = 10003000000008d
 
 
-In #33 of class 13 application.bst.NBodySystem: tag = 1, whole line = 1001f00000000c2
+In #25 of class 13 application.bst.NBodySystem: tag = 1, whole line = 100040000000090
 
 
-In #34 of class 13 application.bst.NBodySystem: tag = 1, whole line = 1000a00000000e1
+In #26 of class 13 application.bst.NBodySystem: tag = 1, whole line = 1001f0000000094
 
 
-In #35 of class 13 application.bst.NBodySystem: tag = 1, whole line = 1001000000000eb
+In #27 of class 13 application.bst.NBodySystem: tag = 1, whole line = 1000a00000000b3
+
+
+In #28 of class 13 application.bst.NBodySystem: tag = 1, whole line = 1001000000000bd
 
 
 End of for loop: resolve unknow name
@@ -8247,23 +7994,23 @@ get DPUID = 0 method =  _new:()Lapplication/bst/NBodySystem; of class applicatio
 
 get DPUID = 0 class =  application/bst/NBodySystem from cache
 get DPUID = 0 class =  application/bst/NBodySystem from cache
-print 0xfb to 28
+print 0xcd to 28
 
 print 30911d0 in 14
 
-print 0x30912f0 to 24
+print 0x30912b8 to 24
 
-method 0 from 0x158 === 0x0
+method 0 from 0x120 === 0x0
 
-method 1 from 0x190 === 0x38
+method 1 from 0x148 === 0x28
 
-method 2 from 0x1b0 === 0x58
+method 2 from 0x168 === 0x48
 
-method 3 from 0x1d0 === 0x78
+method 3 from 0x188 === 0x68
 
-method 4 from 0x1f0 === 0x98
+method 4 from 0x1a8 === 0x88
 
-=============== !Alert pos = 928 === total-size = 928 ================
+=============== !Alert pos = 808 === total-size = 808 ================
 
  ==========--> End of load class application.bst.NBodySystem to dpu#0 <--==========
 
@@ -8327,7 +8074,7 @@ param_buffer(wram)=0x3890000, sim_wram(wram)=(nil), mram = 0x120018
 param_buffer(wram)=0x3890000, sim_wram(wram)=(nil), mram = 0x120018
 param_buffer(wram)=0x3890000, sim_wram(wram)=(nil), mram = 0x120018
 [31m --------------------- (IN DPU) -----------------------------
-[0mmeta_space_pt = 0x3091538, heap_space_pt = 0x90018, param_pt = 0x3890010
+[0mmeta_space_pt = 0x30914c0, heap_space_pt = 0x90018, param_pt = 0x3890010
 [31m
 --------------------------------- Create Frame ---------------------------------
 --------- [0] Frame from ((nil)) ------------
@@ -8337,23 +8084,23 @@ param_buffer(wram)=0x3890000, sim_wram(wram)=(nil), mram = 0x120018
 (0x4) --> FP = (0x4) -> old-frame-fp = (nil) 
 (0x8) old-stack-pointer = (nil) 
 (0xc) return pc = 0x0 
-(0x10) method-ref = 0x30912f0 
+(0x10) method-ref = 0x30912b8 
 (0x14) class-ref = 0x3091198 
 (0x18) constant-pool-ref = 0x30911d0 
-(0x1c) bytecodes = 0x3091308 
+(0x1c) bytecodes = 0x30912d0 
 ------------------------------ End Create Frame ------------------------------
-code_buffer = 0x3091308
+code_buffer = 0x30912d0
 create frame finished
 FP = (0x4)
-pc:0x0 op = 0x2a, ALOAD_0 (addr: 0x03091308)
+pc:0x0 op = 0x2a, ALOAD_0 (addr: 0x030912d0)
  - Load ref 0x90008 to stack
 >> new sp = 0x20
-pc:0x1 op = 0xb7, INVOKESPECIAL (addr: 0x03091309)
- - method-ref-cp-index = 1
- - jmethod-v-index = 0x1
- - jmethod-ref = 0x3090318
+pc:0x1 op = 0xb7, INVOKESPECIAL (addr: 0x030912d1)
  - class-ref-cp-index = 2
  - jclass-ref = 0x3090000
+ - method-ref-cp-index = 1, current_jc = 3091198, target_jc = 3090000
+ - jmethod-v-index = 0x1
+ - jmethod-ref = 0x3090318
  - pop 1 elements from operand stack
  -- new sp = 0x1c
  -- params-pt = 0x20
@@ -8378,67 +8125,12 @@ return - last-sp = 0x1c
  - return-pc = 0x4
  - change sp to 0x1c
  - reset pc to 0x04
- - reset func pt to 0x030912f0
- - bytecodes addr: 03091308
-pc:0x4 op = 0x2a, ALOAD_0 (addr: 0x0309130c)
+ - reset func pt to 0x030912b8
+ - bytecodes addr: 030912d0
+pc:0x4 op = 0x2a, ALOAD_0 (addr: 0x030912d4)
  - Load ref 0x90008 to stack
 >> new sp = 0x20
-pc:0x5 op = 0xbb, NEW (addr: 0x0309130d)
- - count field count
- - + 10
- -- super class index = 15
- -- super class addr = 0x3090000
- - + 0
- -- super class index = 0
- -- super class addr = (nil)
- - field count = 10, instance size = 48
- - allocate instance in mram 0x90018
->> new sp = 0x24
- - write class addr: 0x3090870
-pc:0x8 op = 0x59, DUP (addr: 0x03091310)
- - dup 589848(hex: 90018)
->> new sp = 0x28
-pc:0x9 op = 0xb7, INVOKESPECIAL (addr: 0x03091311)
- - method-ref-cp-index = 9
- - jmethod-v-index = 0xf
- - jmethod-ref = 0x3091348
- - class-ref-cp-index = 7
- - jclass-ref = 0x3090870
- - pop 2 elements from operand stack
- -- new sp = 0x20
- -- params-pt = 0x28
- -- return pc = 12
-
---------------------------------- Create Frame ---------------------------------
---------- [0] Frame from (0x20) ------------
- >> create frame from an existed function call
-(0x24) (param) local 0 = 589848
-(0x28) (param) local 1 = 589848
--------> new current_sp = 0x2c
-(0x2c) --> FP = (0x2c) -> old-frame-fp = 0x4 
-(0x30) old-stack-pointer = 0x20 
-(0x34) return pc = 0xc 
-(0x38) method-ref = 0x3091348 
-(0x3c) class-ref = 0x3090870 
-(0x40) constant-pool-ref = 0x30908a8 
-(0x44) bytecodes = 0x3091360 
------------------------------- End Create Frame ------------------------------
-pc:0x0 op = 0xb1, RETURN (addr: 0x03091360)
-return - last-sp = 0x20
- - last-fp = 0x4
- - return-pc = 0xc
- - change sp to 0x20
- - reset pc to 0x0c
- - reset func pt to 0x030912f0
- - bytecodes addr: 03091308
-pc:0xc op = 0xb5, PUTFIELD (addr: 0x03091314)
- - constant table index = 10
- - field index in instance = 1
->> new sp = 0x1c
->> new sp = 0x18
-set val = 589832 (hex:0x00090008), at addr(m):0x03091314, instance addr: 0x03091308
-pc:0xf op = 0x00, NOP (addr: 0x03091317)
-pc:0x10 op = 0xbb, NEW (addr: 0x03091318)
+pc:0x5 op = 0xbb, NEW (addr: 0x030912d5)
  - count field count
  - + 0
  -- super class index = 2
@@ -8447,83 +8139,147 @@ pc:0x10 op = 0xbb, NEW (addr: 0x03091318)
  -- super class index = 0
  -- super class addr = (nil)
  - field count = 0, instance size = 8
- - allocate instance in mram 0x90048
->> new sp = 0x1c
+ - allocate instance in mram 0x90018
+>> new sp = 0x24
  - write class addr: 0x3090f40
-pc:0x13 op = 0x59, DUP (addr: 0x0309131b)
- - dup 589896(hex: 90048)
->> new sp = 0x20
-pc:0x14 op = 0xb7, INVOKESPECIAL (addr: 0x0309131c)
- - method-ref-cp-index = 18
- - jmethod-v-index = 0xd
- - jmethod-ref = 0x30912f0
- - class-ref-cp-index = 16
+pc:0x8 op = 0x59, DUP (addr: 0x030912d8)
+ - dup 589848(hex: 90018)
+>> new sp = 0x28
+pc:0x9 op = 0xb7, INVOKESPECIAL (addr: 0x030912d9)
+ - class-ref-cp-index = 7
  - jclass-ref = 0x3090f40
+ - method-ref-cp-index = 9, current_jc = 3091198, target_jc = 3090f40
+ - jmethod-v-index = 0xd
+ - jmethod-ref = 0x3091018
  - pop 1 elements from operand stack
- -- new sp = 0x1c
- -- params-pt = 0x20
- -- return pc = 23
+ -- new sp = 0x24
+ -- params-pt = 0x28
+ -- return pc = 12
 
 --------------------------------- Create Frame ---------------------------------
---------- [0] Frame from (0x1c) ------------
+--------- [0] Frame from (0x24) ------------
  >> create frame from an existed function call
-(0x20) (param) local 0 = 589896
--------> new current_sp = 0x24
-(0x24) --> FP = (0x24) -> old-frame-fp = 0x4 
-(0x28) old-stack-pointer = 0x1c 
-(0x2c) return pc = 0x17 
-(0x30) method-ref = 0x30912f0 
-(0x34) class-ref = 0x3090f40 
-(0x38) constant-pool-ref = 0x3090f78 
-(0x3c) bytecodes = 0x3091308 
+(0x28) (param) local 0 = 589848
+-------> new current_sp = 0x2c
+(0x2c) --> FP = (0x2c) -> old-frame-fp = 0x4 
+(0x30) old-stack-pointer = 0x24 
+(0x34) return pc = 0xc 
+(0x38) method-ref = 0x3091018 
+(0x3c) class-ref = 0x3090f40 
+(0x40) constant-pool-ref = 0x3090f78 
+(0x44) bytecodes = 0x3091030 
 ------------------------------ End Create Frame ------------------------------
-pc:0x0 op = 0x2a, ALOAD_0 (addr: 0x03091308)
- - Load ref 0x90048 to stack
->> new sp = 0x40
-pc:0x1 op = 0xb7, INVOKESPECIAL (addr: 0x03091309)
- - method-ref-cp-index = 1
- - jmethod-v-index = 0x1
- - jmethod-ref = 0x3090318
+pc:0x0 op = 0x2a, ALOAD_0 (addr: 0x03091030)
+ - Load ref 0x90018 to stack
+>> new sp = 0x48
+pc:0x1 op = 0xb7, INVOKESPECIAL (addr: 0x03091031)
  - class-ref-cp-index = 2
  - jclass-ref = 0x3090000
+ - method-ref-cp-index = 1, current_jc = 3090f40, target_jc = 3090000
+ - jmethod-v-index = 0x1
+ - jmethod-ref = 0x3090318
  - pop 1 elements from operand stack
- -- new sp = 0x3c
- -- params-pt = 0x40
+ -- new sp = 0x44
+ -- params-pt = 0x48
  -- return pc = 4
 
 --------------------------------- Create Frame ---------------------------------
---------- [0] Frame from (0x3c) ------------
+--------- [0] Frame from (0x44) ------------
  >> create frame from an existed function call
-(0x40) (param) local 0 = 589896
--------> new current_sp = 0x44
-(0x44) --> FP = (0x44) -> old-frame-fp = 0x24 
-(0x48) old-stack-pointer = 0x3c 
-(0x4c) return pc = 0x4 
-(0x50) method-ref = 0x3090318 
-(0x54) class-ref = 0x3090000 
-(0x58) constant-pool-ref = 0x3090038 
-(0x5c) bytecodes = 0x3090330 
+(0x48) (param) local 0 = 589848
+-------> new current_sp = 0x4c
+(0x4c) --> FP = (0x4c) -> old-frame-fp = 0x2c 
+(0x50) old-stack-pointer = 0x44 
+(0x54) return pc = 0x4 
+(0x58) method-ref = 0x3090318 
+(0x5c) class-ref = 0x3090000 
+(0x60) constant-pool-ref = 0x3090038 
+(0x64) bytecodes = 0x3090330 
 ------------------------------ End Create Frame ------------------------------
 pc:0x0 op = 0xb1, RETURN (addr: 0x03090330)
-return - last-sp = 0x3c
- - last-fp = 0x24
+return - last-sp = 0x44
+ - last-fp = 0x2c
  - return-pc = 0x4
- - change sp to 0x3c
+ - change sp to 0x44
  - reset pc to 0x04
- - reset func pt to 0x030912f0
- - bytecodes addr: 03091308
-pc:0x4 op = 0x2a, ALOAD_0 (addr: 0x0309130c)
- - Load ref 0x90048 to stack
->> new sp = 0x40
-pc:0x5 op = 0xbb, NEW (addr: 0x0309130d)
- - count field count
- - field count = 0, instance size = 8
- - allocate instance in mram 0x90050
->> new sp = 0x44
- - write class addr: (nil)
-pc:0x8 op = 0x59, DUP (addr: 0x03091310)
- - dup 589904(hex: 90050)
->> new sp = 0x48
-pc:0x9 op = 0xb7, INVOKESPECIAL (addr: 0x03091311)
- - method-ref-cp-index = 9
- - jmethod-v-index = 0x3090f40
+ - reset func pt to 0x03091018
+ - bytecodes addr: 03091030
+pc:0x4 op = 0xb1, RETURN (addr: 0x03091034)
+return - last-sp = 0x24
+ - last-fp = 0x4
+ - return-pc = 0xc
+ - change sp to 0x24
+ - reset pc to 0x0c
+ - reset func pt to 0x030912b8
+ - bytecodes addr: 030912d0
+pc:0xc op = 0xb5, PUTFIELD (addr: 0x030912dc)
+ - constant table index = 10
+ - field index in instance = 0
+>> new sp = 0x20
+>> new sp = 0x1c
+set val = 589848 (hex:0x00090018), at addr(m):0x00090010, instance addr: 0x00090008
+pc:0xf op = 0xb1, RETURN (addr: 0x030912df)
+return - last-sp = (nil)
+ - last-fp = (nil)
+ - return-pc = (nil)
+ - >> final frame
+[31m --------------------- (END DPU) -----------------------------
+[0mget DPUID = 0 method =  test:()I of class application/bst/NBodySystem from cache
+
+get DPUID = 0 class =  application/bst/NBodySystem from cache
+=== DPU#0x0 ===
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+[31m --------------------- (IN DPU) -----------------------------
+[0mmeta_space_pt = 0x30914c0, heap_space_pt = 0x90020, param_pt = 0x3890010
+[31m
+--------------------------------- Create Frame ---------------------------------
+--------- [0] Frame from ((nil)) ------------
+0x389000c params_count = 1
+((nil)) (param) local 0 = 589832 (addr(p): 0x0389000c)
+-------> new current_sp = 0x4
+(0x4) --> FP = (0x4) -> old-frame-fp = (nil) 
+(0x8) old-stack-pointer = (nil) 
+(0xc) return pc = 0x0 
+(0x10) method-ref = 0x30912e0 
+(0x14) class-ref = 0x3091198 
+(0x18) constant-pool-ref = 0x30911d0 
+(0x1c) bytecodes = 0x30912f8 
+------------------------------ End Create Frame ------------------------------
+code_buffer = 0x30912f8
+create frame finished
+FP = (0x4)
+pc:0x0 op = 0x04, ICONST_1 (addr: 0x030912f8)
+ - push const 1 to stack
+>> new sp = 0x20
+pc:0x1 op = 0xac, IRETURN (addr: 0x030912f9)
+>> new sp = 0x1c
+ - ret val = 1
+ - last-sp = (nil)
+ - last-fp = (nil)
+ - return-pc = (nil)
+ - >> final frame
+[31m --------------------- (END DPU) -----------------------------
+[0mnbs.test() = 1
