@@ -15383,7 +15383,18 @@ pc:0x35 op = 0x53, ?ASTORE (addr: 0x03091e0d)
 pc:0x36 op = 0x4c, ASTORE_N (addr: 0x03091e0e)
  - 1
 >> new sp = 0x60
- - Store ref 0x90048 to local 1
 pc:0x37 op = 0x0b, FCONST_N (addr: 0x03091e0f)
 >> new sp = 0x64
-pc:0x38 op = 0x45, UNKNOW (addr: 0x03091e10)
+pc:0x38 op = 0x45, FSTORE_N (addr: 0x03091e10)
+ - 2
+>> new sp = 0x60
+ - Store float 0.000000 to local 2
+pc:0x39 op = 0x0b, FCONST_N (addr: 0x03091e11)
+>> new sp = 0x64
+pc:0x3a op = 0x46, FSTORE_N (addr: 0x03091e12)
+ - 3
+>> new sp = 0x60
+ - Store float 0.000000 to local 3
+pc:0x3b op = 0x0b, FCONST_N (addr: 0x03091e13)
+>> new sp = 0x64
+pc:0x3c op = 0x38, UNKNOW (addr: 0x03091e14)
