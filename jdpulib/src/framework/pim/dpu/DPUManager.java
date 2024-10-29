@@ -1,4 +1,5 @@
 package framework.pim.dpu;
+
 import com.upmem.dpu.Dpu;
 import com.upmem.dpu.DpuException;
 import framework.lang.struct.DummyProxy;
@@ -27,25 +28,23 @@ public abstract class DPUManager {
     protected int currentTasklet = 0;
     protected int[] taskletSemaphore = new int[UPMEM.TOTAL_HARDWARE_THREADS_COUNT];
 
-
     public abstract void dpuExecute(PrintStream printStream) throws DpuException;
 
     public abstract void callNonstaticMethod(int classPt, int methodPt, int instanceAddr, Object[] params);
 
-    protected int calcFieldCount(Class c){
-        if(c.getSuperclass() == null){
+    protected int calcFieldCount(Class c) {
+        if (c.getSuperclass() == null) {
             return c.getDeclaredFields().length;
         }
         return calcFieldCount(c.getSuperclass()) + c.getDeclaredFields().length;
     }
 
-
-    protected String generateInitializationDescriptor(Object[] params){
+    protected String generateInitializationDescriptor(Object[] params) {
         String desc = "<init>:(";
-        for(Object obj : params){
-            if(obj instanceof Integer){
+        for (Object obj : params) {
+            if (obj instanceof Integer) {
                 desc += "I";
-            }else {
+            } else {
                 String cName = obj.getClass().getName().replace(".", "/");
                 cName = cName.endsWith("Proxy") ? cName.substring(0, cName.length() - 5) : cName;
                 String s = "L" + cName + ";";
@@ -56,11 +55,11 @@ public abstract class DPUManager {
         return desc + ")V";
     }
 
-    public abstract  <T> DummyProxy createObject(Class c, Object... params) throws IOException;
+    public abstract <T> DummyProxy createObject(Class c, Object... params) throws IOException;
 
-    public abstract  <T> Object createObjectSpecific(Class c, String descriptor, Object... params) throws IOException;
+    public abstract <T> Object createObjectSpecific(Class c, String descriptor, Object... params) throws IOException;
 
-    protected DPUManager(){}
-
+    protected DPUManager() {
+    }
 
 }

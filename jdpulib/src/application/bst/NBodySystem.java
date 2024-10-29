@@ -9,17 +9,11 @@ public class NBodySystem {
     private final Body[] bodies;
     private final Sqrt sqrt;
     private final Body body;
-    // private final IBody body;
 
     public NBodySystem() {
-        // body = new IBody();
         body = new Body();
         sqrt = new Sqrt();
         bodies = createBodies();
-    }
-
-    public int test() {
-        return 1;
     }
 
     public Body[] createBodies() {

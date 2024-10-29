@@ -33,7 +33,6 @@ public class DPUManagerUPMEM extends DPUManager {
             if (classCacheManager.getClassLookupTableItem(c.getName().replace(".", "/")) == null) {
                 dpuClassFileManager.loadClassToDPU(c);
             }
-            System.out.println("createObject (useSimulator): after loadClassToDPU");
             classAddr = classCacheManager.getClassLookupTableItem(c.getName().replace(".", "/")).marmAddr;
             String initMethodDesc = generateInitializationDescriptor(params);
 
@@ -64,7 +63,6 @@ public class DPUManagerUPMEM extends DPUManager {
         if (classCacheManager.getClassLookupTableItem(c.getName().replace(".", "/")) == null) {
             dpuClassFileManager.loadClassToDPU(c);
         }
-        System.out.println("createObject: after loadClassToDPU");
         classAddr = classCacheManager.getClassLookupTableItem(c.getName().replace(".", "/")).marmAddr;
         String initMethodDesc = generateInitializationDescriptor(params);
 

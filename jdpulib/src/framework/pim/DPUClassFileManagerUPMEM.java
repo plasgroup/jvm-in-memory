@@ -262,7 +262,7 @@ public class DPUClassFileManagerUPMEM extends DPUClassFileManager {
     }
 
     static {
-        classfileLogger.setEnable(true);
+        classfileLogger.setEnable(false);
     }
 
     @Override

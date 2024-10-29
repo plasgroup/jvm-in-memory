@@ -2,14 +2,8 @@ import framework.pim.BatchDispatcher;
 import framework.pim.ExperimentConfigurator;
 import framework.pim.UPMEM;
 import framework.pim.UPMEMConfigurator;
-import application.bst.BSTBuilder;
-import application.bst.BSTTester;
-import application.bst.DPUTreeNode;
-import application.bst.DPUTreeNodeProxy;
 import application.bst.NBodySystem;
 import application.bst.NBodySystemProxy;
-import application.bst.TreeNode;
-import application.bst.IBody;
 import application.bst.Body;
 import application.bst.Sqrt;
 
@@ -23,13 +17,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import static framework.pim.ExperimentConfigurator.*;
-import static application.bst.BSTBuilder.*;
-import static application.bst.BSTTester.readIntergerArrayList;
-import static application.bst.TreeWriter.writeDPUImages;
 
 /**
  * =======================================================================
- * This is a program for evaluating Binary Search Tree (BST) application
+ * This is a program for evaluating N-Body Simulation (NBody) application
  ** =======================================================================
  **/
 
@@ -122,27 +113,6 @@ public class Main {
         System.out.println(experimentType + " mode, nodes count = " + totalNodeCount + " query count = " + queryCount);
         System.out.println("cpu tree layer count = " + cpuLayerCount);
 
-        // if(noSearch)
-        // System.out.println("No search mode");
-        // if(buildFromSerializedData)
-        // System.out.println("build tree from images, path = " + imagesPath);
-        // if(serializeToFile)
-        // System.out.println("output tree to file. Imgs path = " + imagesPath);
-        // if(writeKeyValue){
-        // System.out.println("Generate key value pairs, and write to file. Count = " +
-        // writeKeyValueCount);
-        // BSTTester.writeKV(writeKeyValueCount, "key_values-" + writeKeyValueCount +
-        // ".txt");
-        // }
-        // if(writeKeyValueOnly){
-        // System.out.println("Write key value pairs only, count = " +
-        // writeKeyValueCount);
-        // BSTTester.writeKV(writeKeyValueCount, "key_values-" + writeKeyValueCount +
-        // ".txt");
-        // System.out.println("Write key value pairs finish.");
-        // return;
-        // }
-
         // UPMEM configurator
 
         upmemConfigurator
@@ -150,57 +120,18 @@ public class Main {
                 .setThreadPerDPU(1)
                 .setUseSimulator(false)
                 .setEnableProfilingRPCDataMovement(false)
-                .setPrintStream(System.out);
-        // .setPrintStream(null);
+                // .setPrintStream(System.out);
+                .setPrintStream(null);
 
         // UPMEM initialization
         UPMEM.initialize(upmemConfigurator);
         UPMEM.setPackageSearchPath("application.bst.");
 
         // Test DPUTreeNode
-        UPMEM.getInstance().getDPUManager(0).dpuClassFileManager.loadClassToDPU(DPUTreeNode.class);
-        // UPMEM.getInstance().getDPUManager(0).dpuClassFileManager.loadClassToDPU(IBody.class);
         UPMEM.getInstance().getDPUManager(0).dpuClassFileManager.loadClassToDPU(Body.class);
         UPMEM.getInstance().getDPUManager(0).dpuClassFileManager.loadClassToDPU(Sqrt.class);
-        NBodySystemProxy nbs = (NBodySystemProxy) UPMEM.getInstance().createObject(0,
-                NBodySystem.class);
-        // System.out.println("nbs.test() = " + nbs.test());
+        NBodySystemProxy nbs = (NBodySystemProxy) UPMEM.getInstance().createObject(0, NBodySystem.class);
         nbs.advance(0.01f);
         System.out.println(nbs.energy());
-
-        // DPUTreeNodeProxy dpuTreeNode = (DPUTreeNodeProxy)
-        // UPMEM.getInstance().createObject(0, DPUTreeNode.class, 1, 1);
-        // dpuTreeNode.insert(3, 3);
-
-        // // Evaluate performance. In performance evaluation mode, the execution time
-        // would be measured.
-        // if(performanceEvaluationMode) {
-        // performanceEvaluation();
-        // return;
-        // }
-
-        // // default
-        // if(args.length == 0){
-        // BSTTester.evaluatePIMBST(totalNodeCount,
-        // ExperimentConfigurator.queryCount,
-        // ExperimentConfigurator.cpuLayerCount);
-        // return;
-        // }
-
-        // // evaluate CPU Tree or PIM Tree
-        // if("CPU".equals(experimentType)){
-        // BSTTester.evaluateCPU(totalNodeCount, queryCount);
-        // }else if("PIM".equals(experimentType)){
-        // BSTTester.evaluatePIMBST(totalNodeCount, queryCount, cpuLayerCount);
-        // }
-
-        // UPMEM.reportProfiling();
-        // if(UPMEM.getConfigurator().isReportProfiling()){
-        // System.out.printf("Simulated data transfer from CPU to DPUs: %d bytes\n",
-        // UPMEM.profiler.transferredBytesToDPU);
-        // System.out.printf("Simulated data transfer from DPUs to CPU: %d bytes\n",
-        // UPMEM.profiler.transferredBytesFromDPU);
-        // }
-
     }
 }

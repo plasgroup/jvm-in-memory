@@ -228,7 +228,7 @@ public class ClassFileAnalyzer {
     }
 
     static {
-        classfileAnalyzerLogger.setEnable(true);
+        classfileAnalyzerLogger.setEnable(false);
     }
 
     public static void printEntryTable(DPUJClass jc) {

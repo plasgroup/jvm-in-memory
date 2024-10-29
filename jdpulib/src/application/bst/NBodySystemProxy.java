@@ -38,12 +38,6 @@ public class NBodySystemProxy extends NBodySystem implements IDPUProxyObject {
     }
 
     @Override
-    public int test() {
-        invokeMethod(dpuID, address, "application/bst/NBodySystem", "test:()I");
-        return getIReturnValue(dpuID);
-    }
-
-    @Override
     public void advance(final float dt) {
         invokeMethod(dpuID, address, "application/bst/NBodySystem", "advance:(F)V", dt);
         return;
