@@ -13926,18 +13926,10 @@ param_buffer(wram)=0x3890000, sim_wram(wram)=(nil), mram = 0x120018
 code_buffer = 0x3091d88
 create frame finished
 FP = (0x4)
-pc:0x0 op = 0x2a, ALOAD_0 (addr: 0x03091d88)
+pc:0x0 op = 0x2a, ALOAD_N (addr: 0x03091d88)
+ - 0
 >> new sp = 0x20
 pc:0x1 op = 0xb7, INVOKESPECIAL (addr: 0x03091d89)
- - class-ref-cp-index = 2
- - jclass-ref = 0x3090000
- - method-ref-cp-index = 1, current_jc = 3091af8, target_jc = 3090000
- - jmethod-v-index = 0x1
- - jmethod-ref = 0x3090318
- - pop 1 elements from operand stack
- -- new sp = 0x1c
- -- params-pt = 0x20
- -- return pc = 4
 
 --------------------------------- Create Frame ---------------------------------
 --------- [0] Frame from (0x1c) ------------
@@ -13953,9 +13945,8 @@ pc:0x1 op = 0xb7, INVOKESPECIAL (addr: 0x03091d89)
 (0x3c) bytecodes = 0x3090330 
 ------------------------------ End Create Frame ------------------------------
 pc:0x0 op = 0xb1, RETURN (addr: 0x03090330)
- - reset func pt to 0x03091d70
- - bytecodes addr: 03091d88
-pc:0x4 op = 0x2a, ALOAD_0 (addr: 0x03091d8c)
+pc:0x4 op = 0x2a, ALOAD_N (addr: 0x03091d8c)
+ - 0
 >> new sp = 0x20
 pc:0x5 op = 0xbb, NEW (addr: 0x03091d8d)
  - count field count
@@ -13972,15 +13963,6 @@ pc:0x5 op = 0xbb, NEW (addr: 0x03091d8d)
 pc:0x8 op = 0x59, DUP (addr: 0x03091d90)
 >> new sp = 0x28
 pc:0x9 op = 0xb7, INVOKESPECIAL (addr: 0x03091d91)
- - class-ref-cp-index = 7
- - jclass-ref = 0x30911d0
- - method-ref-cp-index = 9, current_jc = 3091af8, target_jc = 30911d0
- - jmethod-v-index = 0xf
- - jmethod-ref = 0x3091560
- - pop 1 elements from operand stack
- -- new sp = 0x24
- -- params-pt = 0x28
- -- return pc = 12
 
 --------------------------------- Create Frame ---------------------------------
 --------- [0] Frame from (0x24) ------------
@@ -13995,18 +13977,10 @@ pc:0x9 op = 0xb7, INVOKESPECIAL (addr: 0x03091d91)
 (0x40) constant-pool-ref = 0x3091208 
 (0x44) bytecodes = 0x3091578 
 ------------------------------ End Create Frame ------------------------------
-pc:0x0 op = 0x2a, ALOAD_0 (addr: 0x03091578)
+pc:0x0 op = 0x2a, ALOAD_N (addr: 0x03091578)
+ - 0
 >> new sp = 0x48
 pc:0x1 op = 0xb7, INVOKESPECIAL (addr: 0x03091579)
- - class-ref-cp-index = 15
- - jclass-ref = 0x3090000
- - method-ref-cp-index = 14, current_jc = 30911d0, target_jc = 3090000
- - jmethod-v-index = 0x1
- - jmethod-ref = 0x3090318
- - pop 1 elements from operand stack
- -- new sp = 0x44
- -- params-pt = 0x48
- -- return pc = 4
 
 --------------------------------- Create Frame ---------------------------------
 --------- [0] Frame from (0x44) ------------
@@ -14022,98 +13996,109 @@ pc:0x1 op = 0xb7, INVOKESPECIAL (addr: 0x03091579)
 (0x64) bytecodes = 0x3090330 
 ------------------------------ End Create Frame ------------------------------
 pc:0x0 op = 0xb1, RETURN (addr: 0x03090330)
- - reset func pt to 0x03091560
- - bytecodes addr: 03091578
-pc:0x4 op = 0x2a, ALOAD_0 (addr: 0x0309157c)
+pc:0x4 op = 0x2a, ALOAD_N (addr: 0x0309157c)
+ - 0
 >> new sp = 0x48
 pc:0x5 op = 0x12, LDC (addr: 0x0309157d)
+ - constant value = 3.141593
 >> new sp = 0x4c
 pc:0x7 op = 0xb5, PUTFIELD (addr: 0x0309157f)
 >> new sp = 0x48
 >> new sp = 0x44
  - set val = 1078530011 (hex:0x40490fdb), at addr(m):0x00090020, instance addr: 0x00090018
-pc:0xa op = 0x2a, ALOAD_0 (addr: 0x03091582)
+pc:0xa op = 0x2a, ALOAD_N (addr: 0x03091582)
+ - 0
 >> new sp = 0x48
 pc:0xb op = 0x12, LDC (addr: 0x03091583)
+ - constant value = 39.478420
 >> new sp = 0x4c
 pc:0xd op = 0xb5, PUTFIELD (addr: 0x03091585)
 >> new sp = 0x48
 >> new sp = 0x44
  - set val = 1109256679 (hex:0x421de9e7), at addr(m):0x00090024, instance addr: 0x00090018
-pc:0x10 op = 0x2a, ALOAD_0 (addr: 0x03091588)
+pc:0x10 op = 0x2a, ALOAD_N (addr: 0x03091588)
+ - 0
 >> new sp = 0x48
 pc:0x11 op = 0x12, LDC (addr: 0x03091589)
+ - constant value = 365.239990
 >> new sp = 0x4c
 pc:0x13 op = 0xb5, PUTFIELD (addr: 0x0309158b)
 >> new sp = 0x48
 >> new sp = 0x44
  - set val = 1136041656 (hex:0x43b69eb8), at addr(m):0x00090028, instance addr: 0x00090018
-pc:0x16 op = 0x2a, ALOAD_0 (addr: 0x0309158e)
+pc:0x16 op = 0x2a, ALOAD_N (addr: 0x0309158e)
+ - 0
 >> new sp = 0x48
-pc:0x17 op = 0x0b, FCONST_0 (addr: 0x0309158f)
+pc:0x17 op = 0x0b, FCONST_N (addr: 0x0309158f)
 >> new sp = 0x4c
 pc:0x18 op = 0xb5, PUTFIELD (addr: 0x03091590)
 >> new sp = 0x48
 >> new sp = 0x44
  - set val = 0 (hex:0x00000000), at addr(m):0x0009002c, instance addr: 0x00090018
-pc:0x1b op = 0x2a, ALOAD_0 (addr: 0x03091593)
+pc:0x1b op = 0x2a, ALOAD_N (addr: 0x03091593)
+ - 0
 >> new sp = 0x48
-pc:0x1c op = 0x0b, FCONST_0 (addr: 0x03091594)
+pc:0x1c op = 0x0b, FCONST_N (addr: 0x03091594)
 >> new sp = 0x4c
 pc:0x1d op = 0xb5, PUTFIELD (addr: 0x03091595)
 >> new sp = 0x48
 >> new sp = 0x44
  - set val = 0 (hex:0x00000000), at addr(m):0x00090030, instance addr: 0x00090018
-pc:0x20 op = 0x2a, ALOAD_0 (addr: 0x03091598)
+pc:0x20 op = 0x2a, ALOAD_N (addr: 0x03091598)
+ - 0
 >> new sp = 0x48
-pc:0x21 op = 0x0b, FCONST_0 (addr: 0x03091599)
+pc:0x21 op = 0x0b, FCONST_N (addr: 0x03091599)
 >> new sp = 0x4c
 pc:0x22 op = 0xb5, PUTFIELD (addr: 0x0309159a)
 >> new sp = 0x48
 >> new sp = 0x44
  - set val = 0 (hex:0x00000000), at addr(m):0x00090034, instance addr: 0x00090018
-pc:0x25 op = 0x2a, ALOAD_0 (addr: 0x0309159d)
+pc:0x25 op = 0x2a, ALOAD_N (addr: 0x0309159d)
+ - 0
 >> new sp = 0x48
-pc:0x26 op = 0x0b, FCONST_0 (addr: 0x0309159e)
+pc:0x26 op = 0x0b, FCONST_N (addr: 0x0309159e)
 >> new sp = 0x4c
 pc:0x27 op = 0xb5, PUTFIELD (addr: 0x0309159f)
 >> new sp = 0x48
 >> new sp = 0x44
  - set val = 0 (hex:0x00000000), at addr(m):0x00090038, instance addr: 0x00090018
-pc:0x2a op = 0x2a, ALOAD_0 (addr: 0x030915a2)
+pc:0x2a op = 0x2a, ALOAD_N (addr: 0x030915a2)
+ - 0
 >> new sp = 0x48
-pc:0x2b op = 0x0b, FCONST_0 (addr: 0x030915a3)
+pc:0x2b op = 0x0b, FCONST_N (addr: 0x030915a3)
 >> new sp = 0x4c
 pc:0x2c op = 0xb5, PUTFIELD (addr: 0x030915a4)
 >> new sp = 0x48
 >> new sp = 0x44
  - set val = 0 (hex:0x00000000), at addr(m):0x0009003c, instance addr: 0x00090018
-pc:0x2f op = 0x2a, ALOAD_0 (addr: 0x030915a7)
+pc:0x2f op = 0x2a, ALOAD_N (addr: 0x030915a7)
+ - 0
 >> new sp = 0x48
-pc:0x30 op = 0x0b, FCONST_0 (addr: 0x030915a8)
+pc:0x30 op = 0x0b, FCONST_N (addr: 0x030915a8)
 >> new sp = 0x4c
 pc:0x31 op = 0xb5, PUTFIELD (addr: 0x030915a9)
 >> new sp = 0x48
 >> new sp = 0x44
  - set val = 0 (hex:0x00000000), at addr(m):0x00090040, instance addr: 0x00090018
-pc:0x34 op = 0x2a, ALOAD_0 (addr: 0x030915ac)
+pc:0x34 op = 0x2a, ALOAD_N (addr: 0x030915ac)
+ - 0
 >> new sp = 0x48
-pc:0x35 op = 0x0b, FCONST_0 (addr: 0x030915ad)
+pc:0x35 op = 0x0b, FCONST_N (addr: 0x030915ad)
 >> new sp = 0x4c
 pc:0x36 op = 0xb5, PUTFIELD (addr: 0x030915ae)
 >> new sp = 0x48
 >> new sp = 0x44
  - set val = 0 (hex:0x00000000), at addr(m):0x00090044, instance addr: 0x00090018
 pc:0x39 op = 0xb1, RETURN (addr: 0x030915b1)
- - reset func pt to 0x03091d70
- - bytecodes addr: 03091d88
 pc:0xc op = 0xb5, PUTFIELD (addr: 0x03091d94)
 >> new sp = 0x20
 >> new sp = 0x1c
  - set val = 589848 (hex:0x00090018), at addr(m):0x00090014, instance addr: 0x00090008
-pc:0xf op = 0x2a, ALOAD_0 (addr: 0x03091d97)
+pc:0xf op = 0x2a, ALOAD_N (addr: 0x03091d97)
+ - 0
 >> new sp = 0x20
-pc:0x10 op = 0x2a, ALOAD_0 (addr: 0x03091d98)
+pc:0x10 op = 0x2a, ALOAD_N (addr: 0x03091d98)
+ - 0
 >> new sp = 0x24
 pc:0x11 op = 0xb6, INVOKEVIRTUAL (addr: 0x03091d99)
  - current-class-ref = 0x3091af8
@@ -14151,16 +14136,19 @@ pc:0x11 op = 0xb6, INVOKEVIRTUAL (addr: 0x03091d99)
 (0x5c) constant-pool-ref = 0x3091b30 
 (0x60) bytecodes = 0x3091dd8 
 ------------------------------ End Create Frame ------------------------------
-pc:0x0 op = 0x08, ICONST_5 (addr: 0x03091dd8)
+pc:0x0 op = 0x08, ICONST_N (addr: 0x03091dd8)
+ - 5
 >> new sp = 0x64
 pc:0x1 op = 0xbd, ANEWARRAY (addr: 0x03091dd9)
 >> new sp = 0x60
 >> new sp = 0x64
 pc:0x4 op = 0x59, DUP (addr: 0x03091ddc)
 >> new sp = 0x68
-pc:0x5 op = 0x03, ICONST_0 (addr: 0x03091ddd)
+pc:0x5 op = 0x03, ICONST_N (addr: 0x03091ddd)
+ - 0
 >> new sp = 0x6c
-pc:0x6 op = 0x2a, ALOAD_0 (addr: 0x03091dde)
+pc:0x6 op = 0x2a, ALOAD_N (addr: 0x03091dde)
+ - 0
 >> new sp = 0x70
 pc:0x7 op = 0xb4, GETFIELD (addr: 0x03091ddf)
 >> new sp = 0x6c
@@ -14209,30 +14197,21 @@ pc:0x0 op = 0xbb, NEW (addr: 0x03091690)
  - write class addr: 0x30911d0
 pc:0x3 op = 0x59, DUP (addr: 0x03091693)
 >> new sp = 0x94
-pc:0x4 op = 0x0b, FCONST_0 (addr: 0x03091694)
+pc:0x4 op = 0x0b, FCONST_N (addr: 0x03091694)
 >> new sp = 0x98
-pc:0x5 op = 0x0b, FCONST_0 (addr: 0x03091695)
+pc:0x5 op = 0x0b, FCONST_N (addr: 0x03091695)
 >> new sp = 0x9c
-pc:0x6 op = 0x0b, FCONST_0 (addr: 0x03091696)
+pc:0x6 op = 0x0b, FCONST_N (addr: 0x03091696)
 >> new sp = 0xa0
-pc:0x7 op = 0x0b, FCONST_0 (addr: 0x03091697)
+pc:0x7 op = 0x0b, FCONST_N (addr: 0x03091697)
 >> new sp = 0xa4
-pc:0x8 op = 0x0b, FCONST_0 (addr: 0x03091698)
+pc:0x8 op = 0x0b, FCONST_N (addr: 0x03091698)
 >> new sp = 0xa8
-pc:0x9 op = 0x0b, FCONST_0 (addr: 0x03091699)
+pc:0x9 op = 0x0b, FCONST_N (addr: 0x03091699)
 >> new sp = 0xac
-pc:0xa op = 0x0c, FCONST_1 (addr: 0x0309169a)
+pc:0xa op = 0x0c, FCONST_N (addr: 0x0309169a)
 >> new sp = 0xb0
 pc:0xb op = 0xb7, INVOKESPECIAL (addr: 0x0309169b)
- - class-ref-cp-index = 1
- - jclass-ref = 0x30911d0
- - method-ref-cp-index = 50, current_jc = 30911d0, target_jc = 30911d0
- - jmethod-v-index = 0xe
- - jmethod-ref = 0x30914f8
- - pop 8 elements from operand stack
- -- new sp = 0x90
- -- params-pt = 0xb0
- -- return pc = 14
 
 --------------------------------- Create Frame ---------------------------------
 --------- [0] Frame from (0x90) ------------
@@ -14244,7 +14223,7 @@ pc:0xb op = 0xb7, INVOKESPECIAL (addr: 0x0309169b)
 (0xa4) (param) local 4 = 0
 (0xa8) (param) local 5 = 0
 (0xac) (param) local 6 = 0
-(0xb0) (param) local 7 = 1
+(0xb0) (param) local 7 = 1065353216
 -------> new current_sp = 0xb4
 (0xb4) --> FP = (0xb4) -> old-frame-fp = 0x74 
 (0xb8) old-stack-pointer = 0x90 
@@ -14254,18 +14233,10 @@ pc:0xb op = 0xb7, INVOKESPECIAL (addr: 0x0309169b)
 (0xc8) constant-pool-ref = 0x3091208 
 (0xcc) bytecodes = 0x3091510 
 ------------------------------ End Create Frame ------------------------------
-pc:0x0 op = 0x2a, ALOAD_0 (addr: 0x03091510)
+pc:0x0 op = 0x2a, ALOAD_N (addr: 0x03091510)
+ - 0
 >> new sp = 0xd0
 pc:0x1 op = 0xb7, INVOKESPECIAL (addr: 0x03091511)
- - class-ref-cp-index = 15
- - jclass-ref = 0x3090000
- - method-ref-cp-index = 14, current_jc = 30911d0, target_jc = 3090000
- - jmethod-v-index = 0x1
- - jmethod-ref = 0x3090318
- - pop 1 elements from operand stack
- -- new sp = 0xcc
- -- params-pt = 0xd0
- -- return pc = 4
 
 --------------------------------- Create Frame ---------------------------------
 --------- [0] Frame from (0xcc) ------------
@@ -14281,56 +14252,1138 @@ pc:0x1 op = 0xb7, INVOKESPECIAL (addr: 0x03091511)
 (0xec) bytecodes = 0x3090330 
 ------------------------------ End Create Frame ------------------------------
 pc:0x0 op = 0xb1, RETURN (addr: 0x03090330)
- - reset func pt to 0x030914f8
- - bytecodes addr: 03091510
-pc:0x4 op = 0x2a, ALOAD_0 (addr: 0x03091514)
+pc:0x4 op = 0x2a, ALOAD_N (addr: 0x03091514)
+ - 0
 >> new sp = 0xd0
 pc:0x5 op = 0x12, LDC (addr: 0x03091515)
+ - constant value = 3.141593
 >> new sp = 0xd4
 pc:0x7 op = 0xb5, PUTFIELD (addr: 0x03091517)
 >> new sp = 0xd0
 >> new sp = 0xcc
  - set val = 1078530011 (hex:0x40490fdb), at addr(m):0x00090070, instance addr: 0x00090068
-pc:0xa op = 0x2a, ALOAD_0 (addr: 0x0309151a)
+pc:0xa op = 0x2a, ALOAD_N (addr: 0x0309151a)
+ - 0
 >> new sp = 0xd0
 pc:0xb op = 0x12, LDC (addr: 0x0309151b)
+ - constant value = 39.478420
 >> new sp = 0xd4
 pc:0xd op = 0xb5, PUTFIELD (addr: 0x0309151d)
 >> new sp = 0xd0
 >> new sp = 0xcc
  - set val = 1109256679 (hex:0x421de9e7), at addr(m):0x00090074, instance addr: 0x00090068
-pc:0x10 op = 0x2a, ALOAD_0 (addr: 0x03091520)
+pc:0x10 op = 0x2a, ALOAD_N (addr: 0x03091520)
+ - 0
 >> new sp = 0xd0
 pc:0x11 op = 0x12, LDC (addr: 0x03091521)
+ - constant value = 365.239990
 >> new sp = 0xd4
 pc:0x13 op = 0xb5, PUTFIELD (addr: 0x03091523)
 >> new sp = 0xd0
 >> new sp = 0xcc
  - set val = 1136041656 (hex:0x43b69eb8), at addr(m):0x00090078, instance addr: 0x00090068
-pc:0x16 op = 0x2a, ALOAD_0 (addr: 0x03091526)
+pc:0x16 op = 0x2a, ALOAD_N (addr: 0x03091526)
+ - 0
 >> new sp = 0xd0
-pc:0x17 op = 0x23, FLOAD_1 (addr: 0x03091527)
+pc:0x17 op = 0x23, FLOAD_N (addr: 0x03091527)
+ - 1
 >> new sp = 0xd4
 pc:0x18 op = 0xb5, PUTFIELD (addr: 0x03091528)
 >> new sp = 0xd0
 >> new sp = 0xcc
  - set val = 0 (hex:0x00000000), at addr(m):0x0009007c, instance addr: 0x00090068
-pc:0x1b op = 0x2a, ALOAD_0 (addr: 0x0309152b)
+pc:0x1b op = 0x2a, ALOAD_N (addr: 0x0309152b)
+ - 0
 >> new sp = 0xd0
-pc:0x1c op = 0x24, FLOAD_2 (addr: 0x0309152c)
+pc:0x1c op = 0x24, FLOAD_N (addr: 0x0309152c)
+ - 2
 >> new sp = 0xd4
 pc:0x1d op = 0xb5, PUTFIELD (addr: 0x0309152d)
 >> new sp = 0xd0
 >> new sp = 0xcc
  - set val = 0 (hex:0x00000000), at addr(m):0x00090080, instance addr: 0x00090068
-pc:0x20 op = 0x2a, ALOAD_0 (addr: 0x03091530)
+pc:0x20 op = 0x2a, ALOAD_N (addr: 0x03091530)
+ - 0
 >> new sp = 0xd0
-pc:0x21 op = 0x25, FLOAD_3 (addr: 0x03091531)
+pc:0x21 op = 0x25, FLOAD_N (addr: 0x03091531)
+ - 3
 >> new sp = 0xd4
 pc:0x22 op = 0xb5, PUTFIELD (addr: 0x03091532)
 >> new sp = 0xd0
 >> new sp = 0xcc
  - set val = 0 (hex:0x00000000), at addr(m):0x00090084, instance addr: 0x00090068
-pc:0x25 op = 0x2a, ALOAD_0 (addr: 0x03091535)
+pc:0x25 op = 0x2a, ALOAD_N (addr: 0x03091535)
+ - 0
 >> new sp = 0xd0
-pc:0x26 op = 0x17, UNKNOW (addr: 0x03091536)
+pc:0x26 op = 0x17, FLOAD (addr: 0x03091536)
+>> new sp = 0xd4
+pc:0x28 op = 0x12, LDC (addr: 0x03091538)
+ - constant value = 365.239990
+>> new sp = 0xd8
+pc:0x2a op = 0x6a, FMUL (addr: 0x0309153a)
+>> new sp = 0xd4
+>> new sp = 0xd0
+>> new sp = 0xd4
+pc:0x2b op = 0xb5, PUTFIELD (addr: 0x0309153b)
+>> new sp = 0xd0
+>> new sp = 0xcc
+ - set val = 0 (hex:0x00000000), at addr(m):0x00090088, instance addr: 0x00090068
+pc:0x2e op = 0x2a, ALOAD_N (addr: 0x0309153e)
+ - 0
+>> new sp = 0xd0
+pc:0x2f op = 0x17, FLOAD (addr: 0x0309153f)
+>> new sp = 0xd4
+pc:0x31 op = 0x12, LDC (addr: 0x03091541)
+ - constant value = 365.239990
+>> new sp = 0xd8
+pc:0x33 op = 0x6a, FMUL (addr: 0x03091543)
+>> new sp = 0xd4
+>> new sp = 0xd0
+>> new sp = 0xd4
+pc:0x34 op = 0xb5, PUTFIELD (addr: 0x03091544)
+>> new sp = 0xd0
+>> new sp = 0xcc
+ - set val = 0 (hex:0x00000000), at addr(m):0x0009008c, instance addr: 0x00090068
+pc:0x37 op = 0x2a, ALOAD_N (addr: 0x03091547)
+ - 0
+>> new sp = 0xd0
+pc:0x38 op = 0x17, FLOAD (addr: 0x03091548)
+>> new sp = 0xd4
+pc:0x3a op = 0x12, LDC (addr: 0x0309154a)
+ - constant value = 365.239990
+>> new sp = 0xd8
+pc:0x3c op = 0x6a, FMUL (addr: 0x0309154c)
+>> new sp = 0xd4
+>> new sp = 0xd0
+>> new sp = 0xd4
+pc:0x3d op = 0xb5, PUTFIELD (addr: 0x0309154d)
+>> new sp = 0xd0
+>> new sp = 0xcc
+ - set val = 0 (hex:0x00000000), at addr(m):0x00090090, instance addr: 0x00090068
+pc:0x40 op = 0x2a, ALOAD_N (addr: 0x03091550)
+ - 0
+>> new sp = 0xd0
+pc:0x41 op = 0x17, FLOAD (addr: 0x03091551)
+>> new sp = 0xd4
+pc:0x43 op = 0x12, LDC (addr: 0x03091553)
+ - constant value = 39.478420
+>> new sp = 0xd8
+pc:0x45 op = 0x6a, FMUL (addr: 0x03091555)
+>> new sp = 0xd4
+>> new sp = 0xd0
+>> new sp = 0xd4
+pc:0x46 op = 0xb5, PUTFIELD (addr: 0x03091556)
+>> new sp = 0xd0
+>> new sp = 0xcc
+ - set val = 1109256679 (hex:0x421de9e7), at addr(m):0x00090094, instance addr: 0x00090068
+pc:0x49 op = 0xb1, RETURN (addr: 0x03091559)
+pc:0xe op = 0xb0, ARETURN (addr: 0x0309169e)
+>> new sp = 0x8c
+>> new sp = 0x70
+pc:0xd op = 0x53, ?ASTORE (addr: 0x03091de5)
+>> new sp = 0x6c
+>> new sp = 0x68
+>> new sp = 0x64
+pc:0xe op = 0x59, DUP (addr: 0x03091de6)
+>> new sp = 0x68
+pc:0xf op = 0x04, ICONST_N (addr: 0x03091de7)
+ - 1
+>> new sp = 0x6c
+pc:0x10 op = 0x2a, ALOAD_N (addr: 0x03091de8)
+ - 0
+>> new sp = 0x70
+pc:0x11 op = 0xb4, GETFIELD (addr: 0x03091de9)
+>> new sp = 0x6c
+ - instance addr(m) = 0x90008, field index = 1, addr(m) = 0x90014
+ - field val = 0x90018
+>> new sp = 0x70
+pc:0x14 op = 0xb6, INVOKEVIRTUAL (addr: 0x03091dec)
+ - current-class-ref = 0x3091af8
+ - method-ref-cp-index = 28
+ - v-index = 0x10
+ - class-ref-cp-index = 7
+ - jclass-ref = 0x30911d0
+ - instance-address [me()]= 0x90018, 0x70
+ - instance-class-address = 0x30911d0
+ - jclass-ref = 0x30911d0
+ - jmethod-ref = 0x30915b8
+ - pop 1 elements from operand stack
+ -- new sp = 0x6c
+ -- params-pt = 0x70
+ -- return pc = 23
+
+--------------------------------- Create Frame ---------------------------------
+--------- [0] Frame from (0x6c) ------------
+ >> create frame from an existed function call
+(0x70) (param) local 0 = 589848
+-------> new current_sp = 0x74
+(0x74) --> FP = (0x74) -> old-frame-fp = 0x48 
+(0x78) old-stack-pointer = 0x6c 
+(0x7c) return pc = 0x17 
+(0x80) method-ref = 0x30915b8 
+(0x84) class-ref = 0x30911d0 
+(0x88) constant-pool-ref = 0x3091208 
+(0x8c) bytecodes = 0x30915d0 
+------------------------------ End Create Frame ------------------------------
+pc:0x0 op = 0xbb, NEW (addr: 0x030915d0)
+ - count field count
+ - + 10
+ -- super class index = 15
+ -- super class addr = 0x3090000
+ - + 0
+ -- super class index = 0
+ -- super class addr = (nil)
+ - field count = 10, instance size = 48
+ - allocate instance in mram 0x90098
+>> new sp = 0x90
+ - write class addr: 0x30911d0
+pc:0x3 op = 0x59, DUP (addr: 0x030915d3)
+>> new sp = 0x94
+pc:0x4 op = 0x12, LDC (addr: 0x030915d4)
+ - constant value = 4.841432
+>> new sp = 0x98
+pc:0x6 op = 0x12, LDC (addr: 0x030915d6)
+ - constant value = -1.160320
+>> new sp = 0x9c
+pc:0x8 op = 0x12, LDC (addr: 0x030915d8)
+ - constant value = -0.103622
+>> new sp = 0xa0
+pc:0xa op = 0x12, LDC (addr: 0x030915da)
+ - constant value = 0.001660
+>> new sp = 0xa4
+pc:0xc op = 0x12, LDC (addr: 0x030915dc)
+ - constant value = 0.007699
+>> new sp = 0xa8
+pc:0xe op = 0x12, LDC (addr: 0x030915de)
+ - constant value = -0.000069
+>> new sp = 0xac
+pc:0x10 op = 0x12, LDC (addr: 0x030915e0)
+ - constant value = 0.000955
+>> new sp = 0xb0
+pc:0x12 op = 0xb7, INVOKESPECIAL (addr: 0x030915e2)
+
+--------------------------------- Create Frame ---------------------------------
+--------- [0] Frame from (0x90) ------------
+ >> create frame from an existed function call
+(0x94) (param) local 0 = 589976
+(0x98) (param) local 1 = 1083895042
+(0x9c) (param) local 2 = -1080785570
+(0xa0) (param) local 3 = -1110165557
+(0xa4) (param) local 4 = 987338478
+(0xa8) (param) local 5 = 1006389245
+(0xac) (param) local 6 = -1198469942
+(0xb0) (param) local 7 = 981093121
+-------> new current_sp = 0xb4
+(0xb4) --> FP = (0xb4) -> old-frame-fp = 0x74 
+(0xb8) old-stack-pointer = 0x90 
+(0xbc) return pc = 0x15 
+(0xc0) method-ref = 0x30914f8 
+(0xc4) class-ref = 0x30911d0 
+(0xc8) constant-pool-ref = 0x3091208 
+(0xcc) bytecodes = 0x3091510 
+------------------------------ End Create Frame ------------------------------
+pc:0x0 op = 0x2a, ALOAD_N (addr: 0x03091510)
+ - 0
+>> new sp = 0xd0
+pc:0x1 op = 0xb7, INVOKESPECIAL (addr: 0x03091511)
+
+--------------------------------- Create Frame ---------------------------------
+--------- [0] Frame from (0xcc) ------------
+ >> create frame from an existed function call
+(0xd0) (param) local 0 = 589976
+-------> new current_sp = 0xd4
+(0xd4) --> FP = (0xd4) -> old-frame-fp = 0xb4 
+(0xd8) old-stack-pointer = 0xcc 
+(0xdc) return pc = 0x4 
+(0xe0) method-ref = 0x3090318 
+(0xe4) class-ref = 0x3090000 
+(0xe8) constant-pool-ref = 0x3090038 
+(0xec) bytecodes = 0x3090330 
+------------------------------ End Create Frame ------------------------------
+pc:0x0 op = 0xb1, RETURN (addr: 0x03090330)
+pc:0x4 op = 0x2a, ALOAD_N (addr: 0x03091514)
+ - 0
+>> new sp = 0xd0
+pc:0x5 op = 0x12, LDC (addr: 0x03091515)
+ - constant value = 3.141593
+>> new sp = 0xd4
+pc:0x7 op = 0xb5, PUTFIELD (addr: 0x03091517)
+>> new sp = 0xd0
+>> new sp = 0xcc
+ - set val = 1078530011 (hex:0x40490fdb), at addr(m):0x000900a0, instance addr: 0x00090098
+pc:0xa op = 0x2a, ALOAD_N (addr: 0x0309151a)
+ - 0
+>> new sp = 0xd0
+pc:0xb op = 0x12, LDC (addr: 0x0309151b)
+ - constant value = 39.478420
+>> new sp = 0xd4
+pc:0xd op = 0xb5, PUTFIELD (addr: 0x0309151d)
+>> new sp = 0xd0
+>> new sp = 0xcc
+ - set val = 1109256679 (hex:0x421de9e7), at addr(m):0x000900a4, instance addr: 0x00090098
+pc:0x10 op = 0x2a, ALOAD_N (addr: 0x03091520)
+ - 0
+>> new sp = 0xd0
+pc:0x11 op = 0x12, LDC (addr: 0x03091521)
+ - constant value = 365.239990
+>> new sp = 0xd4
+pc:0x13 op = 0xb5, PUTFIELD (addr: 0x03091523)
+>> new sp = 0xd0
+>> new sp = 0xcc
+ - set val = 1136041656 (hex:0x43b69eb8), at addr(m):0x000900a8, instance addr: 0x00090098
+pc:0x16 op = 0x2a, ALOAD_N (addr: 0x03091526)
+ - 0
+>> new sp = 0xd0
+pc:0x17 op = 0x23, FLOAD_N (addr: 0x03091527)
+ - 1
+>> new sp = 0xd4
+pc:0x18 op = 0xb5, PUTFIELD (addr: 0x03091528)
+>> new sp = 0xd0
+>> new sp = 0xcc
+ - set val = 1083895042 (hex:0x409aed02), at addr(m):0x000900ac, instance addr: 0x00090098
+pc:0x1b op = 0x2a, ALOAD_N (addr: 0x0309152b)
+ - 0
+>> new sp = 0xd0
+pc:0x1c op = 0x24, FLOAD_N (addr: 0x0309152c)
+ - 2
+>> new sp = 0xd4
+pc:0x1d op = 0xb5, PUTFIELD (addr: 0x0309152d)
+>> new sp = 0xd0
+>> new sp = 0xcc
+ - set val = -1080785570 (hex:0xbf94855e), at addr(m):0x000900b0, instance addr: 0x00090098
+pc:0x20 op = 0x2a, ALOAD_N (addr: 0x03091530)
+ - 0
+>> new sp = 0xd0
+pc:0x21 op = 0x25, FLOAD_N (addr: 0x03091531)
+ - 3
+>> new sp = 0xd4
+pc:0x22 op = 0xb5, PUTFIELD (addr: 0x03091532)
+>> new sp = 0xd0
+>> new sp = 0xcc
+ - set val = -1110165557 (hex:0xbdd437cb), at addr(m):0x000900b4, instance addr: 0x00090098
+pc:0x25 op = 0x2a, ALOAD_N (addr: 0x03091535)
+ - 0
+>> new sp = 0xd0
+pc:0x26 op = 0x17, FLOAD (addr: 0x03091536)
+>> new sp = 0xd4
+pc:0x28 op = 0x12, LDC (addr: 0x03091538)
+ - constant value = 365.239990
+>> new sp = 0xd8
+pc:0x2a op = 0x6a, FMUL (addr: 0x0309153a)
+>> new sp = 0xd4
+>> new sp = 0xd0
+>> new sp = 0xd4
+pc:0x2b op = 0xb5, PUTFIELD (addr: 0x0309153b)
+>> new sp = 0xd0
+>> new sp = 0xcc
+ - set val = 1058748469 (hex:0x3f1b3835), at addr(m):0x000900b8, instance addr: 0x00090098
+pc:0x2e op = 0x2a, ALOAD_N (addr: 0x0309153e)
+ - 0
+>> new sp = 0xd0
+pc:0x2f op = 0x17, FLOAD (addr: 0x0309153f)
+>> new sp = 0xd4
+pc:0x31 op = 0x12, LDC (addr: 0x03091541)
+ - constant value = 365.239990
+>> new sp = 0xd8
+pc:0x33 op = 0x6a, FMUL (addr: 0x03091543)
+>> new sp = 0xd4
+>> new sp = 0xd0
+>> new sp = 0xd4
+pc:0x34 op = 0xb5, PUTFIELD (addr: 0x03091544)
+>> new sp = 0xd0
+>> new sp = 0xcc
+ - set val = 1077147544 (hex:0x4033f798), at addr(m):0x000900bc, instance addr: 0x00090098
+pc:0x37 op = 0x2a, ALOAD_N (addr: 0x03091547)
+ - 0
+>> new sp = 0xd0
+pc:0x38 op = 0x17, FLOAD (addr: 0x03091548)
+>> new sp = 0xd4
+pc:0x3a op = 0x12, LDC (addr: 0x0309154a)
+ - constant value = 365.239990
+>> new sp = 0xd8
+pc:0x3c op = 0x6a, FMUL (addr: 0x0309154c)
+>> new sp = 0xd4
+>> new sp = 0xd0
+>> new sp = 0xd4
+pc:0x3d op = 0xb5, PUTFIELD (addr: 0x0309154d)
+>> new sp = 0xd0
+>> new sp = 0xcc
+ - set val = -1127311684 (hex:0xbcce96bc), at addr(m):0x000900c0, instance addr: 0x00090098
+pc:0x40 op = 0x2a, ALOAD_N (addr: 0x03091550)
+ - 0
+>> new sp = 0xd0
+pc:0x41 op = 0x17, FLOAD (addr: 0x03091551)
+>> new sp = 0xd4
+pc:0x43 op = 0x12, LDC (addr: 0x03091553)
+ - constant value = 39.478420
+>> new sp = 0xd8
+pc:0x45 op = 0x6a, FMUL (addr: 0x03091555)
+>> new sp = 0xd4
+>> new sp = 0xd0
+>> new sp = 0xd4
+pc:0x46 op = 0xb5, PUTFIELD (addr: 0x03091556)
+>> new sp = 0xd0
+>> new sp = 0xcc
+ - set val = 1025139888 (hex:0x3d1a64b0), at addr(m):0x000900c4, instance addr: 0x00090098
+pc:0x49 op = 0xb1, RETURN (addr: 0x03091559)
+pc:0x15 op = 0xb0, ARETURN (addr: 0x030915e5)
+>> new sp = 0x8c
+>> new sp = 0x70
+pc:0x17 op = 0x53, ?ASTORE (addr: 0x03091def)
+>> new sp = 0x6c
+>> new sp = 0x68
+>> new sp = 0x64
+pc:0x18 op = 0x59, DUP (addr: 0x03091df0)
+>> new sp = 0x68
+pc:0x19 op = 0x05, ICONST_N (addr: 0x03091df1)
+ - 2
+>> new sp = 0x6c
+pc:0x1a op = 0x2a, ALOAD_N (addr: 0x03091df2)
+ - 0
+>> new sp = 0x70
+pc:0x1b op = 0xb4, GETFIELD (addr: 0x03091df3)
+>> new sp = 0x6c
+ - instance addr(m) = 0x90008, field index = 1, addr(m) = 0x90014
+ - field val = 0x90018
+>> new sp = 0x70
+pc:0x1e op = 0xb6, INVOKEVIRTUAL (addr: 0x03091df6)
+ - current-class-ref = 0x3091af8
+ - method-ref-cp-index = 31
+ - v-index = 0x11
+ - class-ref-cp-index = 7
+ - jclass-ref = 0x30911d0
+ - instance-address [me()]= 0x90018, 0x70
+ - instance-class-address = 0x30911d0
+ - jclass-ref = 0x30911d0
+ - jmethod-ref = 0x30915e8
+ - pop 1 elements from operand stack
+ -- new sp = 0x6c
+ -- params-pt = 0x70
+ -- return pc = 33
+
+--------------------------------- Create Frame ---------------------------------
+--------- [0] Frame from (0x6c) ------------
+ >> create frame from an existed function call
+(0x70) (param) local 0 = 589848
+-------> new current_sp = 0x74
+(0x74) --> FP = (0x74) -> old-frame-fp = 0x48 
+(0x78) old-stack-pointer = 0x6c 
+(0x7c) return pc = 0x21 
+(0x80) method-ref = 0x30915e8 
+(0x84) class-ref = 0x30911d0 
+(0x88) constant-pool-ref = 0x3091208 
+(0x8c) bytecodes = 0x3091600 
+------------------------------ End Create Frame ------------------------------
+pc:0x0 op = 0xbb, NEW (addr: 0x03091600)
+ - count field count
+ - + 10
+ -- super class index = 15
+ -- super class addr = 0x3090000
+ - + 0
+ -- super class index = 0
+ -- super class addr = (nil)
+ - field count = 10, instance size = 48
+ - allocate instance in mram 0x900c8
+>> new sp = 0x90
+ - write class addr: 0x30911d0
+pc:0x3 op = 0x59, DUP (addr: 0x03091603)
+>> new sp = 0x94
+pc:0x4 op = 0x12, LDC (addr: 0x03091604)
+ - constant value = 8.343367
+>> new sp = 0x98
+pc:0x6 op = 0x12, LDC (addr: 0x03091606)
+ - constant value = 4.124799
+>> new sp = 0x9c
+pc:0x8 op = 0x12, LDC (addr: 0x03091608)
+ - constant value = -0.403523
+>> new sp = 0xa0
+pc:0xa op = 0x12, LDC (addr: 0x0309160a)
+ - constant value = -0.002767
+>> new sp = 0xa4
+pc:0xc op = 0x12, LDC (addr: 0x0309160c)
+ - constant value = 0.004999
+>> new sp = 0xa8
+pc:0xe op = 0x12, LDC (addr: 0x0309160e)
+ - constant value = 0.000023
+>> new sp = 0xac
+pc:0x10 op = 0x12, LDC (addr: 0x03091610)
+ - constant value = 0.000286
+>> new sp = 0xb0
+pc:0x12 op = 0xb7, INVOKESPECIAL (addr: 0x03091612)
+
+--------------------------------- Create Frame ---------------------------------
+--------- [0] Frame from (0x90) ------------
+ >> create frame from an existed function call
+(0x94) (param) local 0 = 590024
+(0x98) (param) local 1 = 1090879086
+(0x9c) (param) local 2 = 1082392154
+(0xa0) (param) local 3 = -1093756257
+(0xa4) (param) local 4 = -1154130512
+(0xa8) (param) local 5 = 1000590001
+(0xac) (param) local 6 = 935414205
+(0xb0) (param) local 7 = 966124279
+-------> new current_sp = 0xb4
+(0xb4) --> FP = (0xb4) -> old-frame-fp = 0x74 
+(0xb8) old-stack-pointer = 0x90 
+(0xbc) return pc = 0x15 
+(0xc0) method-ref = 0x30914f8 
+(0xc4) class-ref = 0x30911d0 
+(0xc8) constant-pool-ref = 0x3091208 
+(0xcc) bytecodes = 0x3091510 
+------------------------------ End Create Frame ------------------------------
+pc:0x0 op = 0x2a, ALOAD_N (addr: 0x03091510)
+ - 0
+>> new sp = 0xd0
+pc:0x1 op = 0xb7, INVOKESPECIAL (addr: 0x03091511)
+
+--------------------------------- Create Frame ---------------------------------
+--------- [0] Frame from (0xcc) ------------
+ >> create frame from an existed function call
+(0xd0) (param) local 0 = 590024
+-------> new current_sp = 0xd4
+(0xd4) --> FP = (0xd4) -> old-frame-fp = 0xb4 
+(0xd8) old-stack-pointer = 0xcc 
+(0xdc) return pc = 0x4 
+(0xe0) method-ref = 0x3090318 
+(0xe4) class-ref = 0x3090000 
+(0xe8) constant-pool-ref = 0x3090038 
+(0xec) bytecodes = 0x3090330 
+------------------------------ End Create Frame ------------------------------
+pc:0x0 op = 0xb1, RETURN (addr: 0x03090330)
+pc:0x4 op = 0x2a, ALOAD_N (addr: 0x03091514)
+ - 0
+>> new sp = 0xd0
+pc:0x5 op = 0x12, LDC (addr: 0x03091515)
+ - constant value = 3.141593
+>> new sp = 0xd4
+pc:0x7 op = 0xb5, PUTFIELD (addr: 0x03091517)
+>> new sp = 0xd0
+>> new sp = 0xcc
+ - set val = 1078530011 (hex:0x40490fdb), at addr(m):0x000900d0, instance addr: 0x000900c8
+pc:0xa op = 0x2a, ALOAD_N (addr: 0x0309151a)
+ - 0
+>> new sp = 0xd0
+pc:0xb op = 0x12, LDC (addr: 0x0309151b)
+ - constant value = 39.478420
+>> new sp = 0xd4
+pc:0xd op = 0xb5, PUTFIELD (addr: 0x0309151d)
+>> new sp = 0xd0
+>> new sp = 0xcc
+ - set val = 1109256679 (hex:0x421de9e7), at addr(m):0x000900d4, instance addr: 0x000900c8
+pc:0x10 op = 0x2a, ALOAD_N (addr: 0x03091520)
+ - 0
+>> new sp = 0xd0
+pc:0x11 op = 0x12, LDC (addr: 0x03091521)
+ - constant value = 365.239990
+>> new sp = 0xd4
+pc:0x13 op = 0xb5, PUTFIELD (addr: 0x03091523)
+>> new sp = 0xd0
+>> new sp = 0xcc
+ - set val = 1136041656 (hex:0x43b69eb8), at addr(m):0x000900d8, instance addr: 0x000900c8
+pc:0x16 op = 0x2a, ALOAD_N (addr: 0x03091526)
+ - 0
+>> new sp = 0xd0
+pc:0x17 op = 0x23, FLOAD_N (addr: 0x03091527)
+ - 1
+>> new sp = 0xd4
+pc:0x18 op = 0xb5, PUTFIELD (addr: 0x03091528)
+>> new sp = 0xd0
+>> new sp = 0xcc
+ - set val = 1090879086 (hex:0x41057e6e), at addr(m):0x000900dc, instance addr: 0x000900c8
+pc:0x1b op = 0x2a, ALOAD_N (addr: 0x0309152b)
+ - 0
+>> new sp = 0xd0
+pc:0x1c op = 0x24, FLOAD_N (addr: 0x0309152c)
+ - 2
+>> new sp = 0xd4
+pc:0x1d op = 0xb5, PUTFIELD (addr: 0x0309152d)
+>> new sp = 0xd0
+>> new sp = 0xcc
+ - set val = 1082392154 (hex:0x4083fe5a), at addr(m):0x000900e0, instance addr: 0x000900c8
+pc:0x20 op = 0x2a, ALOAD_N (addr: 0x03091530)
+ - 0
+>> new sp = 0xd0
+pc:0x21 op = 0x25, FLOAD_N (addr: 0x03091531)
+ - 3
+>> new sp = 0xd4
+pc:0x22 op = 0xb5, PUTFIELD (addr: 0x03091532)
+>> new sp = 0xd0
+>> new sp = 0xcc
+ - set val = -1093756257 (hex:0xbece9a9f), at addr(m):0x000900e4, instance addr: 0x000900c8
+pc:0x25 op = 0x2a, ALOAD_N (addr: 0x03091535)
+ - 0
+>> new sp = 0xd0
+pc:0x26 op = 0x17, FLOAD (addr: 0x03091536)
+>> new sp = 0xd4
+pc:0x28 op = 0x12, LDC (addr: 0x03091538)
+ - constant value = 365.239990
+>> new sp = 0xd8
+pc:0x2a op = 0x6a, FMUL (addr: 0x0309153a)
+>> new sp = 0xd4
+>> new sp = 0xd0
+>> new sp = 0xd4
+pc:0x2b op = 0xb5, PUTFIELD (addr: 0x0309153b)
+>> new sp = 0xd0
+>> new sp = 0xcc
+ - set val = -1082040051 (hex:0xbf81610d), at addr(m):0x000900e8, instance addr: 0x000900c8
+pc:0x2e op = 0x2a, ALOAD_N (addr: 0x0309153e)
+ - 0
+>> new sp = 0xd0
+pc:0x2f op = 0x17, FLOAD (addr: 0x0309153f)
+>> new sp = 0xd4
+pc:0x31 op = 0x12, LDC (addr: 0x03091541)
+ - constant value = 365.239990
+>> new sp = 0xd8
+pc:0x33 op = 0x6a, FMUL (addr: 0x03091543)
+>> new sp = 0xd4
+>> new sp = 0xd0
+>> new sp = 0xd4
+pc:0x34 op = 0xb5, PUTFIELD (addr: 0x03091544)
+>> new sp = 0xd0
+>> new sp = 0xcc
+ - set val = 1072279373 (hex:0x3fe9af4d), at addr(m):0x000900ec, instance addr: 0x000900c8
+pc:0x37 op = 0x2a, ALOAD_N (addr: 0x03091547)
+ - 0
+>> new sp = 0xd0
+pc:0x38 op = 0x17, FLOAD (addr: 0x03091548)
+>> new sp = 0xd4
+pc:0x3a op = 0x12, LDC (addr: 0x0309154a)
+ - constant value = 365.239990
+>> new sp = 0xd8
+pc:0x3c op = 0x6a, FMUL (addr: 0x0309154c)
+>> new sp = 0xd4
+>> new sp = 0xd0
+>> new sp = 0xd4
+pc:0x3d op = 0xb5, PUTFIELD (addr: 0x0309154d)
+>> new sp = 0xd0
+>> new sp = 0xcc
+ - set val = 1007280707 (hex:0x3c09e243), at addr(m):0x000900f0, instance addr: 0x000900c8
+pc:0x40 op = 0x2a, ALOAD_N (addr: 0x03091550)
+ - 0
+>> new sp = 0xd0
+pc:0x41 op = 0x17, FLOAD (addr: 0x03091551)
+>> new sp = 0xd4
+pc:0x43 op = 0x12, LDC (addr: 0x03091553)
+ - constant value = 39.478420
+>> new sp = 0xd8
+pc:0x45 op = 0x6a, FMUL (addr: 0x03091555)
+>> new sp = 0xd4
+>> new sp = 0xd0
+>> new sp = 0xd4
+pc:0x46 op = 0xb5, PUTFIELD (addr: 0x03091556)
+>> new sp = 0xd0
+>> new sp = 0xcc
+ - set val = 1010362953 (hex:0x3c38ea49), at addr(m):0x000900f4, instance addr: 0x000900c8
+pc:0x49 op = 0xb1, RETURN (addr: 0x03091559)
+pc:0x15 op = 0xb0, ARETURN (addr: 0x03091615)
+>> new sp = 0x8c
+>> new sp = 0x70
+pc:0x21 op = 0x53, ?ASTORE (addr: 0x03091df9)
+>> new sp = 0x6c
+>> new sp = 0x68
+>> new sp = 0x64
+pc:0x22 op = 0x59, DUP (addr: 0x03091dfa)
+>> new sp = 0x68
+pc:0x23 op = 0x06, ICONST_N (addr: 0x03091dfb)
+ - 3
+>> new sp = 0x6c
+pc:0x24 op = 0x2a, ALOAD_N (addr: 0x03091dfc)
+ - 0
+>> new sp = 0x70
+pc:0x25 op = 0xb4, GETFIELD (addr: 0x03091dfd)
+>> new sp = 0x6c
+ - instance addr(m) = 0x90008, field index = 1, addr(m) = 0x90014
+ - field val = 0x90018
+>> new sp = 0x70
+pc:0x28 op = 0xb6, INVOKEVIRTUAL (addr: 0x03091e00)
+ - current-class-ref = 0x3091af8
+ - method-ref-cp-index = 34
+ - v-index = 0x12
+ - class-ref-cp-index = 7
+ - jclass-ref = 0x30911d0
+ - instance-address [me()]= 0x90018, 0x70
+ - instance-class-address = 0x30911d0
+ - jclass-ref = 0x30911d0
+ - jmethod-ref = 0x3091618
+ - pop 1 elements from operand stack
+ -- new sp = 0x6c
+ -- params-pt = 0x70
+ -- return pc = 43
+
+--------------------------------- Create Frame ---------------------------------
+--------- [0] Frame from (0x6c) ------------
+ >> create frame from an existed function call
+(0x70) (param) local 0 = 589848
+-------> new current_sp = 0x74
+(0x74) --> FP = (0x74) -> old-frame-fp = 0x48 
+(0x78) old-stack-pointer = 0x6c 
+(0x7c) return pc = 0x2b 
+(0x80) method-ref = 0x3091618 
+(0x84) class-ref = 0x30911d0 
+(0x88) constant-pool-ref = 0x3091208 
+(0x8c) bytecodes = 0x3091630 
+------------------------------ End Create Frame ------------------------------
+pc:0x0 op = 0xbb, NEW (addr: 0x03091630)
+ - count field count
+ - + 10
+ -- super class index = 15
+ -- super class addr = 0x3090000
+ - + 0
+ -- super class index = 0
+ -- super class addr = (nil)
+ - field count = 10, instance size = 48
+ - allocate instance in mram 0x900f8
+>> new sp = 0x90
+ - write class addr: 0x30911d0
+pc:0x3 op = 0x59, DUP (addr: 0x03091633)
+>> new sp = 0x94
+pc:0x4 op = 0x12, LDC (addr: 0x03091634)
+ - constant value = 12.894369
+>> new sp = 0x98
+pc:0x6 op = 0x12, LDC (addr: 0x03091636)
+ - constant value = -15.111152
+>> new sp = 0x9c
+pc:0x8 op = 0x12, LDC (addr: 0x03091638)
+ - constant value = -0.223308
+>> new sp = 0xa0
+pc:0xa op = 0x12, LDC (addr: 0x0309163a)
+ - constant value = 0.002965
+>> new sp = 0xa4
+pc:0xc op = 0x12, LDC (addr: 0x0309163c)
+ - constant value = 0.002378
+>> new sp = 0xa8
+pc:0xe op = 0x12, LDC (addr: 0x0309163e)
+ - constant value = -0.000030
+>> new sp = 0xac
+pc:0x10 op = 0x12, LDC (addr: 0x03091640)
+ - constant value = 0.000044
+>> new sp = 0xb0
+pc:0x12 op = 0xb7, INVOKESPECIAL (addr: 0x03091642)
+
+--------------------------------- Create Frame ---------------------------------
+--------- [0] Frame from (0x90) ------------
+ >> create frame from an existed function call
+(0x94) (param) local 0 = 590072
+(0x98) (param) local 1 = 1095651158
+(0x9c) (param) local 2 = -1049508025
+(0xa0) (param) local 3 = -1100698946
+(0xa4) (param) local 4 = 994200002
+(0xa8) (param) local 5 = 991682594
+(0xac) (param) local 6 = -1208431584
+(0xb0) (param) local 7 = 943137328
+-------> new current_sp = 0xb4
+(0xb4) --> FP = (0xb4) -> old-frame-fp = 0x74 
+(0xb8) old-stack-pointer = 0x90 
+(0xbc) return pc = 0x15 
+(0xc0) method-ref = 0x30914f8 
+(0xc4) class-ref = 0x30911d0 
+(0xc8) constant-pool-ref = 0x3091208 
+(0xcc) bytecodes = 0x3091510 
+------------------------------ End Create Frame ------------------------------
+pc:0x0 op = 0x2a, ALOAD_N (addr: 0x03091510)
+ - 0
+>> new sp = 0xd0
+pc:0x1 op = 0xb7, INVOKESPECIAL (addr: 0x03091511)
+
+--------------------------------- Create Frame ---------------------------------
+--------- [0] Frame from (0xcc) ------------
+ >> create frame from an existed function call
+(0xd0) (param) local 0 = 590072
+-------> new current_sp = 0xd4
+(0xd4) --> FP = (0xd4) -> old-frame-fp = 0xb4 
+(0xd8) old-stack-pointer = 0xcc 
+(0xdc) return pc = 0x4 
+(0xe0) method-ref = 0x3090318 
+(0xe4) class-ref = 0x3090000 
+(0xe8) constant-pool-ref = 0x3090038 
+(0xec) bytecodes = 0x3090330 
+------------------------------ End Create Frame ------------------------------
+pc:0x0 op = 0xb1, RETURN (addr: 0x03090330)
+pc:0x4 op = 0x2a, ALOAD_N (addr: 0x03091514)
+ - 0
+>> new sp = 0xd0
+pc:0x5 op = 0x12, LDC (addr: 0x03091515)
+ - constant value = 3.141593
+>> new sp = 0xd4
+pc:0x7 op = 0xb5, PUTFIELD (addr: 0x03091517)
+>> new sp = 0xd0
+>> new sp = 0xcc
+ - set val = 1078530011 (hex:0x40490fdb), at addr(m):0x00090100, instance addr: 0x000900f8
+pc:0xa op = 0x2a, ALOAD_N (addr: 0x0309151a)
+ - 0
+>> new sp = 0xd0
+pc:0xb op = 0x12, LDC (addr: 0x0309151b)
+ - constant value = 39.478420
+>> new sp = 0xd4
+pc:0xd op = 0xb5, PUTFIELD (addr: 0x0309151d)
+>> new sp = 0xd0
+>> new sp = 0xcc
+ - set val = 1109256679 (hex:0x421de9e7), at addr(m):0x00090104, instance addr: 0x000900f8
+pc:0x10 op = 0x2a, ALOAD_N (addr: 0x03091520)
+ - 0
+>> new sp = 0xd0
+pc:0x11 op = 0x12, LDC (addr: 0x03091521)
+ - constant value = 365.239990
+>> new sp = 0xd4
+pc:0x13 op = 0xb5, PUTFIELD (addr: 0x03091523)
+>> new sp = 0xd0
+>> new sp = 0xcc
+ - set val = 1136041656 (hex:0x43b69eb8), at addr(m):0x00090108, instance addr: 0x000900f8
+pc:0x16 op = 0x2a, ALOAD_N (addr: 0x03091526)
+ - 0
+>> new sp = 0xd0
+pc:0x17 op = 0x23, FLOAD_N (addr: 0x03091527)
+ - 1
+>> new sp = 0xd4
+pc:0x18 op = 0xb5, PUTFIELD (addr: 0x03091528)
+>> new sp = 0xd0
+>> new sp = 0xcc
+ - set val = 1095651158 (hex:0x414e4f56), at addr(m):0x0009010c, instance addr: 0x000900f8
+pc:0x1b op = 0x2a, ALOAD_N (addr: 0x0309152b)
+ - 0
+>> new sp = 0xd0
+pc:0x1c op = 0x24, FLOAD_N (addr: 0x0309152c)
+ - 2
+>> new sp = 0xd4
+pc:0x1d op = 0xb5, PUTFIELD (addr: 0x0309152d)
+>> new sp = 0xd0
+>> new sp = 0xcc
+ - set val = -1049508025 (hex:0xc171c747), at addr(m):0x00090110, instance addr: 0x000900f8
+pc:0x20 op = 0x2a, ALOAD_N (addr: 0x03091530)
+ - 0
+>> new sp = 0xd0
+pc:0x21 op = 0x25, FLOAD_N (addr: 0x03091531)
+ - 3
+>> new sp = 0xd4
+pc:0x22 op = 0xb5, PUTFIELD (addr: 0x03091532)
+>> new sp = 0xd0
+>> new sp = 0xcc
+ - set val = -1100698946 (hex:0xbe64aabe), at addr(m):0x00090114, instance addr: 0x000900f8
+pc:0x25 op = 0x2a, ALOAD_N (addr: 0x03091535)
+ - 0
+>> new sp = 0xd0
+pc:0x26 op = 0x17, FLOAD (addr: 0x03091536)
+>> new sp = 0xd4
+pc:0x28 op = 0x12, LDC (addr: 0x03091538)
+ - constant value = 365.239990
+>> new sp = 0xd8
+pc:0x2a op = 0x6a, FMUL (addr: 0x0309153a)
+>> new sp = 0xd4
+>> new sp = 0xd0
+>> new sp = 0xd4
+pc:0x2b op = 0xb5, PUTFIELD (addr: 0x0309153b)
+>> new sp = 0xd0
+>> new sp = 0xcc
+ - set val = 1066047717 (hex:0x3f8a98e5), at addr(m):0x00090118, instance addr: 0x000900f8
+pc:0x2e op = 0x2a, ALOAD_N (addr: 0x0309153e)
+ - 0
+>> new sp = 0xd0
+pc:0x2f op = 0x17, FLOAD (addr: 0x0309153f)
+>> new sp = 0xd4
+pc:0x31 op = 0x12, LDC (addr: 0x03091541)
+ - constant value = 365.239990
+>> new sp = 0xd8
+pc:0x33 op = 0x6a, FMUL (addr: 0x03091543)
+>> new sp = 0xd4
+>> new sp = 0xd0
+>> new sp = 0xd4
+pc:0x34 op = 0xb5, PUTFIELD (addr: 0x03091544)
+>> new sp = 0xd0
+>> new sp = 0xcc
+ - set val = 1063150585 (hex:0x3f5e63f9), at addr(m):0x0009011c, instance addr: 0x000900f8
+pc:0x37 op = 0x2a, ALOAD_N (addr: 0x03091547)
+ - 0
+>> new sp = 0xd0
+pc:0x38 op = 0x17, FLOAD (addr: 0x03091548)
+>> new sp = 0xd4
+pc:0x3a op = 0x12, LDC (addr: 0x0309154a)
+ - constant value = 365.239990
+>> new sp = 0xd8
+pc:0x3c op = 0x6a, FMUL (addr: 0x0309154c)
+>> new sp = 0xd4
+>> new sp = 0xd0
+>> new sp = 0xd4
+pc:0x3d op = 0xb5, PUTFIELD (addr: 0x0309154d)
+>> new sp = 0xd0
+>> new sp = 0xcc
+ - set val = -1137607840 (hex:0xbc317b60), at addr(m):0x00090120, instance addr: 0x000900f8
+pc:0x40 op = 0x2a, ALOAD_N (addr: 0x03091550)
+ - 0
+>> new sp = 0xd0
+pc:0x41 op = 0x17, FLOAD (addr: 0x03091551)
+>> new sp = 0xd4
+pc:0x43 op = 0x12, LDC (addr: 0x03091553)
+ - constant value = 39.478420
+>> new sp = 0xd8
+pc:0x45 op = 0x6a, FMUL (addr: 0x03091555)
+>> new sp = 0xd4
+>> new sp = 0xd0
+>> new sp = 0xd4
+pc:0x46 op = 0xb5, PUTFIELD (addr: 0x03091556)
+>> new sp = 0xd0
+>> new sp = 0xcc
+ - set val = 987885206 (hex:0x3ae1ee96), at addr(m):0x00090124, instance addr: 0x000900f8
+pc:0x49 op = 0xb1, RETURN (addr: 0x03091559)
+pc:0x15 op = 0xb0, ARETURN (addr: 0x03091645)
+>> new sp = 0x8c
+>> new sp = 0x70
+pc:0x2b op = 0x53, ?ASTORE (addr: 0x03091e03)
+>> new sp = 0x6c
+>> new sp = 0x68
+>> new sp = 0x64
+pc:0x2c op = 0x59, DUP (addr: 0x03091e04)
+>> new sp = 0x68
+pc:0x2d op = 0x07, ICONST_N (addr: 0x03091e05)
+ - 4
+>> new sp = 0x6c
+pc:0x2e op = 0x2a, ALOAD_N (addr: 0x03091e06)
+ - 0
+>> new sp = 0x70
+pc:0x2f op = 0xb4, GETFIELD (addr: 0x03091e07)
+>> new sp = 0x6c
+ - instance addr(m) = 0x90008, field index = 1, addr(m) = 0x90014
+ - field val = 0x90018
+>> new sp = 0x70
+pc:0x32 op = 0xb6, INVOKEVIRTUAL (addr: 0x03091e0a)
+ - current-class-ref = 0x3091af8
+ - method-ref-cp-index = 37
+ - v-index = 0x13
+ - class-ref-cp-index = 7
+ - jclass-ref = 0x30911d0
+ - instance-address [me()]= 0x90018, 0x70
+ - instance-class-address = 0x30911d0
+ - jclass-ref = 0x30911d0
+ - jmethod-ref = 0x3091648
+ - pop 1 elements from operand stack
+ -- new sp = 0x6c
+ -- params-pt = 0x70
+ -- return pc = 53
+
+--------------------------------- Create Frame ---------------------------------
+--------- [0] Frame from (0x6c) ------------
+ >> create frame from an existed function call
+(0x70) (param) local 0 = 589848
+-------> new current_sp = 0x74
+(0x74) --> FP = (0x74) -> old-frame-fp = 0x48 
+(0x78) old-stack-pointer = 0x6c 
+(0x7c) return pc = 0x35 
+(0x80) method-ref = 0x3091648 
+(0x84) class-ref = 0x30911d0 
+(0x88) constant-pool-ref = 0x3091208 
+(0x8c) bytecodes = 0x3091660 
+------------------------------ End Create Frame ------------------------------
+pc:0x0 op = 0xbb, NEW (addr: 0x03091660)
+ - count field count
+ - + 10
+ -- super class index = 15
+ -- super class addr = 0x3090000
+ - + 0
+ -- super class index = 0
+ -- super class addr = (nil)
+ - field count = 10, instance size = 48
+ - allocate instance in mram 0x90128
+>> new sp = 0x90
+ - write class addr: 0x30911d0
+pc:0x3 op = 0x59, DUP (addr: 0x03091663)
+>> new sp = 0x94
+pc:0x4 op = 0x12, LDC (addr: 0x03091664)
+ - constant value = 15.379697
+>> new sp = 0x98
+pc:0x6 op = 0x12, LDC (addr: 0x03091666)
+ - constant value = -25.919315
+>> new sp = 0x9c
+pc:0x8 op = 0x12, LDC (addr: 0x03091668)
+ - constant value = 0.179259
+>> new sp = 0xa0
+pc:0xa op = 0x12, LDC (addr: 0x0309166a)
+ - constant value = 0.002681
+>> new sp = 0xa4
+pc:0xc op = 0x12, LDC (addr: 0x0309166c)
+ - constant value = 0.001628
+>> new sp = 0xa8
+pc:0xe op = 0x12, LDC (addr: 0x0309166e)
+ - constant value = -0.000095
+>> new sp = 0xac
+pc:0x10 op = 0x12, LDC (addr: 0x03091670)
+ - constant value = 0.000052
+>> new sp = 0xb0
+pc:0x12 op = 0xb7, INVOKESPECIAL (addr: 0x03091672)
+
+--------------------------------- Create Frame ---------------------------------
+--------- [0] Frame from (0x90) ------------
+ >> create frame from an existed function call
+(0x94) (param) local 0 = 590120
+(0x98) (param) local 1 = 1098257213
+(0x9c) (param) local 2 = -1043375422
+(0xa0) (param) local 3 = 1043828637
+(0xa4) (param) local 4 = 992980559
+(0xa8) (param) local 5 = 987065018
+(0xac) (param) local 6 = -1194880968
+(0xb0) (param) local 7 = 945295518
+-------> new current_sp = 0xb4
+(0xb4) --> FP = (0xb4) -> old-frame-fp = 0x74 
+(0xb8) old-stack-pointer = 0x90 
+(0xbc) return pc = 0x15 
+(0xc0) method-ref = 0x30914f8 
+(0xc4) class-ref = 0x30911d0 
+(0xc8) constant-pool-ref = 0x3091208 
+(0xcc) bytecodes = 0x3091510 
+------------------------------ End Create Frame ------------------------------
+pc:0x0 op = 0x2a, ALOAD_N (addr: 0x03091510)
+ - 0
+>> new sp = 0xd0
+pc:0x1 op = 0xb7, INVOKESPECIAL (addr: 0x03091511)
+
+--------------------------------- Create Frame ---------------------------------
+--------- [0] Frame from (0xcc) ------------
+ >> create frame from an existed function call
+(0xd0) (param) local 0 = 590120
+-------> new current_sp = 0xd4
+(0xd4) --> FP = (0xd4) -> old-frame-fp = 0xb4 
+(0xd8) old-stack-pointer = 0xcc 
+(0xdc) return pc = 0x4 
+(0xe0) method-ref = 0x3090318 
+(0xe4) class-ref = 0x3090000 
+(0xe8) constant-pool-ref = 0x3090038 
+(0xec) bytecodes = 0x3090330 
+------------------------------ End Create Frame ------------------------------
+pc:0x0 op = 0xb1, RETURN (addr: 0x03090330)
+pc:0x4 op = 0x2a, ALOAD_N (addr: 0x03091514)
+ - 0
+>> new sp = 0xd0
+pc:0x5 op = 0x12, LDC (addr: 0x03091515)
+ - constant value = 3.141593
+>> new sp = 0xd4
+pc:0x7 op = 0xb5, PUTFIELD (addr: 0x03091517)
+>> new sp = 0xd0
+>> new sp = 0xcc
+ - set val = 1078530011 (hex:0x40490fdb), at addr(m):0x00090130, instance addr: 0x00090128
+pc:0xa op = 0x2a, ALOAD_N (addr: 0x0309151a)
+ - 0
+>> new sp = 0xd0
+pc:0xb op = 0x12, LDC (addr: 0x0309151b)
+ - constant value = 39.478420
+>> new sp = 0xd4
+pc:0xd op = 0xb5, PUTFIELD (addr: 0x0309151d)
+>> new sp = 0xd0
+>> new sp = 0xcc
+ - set val = 1109256679 (hex:0x421de9e7), at addr(m):0x00090134, instance addr: 0x00090128
+pc:0x10 op = 0x2a, ALOAD_N (addr: 0x03091520)
+ - 0
+>> new sp = 0xd0
+pc:0x11 op = 0x12, LDC (addr: 0x03091521)
+ - constant value = 365.239990
+>> new sp = 0xd4
+pc:0x13 op = 0xb5, PUTFIELD (addr: 0x03091523)
+>> new sp = 0xd0
+>> new sp = 0xcc
+ - set val = 1136041656 (hex:0x43b69eb8), at addr(m):0x00090138, instance addr: 0x00090128
+pc:0x16 op = 0x2a, ALOAD_N (addr: 0x03091526)
+ - 0
+>> new sp = 0xd0
+pc:0x17 op = 0x23, FLOAD_N (addr: 0x03091527)
+ - 1
+>> new sp = 0xd4
+pc:0x18 op = 0xb5, PUTFIELD (addr: 0x03091528)
+>> new sp = 0xd0
+>> new sp = 0xcc
+ - set val = 1098257213 (hex:0x4176133d), at addr(m):0x0009013c, instance addr: 0x00090128
+pc:0x1b op = 0x2a, ALOAD_N (addr: 0x0309152b)
+ - 0
+>> new sp = 0xd0
+pc:0x1c op = 0x24, FLOAD_N (addr: 0x0309152c)
+ - 2
+>> new sp = 0xd4
+pc:0x1d op = 0xb5, PUTFIELD (addr: 0x0309152d)
+>> new sp = 0xd0
+>> new sp = 0xcc
+ - set val = -1043375422 (hex:0xc1cf5ac2), at addr(m):0x00090140, instance addr: 0x00090128
+pc:0x20 op = 0x2a, ALOAD_N (addr: 0x03091530)
+ - 0
+>> new sp = 0xd0
+pc:0x21 op = 0x25, FLOAD_N (addr: 0x03091531)
+ - 3
+>> new sp = 0xd4
+pc:0x22 op = 0xb5, PUTFIELD (addr: 0x03091532)
+>> new sp = 0xd0
+>> new sp = 0xcc
+ - set val = 1043828637 (hex:0x3e378f9d), at addr(m):0x00090144, instance addr: 0x00090128
+pc:0x25 op = 0x2a, ALOAD_N (addr: 0x03091535)
+ - 0
+>> new sp = 0xd0
+pc:0x26 op = 0x17, FLOAD (addr: 0x03091536)
+>> new sp = 0xd4
+pc:0x28 op = 0x12, LDC (addr: 0x03091538)
+ - constant value = 365.239990
+>> new sp = 0xd8
+pc:0x2a op = 0x6a, FMUL (addr: 0x0309153a)
+>> new sp = 0xd4
+>> new sp = 0xd0
+>> new sp = 0xd4
+pc:0x2b op = 0xb5, PUTFIELD (addr: 0x0309153b)
+>> new sp = 0xd0
+>> new sp = 0xcc
+ - set val = 1065002416 (hex:0x3f7aa5b0), at addr(m):0x00090148, instance addr: 0x00090128
+pc:0x2e op = 0x2a, ALOAD_N (addr: 0x0309153e)
+ - 0
+>> new sp = 0xd0
+pc:0x2f op = 0x17, FLOAD (addr: 0x0309153f)
+>> new sp = 0xd4
+pc:0x31 op = 0x12, LDC (addr: 0x03091541)
+ - constant value = 365.239990
+>> new sp = 0xd8
+pc:0x33 op = 0x6a, FMUL (addr: 0x03091543)
+>> new sp = 0xd4
+>> new sp = 0xd0
+>> new sp = 0xd4
+pc:0x34 op = 0xb5, PUTFIELD (addr: 0x03091544)
+>> new sp = 0xd0
+>> new sp = 0xcc
+ - set val = 1058553393 (hex:0x3f183e31), at addr(m):0x0009014c, instance addr: 0x00090128
+pc:0x37 op = 0x2a, ALOAD_N (addr: 0x03091547)
+ - 0
+>> new sp = 0xd0
+pc:0x38 op = 0x17, FLOAD (addr: 0x03091548)
+>> new sp = 0xd4
+pc:0x3a op = 0x12, LDC (addr: 0x0309154a)
+ - constant value = 365.239990
+>> new sp = 0xd8
+pc:0x3c op = 0x6a, FMUL (addr: 0x0309154c)
+>> new sp = 0xd4
+>> new sp = 0xd0
+>> new sp = 0xd4
+pc:0x3d op = 0xb5, PUTFIELD (addr: 0x0309154d)
+>> new sp = 0xd0
+>> new sp = 0xcc
+ - set val = -1123132350 (hex:0xbd0e5c42), at addr(m):0x00090150, instance addr: 0x00090128
+pc:0x40 op = 0x2a, ALOAD_N (addr: 0x03091550)
+ - 0
+>> new sp = 0xd0
+pc:0x41 op = 0x17, FLOAD (addr: 0x03091551)
+>> new sp = 0xd4
+pc:0x43 op = 0x12, LDC (addr: 0x03091553)
+ - constant value = 39.478420
+>> new sp = 0xd8
+pc:0x45 op = 0x6a, FMUL (addr: 0x03091555)
+>> new sp = 0xd4
+>> new sp = 0xd0
+>> new sp = 0xd4
+pc:0x46 op = 0xb5, PUTFIELD (addr: 0x03091556)
+>> new sp = 0xd0
+>> new sp = 0xcc
+ - set val = 990201755 (hex:0x3b05479b), at addr(m):0x00090154, instance addr: 0x00090128
+pc:0x49 op = 0xb1, RETURN (addr: 0x03091559)
+pc:0x15 op = 0xb0, ARETURN (addr: 0x03091675)
+>> new sp = 0x8c
+>> new sp = 0x70
+pc:0x35 op = 0x53, ?ASTORE (addr: 0x03091e0d)
+>> new sp = 0x6c
+>> new sp = 0x68
+>> new sp = 0x64
+pc:0x36 op = 0x4c, ASTORE_N (addr: 0x03091e0e)
+ - 1
+>> new sp = 0x60
+ - Store ref 0x90048 to local 1
+pc:0x37 op = 0x0b, FCONST_N (addr: 0x03091e0f)
+>> new sp = 0x64
+pc:0x38 op = 0x45, UNKNOW (addr: 0x03091e10)

@@ -44,9 +44,11 @@ void interp(struct function_thunk func_thunk)
     DEBUG_PRINT("create frame finished\n");
     DEBUG_PRINT("FP = (%p)\n", current_fp[tasklet_id]);
 
+    uint8_t current_code;
+
     while (1)
     {
-        switch (code_buffer[pc++])
+        switch (current_code = code_buffer[pc++])
         {
             // case NOP:
             //     DEBUG_OUT_INSN_PARSED("NOP");
@@ -65,9 +67,11 @@ void interp(struct function_thunk func_thunk)
             //     break;
 
         case ALOAD_0:
-            DEBUG_OUT_INSN_PARSED("ALOAD_0")
+        case ALOAD_1:
+            DEBUG_OUT_INSN_PARSED("ALOAD_N")
+            DEBUG_PRINT(" - %d\n", current_code - ALOAD_0);
 
-            op1 = FRAME_GET_LOCALS(current_fp[tasklet_id], func->max_locals, 0);
+            op1 = FRAME_GET_LOCALS(current_fp[tasklet_id], func->max_locals, (current_code - ALOAD_0));
             // DEBUG_PRINT(" - Current frame ptr: %p\n", current_fp[tasklet_id]);
             // DEBUG_PRINT(" - max locals = %d\n", func->max_locals);
             // DEBUG_PRINT(" - Load ref %p to stack\n", op1);
@@ -75,79 +79,65 @@ void interp(struct function_thunk func_thunk)
 
             PUSH_EVAL_STACK(op1)
             break;
-        case ALOAD_1:
-            DEBUG_OUT_INSN_PARSED("ALOAD_1")
-            op1 = FRAME_GET_LOCALS(current_fp[tasklet_id], func->max_locals, 1);
-            // DEBUG_PRINT(" - Load ref %p to stack\n", op1);
-            PUSH_EVAL_STACK(op1)
+
+        case ASTORE_0:
+        case ASTORE_1:
+        case ASTORE_2:
+        case ASTORE_3:
+            DEBUG_OUT_INSN_PARSED("ASTORE_N")
+            DEBUG_PRINT(" - %d\n", current_code - ASTORE_0);
+            POP_EVAL_STACK(op1)
+            FRAME_GET_LOCALS(current_fp[tasklet_id], func->max_locals, (current_code - ASTORE_0)) = op1;
+            // DEBUG_PRINT(" - Store ref %p to local %d\n", FRAME_GET_LOCALS(current_fp[tasklet_id], func->max_locals, (current_code - ASTORE_0)), (current_code - ASTORE_0));
             break;
 
-        // case FLOAD_0:
-        //     // DEBUG_OUT_INSN_PARSED("FLOAD_0")
-        //     op1 = FRAME_GET_LOCALS(current_fp[tasklet_id], func->max_locals, 0);
-        //     // DEBUG_PRINT(" - Load float %f to stack\n", *(float *)&op1);
-        //     PUSH_EVAL_STACK(op1)
-        //     break;
+        case FLOAD_0:
         case FLOAD_1:
-            DEBUG_OUT_INSN_PARSED("FLOAD_1")
-            op1 = FRAME_GET_LOCALS(current_fp[tasklet_id], func->max_locals, 1);
-            // DEBUG_PRINT(" - Load float %f to stack\n", *(float *)&op1);
-            PUSH_EVAL_STACK(op1)
-            break;
         case FLOAD_2:
-            DEBUG_OUT_INSN_PARSED("FLOAD_2")
-            op1 = FRAME_GET_LOCALS(current_fp[tasklet_id], func->max_locals, 2);
-            // DEBUG_PRINT(" - Load float %f to stack\n", *(float *)&op1);
-            PUSH_EVAL_STACK(op1)
-            break;
         case FLOAD_3:
-            DEBUG_OUT_INSN_PARSED("FLOAD_3")
-            op1 = FRAME_GET_LOCALS(current_fp[tasklet_id], func->max_locals, 3);
+            DEBUG_OUT_INSN_PARSED("FLOAD_N")
+            DEBUG_PRINT(" - %d\n", current_code - FLOAD_0);
+            op1 = FRAME_GET_LOCALS(current_fp[tasklet_id], func->max_locals, (current_code - FLOAD_0));
             // DEBUG_PRINT(" - Load float %f to stack\n", *(float *)&op1);
             PUSH_EVAL_STACK(op1)
             break;
 
+        case FLOAD:
+            DEBUG_OUT_INSN_PARSED("FLOAD")
+            op1 = code_buffer[pc]; // local variable index
+            // DEBUG_PRINT(" - local variable index = %d\n", op1);
+            pc += 1;
+            op2 = FRAME_GET_LOCALS(current_fp[tasklet_id], func->max_locals, op1);
+            // DEBUG_PRINT(" - Load float %f to stack\n", *(float *)&op2);
+            PUSH_EVAL_STACK(op2)
+            break;
+
+        case FSTORE_0:
+        case FSTORE_1:
+        case FSTORE_2:
+        case FSTORE_3:
+            DEBUG_OUT_INSN_PARSED("FSTORE_N")
+            DEBUG_PRINT(" - %d\n", current_code - FSTORE_0);
+            POP_EVAL_STACK(op1)
+            FRAME_GET_LOCALS(current_fp[tasklet_id], func->max_locals, (current_code - FSTORE_0)) = op1;
+            uint8_t tmp = FRAME_GET_LOCALS(current_fp[tasklet_id], func->max_locals, (current_code - FSTORE_0));
+            DEBUG_PRINT(" - Store float %f to local %d\n", *(float *)&tmp, (current_code - FSTORE_0));
+            break;
+
+        case ICONST_M1:
         case ICONST_0:
-            DEBUG_OUT_INSN_PARSED("ICONST_0")
-            // DEBUG_PRINT(" - push const 0 to stack\n");
-            PUSH_EVAL_STACK(0);
-            break;
         case ICONST_1:
-            DEBUG_OUT_INSN_PARSED("ICONST_1")
-            // DEBUG_PRINT(" - push const 1 to stack\n");
-            ;
-            PUSH_EVAL_STACK(1);
-            break;
         case ICONST_2:
-            DEBUG_OUT_INSN_PARSED("ICONST_2")
-            // DEBUG_PRINT(" - push const 2 to stack\n");
-            ;
-            PUSH_EVAL_STACK(2);
-            break;
         case ICONST_3:
-            DEBUG_OUT_INSN_PARSED("ICONST_3")
-            // DEBUG_PRINT(" - push const 3 to stack\n");
-            ;
-            PUSH_EVAL_STACK(3);
-            break;
         case ICONST_4:
-            DEBUG_OUT_INSN_PARSED("ICONST_4")
-            // DEBUG_PRINT(" - push const 4 to stack\n");
-            ;
-            PUSH_EVAL_STACK(4);
-            break;
         case ICONST_5:
-            DEBUG_OUT_INSN_PARSED("ICONST_5")
-            // DEBUG_PRINT(" - push const 5 to stack\n");
+            DEBUG_OUT_INSN_PARSED("ICONST_N")
+            DEBUG_PRINT(" - %d\n", current_code - ICONST_0);
+            // DEBUG_PRINT(" - push const %d to stack\n", (current_code - ICONST_0));
             ;
-            PUSH_EVAL_STACK(5);
+            PUSH_EVAL_STACK(current_code - ICONST_0);
             break;
-        // case ICONST_M1:
-        //     DEBUG_OUT_INSN_PARSED("ICONST_M1")
-        //     DEBUG_PRINT(" - push const -1 to stack\n");
-        //     ;
-        //     PUSH_EVAL_STACK(-1);
-        //     break;
+
         case ACONST_NULL:
             DEBUG_OUT_INSN_PARSED("ACONST_NULL")
             // DEBUG_PRINT(" - push const NULL to stack\n");
@@ -155,16 +145,13 @@ void interp(struct function_thunk func_thunk)
             PUSH_EVAL_STACK(0);
             break;
         case FCONST_0:
-            DEBUG_OUT_INSN_PARSED("FCONST_0")
-            // DEBUG_PRINT(" - push const 0.0 to stack\n");
-            ;
-            PUSH_EVAL_STACK(0);
-            break;
         case FCONST_1:
-            DEBUG_OUT_INSN_PARSED("FCONST_1")
-            // DEBUG_PRINT(" - push const 1.0 to stack\n");
+            DEBUG_OUT_INSN_PARSED("FCONST_N")
+            // DEBUG_PRINT(" - %d\n", current_code - FCONST_0);
+            float f = (float)(current_code - FCONST_0);
+            // DEBUG_PRINT(" - push const %f to stack\n", f);
             ;
-            PUSH_EVAL_STACK(1.0);
+            PUSH_EVAL_STACK(*(uint32_t *)&f);
             break;
         // case IFGE:
         //     DEBUG_OUT_INSN_PARSED("IFGE")
@@ -407,12 +394,12 @@ void interp(struct function_thunk func_thunk)
             // DEBUG_PRINT(" - reset pc to 0x%02x\n", op4);
 
             func = FRAME_GET_METHOD(op3);
-            DEBUG_PRINT(" - reset func pt to 0x%08x\n", func);
+            // DEBUG_PRINT(" - reset func pt to 0x%08x\n", func);
             current_fp[tasklet_id] = op3;
             code_buffer = func->bytecodes;
             jc = FRAME_GET_CLASS(op3);
             pc = op4;
-            DEBUG_PRINT(" - bytecodes addr: %08x\n", func->bytecodes);
+            // DEBUG_PRINT(" - bytecodes addr: %08x\n", func->bytecodes);
             func_thunk.func = func;
             func_thunk.jc = jc;
 
@@ -446,12 +433,12 @@ void interp(struct function_thunk func_thunk)
             // DEBUG_PRINT(" - reset pc to 0x%02x\n", op4);
 
             func = FRAME_GET_METHOD(op3);
-            DEBUG_PRINT(" - reset func pt to 0x%08x\n", func);
+            // DEBUG_PRINT(" - reset func pt to 0x%08x\n", func);
             current_fp[tasklet_id] = op3;
             code_buffer = func->bytecodes;
             jc = FRAME_GET_CLASS(op3);
             pc = op4;
-            DEBUG_PRINT(" - bytecodes addr: %08x\n", func->bytecodes);
+            // DEBUG_PRINT(" - bytecodes addr: %08x\n", func->bytecodes);
             func_thunk.func = func;
             func_thunk.jc = jc;
             break;
@@ -484,12 +471,12 @@ void interp(struct function_thunk func_thunk)
             // DEBUG_PRINT(" - reset pc to 0x%02x\n", op4);
 
             func = FRAME_GET_METHOD(op3);
-            DEBUG_PRINT(" - reset func pt to 0x%08x\n", func);
+            // DEBUG_PRINT(" - reset func pt to 0x%08x\n", func);
             current_fp[tasklet_id] = op3;
             code_buffer = func->bytecodes;
             jc = FRAME_GET_CLASS(op3);
             pc = op4;
-            DEBUG_PRINT(" - bytecodes addr: %08x\n", func->bytecodes);
+            // DEBUG_PRINT(" - bytecodes addr: %08x\n", func->bytecodes);
             func_thunk.func = func;
             func_thunk.jc = jc;
             break;
@@ -514,28 +501,40 @@ void interp(struct function_thunk func_thunk)
             //     PUSH_EVAL_STACK(op2 * op1);
             //     break;
 
+        case FMUL:
+            DEBUG_OUT_INSN_PARSED("FMUL")
+            POP_EVAL_STACK(op1);
+            POP_EVAL_STACK(op2);
+            // DEBUG_PRINT(" - value 2 = %f\n", *(float *)&op1);
+            // DEBUG_PRINT(" - value 1 = %f\n", *(float *)&op2);
+            float result = *(float *)&op1 * *(float *)&op2;
+            op3 = *(uint32_t *)&result;
+            // DEBUG_PRINT(" - mul result = %f\n", *(float *)&op3);
+            PUSH_EVAL_STACK(op3);
+            break;
+
         case INVOKESPECIAL:
             DEBUG_OUT_INSN_PARSED("INVOKESPECIAL")
 
             op1 = (code_buffer[pc] << 8) | code_buffer[pc + 1]; // constant table index to methoderef
             op2 = (func_thunk.jc->items[op1].info >> 16) & 0xFFFF;
-            DEBUG_PRINT(" - class-ref-cp-index = %d\n", op2);
-            DEBUG_PRINT(" - jclass-ref = %p\n", func_thunk.jc->items[op2].direct_value);
+            // DEBUG_PRINT(" - class-ref-cp-index = %d\n", op2);
+            // DEBUG_PRINT(" - jclass-ref = %p\n", func_thunk.jc->items[op2].direct_value);
             callee.jc = func_thunk.jc->items[op2].direct_value;
 
-            DEBUG_PRINT(" - method-ref-cp-index = %d, current_jc = %x, target_jc = %x\n", op1, func_thunk.jc, callee.jc);
-            DEBUG_PRINT(" - jmethod-v-index = %p\n", func_thunk.jc->items[op1].direct_value);
+            // DEBUG_PRINT(" - method-ref-cp-index = %d, current_jc = %x, target_jc = %x\n", op1, func_thunk.jc, callee.jc);
+            // DEBUG_PRINT(" - jmethod-v-index = %p\n", func_thunk.jc->items[op1].direct_value);
             op4 = func_thunk.jc->items[op1].direct_value;
-            DEBUG_PRINT(" - jmethod-ref = %p\n", callee.jc->virtual_table[op4].methodref);
+            // DEBUG_PRINT(" - jmethod-ref = %p\n", callee.jc->virtual_table[op4].methodref);
 
             callee.func = callee.jc->virtual_table[op4].methodref;
 
             callee.params = current_sp[tasklet_id];
             current_sp[tasklet_id] -= 4 * callee.func->params_count;
-            DEBUG_PRINT(" - pop %d elements from operand stack\n", callee.func->params_count);
-            DEBUG_PRINT(" -- new sp = %p\n", current_sp[tasklet_id]);
-            DEBUG_PRINT(" -- params-pt = %p\n", callee.params);
-            DEBUG_PRINT(" -- return pc = %d\n", pc + 2);
+            // DEBUG_PRINT(" - pop %d elements from operand stack\n", callee.func->params_count);
+            // DEBUG_PRINT(" -- new sp = %p\n", current_sp[tasklet_id]);
+            // DEBUG_PRINT(" -- params-pt = %p\n", callee.params);
+            // DEBUG_PRINT(" -- return pc = %d\n", pc + 2);
 
             current_fp[tasklet_id] = create_new_vmframe(callee, pc + 2);
 
@@ -550,7 +549,7 @@ void interp(struct function_thunk func_thunk)
             op1 = (uint8_t)(code_buffer[pc] << 8) | code_buffer[pc + 1];
             op1 = pc + (short)op1 - 1;
             pc += 2;
-            DEBUG_PRINT(" - goto %d\n", op1);
+            // DEBUG_PRINT(" - goto %d\n", op1);
             pc = op1;
             break;
         case AALOAD:
@@ -676,7 +675,7 @@ void interp(struct function_thunk func_thunk)
             // DEBUG_PRINT(" - constant table index = %d\n", op1);
             pc += 1;
             op2 = (jc->items[op1].direct_value & 0xFFFFFFFF);
-            // DEBUG_PRINT(" - constant value = %f\n", *(float *)&op2);
+            DEBUG_PRINT(" - constant value = %f\n", *(float *)&op2);
             PUSH_EVAL_STACK(op2);
             break;
 
