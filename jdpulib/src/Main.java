@@ -166,6 +166,7 @@ public class Main {
                 NBodySystem.class);
         // System.out.println("nbs.test() = " + nbs.test());
         nbs.advance(0.01f);
+        System.out.println(nbs.energy());
 
         // DPUTreeNodeProxy dpuTreeNode = (DPUTreeNodeProxy)
         // UPMEM.getInstance().createObject(0, DPUTreeNode.class, 1, 1);

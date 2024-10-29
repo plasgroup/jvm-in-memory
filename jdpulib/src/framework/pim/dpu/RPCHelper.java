@@ -31,7 +31,7 @@ public class RPCHelper {
     public static float getFReturnValue(int dpuID) {
         if (UPMEM.isBatchDispatchingRecording())
             return -1;
-        float returnVal = upmem.getDPUManager(dpuID).garbageCollector.getReturnVal();
+        float returnVal = Float.intBitsToFloat(upmem.getDPUManager(dpuID).garbageCollector.getReturnVal());
         // pimProxy.logf( "framework.pim:proxy","return int = %d\n", returnVal);
 
         return returnVal;

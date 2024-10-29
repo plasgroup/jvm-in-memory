@@ -19,22 +19,22 @@ public class DPUGarbageCollectorUPMEM extends DPUGarbageCollector {
 
         // set up space beginning pointer for meta space and heap space
         BytesUtils.writeU4LittleEndian(ptBytes, this.metaSpacePt, 0);
-        if(!ExperimentConfigurator.useSimulator)
+        if (!ExperimentConfigurator.useSimulator)
             dpu.copy("meta_space_pt", ptBytes, 0);
         BytesUtils.writeU4LittleEndian(ptBytes, this.heapSpacePt, 0);
-        if(!ExperimentConfigurator.useSimulator)
+        if (!ExperimentConfigurator.useSimulator)
             dpu.copy("mram_heap_pt", ptBytes, 0);
         byte[] bufferPointers = new byte[24 * 4];
 
         /**
          * Each tasklet of a DPU manage part of the parameter buffer.
          * This loop init the beginning address of i-th tasklet's parameter buffer
-         * **/
-        for(int i = 0; i < MAX_TASKLET; i++){
-            BytesUtils.
-                    writeU4LittleEndian(bufferPointers, parameterBufferBeginAddr + i * perTaskletParameterBufferSize, i * 4);
+         **/
+        for (int i = 0; i < MAX_TASKLET; i++) {
+            BytesUtils.writeU4LittleEndian(bufferPointers, parameterBufferBeginAddr + i * perTaskletParameterBufferSize,
+                    i * 4);
         }
-        if(!ExperimentConfigurator.useSimulator)
+        if (!ExperimentConfigurator.useSimulator)
             dpu.copy("params_buffer_pt", bufferPointers, 0);
 
     }
@@ -54,7 +54,7 @@ public class DPUGarbageCollectorUPMEM extends DPUGarbageCollector {
         byte[] ptBytes = new byte[4];
         BytesUtils.writeU4LittleEndian(ptBytes, this.heapSpacePt, 0);
         try {
-            if(UPMEM.getConfigurator().isEnableProfilingRPCDataMovement()){
+            if (UPMEM.getConfigurator().isEnableProfilingRPCDataMovement()) {
                 UPMEM.profiler.transferredBytesToDPU += 4 * 64;
             }
             dpu.copy("mram_heap_pt", ptBytes, 0);
@@ -68,7 +68,7 @@ public class DPUGarbageCollectorUPMEM extends DPUGarbageCollector {
         byte[] ptBytes = new byte[4];
         BytesUtils.writeU4LittleEndian(ptBytes, this.heapSpacePt, 0);
         try {
-            if(UPMEM.getConfigurator().isEnableProfilingRPCDataMovement()){
+            if (UPMEM.getConfigurator().isEnableProfilingRPCDataMovement()) {
                 UPMEM.profiler.transferredBytesToDPU += 4 * 64;
             }
             dpu.copy("meta_space_pt", ptBytes, 0);
@@ -76,14 +76,14 @@ public class DPUGarbageCollectorUPMEM extends DPUGarbageCollector {
             throw new RuntimeException(e);
         }
     }
+
     /** push parameters to tasklet's parameter buffer (default: tasklet id = 0) **/
 
     @Override
     public int pushParameters(int[] params) {
 
-        return pushParameters(params,0);
+        return pushParameters(params, 0);
     }
-
 
     /** push parameters to tasklet's parameter buffer **/
     @Override
@@ -92,28 +92,30 @@ public class DPUGarbageCollectorUPMEM extends DPUGarbageCollector {
         int size = (params.length * 4 + 0b111) & ~(0b111);
         byte[] data = new byte[size];
         int addr = parameterBufferBeginAddr + (parameterBufferSize / 24) * tasklet;
-        for(int i = 0; i < params.length; i++){
+        for (int i = 0; i < params.length; i++) {
             BytesUtils.writeU4LittleEndian(data, params[i], i * 4);
         }
 
         transfer(DPUJVMMemSpaceKind.DPU_PARAMETER_BUFFER, data, addr);
         byte[] ptBytes = new byte[4];
-        BytesUtils.writeU4LittleEndian(ptBytes, parameterBufferBeginAddr + tasklet * perTaskletParameterBufferSize + size, 0);
+        BytesUtils.writeU4LittleEndian(ptBytes,
+                parameterBufferBeginAddr + tasklet * perTaskletParameterBufferSize + size, 0);
         try {
-            if(UPMEM.getConfigurator().isEnableProfilingRPCDataMovement()){
+            if (UPMEM.getConfigurator().isEnableProfilingRPCDataMovement()) {
                 UPMEM.profiler.transferredBytesToDPU += ptBytes.length * 64L;
             }
-            dpu.copy("params_buffer_pt", ptBytes , 4 * tasklet);
+            dpu.copy("params_buffer_pt", ptBytes, 4 * tasklet);
         } catch (DpuException e) {
             throw new RuntimeException(e);
         }
         return addr;
     }
+
     @Override
     public void readBackHeapSpacePt() {
         byte[] bs = new byte[4];
         try {
-            if(UPMEM.getConfigurator().isEnableProfilingRPCDataMovement()){
+            if (UPMEM.getConfigurator().isEnableProfilingRPCDataMovement()) {
                 UPMEM.profiler.transferredBytesFromDPU += 4 * 64;
             }
             dpu.copy(bs, "mram_heap_pt");
@@ -128,7 +130,7 @@ public class DPUGarbageCollectorUPMEM extends DPUGarbageCollector {
     public void readBackMetaSpacePt() {
         byte[] bs = new byte[4];
         try {
-            if(UPMEM.getConfigurator().isEnableProfilingRPCDataMovement()){
+            if (UPMEM.getConfigurator().isEnableProfilingRPCDataMovement()) {
                 UPMEM.profiler.transferredBytesFromDPU += 4 * 64;
             }
             dpu.copy(bs, "meta_space_pt");
@@ -143,10 +145,10 @@ public class DPUGarbageCollectorUPMEM extends DPUGarbageCollector {
     public void transfer(DPUJVMMemSpaceKind spaceKind, byte[] data, int pt) {
         String spaceVarName = "";
         int beginAddr = -1;
-        if(spaceKind == DPUJVMMemSpaceKind.DPU_METASPACE){
+        if (spaceKind == DPUJVMMemSpaceKind.DPU_METASPACE) {
             spaceVarName = "m_metaspace";
             beginAddr = metaSpaceBeginAddr;
-        } else if (spaceKind == DPUJVMMemSpaceKind.DPU_HEAPSPACE){
+        } else if (spaceKind == DPUJVMMemSpaceKind.DPU_HEAPSPACE) {
             spaceVarName = "m_heapspace";
             beginAddr = heapSpaceBeginAddr;
         } else if (spaceKind == DPUJVMMemSpaceKind.DPU_PARAMETER_BUFFER) {
@@ -154,11 +156,10 @@ public class DPUGarbageCollectorUPMEM extends DPUGarbageCollector {
             beginAddr = parameterBufferBeginAddr;
         }
 
-
-        if(!spaceVarName.isEmpty()){
-            if(!ExperimentConfigurator.useSimulator) {
+        if (!spaceVarName.isEmpty()) {
+            if (!ExperimentConfigurator.useSimulator) {
                 try {
-                    if(UPMEM.getConfigurator().isEnableProfilingRPCDataMovement()){
+                    if (UPMEM.getConfigurator().isEnableProfilingRPCDataMovement()) {
                         UPMEM.profiler.transferredBytesToDPU += data.length * 64L;
                     }
                     dpu.copy(spaceVarName, data, pt - beginAddr);
@@ -168,9 +169,7 @@ public class DPUGarbageCollectorUPMEM extends DPUGarbageCollector {
             }
         }
 
-
     }
-
 
     /** allocate memory in DPU memory, and fill bytes data **/
 
@@ -181,14 +180,14 @@ public class DPUGarbageCollectorUPMEM extends DPUGarbageCollector {
         transfer(spaceKind, data, addr);
         byte[] t = new byte[4];
         try {
-            if(UPMEM.getConfigurator().isEnableProfilingRPCDataMovement()){
+            if (UPMEM.getConfigurator().isEnableProfilingRPCDataMovement()) {
                 UPMEM.profiler.transferredBytesToDPU += 4 * 64;
             }
             dpu.copy(t, "meta_space_pt");
         } catch (DpuException e) {
             throw new RuntimeException(e);
         }
-        if(BytesUtils.readU4LittleEndian(t, 0) != this.metaSpacePt){
+        if (BytesUtils.readU4LittleEndian(t, 0) != this.metaSpacePt) {
             throw new RuntimeException("dpu pt = " + BytesUtils.readU4LittleEndian(t, 0) + " != " + this.metaSpacePt);
         }
         return addr;
@@ -196,24 +195,24 @@ public class DPUGarbageCollectorUPMEM extends DPUGarbageCollector {
 
     /** allocate memory in DPU memory **/
     @Override
-    public int allocate(DPUJVMMemSpaceKind spaceKind, int size) throws  RuntimeException {
+    public int allocate(DPUJVMMemSpaceKind spaceKind, int size) throws RuntimeException {
         int alignmentMask;
-        if(spaceKind == DPUJVMMemSpaceKind.DPU_PARAMETER_BUFFER){
+        if (spaceKind == DPUJVMMemSpaceKind.DPU_PARAMETER_BUFFER) {
             alignmentMask = 0b111;
-        }else{
+        } else {
             alignmentMask = 0b111;
         }
         size = (size + alignmentMask) & ~alignmentMask;
 
         // This list contains values for selection, according to the spaceKind
-        int[] sourceMemoryPointers = new int[]{metaSpacePt, heapSpacePt};
-        String[] pointerVarNames = new String[]{"meta_space_pt",  "mram_heap_pt", "params_buffer_pt"};
+        int[] sourceMemoryPointers = new int[] { metaSpacePt, heapSpacePt };
+        String[] pointerVarNames = new String[] { "meta_space_pt", "mram_heap_pt", "params_buffer_pt" };
         String pointerVarName = pointerVarNames[spaceKind.ordinal()];
         int addr;
         byte[] ptBytes = new byte[4];
         // copy latest pointer from DPU
         try {
-            if(UPMEM.getConfigurator().isEnableProfilingRPCDataMovement()){
+            if (UPMEM.getConfigurator().isEnableProfilingRPCDataMovement()) {
                 UPMEM.profiler.transferredBytesToDPU += 4 * 64;
             }
             dpu.copy(ptBytes, pointerVarName);
@@ -221,8 +220,10 @@ public class DPUGarbageCollectorUPMEM extends DPUGarbageCollector {
             throw new RuntimeException(e);
         }
         // update latest pointer temporary
-        sourceMemoryPointers[spaceKind.ordinal()] = BytesUtils.readU4LittleEndian(ptBytes, 0);;
-        // save the latest pointer (It will be the beginning of addr of the space we allocate)
+        sourceMemoryPointers[spaceKind.ordinal()] = BytesUtils.readU4LittleEndian(ptBytes, 0);
+        ;
+        // save the latest pointer (It will be the beginning of addr of the space we
+        // allocate)
         addr = sourceMemoryPointers[spaceKind.ordinal()];
         // increase the space pointer
         sourceMemoryPointers[spaceKind.ordinal()] += size;
@@ -230,12 +231,10 @@ public class DPUGarbageCollectorUPMEM extends DPUGarbageCollector {
         metaSpacePt = sourceMemoryPointers[0];
         heapSpacePt = sourceMemoryPointers[1];
 
-
-
         // write new pointer value to DPU
         BytesUtils.writeU4LittleEndian(ptBytes, sourceMemoryPointers[spaceKind.ordinal()], 0);
         try {
-            if(UPMEM.getConfigurator().isEnableProfilingRPCDataMovement()){
+            if (UPMEM.getConfigurator().isEnableProfilingRPCDataMovement()) {
                 UPMEM.profiler.transferredBytesToDPU += ptBytes.length * 64;
             }
             dpu.copy(pointerVarName, ptBytes);
@@ -248,15 +247,17 @@ public class DPUGarbageCollectorUPMEM extends DPUGarbageCollector {
 
     @Override
     public int freeFromBack(DPUJVMMemSpaceKind spaceKind, int size) {
-        switch (spaceKind){
+        switch (spaceKind) {
             case DPU_HEAPSPACE:
                 heapSpacePt -= size;
-                if(heapSpacePt < 0) throw new RuntimeException("Exception in freeing DPU memory");
+                if (heapSpacePt < 0)
+                    throw new RuntimeException("Exception in freeing DPU memory");
                 updateHeapPointerToDPU();
                 return heapSpacePt;
             case DPU_METASPACE:
                 metaSpacePt -= size;
-                if(metaSpacePt < 0) throw new RuntimeException("Exception in freeing DPU memory");
+                if (metaSpacePt < 0)
+                    throw new RuntimeException("Exception in freeing DPU memory");
                 updateMetaSpacePointerToDPU();
                 return heapSpacePt;
             case DPU_PARAMETER_BUFFER, DPU_STATIC_TEMP:
@@ -271,7 +272,7 @@ public class DPUGarbageCollectorUPMEM extends DPUGarbageCollector {
     }
 
     @Override
-    public int getRemainMetaMemory(){
+    public int getRemainMetaMemory() {
         return metaSpaceSize - (metaSpacePt - metaSpaceBeginAddr);
     }
 
@@ -280,7 +281,7 @@ public class DPUGarbageCollectorUPMEM extends DPUGarbageCollector {
     public int getReturnVal() {
         byte[] returnValBytes = new byte[4];
         try {
-            if(UPMEM.getConfigurator().isEnableProfilingRPCDataMovement()){
+            if (UPMEM.getConfigurator().isEnableProfilingRPCDataMovement()) {
                 UPMEM.profiler.transferredBytesFromDPU += 4 * 64;
             }
             dpu.copy(returnValBytes, "return_val");
@@ -290,13 +291,12 @@ public class DPUGarbageCollectorUPMEM extends DPUGarbageCollector {
         return BytesUtils.readU4LittleEndian(returnValBytes, 0);
     }
 
-
     /** get int32 values from address addr **/
     @Override
     public int getInt32(int addr) {
         byte[] returnValBytes = new byte[4];
         try {
-            if(UPMEM.getConfigurator().isEnableProfilingRPCDataMovement()){
+            if (UPMEM.getConfigurator().isEnableProfilingRPCDataMovement()) {
                 UPMEM.profiler.transferredBytesFromDPU += 4 * 64;
             }
             dpu.copy(returnValBytes, "mram_heap_pt", addr);
@@ -311,7 +311,7 @@ public class DPUGarbageCollectorUPMEM extends DPUGarbageCollector {
         byte[] valBytes = new byte[4];
         BytesUtils.writeU4LittleEndian(valBytes, val, 0);
         try {
-            if(UPMEM.getConfigurator().isEnableProfilingRPCDataMovement()){
+            if (UPMEM.getConfigurator().isEnableProfilingRPCDataMovement()) {
                 UPMEM.profiler.transferredBytesToDPU += 4 * 64;
             }
             dpu.copy(valBytes, "mram_heap_pt", addr);
