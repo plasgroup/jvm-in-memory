@@ -17,6 +17,7 @@ import java.io.InputStream;
 import java.rmi.RemoteException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static framework.pim.ExperimentConfigurator.*;
 
@@ -46,16 +47,25 @@ public class Main {
         UPMEM.initialize(upmemConfigurator);
         UPMEM.setPackageSearchPath("application.nbody.");
 
-        // Test DPUTreeNode
+        // Create proxy object
         UPMEM.getInstance().getDPUManager(0).dpuClassFileManager.loadClassToDPU(Body.class);
         UPMEM.getInstance().getDPUManager(0).dpuClassFileManager.loadClassToDPU(Sqrt.class);
         NBodySystemProxy nbs = (NBodySystemProxy) UPMEM.getInstance().createObject(0, NBodySystem.class);
         System.out.println("[INFO] Start DPU advance");
+
+        // Run the N-Body simulation (executions time is measured)
+        long start = System.nanoTime();
         for (int i = 0; i < iterations; i++) {
             nbs.advance(0.01f);
         }
+        float energy = nbs.energy();
+        long end = System.nanoTime();
+        long durationInMicros = TimeUnit.NANOSECONDS.toMicros(end - start);
+        long durationInMillis = TimeUnit.NANOSECONDS.toMillis(end - start);
+        System.out.println("[INFO] Duration of " + iterations + " iterations: " + durationInMicros + " us");
+        System.out.println("[INFO] Duration of " + iterations + " iterations: " + durationInMillis + " ms");
+
         System.out.println("[INFO] End DPU advance");
-        float result = nbs.energy();
-        System.out.println("\tResult of " + iterations + " iterations is: " + result);
+        System.out.println("\tResult of " + iterations + " iterations is: " + energy);
     }
 }
