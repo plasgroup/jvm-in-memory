@@ -578,6 +578,20 @@ void interp(struct function_thunk func_thunk)
             PUSH_EVAL_STACK(op3);
             break;
 
+        case FSUB:
+            DEBUG_OUT_INSN_PARSED("FSUB")
+            POP_EVAL_STACK(op1);
+            POP_EVAL_STACK(op2);
+            // DEBUG_PRINT(" - value 2 = %f\n", *(float *)&op1);
+            // DEBUG_PRINT(" - value 1 = %f\n", *(float *)&op2);
+            {
+                float result = *(float *)&op2 - *(float *)&op1;
+                op3 = *(uint32_t *)&result;
+            }
+            // DEBUG_PRINT(" - sub result = %f\n", *(float *)&op3);
+            PUSH_EVAL_STACK(op3);
+            break;
+
         case FMUL:
             DEBUG_OUT_INSN_PARSED("FMUL")
             POP_EVAL_STACK(op1);
@@ -590,6 +604,32 @@ void interp(struct function_thunk func_thunk)
             }
             // DEBUG_PRINT(" - mul result = %f\n", *(float *)&op3);
             PUSH_EVAL_STACK(op3);
+            break;
+
+        case FDIV:
+            DEBUG_OUT_INSN_PARSED("FDIV")
+            POP_EVAL_STACK(op1);
+            POP_EVAL_STACK(op2);
+            // DEBUG_PRINT(" - value 2 = %f\n", *(float *)&op1);
+            // DEBUG_PRINT(" - value 1 = %f\n", *(float *)&op2);
+            {
+                float result = *(float *)&op2 / *(float *)&op1;
+                op3 = *(uint32_t *)&result;
+            }
+            // DEBUG_PRINT(" - div result = %f\n", *(float *)&op3);
+            PUSH_EVAL_STACK(op3);
+            break;
+
+        case FNEG:
+            DEBUG_OUT_INSN_PARSED("FNEG")
+            POP_EVAL_STACK(op1);
+            // DEBUG_PRINT(" - value = %f\n", *(float *)&op1);
+            {
+                float result = -*(float *)&op1;
+                op2 = *(uint32_t *)&result;
+            }
+            // DEBUG_PRINT(" - neg result = %f\n", *(float *)&op2);
+            PUSH_EVAL_STACK(op2);
             break;
 
         case INVOKESPECIAL:
@@ -625,13 +665,11 @@ void interp(struct function_thunk func_thunk)
             break;
         case GOTO:
             DEBUG_OUT_INSN_PARSED("GOTO")
-            op1 = (uint8_t)(code_buffer[pc] << 8) | code_buffer[pc + 1];
             {
-                DEBUG_PRINT(" - op1 %b\n", op1);
-                short offset = *(short *)&op1;
-                DEBUG_PRINT(" - cur %d, offset %d\n", pc - 1, offset);
+                short offset = (short)(code_buffer[pc] << 8) | (short)code_buffer[pc + 1];
+                // DEBUG_PRINT(" - cur %d, offset %d\n", pc - 1, offset);
+                op1 = pc - 1 + offset;
             }
-            op1 = pc + *(short *)&op1 - 1;
             pc += 2;
             DEBUG_PRINT(" - goto %d\n", op1);
             pc = op1;

@@ -15523,8 +15523,627 @@ pc:0x81 op = 0x38, FSTORE (addr: 0x03091e59)
  - Store float 0.000000 to local 4
 pc:0x83 op = 0x84, IINC (addr: 0x03091e5b)
 pc:0x86 op = 0xa7, GOTO (addr: 0x03091e5e)
- - op1 11000011000000000000000000000000
- - cur 134, offset 195
- - goto 329
-pc:0x149 op = 0x69, UNKNOW (addr: 0x03091f21)
- set val = 329 (hex:0x00000069), at addr(m):0x00000787, instance addr: 0x03091f21
+ - goto 73
+pc:0x49 op = 0x15, ILOAD (addr: 0x03091e21)
+>> new sp = 0x64
+pc:0x4b op = 0x15, ILOAD (addr: 0x03091e23)
+>> new sp = 0x68
+pc:0x4d op = 0xa2, IF_ICMPGE (addr: 0x03091e25)
+>> new sp = 0x64
+>> new sp = 0x60
+ - value 2 = 5
+ - value 1 = 1
+pc:0x50 op = 0x19, ALOAD (addr: 0x03091e28)
+>> new sp = 0x64
+pc:0x52 op = 0x15, ILOAD (addr: 0x03091e2a)
+>> new sp = 0x68
+pc:0x54 op = 0x32, ?ALOAD (addr: 0x03091e2c)
+>> new sp = 0x64
+>> new sp = 0x60
+>> new sp = 0x64
+pc:0x55 op = 0x3a, ASTORE (addr: 0x03091e2d)
+>> new sp = 0x60
+pc:0x57 op = 0x24, FLOAD_N (addr: 0x03091e2f)
+ - 2
+>> new sp = 0x64
+pc:0x58 op = 0x19, ALOAD (addr: 0x03091e30)
+>> new sp = 0x68
+pc:0x5a op = 0xb4, GETFIELD (addr: 0x03091e32)
+>> new sp = 0x64
+ - instance addr(m) = 0x90098, field index = 6, addr(m) = 0x900b8
+ - field val = 0x3f1b3835
+>> new sp = 0x68
+pc:0x5d op = 0x19, ALOAD (addr: 0x03091e35)
+>> new sp = 0x6c
+pc:0x5f op = 0xb4, GETFIELD (addr: 0x03091e37)
+>> new sp = 0x68
+ - instance addr(m) = 0x90098, field index = 9, addr(m) = 0x900c4
+ - field val = 0x3d1a64b0
+>> new sp = 0x6c
+pc:0x62 op = 0x6a, FMUL (addr: 0x03091e3a)
+>> new sp = 0x68
+>> new sp = 0x64
+>> new sp = 0x68
+pc:0x63 op = 0x62, FADD (addr: 0x03091e3b)
+>> new sp = 0x64
+>> new sp = 0x60
+>> new sp = 0x64
+pc:0x64 op = 0x45, FSTORE_N (addr: 0x03091e3c)
+ - 2
+>> new sp = 0x60
+ - Store float 0.000000 to local 2
+pc:0x65 op = 0x25, FLOAD_N (addr: 0x03091e3d)
+ - 3
+>> new sp = 0x64
+pc:0x66 op = 0x19, ALOAD (addr: 0x03091e3e)
+>> new sp = 0x68
+pc:0x68 op = 0xb4, GETFIELD (addr: 0x03091e40)
+>> new sp = 0x64
+ - instance addr(m) = 0x90098, field index = 7, addr(m) = 0x900bc
+ - field val = 0x4033f798
+>> new sp = 0x68
+pc:0x6b op = 0x19, ALOAD (addr: 0x03091e43)
+>> new sp = 0x6c
+pc:0x6d op = 0xb4, GETFIELD (addr: 0x03091e45)
+>> new sp = 0x68
+ - instance addr(m) = 0x90098, field index = 9, addr(m) = 0x900c4
+ - field val = 0x3d1a64b0
+>> new sp = 0x6c
+pc:0x70 op = 0x6a, FMUL (addr: 0x03091e48)
+>> new sp = 0x68
+>> new sp = 0x64
+>> new sp = 0x68
+pc:0x71 op = 0x62, FADD (addr: 0x03091e49)
+>> new sp = 0x64
+>> new sp = 0x60
+>> new sp = 0x64
+pc:0x72 op = 0x46, FSTORE_N (addr: 0x03091e4a)
+ - 3
+>> new sp = 0x60
+ - Store float 0.000000 to local 3
+pc:0x73 op = 0x17, FLOAD (addr: 0x03091e4b)
+>> new sp = 0x64
+pc:0x75 op = 0x19, ALOAD (addr: 0x03091e4d)
+>> new sp = 0x68
+pc:0x77 op = 0xb4, GETFIELD (addr: 0x03091e4f)
+>> new sp = 0x64
+ - instance addr(m) = 0x90098, field index = 8, addr(m) = 0x900c0
+ - field val = 0xbcce96bc
+>> new sp = 0x68
+pc:0x7a op = 0x19, ALOAD (addr: 0x03091e52)
+>> new sp = 0x6c
+pc:0x7c op = 0xb4, GETFIELD (addr: 0x03091e54)
+>> new sp = 0x68
+ - instance addr(m) = 0x90098, field index = 9, addr(m) = 0x900c4
+ - field val = 0x3d1a64b0
+>> new sp = 0x6c
+pc:0x7f op = 0x6a, FMUL (addr: 0x03091e57)
+>> new sp = 0x68
+>> new sp = 0x64
+>> new sp = 0x68
+pc:0x80 op = 0x62, FADD (addr: 0x03091e58)
+>> new sp = 0x64
+>> new sp = 0x60
+>> new sp = 0x64
+pc:0x81 op = 0x38, FSTORE (addr: 0x03091e59)
+>> new sp = 0x60
+ - Store float -0.000951 to local 4
+pc:0x83 op = 0x84, IINC (addr: 0x03091e5b)
+pc:0x86 op = 0xa7, GOTO (addr: 0x03091e5e)
+ - goto 73
+pc:0x49 op = 0x15, ILOAD (addr: 0x03091e21)
+>> new sp = 0x64
+pc:0x4b op = 0x15, ILOAD (addr: 0x03091e23)
+>> new sp = 0x68
+pc:0x4d op = 0xa2, IF_ICMPGE (addr: 0x03091e25)
+>> new sp = 0x64
+>> new sp = 0x60
+ - value 2 = 5
+ - value 1 = 2
+pc:0x50 op = 0x19, ALOAD (addr: 0x03091e28)
+>> new sp = 0x64
+pc:0x52 op = 0x15, ILOAD (addr: 0x03091e2a)
+>> new sp = 0x68
+pc:0x54 op = 0x32, ?ALOAD (addr: 0x03091e2c)
+>> new sp = 0x64
+>> new sp = 0x60
+>> new sp = 0x64
+pc:0x55 op = 0x3a, ASTORE (addr: 0x03091e2d)
+>> new sp = 0x60
+pc:0x57 op = 0x24, FLOAD_N (addr: 0x03091e2f)
+ - 2
+>> new sp = 0x64
+pc:0x58 op = 0x19, ALOAD (addr: 0x03091e30)
+>> new sp = 0x68
+pc:0x5a op = 0xb4, GETFIELD (addr: 0x03091e32)
+>> new sp = 0x64
+ - instance addr(m) = 0x900c8, field index = 6, addr(m) = 0x900e8
+ - field val = 0xbf81610d
+>> new sp = 0x68
+pc:0x5d op = 0x19, ALOAD (addr: 0x03091e35)
+>> new sp = 0x6c
+pc:0x5f op = 0xb4, GETFIELD (addr: 0x03091e37)
+>> new sp = 0x68
+ - instance addr(m) = 0x900c8, field index = 9, addr(m) = 0x900f4
+ - field val = 0x3c38ea49
+>> new sp = 0x6c
+pc:0x62 op = 0x6a, FMUL (addr: 0x03091e3a)
+>> new sp = 0x68
+>> new sp = 0x64
+>> new sp = 0x68
+pc:0x63 op = 0x62, FADD (addr: 0x03091e3b)
+>> new sp = 0x64
+>> new sp = 0x60
+>> new sp = 0x64
+pc:0x64 op = 0x45, FSTORE_N (addr: 0x03091e3c)
+ - 2
+>> new sp = 0x60
+ - Store float 0.000000 to local 2
+pc:0x65 op = 0x25, FLOAD_N (addr: 0x03091e3d)
+ - 3
+>> new sp = 0x64
+pc:0x66 op = 0x19, ALOAD (addr: 0x03091e3e)
+>> new sp = 0x68
+pc:0x68 op = 0xb4, GETFIELD (addr: 0x03091e40)
+>> new sp = 0x64
+ - instance addr(m) = 0x900c8, field index = 7, addr(m) = 0x900ec
+ - field val = 0x3fe9af4d
+>> new sp = 0x68
+pc:0x6b op = 0x19, ALOAD (addr: 0x03091e43)
+>> new sp = 0x6c
+pc:0x6d op = 0xb4, GETFIELD (addr: 0x03091e45)
+>> new sp = 0x68
+ - instance addr(m) = 0x900c8, field index = 9, addr(m) = 0x900f4
+ - field val = 0x3c38ea49
+>> new sp = 0x6c
+pc:0x70 op = 0x6a, FMUL (addr: 0x03091e48)
+>> new sp = 0x68
+>> new sp = 0x64
+>> new sp = 0x68
+pc:0x71 op = 0x62, FADD (addr: 0x03091e49)
+>> new sp = 0x64
+>> new sp = 0x60
+>> new sp = 0x64
+pc:0x72 op = 0x46, FSTORE_N (addr: 0x03091e4a)
+ - 3
+>> new sp = 0x60
+ - Store float 0.000000 to local 3
+pc:0x73 op = 0x17, FLOAD (addr: 0x03091e4b)
+>> new sp = 0x64
+pc:0x75 op = 0x19, ALOAD (addr: 0x03091e4d)
+>> new sp = 0x68
+pc:0x77 op = 0xb4, GETFIELD (addr: 0x03091e4f)
+>> new sp = 0x64
+ - instance addr(m) = 0x900c8, field index = 8, addr(m) = 0x900f0
+ - field val = 0x3c09e243
+>> new sp = 0x68
+pc:0x7a op = 0x19, ALOAD (addr: 0x03091e52)
+>> new sp = 0x6c
+pc:0x7c op = 0xb4, GETFIELD (addr: 0x03091e54)
+>> new sp = 0x68
+ - instance addr(m) = 0x900c8, field index = 9, addr(m) = 0x900f4
+ - field val = 0x3c38ea49
+>> new sp = 0x6c
+pc:0x7f op = 0x6a, FMUL (addr: 0x03091e57)
+>> new sp = 0x68
+>> new sp = 0x64
+>> new sp = 0x68
+pc:0x80 op = 0x62, FADD (addr: 0x03091e58)
+>> new sp = 0x64
+>> new sp = 0x60
+>> new sp = 0x64
+pc:0x81 op = 0x38, FSTORE (addr: 0x03091e59)
+>> new sp = 0x60
+ - Store float -0.000856 to local 4
+pc:0x83 op = 0x84, IINC (addr: 0x03091e5b)
+pc:0x86 op = 0xa7, GOTO (addr: 0x03091e5e)
+ - goto 73
+pc:0x49 op = 0x15, ILOAD (addr: 0x03091e21)
+>> new sp = 0x64
+pc:0x4b op = 0x15, ILOAD (addr: 0x03091e23)
+>> new sp = 0x68
+pc:0x4d op = 0xa2, IF_ICMPGE (addr: 0x03091e25)
+>> new sp = 0x64
+>> new sp = 0x60
+ - value 2 = 5
+ - value 1 = 3
+pc:0x50 op = 0x19, ALOAD (addr: 0x03091e28)
+>> new sp = 0x64
+pc:0x52 op = 0x15, ILOAD (addr: 0x03091e2a)
+>> new sp = 0x68
+pc:0x54 op = 0x32, ?ALOAD (addr: 0x03091e2c)
+>> new sp = 0x64
+>> new sp = 0x60
+>> new sp = 0x64
+pc:0x55 op = 0x3a, ASTORE (addr: 0x03091e2d)
+>> new sp = 0x60
+pc:0x57 op = 0x24, FLOAD_N (addr: 0x03091e2f)
+ - 2
+>> new sp = 0x64
+pc:0x58 op = 0x19, ALOAD (addr: 0x03091e30)
+>> new sp = 0x68
+pc:0x5a op = 0xb4, GETFIELD (addr: 0x03091e32)
+>> new sp = 0x64
+ - instance addr(m) = 0x900f8, field index = 6, addr(m) = 0x90118
+ - field val = 0x3f8a98e5
+>> new sp = 0x68
+pc:0x5d op = 0x19, ALOAD (addr: 0x03091e35)
+>> new sp = 0x6c
+pc:0x5f op = 0xb4, GETFIELD (addr: 0x03091e37)
+>> new sp = 0x68
+ - instance addr(m) = 0x900f8, field index = 9, addr(m) = 0x90124
+ - field val = 0x3ae1ee96
+>> new sp = 0x6c
+pc:0x62 op = 0x6a, FMUL (addr: 0x03091e3a)
+>> new sp = 0x68
+>> new sp = 0x64
+>> new sp = 0x68
+pc:0x63 op = 0x62, FADD (addr: 0x03091e3b)
+>> new sp = 0x64
+>> new sp = 0x60
+>> new sp = 0x64
+pc:0x64 op = 0x45, FSTORE_N (addr: 0x03091e3c)
+ - 2
+>> new sp = 0x60
+ - Store float 0.000000 to local 2
+pc:0x65 op = 0x25, FLOAD_N (addr: 0x03091e3d)
+ - 3
+>> new sp = 0x64
+pc:0x66 op = 0x19, ALOAD (addr: 0x03091e3e)
+>> new sp = 0x68
+pc:0x68 op = 0xb4, GETFIELD (addr: 0x03091e40)
+>> new sp = 0x64
+ - instance addr(m) = 0x900f8, field index = 7, addr(m) = 0x9011c
+ - field val = 0x3f5e63f9
+>> new sp = 0x68
+pc:0x6b op = 0x19, ALOAD (addr: 0x03091e43)
+>> new sp = 0x6c
+pc:0x6d op = 0xb4, GETFIELD (addr: 0x03091e45)
+>> new sp = 0x68
+ - instance addr(m) = 0x900f8, field index = 9, addr(m) = 0x90124
+ - field val = 0x3ae1ee96
+>> new sp = 0x6c
+pc:0x70 op = 0x6a, FMUL (addr: 0x03091e48)
+>> new sp = 0x68
+>> new sp = 0x64
+>> new sp = 0x68
+pc:0x71 op = 0x62, FADD (addr: 0x03091e49)
+>> new sp = 0x64
+>> new sp = 0x60
+>> new sp = 0x64
+pc:0x72 op = 0x46, FSTORE_N (addr: 0x03091e4a)
+ - 3
+>> new sp = 0x60
+ - Store float 0.000000 to local 3
+pc:0x73 op = 0x17, FLOAD (addr: 0x03091e4b)
+>> new sp = 0x64
+pc:0x75 op = 0x19, ALOAD (addr: 0x03091e4d)
+>> new sp = 0x68
+pc:0x77 op = 0xb4, GETFIELD (addr: 0x03091e4f)
+>> new sp = 0x64
+ - instance addr(m) = 0x900f8, field index = 8, addr(m) = 0x90120
+ - field val = 0xbc317b60
+>> new sp = 0x68
+pc:0x7a op = 0x19, ALOAD (addr: 0x03091e52)
+>> new sp = 0x6c
+pc:0x7c op = 0xb4, GETFIELD (addr: 0x03091e54)
+>> new sp = 0x68
+ - instance addr(m) = 0x900f8, field index = 9, addr(m) = 0x90124
+ - field val = 0x3ae1ee96
+>> new sp = 0x6c
+pc:0x7f op = 0x6a, FMUL (addr: 0x03091e57)
+>> new sp = 0x68
+>> new sp = 0x64
+>> new sp = 0x68
+pc:0x80 op = 0x62, FADD (addr: 0x03091e58)
+>> new sp = 0x64
+>> new sp = 0x60
+>> new sp = 0x64
+pc:0x81 op = 0x38, FSTORE (addr: 0x03091e59)
+>> new sp = 0x60
+ - Store float -0.000874 to local 4
+pc:0x83 op = 0x84, IINC (addr: 0x03091e5b)
+pc:0x86 op = 0xa7, GOTO (addr: 0x03091e5e)
+ - goto 73
+pc:0x49 op = 0x15, ILOAD (addr: 0x03091e21)
+>> new sp = 0x64
+pc:0x4b op = 0x15, ILOAD (addr: 0x03091e23)
+>> new sp = 0x68
+pc:0x4d op = 0xa2, IF_ICMPGE (addr: 0x03091e25)
+>> new sp = 0x64
+>> new sp = 0x60
+ - value 2 = 5
+ - value 1 = 4
+pc:0x50 op = 0x19, ALOAD (addr: 0x03091e28)
+>> new sp = 0x64
+pc:0x52 op = 0x15, ILOAD (addr: 0x03091e2a)
+>> new sp = 0x68
+pc:0x54 op = 0x32, ?ALOAD (addr: 0x03091e2c)
+>> new sp = 0x64
+>> new sp = 0x60
+>> new sp = 0x64
+pc:0x55 op = 0x3a, ASTORE (addr: 0x03091e2d)
+>> new sp = 0x60
+pc:0x57 op = 0x24, FLOAD_N (addr: 0x03091e2f)
+ - 2
+>> new sp = 0x64
+pc:0x58 op = 0x19, ALOAD (addr: 0x03091e30)
+>> new sp = 0x68
+pc:0x5a op = 0xb4, GETFIELD (addr: 0x03091e32)
+>> new sp = 0x64
+ - instance addr(m) = 0x90128, field index = 6, addr(m) = 0x90148
+ - field val = 0x3f7aa5b0
+>> new sp = 0x68
+pc:0x5d op = 0x19, ALOAD (addr: 0x03091e35)
+>> new sp = 0x6c
+pc:0x5f op = 0xb4, GETFIELD (addr: 0x03091e37)
+>> new sp = 0x68
+ - instance addr(m) = 0x90128, field index = 9, addr(m) = 0x90154
+ - field val = 0x3b05479b
+>> new sp = 0x6c
+pc:0x62 op = 0x6a, FMUL (addr: 0x03091e3a)
+>> new sp = 0x68
+>> new sp = 0x64
+>> new sp = 0x68
+pc:0x63 op = 0x62, FADD (addr: 0x03091e3b)
+>> new sp = 0x64
+>> new sp = 0x60
+>> new sp = 0x64
+pc:0x64 op = 0x45, FSTORE_N (addr: 0x03091e3c)
+ - 2
+>> new sp = 0x60
+ - Store float 0.000000 to local 2
+pc:0x65 op = 0x25, FLOAD_N (addr: 0x03091e3d)
+ - 3
+>> new sp = 0x64
+pc:0x66 op = 0x19, ALOAD (addr: 0x03091e3e)
+>> new sp = 0x68
+pc:0x68 op = 0xb4, GETFIELD (addr: 0x03091e40)
+>> new sp = 0x64
+ - instance addr(m) = 0x90128, field index = 7, addr(m) = 0x9014c
+ - field val = 0x3f183e31
+>> new sp = 0x68
+pc:0x6b op = 0x19, ALOAD (addr: 0x03091e43)
+>> new sp = 0x6c
+pc:0x6d op = 0xb4, GETFIELD (addr: 0x03091e45)
+>> new sp = 0x68
+ - instance addr(m) = 0x90128, field index = 9, addr(m) = 0x90154
+ - field val = 0x3b05479b
+>> new sp = 0x6c
+pc:0x70 op = 0x6a, FMUL (addr: 0x03091e48)
+>> new sp = 0x68
+>> new sp = 0x64
+>> new sp = 0x68
+pc:0x71 op = 0x62, FADD (addr: 0x03091e49)
+>> new sp = 0x64
+>> new sp = 0x60
+>> new sp = 0x64
+pc:0x72 op = 0x46, FSTORE_N (addr: 0x03091e4a)
+ - 3
+>> new sp = 0x60
+ - Store float 0.000000 to local 3
+pc:0x73 op = 0x17, FLOAD (addr: 0x03091e4b)
+>> new sp = 0x64
+pc:0x75 op = 0x19, ALOAD (addr: 0x03091e4d)
+>> new sp = 0x68
+pc:0x77 op = 0xb4, GETFIELD (addr: 0x03091e4f)
+>> new sp = 0x64
+ - instance addr(m) = 0x90128, field index = 8, addr(m) = 0x90150
+ - field val = 0xbd0e5c42
+>> new sp = 0x68
+pc:0x7a op = 0x19, ALOAD (addr: 0x03091e52)
+>> new sp = 0x6c
+pc:0x7c op = 0xb4, GETFIELD (addr: 0x03091e54)
+>> new sp = 0x68
+ - instance addr(m) = 0x90128, field index = 9, addr(m) = 0x90154
+ - field val = 0x3b05479b
+>> new sp = 0x6c
+pc:0x7f op = 0x6a, FMUL (addr: 0x03091e57)
+>> new sp = 0x68
+>> new sp = 0x64
+>> new sp = 0x68
+pc:0x80 op = 0x62, FADD (addr: 0x03091e58)
+>> new sp = 0x64
+>> new sp = 0x60
+>> new sp = 0x64
+pc:0x81 op = 0x38, FSTORE (addr: 0x03091e59)
+>> new sp = 0x60
+ - Store float -0.000945 to local 4
+pc:0x83 op = 0x84, IINC (addr: 0x03091e5b)
+pc:0x86 op = 0xa7, GOTO (addr: 0x03091e5e)
+ - goto 73
+pc:0x49 op = 0x15, ILOAD (addr: 0x03091e21)
+>> new sp = 0x64
+pc:0x4b op = 0x15, ILOAD (addr: 0x03091e23)
+>> new sp = 0x68
+pc:0x4d op = 0xa2, IF_ICMPGE (addr: 0x03091e25)
+>> new sp = 0x64
+>> new sp = 0x60
+ - value 2 = 5
+ - value 1 = 5
+ - branch to pc = 0x89
+pc:0x89 op = 0x2b, ALOAD_N (addr: 0x03091e61)
+ - 1
+>> new sp = 0x64
+pc:0x8a op = 0x03, ICONST_N (addr: 0x03091e62)
+ - 0
+>> new sp = 0x68
+pc:0x8b op = 0x32, ?ALOAD (addr: 0x03091e63)
+>> new sp = 0x64
+>> new sp = 0x60
+>> new sp = 0x64
+pc:0x8c op = 0x24, FLOAD_N (addr: 0x03091e64)
+ - 2
+>> new sp = 0x68
+pc:0x8d op = 0x25, FLOAD_N (addr: 0x03091e65)
+ - 3
+>> new sp = 0x6c
+pc:0x8e op = 0x17, FLOAD (addr: 0x03091e66)
+>> new sp = 0x70
+pc:0x90 op = 0xb6, INVOKEVIRTUAL (addr: 0x03091e68)
+ - current-class-ref = 0x3091af8
+ - method-ref-cp-index = 53
+ - v-index = 0xd
+ - class-ref-cp-index = 7
+ - jclass-ref = 0x30911d0
+ - instance-address [me()]= 0x90068, 0x64
+ - instance-class-address = 0x30911d0
+ - jclass-ref = 0x30911d0
+ - jmethod-ref = 0x30914c0
+ - pop 4 elements from operand stack
+ -- new sp = 0x60
+ -- params-pt = 0x70
+ -- return pc = 147
+
+--------------------------------- Create Frame ---------------------------------
+--------- [0] Frame from (0x60) ------------
+ >> create frame from an existed function call
+(0x64) (param) local 0 = 589928
+(0x68) (param) local 1 = 1014677263
+(0x6c) (param) local 2 = 1040476364
+(0x70) (param) local 3 = -1166559697
+-------> new current_sp = 0x74
+(0x74) --> FP = (0x74) -> old-frame-fp = 0x48 
+(0x78) old-stack-pointer = 0x60 
+(0x7c) return pc = 0x93 
+(0x80) method-ref = 0x30914c0 
+(0x84) class-ref = 0x30911d0 
+(0x88) constant-pool-ref = 0x3091208 
+(0x8c) bytecodes = 0x30914d8 
+------------------------------ End Create Frame ------------------------------
+pc:0x0 op = 0x2a, ALOAD_N (addr: 0x030914d8)
+ - 0
+>> new sp = 0x90
+pc:0x1 op = 0x0b, FCONST_N (addr: 0x030914d9)
+>> new sp = 0x94
+pc:0x2 op = 0x23, FLOAD_N (addr: 0x030914da)
+ - 1
+>> new sp = 0x98
+pc:0x3 op = 0x12, LDC (addr: 0x030914db)
+ - constant value = 39.478420
+>> new sp = 0x9c
+pc:0x5 op = 0x6e, FDIV (addr: 0x030914dd)
+>> new sp = 0x98
+>> new sp = 0x94
+>> new sp = 0x98
+pc:0x6 op = 0x66, FSUB (addr: 0x030914de)
+>> new sp = 0x94
+>> new sp = 0x90
+>> new sp = 0x94
+pc:0x7 op = 0xb5, PUTFIELD (addr: 0x030914df)
+>> new sp = 0x90
+>> new sp = 0x8c
+ - set val = -1177862321 (hex:0xb9cb3f4f), at addr(m):0x00090088, instance addr: 0x00090068
+pc:0xa op = 0x2a, ALOAD_N (addr: 0x030914e2)
+ - 0
+>> new sp = 0x90
+pc:0xb op = 0x0b, FCONST_N (addr: 0x030914e3)
+>> new sp = 0x94
+pc:0xc op = 0x24, FLOAD_N (addr: 0x030914e4)
+ - 2
+>> new sp = 0x98
+pc:0xd op = 0x12, LDC (addr: 0x030914e5)
+ - constant value = 39.478420
+>> new sp = 0x9c
+pc:0xf op = 0x6e, FDIV (addr: 0x030914e7)
+>> new sp = 0x98
+>> new sp = 0x94
+>> new sp = 0x98
+pc:0x10 op = 0x66, FSUB (addr: 0x030914e8)
+>> new sp = 0x94
+>> new sp = 0x90
+>> new sp = 0x94
+pc:0x11 op = 0xb5, PUTFIELD (addr: 0x030914e9)
+>> new sp = 0x90
+>> new sp = 0x8c
+ - set val = -1151948950 (hex:0xbb56a76a), at addr(m):0x0009008c, instance addr: 0x00090068
+pc:0x14 op = 0x2a, ALOAD_N (addr: 0x030914ec)
+ - 0
+>> new sp = 0x90
+pc:0x15 op = 0x0b, FCONST_N (addr: 0x030914ed)
+>> new sp = 0x94
+pc:0x16 op = 0x25, FLOAD_N (addr: 0x030914ee)
+ - 3
+>> new sp = 0x98
+pc:0x17 op = 0x12, LDC (addr: 0x030914ef)
+ - constant value = 39.478420
+>> new sp = 0x9c
+pc:0x19 op = 0x6e, FDIV (addr: 0x030914f1)
+>> new sp = 0x98
+>> new sp = 0x94
+>> new sp = 0x98
+pc:0x1a op = 0x66, FSUB (addr: 0x030914f2)
+>> new sp = 0x94
+>> new sp = 0x90
+>> new sp = 0x94
+pc:0x1b op = 0xb5, PUTFIELD (addr: 0x030914f3)
+>> new sp = 0x90
+>> new sp = 0x8c
+ - set val = 935905689 (hex:0x37c8c999), at addr(m):0x00090090, instance addr: 0x00090068
+pc:0x1e op = 0xb1, RETURN (addr: 0x030914f6)
+pc:0x93 op = 0x2b, ALOAD_N (addr: 0x03091e6b)
+ - 1
+>> new sp = 0x64
+pc:0x94 op = 0xb0, ARETURN (addr: 0x03091e6c)
+>> new sp = 0x60
+>> new sp = 0x24
+pc:0x14 op = 0xb5, PUTFIELD (addr: 0x03091d9c)
+>> new sp = 0x20
+>> new sp = 0x1c
+ - set val = 589896 (hex:0x00090048), at addr(m):0x00090010, instance addr: 0x00090008
+pc:0x17 op = 0xb1, RETURN (addr: 0x03091d9f)
+[31m --------------------- (END DPU) -----------------------------
+[0mget DPUID = 0 method =  test:()I of class application/bst/NBodySystem from cache
+
+get DPUID = 0 class =  application/bst/NBodySystem from cache
+=== DPU#0x0 ===
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+meta_space_begin = 0x3090000, heap_space_begin = 0x90000, param_begin = 0x3890000, wram_space_begin = 0x0
+[31m --------------------- (IN DPU) -----------------------------
+[0mmeta_space_pt = 0x30920d8, heap_space_pt = 0x90158, param_pt = 0x3890010
+[31m
+--------------------------------- Create Frame ---------------------------------
+--------- [0] Frame from ((nil)) ------------
+0x389000c params_count = 1
+((nil)) (param) local 0 = 589832 (addr(p): 0x0389000c)
+-------> new current_sp = 0x4
+(0x4) --> FP = (0x4) -> old-frame-fp = (nil) 
+(0x8) old-stack-pointer = (nil) 
+(0xc) return pc = 0x0 
+(0x10) method-ref = 0x3091da0 
+(0x14) class-ref = 0x3091af8 
+(0x18) constant-pool-ref = 0x3091b30 
+(0x1c) bytecodes = 0x3091db8 
+------------------------------ End Create Frame ------------------------------
+code_buffer = 0x3091db8
+create frame finished
+FP = (0x4)
+pc:0x0 op = 0x04, ICONST_N (addr: 0x03091db8)
+ - 1
+>> new sp = 0x20
+pc:0x1 op = 0xac, IRETURN (addr: 0x03091db9)
+>> new sp = 0x1c
+[31m --------------------- (END DPU) -----------------------------
+[0mnbs.test() = 1
