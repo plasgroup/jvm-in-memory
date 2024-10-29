@@ -66,8 +66,30 @@ void interp(struct function_thunk func_thunk)
             //     PUSH_EVAL_STACK(op1)
             //     break;
 
+        case ILOAD:
+            DEBUG_OUT_INSN_PARSED("ILOAD")
+            op1 = code_buffer[pc]; // local variable index
+            // DEBUG_PRINT(" - local variable index = %d\n", op1);
+            pc += 1;
+            op2 = FRAME_GET_LOCALS(current_fp[tasklet_id], func->max_locals, op1);
+            // DEBUG_PRINT(" - Load INT %d to stack\n", op2);
+            PUSH_EVAL_STACK(op2)
+            break;
+
+        case ISTORE:
+            DEBUG_OUT_INSN_PARSED("ISTORE")
+            op1 = code_buffer[pc]; // local variable index
+            // DEBUG_PRINT(" - local variable index = %d\n", op1);
+            pc += 1;
+            POP_EVAL_STACK(op2)
+            FRAME_GET_LOCALS(current_fp[tasklet_id], func->max_locals, op1) = op2;
+            // DEBUG_PRINT(" - Store INT %d to local %d\n", op2, op1);
+            break;
+
         case ALOAD_0:
         case ALOAD_1:
+        case ALOAD_2:
+        case ALOAD_3:
             DEBUG_OUT_INSN_PARSED("ALOAD_N")
             DEBUG_PRINT(" - %d\n", current_code - ALOAD_0);
 
@@ -80,6 +102,16 @@ void interp(struct function_thunk func_thunk)
             PUSH_EVAL_STACK(op1)
             break;
 
+        case ALOAD:
+            DEBUG_OUT_INSN_PARSED("ALOAD")
+            op1 = code_buffer[pc]; // local variable index
+            // DEBUG_PRINT(" - local variable index = %d\n", op1);
+            pc += 1;
+            op2 = FRAME_GET_LOCALS(current_fp[tasklet_id], func->max_locals, op1);
+            // DEBUG_PRINT(" - Load ref %p to stack\n", op2);
+            PUSH_EVAL_STACK(op2)
+            break;
+
         case ASTORE_0:
         case ASTORE_1:
         case ASTORE_2:
@@ -89,6 +121,16 @@ void interp(struct function_thunk func_thunk)
             POP_EVAL_STACK(op1)
             FRAME_GET_LOCALS(current_fp[tasklet_id], func->max_locals, (current_code - ASTORE_0)) = op1;
             // DEBUG_PRINT(" - Store ref %p to local %d\n", FRAME_GET_LOCALS(current_fp[tasklet_id], func->max_locals, (current_code - ASTORE_0)), (current_code - ASTORE_0));
+            break;
+
+        case ASTORE:
+            DEBUG_OUT_INSN_PARSED("ASTORE")
+            op1 = code_buffer[pc]; // local variable index
+            // DEBUG_PRINT(" - local variable index = %d\n", op1);
+            pc += 1;
+            POP_EVAL_STACK(op2)
+            FRAME_GET_LOCALS(current_fp[tasklet_id], func->max_locals, op1) = op2;
+            // DEBUG_PRINT(" - Store ref %p to local %d\n", op2, op1);
             break;
 
         case FLOAD_0:
@@ -124,6 +166,16 @@ void interp(struct function_thunk func_thunk)
             DEBUG_PRINT(" - Store float %f to local %d\n", *(float *)&tmp, (current_code - FSTORE_0));
             break;
 
+        case FSTORE:
+            DEBUG_OUT_INSN_PARSED("FSTORE")
+            op1 = code_buffer[pc]; // local variable index
+            // DEBUG_PRINT(" - local variable index = %d\n", op1);
+            pc += 1;
+            POP_EVAL_STACK(op2)
+            FRAME_GET_LOCALS(current_fp[tasklet_id], func->max_locals, op1) = op2;
+            DEBUG_PRINT(" - Store float %f to local %d\n", *(float *)&op2, op1);
+            break;
+
         case ICONST_M1:
         case ICONST_0:
         case ICONST_1:
@@ -148,10 +200,12 @@ void interp(struct function_thunk func_thunk)
         case FCONST_1:
             DEBUG_OUT_INSN_PARSED("FCONST_N")
             // DEBUG_PRINT(" - %d\n", current_code - FCONST_0);
-            float f = (float)(current_code - FCONST_0);
-            // DEBUG_PRINT(" - push const %f to stack\n", f);
-            ;
-            PUSH_EVAL_STACK(*(uint32_t *)&f);
+            {
+                float f = (float)(current_code - FCONST_0);
+                // DEBUG_PRINT(" - push const %f to stack\n", f);
+                ;
+                PUSH_EVAL_STACK(*(uint32_t *)&f);
+            }
             break;
         // case IFGE:
         //     DEBUG_OUT_INSN_PARSED("IFGE")
@@ -184,22 +238,22 @@ void interp(struct function_thunk func_thunk)
         //         DEBUG_PRINT(" - branch to pc = %p\n", op1);
         //     }
         //     break;
-        // case IF_ICMPGE:
-        //     DEBUG_OUT_INSN_PARSED("IF_ICMPGE")
-        //     op1 = (uint8_t)code_buffer[pc] << 8 | code_buffer[pc + 1];
-        //     POP_EVAL_STACK(op2);
-        //     POP_EVAL_STACK(op3);
-        //     DEBUG_PRINT(" - value 2 = %d\n", op2);
-        //     DEBUG_PRINT(" - value 1 = %d\n", op3);
-        //     op1 = pc + (short)op1 - 1;
-        //     //  DEBUG_PRINT(" - branch-target = 0x%02x\n", op1);
-        //     pc += 2;
-        //     if (op3 >= op2)
-        //     {
-        //         pc = op1;
-        //         DEBUG_PRINT(" - branch to pc = %p\n", op1);
-        //     }
-        //     break;
+        case IF_ICMPGE:
+            DEBUG_OUT_INSN_PARSED("IF_ICMPGE")
+            op1 = (uint8_t)code_buffer[pc] << 8 | code_buffer[pc + 1];
+            POP_EVAL_STACK(op2);
+            POP_EVAL_STACK(op3);
+            DEBUG_PRINT(" - value 2 = %d\n", op2);
+            DEBUG_PRINT(" - value 1 = %d\n", op3);
+            op1 = pc + (short)op1 - 1;
+            //  DEBUG_PRINT(" - branch-target = 0x%02x\n", op1);
+            pc += 2;
+            if (op3 >= op2)
+            {
+                pc = op1;
+                DEBUG_PRINT(" - branch to pc = %p\n", op1);
+            }
+            break;
         // case IF_ICMPLT:
         //     DEBUG_OUT_INSN_PARSED("IF_ICMPLT")
         //     op1 = (uint8_t)code_buffer[pc] << 8 | code_buffer[pc + 1];
@@ -491,15 +545,38 @@ void interp(struct function_thunk func_thunk)
             //     PUSH_EVAL_STACK(op2 - op1);
             //     break;
 
-            // case IMUL:
-            //     DEBUG_OUT_INSN_PARSED("IMUL")
-            //     POP_EVAL_STACK(op1);
-            //     POP_EVAL_STACK(op2);
-            //     DEBUG_PRINT(" - value 2 = %d\n", op1);
-            //     DEBUG_PRINT(" - value 1 = %d\n", op2);
-            //     DEBUG_PRINT(" - mul result = %d\n", op2 * op1);
-            //     PUSH_EVAL_STACK(op2 * op1);
-            //     break;
+        case IMUL:
+            DEBUG_OUT_INSN_PARSED("IMUL")
+            POP_EVAL_STACK(op1);
+            POP_EVAL_STACK(op2);
+            // DEBUG_PRINT(" - value 2 = %d\n", op1);
+            // DEBUG_PRINT(" - value 1 = %d\n", op2);
+            // DEBUG_PRINT(" - mul result = %d\n", op2 * op1);
+            PUSH_EVAL_STACK(op2 * op1);
+            break;
+
+        case IINC:
+            DEBUG_OUT_INSN_PARSED("IINC")
+            op1 = code_buffer[pc];     // local variable index
+            op2 = code_buffer[pc + 1]; // increment value
+            pc += 2;
+            FRAME_GET_LOCALS(current_fp[tasklet_id], func->max_locals, op1) += op2;
+            // DEBUG_PRINT(" - local variable index = %d, increment value = %d\n", op1, op2);
+            break;
+
+        case FADD:
+            DEBUG_OUT_INSN_PARSED("FADD")
+            POP_EVAL_STACK(op1);
+            POP_EVAL_STACK(op2);
+            // DEBUG_PRINT(" - value 2 = %f\n", *(float *)&op1);
+            // DEBUG_PRINT(" - value 1 = %f\n", *(float *)&op2);
+            {
+                float result = *(float *)&op1 + *(float *)&op2;
+                op3 = *(uint32_t *)&result;
+            }
+            // DEBUG_PRINT(" - add result = %f\n", *(float *)&op3);
+            PUSH_EVAL_STACK(op3);
+            break;
 
         case FMUL:
             DEBUG_OUT_INSN_PARSED("FMUL")
@@ -507,8 +584,10 @@ void interp(struct function_thunk func_thunk)
             POP_EVAL_STACK(op2);
             // DEBUG_PRINT(" - value 2 = %f\n", *(float *)&op1);
             // DEBUG_PRINT(" - value 1 = %f\n", *(float *)&op2);
-            float result = *(float *)&op1 * *(float *)&op2;
-            op3 = *(uint32_t *)&result;
+            {
+                float result = *(float *)&op1 * *(float *)&op2;
+                op3 = *(uint32_t *)&result;
+            }
             // DEBUG_PRINT(" - mul result = %f\n", *(float *)&op3);
             PUSH_EVAL_STACK(op3);
             break;
@@ -547,9 +626,14 @@ void interp(struct function_thunk func_thunk)
         case GOTO:
             DEBUG_OUT_INSN_PARSED("GOTO")
             op1 = (uint8_t)(code_buffer[pc] << 8) | code_buffer[pc + 1];
-            op1 = pc + (short)op1 - 1;
+            {
+                DEBUG_PRINT(" - op1 %b\n", op1);
+                short offset = *(short *)&op1;
+                DEBUG_PRINT(" - cur %d, offset %d\n", pc - 1, offset);
+            }
+            op1 = pc + *(short *)&op1 - 1;
             pc += 2;
-            // DEBUG_PRINT(" - goto %d\n", op1);
+            DEBUG_PRINT(" - goto %d\n", op1);
             pc = op1;
             break;
         case AALOAD:
@@ -587,18 +671,18 @@ void interp(struct function_thunk func_thunk)
             *(uint32_t __mram_ptr *)(op3 + 8 + 4 + 4 * op2) = op1;
 
             break;
-        // case ARRAYLENGTH:
-        //     DEBUG_OUT_INSN_PARSED("ARRAYLENGTH")
+        case ARRAYLENGTH:
+            DEBUG_OUT_INSN_PARSED("ARRAYLENGTH")
 
-        //     // array address
-        //     POP_EVAL_STACK(op1)
+            // array address
+            POP_EVAL_STACK(op1)
 
-        //     // read array length
-        //     op2 = *(uint32_t __mram_ptr *)(op2 + 8);
+            // read array length
+            op2 = *(uint32_t __mram_ptr *)(op2 + 8);
 
-        //     PUSH_EVAL_STACK(op2);
+            PUSH_EVAL_STACK(op2);
 
-        //     break;
+            break;
         case NEWARRAY:
             DEBUG_OUT_INSN_PARSED("NEWARRAY")
             /*bytecord format: newarray atype*/
