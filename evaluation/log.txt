@@ -13927,7 +13927,10 @@ code_buffer = 0x3091d88
 create frame finished
 FP = (0x4)
 pc:0x0 op = 0x2a, ALOAD_0 (addr: 0x03091d88)
+ - Current frame ptr: 0x4
+ - param count = 1
  - Load ref 0x90008 to stack
+ - 1: (nil), 2: (nil)
 >> new sp = 0x20
 pc:0x1 op = 0xb7, INVOKESPECIAL (addr: 0x03091d89)
  - class-ref-cp-index = 2
@@ -13954,8 +13957,13 @@ pc:0x1 op = 0xb7, INVOKESPECIAL (addr: 0x03091d89)
 (0x3c) bytecodes = 0x3090330 
 ------------------------------ End Create Frame ------------------------------
 pc:0x0 op = 0xb1, RETURN (addr: 0x03090330)
+ - reset func pt to 0x03091d70
+ - bytecodes addr: 03091d88
 pc:0x4 op = 0x2a, ALOAD_0 (addr: 0x03091d8c)
+ - Current frame ptr: 0x4
+ - param count = 1
  - Load ref 0x90008 to stack
+ - 1: (nil), 2: (nil)
 >> new sp = 0x20
 pc:0x5 op = 0xbb, NEW (addr: 0x03091d8d)
  - count field count
@@ -13996,7 +14004,10 @@ pc:0x9 op = 0xb7, INVOKESPECIAL (addr: 0x03091d91)
 (0x44) bytecodes = 0x3091578 
 ------------------------------ End Create Frame ------------------------------
 pc:0x0 op = 0x2a, ALOAD_0 (addr: 0x03091578)
+ - Current frame ptr: 0x2c
+ - param count = 1
  - Load ref 0x90018 to stack
+ - 1: 0x4, 2: 0x24
 >> new sp = 0x48
 pc:0x1 op = 0xb7, INVOKESPECIAL (addr: 0x03091579)
  - class-ref-cp-index = 15
@@ -14023,8 +14034,13 @@ pc:0x1 op = 0xb7, INVOKESPECIAL (addr: 0x03091579)
 (0x64) bytecodes = 0x3090330 
 ------------------------------ End Create Frame ------------------------------
 pc:0x0 op = 0xb1, RETURN (addr: 0x03090330)
+ - reset func pt to 0x03091560
+ - bytecodes addr: 03091578
 pc:0x4 op = 0x2a, ALOAD_0 (addr: 0x0309157c)
+ - Current frame ptr: 0x2c
+ - param count = 1
  - Load ref 0x90018 to stack
+ - 1: 0x4, 2: 0x24
 >> new sp = 0x48
 pc:0x5 op = 0x12, LDC (addr: 0x0309157d)
  - constant table index = 20
@@ -14035,9 +14051,12 @@ pc:0x7 op = 0xb5, PUTFIELD (addr: 0x0309157f)
  - field index in instance = 0
 >> new sp = 0x48
 >> new sp = 0x44
-set val = 1078530011 (hex:0x40490fdb), at addr(m):0x00090020, instance addr: 0x00090018
+ - set val = 1078530011 (hex:0x40490fdb), at addr(m):0x00090020, instance addr: 0x00090018
 pc:0xa op = 0x2a, ALOAD_0 (addr: 0x03091582)
+ - Current frame ptr: 0x2c
+ - param count = 1
  - Load ref 0x90018 to stack
+ - 1: 0x4, 2: 0x24
 >> new sp = 0x48
 pc:0xb op = 0x12, LDC (addr: 0x03091583)
  - constant table index = 3
@@ -14048,9 +14067,12 @@ pc:0xd op = 0xb5, PUTFIELD (addr: 0x03091585)
  - field index in instance = 1
 >> new sp = 0x48
 >> new sp = 0x44
-set val = 1109256679 (hex:0x421de9e7), at addr(m):0x00090024, instance addr: 0x00090018
+ - set val = 1109256679 (hex:0x421de9e7), at addr(m):0x00090024, instance addr: 0x00090018
 pc:0x10 op = 0x2a, ALOAD_0 (addr: 0x03091588)
+ - Current frame ptr: 0x2c
+ - param count = 1
  - Load ref 0x90018 to stack
+ - 1: 0x4, 2: 0x24
 >> new sp = 0x48
 pc:0x11 op = 0x12, LDC (addr: 0x03091589)
  - constant table index = 27
@@ -14061,9 +14083,12 @@ pc:0x13 op = 0xb5, PUTFIELD (addr: 0x0309158b)
  - field index in instance = 2
 >> new sp = 0x48
 >> new sp = 0x44
-set val = 1136041656 (hex:0x43b69eb8), at addr(m):0x00090028, instance addr: 0x00090018
+ - set val = 1136041656 (hex:0x43b69eb8), at addr(m):0x00090028, instance addr: 0x00090018
 pc:0x16 op = 0x2a, ALOAD_0 (addr: 0x0309158e)
+ - Current frame ptr: 0x2c
+ - param count = 1
  - Load ref 0x90018 to stack
+ - 1: 0x4, 2: 0x24
 >> new sp = 0x48
 pc:0x17 op = 0x0b, FCONST_0 (addr: 0x0309158f)
  - push const 0.0 to stack
@@ -14073,9 +14098,12 @@ pc:0x18 op = 0xb5, PUTFIELD (addr: 0x03091590)
  - field index in instance = 3
 >> new sp = 0x48
 >> new sp = 0x44
-set val = 0 (hex:0x00000000), at addr(m):0x0009002c, instance addr: 0x00090018
+ - set val = 0 (hex:0x00000000), at addr(m):0x0009002c, instance addr: 0x00090018
 pc:0x1b op = 0x2a, ALOAD_0 (addr: 0x03091593)
+ - Current frame ptr: 0x2c
+ - param count = 1
  - Load ref 0x90018 to stack
+ - 1: 0x4, 2: 0x24
 >> new sp = 0x48
 pc:0x1c op = 0x0b, FCONST_0 (addr: 0x03091594)
  - push const 0.0 to stack
@@ -14085,9 +14113,12 @@ pc:0x1d op = 0xb5, PUTFIELD (addr: 0x03091595)
  - field index in instance = 4
 >> new sp = 0x48
 >> new sp = 0x44
-set val = 0 (hex:0x00000000), at addr(m):0x00090030, instance addr: 0x00090018
+ - set val = 0 (hex:0x00000000), at addr(m):0x00090030, instance addr: 0x00090018
 pc:0x20 op = 0x2a, ALOAD_0 (addr: 0x03091598)
+ - Current frame ptr: 0x2c
+ - param count = 1
  - Load ref 0x90018 to stack
+ - 1: 0x4, 2: 0x24
 >> new sp = 0x48
 pc:0x21 op = 0x0b, FCONST_0 (addr: 0x03091599)
  - push const 0.0 to stack
@@ -14097,9 +14128,12 @@ pc:0x22 op = 0xb5, PUTFIELD (addr: 0x0309159a)
  - field index in instance = 5
 >> new sp = 0x48
 >> new sp = 0x44
-set val = 0 (hex:0x00000000), at addr(m):0x00090034, instance addr: 0x00090018
+ - set val = 0 (hex:0x00000000), at addr(m):0x00090034, instance addr: 0x00090018
 pc:0x25 op = 0x2a, ALOAD_0 (addr: 0x0309159d)
+ - Current frame ptr: 0x2c
+ - param count = 1
  - Load ref 0x90018 to stack
+ - 1: 0x4, 2: 0x24
 >> new sp = 0x48
 pc:0x26 op = 0x0b, FCONST_0 (addr: 0x0309159e)
  - push const 0.0 to stack
@@ -14109,9 +14143,12 @@ pc:0x27 op = 0xb5, PUTFIELD (addr: 0x0309159f)
  - field index in instance = 6
 >> new sp = 0x48
 >> new sp = 0x44
-set val = 0 (hex:0x00000000), at addr(m):0x00090038, instance addr: 0x00090018
+ - set val = 0 (hex:0x00000000), at addr(m):0x00090038, instance addr: 0x00090018
 pc:0x2a op = 0x2a, ALOAD_0 (addr: 0x030915a2)
+ - Current frame ptr: 0x2c
+ - param count = 1
  - Load ref 0x90018 to stack
+ - 1: 0x4, 2: 0x24
 >> new sp = 0x48
 pc:0x2b op = 0x0b, FCONST_0 (addr: 0x030915a3)
  - push const 0.0 to stack
@@ -14121,9 +14158,12 @@ pc:0x2c op = 0xb5, PUTFIELD (addr: 0x030915a4)
  - field index in instance = 7
 >> new sp = 0x48
 >> new sp = 0x44
-set val = 0 (hex:0x00000000), at addr(m):0x0009003c, instance addr: 0x00090018
+ - set val = 0 (hex:0x00000000), at addr(m):0x0009003c, instance addr: 0x00090018
 pc:0x2f op = 0x2a, ALOAD_0 (addr: 0x030915a7)
+ - Current frame ptr: 0x2c
+ - param count = 1
  - Load ref 0x90018 to stack
+ - 1: 0x4, 2: 0x24
 >> new sp = 0x48
 pc:0x30 op = 0x0b, FCONST_0 (addr: 0x030915a8)
  - push const 0.0 to stack
@@ -14133,9 +14173,12 @@ pc:0x31 op = 0xb5, PUTFIELD (addr: 0x030915a9)
  - field index in instance = 8
 >> new sp = 0x48
 >> new sp = 0x44
-set val = 0 (hex:0x00000000), at addr(m):0x00090040, instance addr: 0x00090018
+ - set val = 0 (hex:0x00000000), at addr(m):0x00090040, instance addr: 0x00090018
 pc:0x34 op = 0x2a, ALOAD_0 (addr: 0x030915ac)
+ - Current frame ptr: 0x2c
+ - param count = 1
  - Load ref 0x90018 to stack
+ - 1: 0x4, 2: 0x24
 >> new sp = 0x48
 pc:0x35 op = 0x0b, FCONST_0 (addr: 0x030915ad)
  - push const 0.0 to stack
@@ -14145,24 +14188,34 @@ pc:0x36 op = 0xb5, PUTFIELD (addr: 0x030915ae)
  - field index in instance = 9
 >> new sp = 0x48
 >> new sp = 0x44
-set val = 0 (hex:0x00000000), at addr(m):0x00090044, instance addr: 0x00090018
+ - set val = 0 (hex:0x00000000), at addr(m):0x00090044, instance addr: 0x00090018
 pc:0x39 op = 0xb1, RETURN (addr: 0x030915b1)
+ - reset func pt to 0x03091d70
+ - bytecodes addr: 03091d88
 pc:0xc op = 0xb5, PUTFIELD (addr: 0x03091d94)
  - constant table index = 10
  - field index in instance = 1
 >> new sp = 0x20
 >> new sp = 0x1c
-set val = 589848 (hex:0x00090018), at addr(m):0x00090014, instance addr: 0x00090008
+ - set val = 589848 (hex:0x00090018), at addr(m):0x00090014, instance addr: 0x00090008
 pc:0xf op = 0x2a, ALOAD_0 (addr: 0x03091d97)
+ - Current frame ptr: 0x4
+ - param count = 1
  - Load ref 0x90008 to stack
+ - 1: (nil), 2: (nil)
 >> new sp = 0x20
 pc:0x10 op = 0x2a, ALOAD_0 (addr: 0x03091d98)
+ - Current frame ptr: 0x4
+ - param count = 1
  - Load ref 0x90008 to stack
+ - 1: (nil), 2: (nil)
 >> new sp = 0x24
 pc:0x11 op = 0xb6, INVOKEVIRTUAL (addr: 0x03091d99)
  - current-class-ref = 0x3091af8
  - method-ref-cp-index = 16
  - v-index = 0xf
+ - class-ref-cp-index = 11
+ - jclass-ref = 0x3091af8
  - instance-address [me()]= 0x90008, 0x24
  - instance-class-address = 0x3091af8
  - jclass-ref = 0x3091af8
@@ -14203,7 +14256,10 @@ pc:0x4 op = 0x59, DUP (addr: 0x03091ddc)
 pc:0x5 op = 0x03, ICONST_0 (addr: 0x03091ddd)
 >> new sp = 0x6c
 pc:0x6 op = 0x2a, ALOAD_0 (addr: 0x03091dde)
+ - Current frame ptr: 0x48
+ - param count = 1
  - Load ref 0x3091578 to stack
+ - 1: 0x4, 2: 0x20
 >> new sp = 0x70
 pc:0x7 op = 0xb4, GETFIELD (addr: 0x03091ddf)
  - fieldref in cp index = 10
@@ -14211,31 +14267,12 @@ pc:0x7 op = 0xb4, GETFIELD (addr: 0x03091ddf)
  - field index in instance = 1
 >> new sp = 0x6c
  - instance addr(m) = 0x3091578, field index = 1, addr(m) = 0x3091584
-field val = 0x1800b503
+ - field val = 0x1800b503
 >> new sp = 0x70
 pc:0xa op = 0xb6, INVOKEVIRTUAL (addr: 0x03091de2)
  - current-class-ref = 0x3091af8
  - method-ref-cp-index = 24
  - v-index = 0x14
- - instance-address [me()]= (nil), 0x74
- - instance-class-address = (nil)
- - jclass-ref = (nil)
- - jmethod-ref = (nil)
- - pop 0 elements from operand stack
- -- new sp = 0x70
- -- params-pt = 0x70
- -- return pc = 13
-
---------------------------------- Create Frame ---------------------------------
---------- [0] Frame from (0x70) ------------
- >> create frame from an existed function call
--------> new current_sp = 0x74
-(0x74) --> FP = (0x74) -> old-frame-fp = 0x48 
-(0x78) old-stack-pointer = 0x70 
-(0x7c) return pc = 0xd 
-(0x80) method-ref = (nil) 
-(0x84) class-ref = (nil) 
-(0x88) constant-pool-ref = 0x3091af8 
-(0x8c) bytecodes = 0x3091af8 
------------------------------- End Create Frame ------------------------------
-pc:0x0 op = 0xe0, UNKNOW (addr: 0x03091af8)
+ - class-ref-cp-index = 7
+ - jclass-ref = 0x30911d0
+ - instance-address [me()]= 0x1800b503, 0x70

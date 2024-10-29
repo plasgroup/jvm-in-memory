@@ -68,7 +68,10 @@ void interp(struct function_thunk func_thunk)
             DEBUG_OUT_INSN_PARSED("ALOAD_0")
 
             op1 = FRAME_GET_LOCALS(current_fp[tasklet_id], func->params_count, 0);
+            DEBUG_PRINT(" - Current frame ptr: %p\n", current_fp[tasklet_id]);
+            DEBUG_PRINT(" - param count = %d\n", func->params_count);
             DEBUG_PRINT(" - Load ref %p to stack\n", op1);
+            DEBUG_PRINT(" - 1: %p, 2: %p\n", FRAME_GET_LOCALS(current_fp[tasklet_id], func->params_count, 1), FRAME_GET_LOCALS(current_fp[tasklet_id], func->params_count, 2));
 
             PUSH_EVAL_STACK(op1)
             break;
@@ -264,7 +267,7 @@ void interp(struct function_thunk func_thunk)
 
             // read field
             op4 = *(uint32_t __mram_ptr *)(op3 + 8 + 4 * op2);
-            DEBUG_PRINT("field val = 0x%x\n", op4);
+            DEBUG_PRINT(" - field val = 0x%x\n", op4);
             PUSH_EVAL_STACK(op4);
 
             break;
@@ -278,7 +281,7 @@ void interp(struct function_thunk func_thunk)
             op1 = jc->items[op1].direct_value & 0xFFFF; // index in instance fields
             POP_EVAL_STACK(op3);                        // val
             POP_EVAL_STACK(op4);                        // instance addr
-            DEBUG_PRINT("set val = %d (hex:0x%08x), at addr(m):0x%08x, instance addr: 0x%08x\n", op3, op3, op4 + 8 + op1 * 4, op4);
+            DEBUG_PRINT(" - set val = %d (hex:0x%08x), at addr(m):0x%08x, instance addr: 0x%08x\n", op3, op3, op4 + 8 + op1 * 4, op4);
             *(uint32_t __mram_ptr *)(op4 + 8 + op1 * 4) = op3;
             break;
 
@@ -286,30 +289,41 @@ void interp(struct function_thunk func_thunk)
             DEBUG_OUT_INSN_PARSED("INVOKEVIRTUAL")
 
             op1 = (uint8_t)(code_buffer[pc] << 8) | code_buffer[pc + 1]; // constant table index to methoderef
-            op2 = func_thunk.jc->items[op1].direct_value;
+            op2 = func_thunk.jc->items[op1].direct_value;                // vtable index
 
             DEBUG_PRINT(" - current-class-ref = %p\n", func_thunk.jc);
             DEBUG_PRINT(" - method-ref-cp-index = %d\n", op1);
 
             DEBUG_PRINT(" - v-index = %p\n", op2);
 
-            callee.func = func_thunk.jc->virtual_table[op2].methodref;
+            op4 = (func_thunk.jc->items[op1].info >> 16) & 0xFFFF; // entry table index of the target method's class
+            DEBUG_PRINT(" - class-ref-cp-index = %d\n", op4);
+            DEBUG_PRINT(" - jclass-ref = %p\n", func_thunk.jc->items[op4].direct_value);
+            callee.jc = func_thunk.jc->items[op4].direct_value; // the class of target method (may be the real one, but should has inherent/inherented relation. We should can read a scheme of the target method from its virtual table. After knowing the scheme of the method, we can know its parameter count)
+
+            callee.func = callee.jc->virtual_table[op2].methodref; // read method from temporary target class's vtable
+
+            // get the address that stores the instance address.
             op4 = (uint8_t __mram_ptr *)(current_sp[tasklet_id] - 4 * (callee.func->params_count - 1));
 
             DEBUG_PRINT(" - instance-address [me()]= %p, %p\n", *(uint8_t __mram_ptr * __mram_ptr *)op4, op4);
 
+            // get the address of class reference of the object instance
             op3 = *(uint32_t __mram_ptr *)op4 + 4;
 
+            // get the reference of class of the target object.
             op1 = *(uint32_t __mram_ptr *)(op3);
             DEBUG_PRINT(" - instance-class-address = %p\n", op1);
 
             DEBUG_PRINT(" - jclass-ref = %p\n", ((struct j_class __mram_ptr *)(op1))->virtual_table[op2].classref);
             DEBUG_PRINT(" - jmethod-ref = %p\n", ((struct j_class __mram_ptr *)(op1))->virtual_table[op2].methodref);
+
+            // read real target class and method reference, write to callee
             callee.jc = ((struct j_class __mram_ptr *)(op1))->virtual_table[op2].classref;
             callee.func = ((struct j_class __mram_ptr *)(op1))->virtual_table[op2].methodref;
-            callee.params =
-                current_sp[tasklet_id];
+            callee.params = current_sp[tasklet_id];
 
+            // top callee.func->params_count on the evaluation stack as the arguments of the callee.
             current_sp[tasklet_id] -= 4 * callee.func->params_count;
             DEBUG_PRINT(" - pop %d elements from operand stack\n", callee.func->params_count);
             DEBUG_PRINT(" -- new sp = %p\n", current_sp[tasklet_id]);
@@ -322,10 +336,7 @@ void interp(struct function_thunk func_thunk)
             func = callee.func;
             code_buffer = func->bytecodes;
             jc = callee.jc;
-
-            func_thunk.func = func;
-            func_thunk.jc = jc;
-
+            func_thunk = callee;
             break;
 
         case NEW:
@@ -390,12 +401,12 @@ void interp(struct function_thunk func_thunk)
             // DEBUG_PRINT(" - reset pc to 0x%02x\n", op4);
 
             func = FRAME_GET_METHOD(op3);
-            // DEBUG_PRINT(" - reset func pt to 0x%08x\n", func);
+            DEBUG_PRINT(" - reset func pt to 0x%08x\n", func);
             current_fp[tasklet_id] = op3;
             code_buffer = func->bytecodes;
             jc = FRAME_GET_CLASS(op3);
             pc = op4;
-            // DEBUG_PRINT(" - bytecodes addr: %08x\n", func->bytecodes);
+            DEBUG_PRINT(" - bytecodes addr: %08x\n", func->bytecodes);
             func_thunk.func = func;
             func_thunk.jc = jc;
 
@@ -429,12 +440,12 @@ void interp(struct function_thunk func_thunk)
             // DEBUG_PRINT(" - reset pc to 0x%02x\n", op4);
 
             func = FRAME_GET_METHOD(op3);
-            // DEBUG_PRINT(" - reset func pt to 0x%08x\n", func);
+            DEBUG_PRINT(" - reset func pt to 0x%08x\n", func);
             current_fp[tasklet_id] = op3;
             code_buffer = func->bytecodes;
             jc = FRAME_GET_CLASS(op3);
             pc = op4;
-            // DEBUG_PRINT(" - bytecodes addr: %08x\n", func->bytecodes);
+            DEBUG_PRINT(" - bytecodes addr: %08x\n", func->bytecodes);
             func_thunk.func = func;
             func_thunk.jc = jc;
             break;
@@ -467,12 +478,12 @@ void interp(struct function_thunk func_thunk)
             // DEBUG_PRINT(" - reset pc to 0x%02x\n", op4);
 
             func = FRAME_GET_METHOD(op3);
-            // DEBUG_PRINT(" - reset func pt to 0x%08x\n", func);
+            DEBUG_PRINT(" - reset func pt to 0x%08x\n", func);
             current_fp[tasklet_id] = op3;
             code_buffer = func->bytecodes;
             jc = FRAME_GET_CLASS(op3);
             pc = op4;
-            // DEBUG_PRINT(" - bytecodes addr: %08x\n", func->bytecodes);
+            DEBUG_PRINT(" - bytecodes addr: %08x\n", func->bytecodes);
             func_thunk.func = func;
             func_thunk.jc = jc;
             break;
