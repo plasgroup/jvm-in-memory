@@ -15283,10 +15283,7 @@ create frame finished
 FP = (0x4)
 pc:0x0 op = 0x2a, ALOAD_N (addr: 0x03091e30)
  - 0
- - Current frame ptr: 0x4
- - max locals = 1
  - Load ref 0x90008 to stack
- - 1: (nil), 2: (nil)
 >> new sp = 0x20
 pc:0x1 op = 0xb7, INVOKESPECIAL (addr: 0x03091e31)
  - class-ref-cp-index = 2
@@ -15322,10 +15319,7 @@ return - last-sp = 0x1c
  - bytecodes addr: 03091e30
 pc:0x4 op = 0x2a, ALOAD_N (addr: 0x03091e34)
  - 0
- - Current frame ptr: 0x4
- - max locals = 1
  - Load ref 0x90008 to stack
- - 1: (nil), 2: (nil)
 >> new sp = 0x20
 pc:0x5 op = 0xbb, NEW (addr: 0x03091e35)
  - count field count
@@ -15368,10 +15362,7 @@ pc:0x9 op = 0xb7, INVOKESPECIAL (addr: 0x03091e39)
 ------------------------------ End Create Frame ------------------------------
 pc:0x0 op = 0x2a, ALOAD_N (addr: 0x03091578)
  - 0
- - Current frame ptr: 0x2c
- - max locals = 1
  - Load ref 0x90020 to stack
- - 1: 0x4, 2: 0x24
 >> new sp = 0x48
 pc:0x1 op = 0xb7, INVOKESPECIAL (addr: 0x03091579)
  - class-ref-cp-index = 15
@@ -15407,10 +15398,7 @@ return - last-sp = 0x44
  - bytecodes addr: 03091578
 pc:0x4 op = 0x2a, ALOAD_N (addr: 0x0309157c)
  - 0
- - Current frame ptr: 0x2c
- - max locals = 1
  - Load ref 0x90020 to stack
- - 1: 0x4, 2: 0x24
 >> new sp = 0x48
 pc:0x5 op = 0x12, LDC (addr: 0x0309157d)
  - constant table index = 20
@@ -15424,10 +15412,7 @@ pc:0x7 op = 0xb5, PUTFIELD (addr: 0x0309157f)
  - set val = 1078530011 (hex:0x40490fdb), at addr(m):0x00090028, instance addr: 0x00090020
 pc:0xa op = 0x2a, ALOAD_N (addr: 0x03091582)
  - 0
- - Current frame ptr: 0x2c
- - max locals = 1
  - Load ref 0x90020 to stack
- - 1: 0x4, 2: 0x24
 >> new sp = 0x48
 pc:0xb op = 0x12, LDC (addr: 0x03091583)
  - constant table index = 3
@@ -15441,10 +15426,7 @@ pc:0xd op = 0xb5, PUTFIELD (addr: 0x03091585)
  - set val = 1109256679 (hex:0x421de9e7), at addr(m):0x0009002c, instance addr: 0x00090020
 pc:0x10 op = 0x2a, ALOAD_N (addr: 0x03091588)
  - 0
- - Current frame ptr: 0x2c
- - max locals = 1
  - Load ref 0x90020 to stack
- - 1: 0x4, 2: 0x24
 >> new sp = 0x48
 pc:0x11 op = 0x12, LDC (addr: 0x03091589)
  - constant table index = 27
@@ -15458,10 +15440,7 @@ pc:0x13 op = 0xb5, PUTFIELD (addr: 0x0309158b)
  - set val = 1136041656 (hex:0x43b69eb8), at addr(m):0x00090030, instance addr: 0x00090020
 pc:0x16 op = 0x2a, ALOAD_N (addr: 0x0309158e)
  - 0
- - Current frame ptr: 0x2c
- - max locals = 1
  - Load ref 0x90020 to stack
- - 1: 0x4, 2: 0x24
 >> new sp = 0x48
 pc:0x17 op = 0x0b, FCONST_N (addr: 0x0309158f)
  - 0
@@ -15475,10 +15454,7 @@ pc:0x18 op = 0xb5, PUTFIELD (addr: 0x03091590)
  - set val = 0 (hex:0x00000000), at addr(m):0x00090034, instance addr: 0x00090020
 pc:0x1b op = 0x2a, ALOAD_N (addr: 0x03091593)
  - 0
- - Current frame ptr: 0x2c
- - max locals = 1
  - Load ref 0x90020 to stack
- - 1: 0x4, 2: 0x24
 >> new sp = 0x48
 pc:0x1c op = 0x0b, FCONST_N (addr: 0x03091594)
  - 0
@@ -15492,10 +15468,7 @@ pc:0x1d op = 0xb5, PUTFIELD (addr: 0x03091595)
  - set val = 0 (hex:0x00000000), at addr(m):0x00090038, instance addr: 0x00090020
 pc:0x20 op = 0x2a, ALOAD_N (addr: 0x03091598)
  - 0
- - Current frame ptr: 0x2c
- - max locals = 1
  - Load ref 0x90020 to stack
- - 1: 0x4, 2: 0x24
 >> new sp = 0x48
 pc:0x21 op = 0x0b, FCONST_N (addr: 0x03091599)
  - 0
@@ -15509,10 +15482,7 @@ pc:0x22 op = 0xb5, PUTFIELD (addr: 0x0309159a)
  - set val = 0 (hex:0x00000000), at addr(m):0x0009003c, instance addr: 0x00090020
 pc:0x25 op = 0x2a, ALOAD_N (addr: 0x0309159d)
  - 0
- - Current frame ptr: 0x2c
- - max locals = 1
  - Load ref 0x90020 to stack
- - 1: 0x4, 2: 0x24
 >> new sp = 0x48
 pc:0x26 op = 0x0b, FCONST_N (addr: 0x0309159e)
  - 0
@@ -15526,10 +15496,7 @@ pc:0x27 op = 0xb5, PUTFIELD (addr: 0x0309159f)
  - set val = 0 (hex:0x00000000), at addr(m):0x00090040, instance addr: 0x00090020
 pc:0x2a op = 0x2a, ALOAD_N (addr: 0x030915a2)
  - 0
- - Current frame ptr: 0x2c
- - max locals = 1
  - Load ref 0x90020 to stack
- - 1: 0x4, 2: 0x24
 >> new sp = 0x48
 pc:0x2b op = 0x0b, FCONST_N (addr: 0x030915a3)
  - 0
@@ -15543,10 +15510,7 @@ pc:0x2c op = 0xb5, PUTFIELD (addr: 0x030915a4)
  - set val = 0 (hex:0x00000000), at addr(m):0x00090044, instance addr: 0x00090020
 pc:0x2f op = 0x2a, ALOAD_N (addr: 0x030915a7)
  - 0
- - Current frame ptr: 0x2c
- - max locals = 1
  - Load ref 0x90020 to stack
- - 1: 0x4, 2: 0x24
 >> new sp = 0x48
 pc:0x30 op = 0x0b, FCONST_N (addr: 0x030915a8)
  - 0
@@ -15560,10 +15524,7 @@ pc:0x31 op = 0xb5, PUTFIELD (addr: 0x030915a9)
  - set val = 0 (hex:0x00000000), at addr(m):0x00090048, instance addr: 0x00090020
 pc:0x34 op = 0x2a, ALOAD_N (addr: 0x030915ac)
  - 0
- - Current frame ptr: 0x2c
- - max locals = 1
  - Load ref 0x90020 to stack
- - 1: 0x4, 2: 0x24
 >> new sp = 0x48
 pc:0x35 op = 0x0b, FCONST_N (addr: 0x030915ad)
  - 0
@@ -15591,10 +15552,7 @@ pc:0xc op = 0xb5, PUTFIELD (addr: 0x03091e3c)
  - set val = 589856 (hex:0x00090020), at addr(m):0x00090018, instance addr: 0x00090008
 pc:0xf op = 0x2a, ALOAD_N (addr: 0x03091e3f)
  - 0
- - Current frame ptr: 0x4
- - max locals = 1
  - Load ref 0x90008 to stack
- - 1: (nil), 2: (nil)
 >> new sp = 0x20
 pc:0x10 op = 0xbb, NEW (addr: 0x03091e40)
  - count field count
@@ -15637,10 +15595,7 @@ pc:0x14 op = 0xb7, INVOKESPECIAL (addr: 0x03091e44)
 ------------------------------ End Create Frame ------------------------------
 pc:0x0 op = 0x2a, ALOAD_N (addr: 0x03091990)
  - 0
- - Current frame ptr: 0x2c
- - max locals = 1
  - Load ref 0x90050 to stack
- - 1: 0x4, 2: 0x24
 >> new sp = 0x48
 pc:0x1 op = 0xb7, INVOKESPECIAL (addr: 0x03091991)
  - class-ref-cp-index = 2
@@ -15690,17 +15645,11 @@ pc:0x17 op = 0xb5, PUTFIELD (addr: 0x03091e47)
  - set val = 589904 (hex:0x00090050), at addr(m):0x00090014, instance addr: 0x00090008
 pc:0x1a op = 0x2a, ALOAD_N (addr: 0x03091e4a)
  - 0
- - Current frame ptr: 0x4
- - max locals = 1
  - Load ref 0x90008 to stack
- - 1: (nil), 2: (nil)
 >> new sp = 0x20
 pc:0x1b op = 0x2a, ALOAD_N (addr: 0x03091e4b)
  - 0
- - Current frame ptr: 0x4
- - max locals = 1
  - Load ref 0x90008 to stack
- - 1: (nil), 2: (nil)
 >> new sp = 0x24
 pc:0x1c op = 0xb6, INVOKEVIRTUAL (addr: 0x03091e4c)
  - current-class-ref = 0x3091af8
@@ -15743,8 +15692,12 @@ pc:0x0 op = 0x08, ICONST_N (addr: 0x03091e90)
  - push const 5 to stack
 >> new sp = 0x64
 pc:0x1 op = 0xbd, ANEWARRAY (addr: 0x03091e91)
+ -- class index = 7
+ -- class addr = 0x30911d0
 >> new sp = 0x60
+ - array length = 5
 >> new sp = 0x64
+ - allocate array in mram 0x90058
 pc:0x4 op = 0x59, DUP (addr: 0x03091e94)
  - dup 589912(hex: 90058)
 >> new sp = 0x68
@@ -15754,10 +15707,7 @@ pc:0x5 op = 0x03, ICONST_N (addr: 0x03091e95)
 >> new sp = 0x6c
 pc:0x6 op = 0x2a, ALOAD_N (addr: 0x03091e96)
  - 0
- - Current frame ptr: 0x48
- - max locals = 9
  - Load ref 0x90008 to stack
- - 1: 0x4, 2: 0x20
 >> new sp = 0x70
 pc:0x7 op = 0xb4, GETFIELD (addr: 0x03091e97)
  - fieldref in cp index = 10
@@ -15871,10 +15821,7 @@ pc:0xb op = 0xb7, INVOKESPECIAL (addr: 0x0309169b)
 ------------------------------ End Create Frame ------------------------------
 pc:0x0 op = 0x2a, ALOAD_N (addr: 0x03091510)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x90078 to stack
- - 1: (nil), 2: (nil)
 >> new sp = 0xd0
 pc:0x1 op = 0xb7, INVOKESPECIAL (addr: 0x03091511)
  - class-ref-cp-index = 15
@@ -15910,10 +15857,7 @@ return - last-sp = 0xcc
  - bytecodes addr: 03091510
 pc:0x4 op = 0x2a, ALOAD_N (addr: 0x03091514)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x90078 to stack
- - 1: (nil), 2: (nil)
 >> new sp = 0xd0
 pc:0x5 op = 0x12, LDC (addr: 0x03091515)
  - constant table index = 20
@@ -15927,10 +15871,7 @@ pc:0x7 op = 0xb5, PUTFIELD (addr: 0x03091517)
  - set val = 1078530011 (hex:0x40490fdb), at addr(m):0x00090080, instance addr: 0x00090078
 pc:0xa op = 0x2a, ALOAD_N (addr: 0x0309151a)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x90078 to stack
- - 1: (nil), 2: (nil)
 >> new sp = 0xd0
 pc:0xb op = 0x12, LDC (addr: 0x0309151b)
  - constant table index = 3
@@ -15944,10 +15885,7 @@ pc:0xd op = 0xb5, PUTFIELD (addr: 0x0309151d)
  - set val = 1109256679 (hex:0x421de9e7), at addr(m):0x00090084, instance addr: 0x00090078
 pc:0x10 op = 0x2a, ALOAD_N (addr: 0x03091520)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x90078 to stack
- - 1: (nil), 2: (nil)
 >> new sp = 0xd0
 pc:0x11 op = 0x12, LDC (addr: 0x03091521)
  - constant table index = 27
@@ -15961,10 +15899,7 @@ pc:0x13 op = 0xb5, PUTFIELD (addr: 0x03091523)
  - set val = 1136041656 (hex:0x43b69eb8), at addr(m):0x00090088, instance addr: 0x00090078
 pc:0x16 op = 0x2a, ALOAD_N (addr: 0x03091526)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x90078 to stack
- - 1: (nil), 2: (nil)
 >> new sp = 0xd0
 pc:0x17 op = 0x23, FLOAD_N (addr: 0x03091527)
  - 1
@@ -15978,10 +15913,7 @@ pc:0x18 op = 0xb5, PUTFIELD (addr: 0x03091528)
  - set val = 0 (hex:0x00000000), at addr(m):0x0009008c, instance addr: 0x00090078
 pc:0x1b op = 0x2a, ALOAD_N (addr: 0x0309152b)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x90078 to stack
- - 1: (nil), 2: (nil)
 >> new sp = 0xd0
 pc:0x1c op = 0x24, FLOAD_N (addr: 0x0309152c)
  - 2
@@ -15995,10 +15927,7 @@ pc:0x1d op = 0xb5, PUTFIELD (addr: 0x0309152d)
  - set val = 0 (hex:0x00000000), at addr(m):0x00090090, instance addr: 0x00090078
 pc:0x20 op = 0x2a, ALOAD_N (addr: 0x03091530)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x90078 to stack
- - 1: (nil), 2: (nil)
 >> new sp = 0xd0
 pc:0x21 op = 0x25, FLOAD_N (addr: 0x03091531)
  - 3
@@ -16012,10 +15941,7 @@ pc:0x22 op = 0xb5, PUTFIELD (addr: 0x03091532)
  - set val = 0 (hex:0x00000000), at addr(m):0x00090094, instance addr: 0x00090078
 pc:0x25 op = 0x2a, ALOAD_N (addr: 0x03091535)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x90078 to stack
- - 1: (nil), 2: (nil)
 >> new sp = 0xd0
 pc:0x26 op = 0x17, FLOAD (addr: 0x03091536)
  - local variable index = 4
@@ -16040,10 +15966,7 @@ pc:0x2b op = 0xb5, PUTFIELD (addr: 0x0309153b)
  - set val = 0 (hex:0x00000000), at addr(m):0x00090098, instance addr: 0x00090078
 pc:0x2e op = 0x2a, ALOAD_N (addr: 0x0309153e)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x90078 to stack
- - 1: (nil), 2: (nil)
 >> new sp = 0xd0
 pc:0x2f op = 0x17, FLOAD (addr: 0x0309153f)
  - local variable index = 5
@@ -16068,10 +15991,7 @@ pc:0x34 op = 0xb5, PUTFIELD (addr: 0x03091544)
  - set val = 0 (hex:0x00000000), at addr(m):0x0009009c, instance addr: 0x00090078
 pc:0x37 op = 0x2a, ALOAD_N (addr: 0x03091547)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x90078 to stack
- - 1: (nil), 2: (nil)
 >> new sp = 0xd0
 pc:0x38 op = 0x17, FLOAD (addr: 0x03091548)
  - local variable index = 6
@@ -16096,10 +16016,7 @@ pc:0x3d op = 0xb5, PUTFIELD (addr: 0x0309154d)
  - set val = 0 (hex:0x00000000), at addr(m):0x000900a0, instance addr: 0x00090078
 pc:0x40 op = 0x2a, ALOAD_N (addr: 0x03091550)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x90078 to stack
- - 1: (nil), 2: (nil)
 >> new sp = 0xd0
 pc:0x41 op = 0x17, FLOAD (addr: 0x03091551)
  - local variable index = 7
@@ -16157,10 +16074,7 @@ pc:0xf op = 0x04, ICONST_N (addr: 0x03091e9f)
 >> new sp = 0x6c
 pc:0x10 op = 0x2a, ALOAD_N (addr: 0x03091ea0)
  - 0
- - Current frame ptr: 0x48
- - max locals = 9
  - Load ref 0x90008 to stack
- - 1: 0x4, 2: 0x20
 >> new sp = 0x70
 pc:0x11 op = 0xb4, GETFIELD (addr: 0x03091ea1)
  - fieldref in cp index = 10
@@ -16274,10 +16188,7 @@ pc:0x12 op = 0xb7, INVOKESPECIAL (addr: 0x030915e2)
 ------------------------------ End Create Frame ------------------------------
 pc:0x0 op = 0x2a, ALOAD_N (addr: 0x03091510)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x900a8 to stack
- - 1: 0x409aed02, 2: 0xbf94855e
 >> new sp = 0xd0
 pc:0x1 op = 0xb7, INVOKESPECIAL (addr: 0x03091511)
  - class-ref-cp-index = 15
@@ -16313,10 +16224,7 @@ return - last-sp = 0xcc
  - bytecodes addr: 03091510
 pc:0x4 op = 0x2a, ALOAD_N (addr: 0x03091514)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x900a8 to stack
- - 1: 0x409aed02, 2: 0xbf94855e
 >> new sp = 0xd0
 pc:0x5 op = 0x12, LDC (addr: 0x03091515)
  - constant table index = 20
@@ -16330,10 +16238,7 @@ pc:0x7 op = 0xb5, PUTFIELD (addr: 0x03091517)
  - set val = 1078530011 (hex:0x40490fdb), at addr(m):0x000900b0, instance addr: 0x000900a8
 pc:0xa op = 0x2a, ALOAD_N (addr: 0x0309151a)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x900a8 to stack
- - 1: 0x409aed02, 2: 0xbf94855e
 >> new sp = 0xd0
 pc:0xb op = 0x12, LDC (addr: 0x0309151b)
  - constant table index = 3
@@ -16347,10 +16252,7 @@ pc:0xd op = 0xb5, PUTFIELD (addr: 0x0309151d)
  - set val = 1109256679 (hex:0x421de9e7), at addr(m):0x000900b4, instance addr: 0x000900a8
 pc:0x10 op = 0x2a, ALOAD_N (addr: 0x03091520)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x900a8 to stack
- - 1: 0x409aed02, 2: 0xbf94855e
 >> new sp = 0xd0
 pc:0x11 op = 0x12, LDC (addr: 0x03091521)
  - constant table index = 27
@@ -16364,10 +16266,7 @@ pc:0x13 op = 0xb5, PUTFIELD (addr: 0x03091523)
  - set val = 1136041656 (hex:0x43b69eb8), at addr(m):0x000900b8, instance addr: 0x000900a8
 pc:0x16 op = 0x2a, ALOAD_N (addr: 0x03091526)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x900a8 to stack
- - 1: 0x409aed02, 2: 0xbf94855e
 >> new sp = 0xd0
 pc:0x17 op = 0x23, FLOAD_N (addr: 0x03091527)
  - 1
@@ -16381,10 +16280,7 @@ pc:0x18 op = 0xb5, PUTFIELD (addr: 0x03091528)
  - set val = 1083895042 (hex:0x409aed02), at addr(m):0x000900bc, instance addr: 0x000900a8
 pc:0x1b op = 0x2a, ALOAD_N (addr: 0x0309152b)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x900a8 to stack
- - 1: 0x409aed02, 2: 0xbf94855e
 >> new sp = 0xd0
 pc:0x1c op = 0x24, FLOAD_N (addr: 0x0309152c)
  - 2
@@ -16398,10 +16294,7 @@ pc:0x1d op = 0xb5, PUTFIELD (addr: 0x0309152d)
  - set val = -1080785570 (hex:0xbf94855e), at addr(m):0x000900c0, instance addr: 0x000900a8
 pc:0x20 op = 0x2a, ALOAD_N (addr: 0x03091530)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x900a8 to stack
- - 1: 0x409aed02, 2: 0xbf94855e
 >> new sp = 0xd0
 pc:0x21 op = 0x25, FLOAD_N (addr: 0x03091531)
  - 3
@@ -16415,10 +16308,7 @@ pc:0x22 op = 0xb5, PUTFIELD (addr: 0x03091532)
  - set val = -1110165557 (hex:0xbdd437cb), at addr(m):0x000900c4, instance addr: 0x000900a8
 pc:0x25 op = 0x2a, ALOAD_N (addr: 0x03091535)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x900a8 to stack
- - 1: 0x409aed02, 2: 0xbf94855e
 >> new sp = 0xd0
 pc:0x26 op = 0x17, FLOAD (addr: 0x03091536)
  - local variable index = 4
@@ -16443,10 +16333,7 @@ pc:0x2b op = 0xb5, PUTFIELD (addr: 0x0309153b)
  - set val = 1058748469 (hex:0x3f1b3835), at addr(m):0x000900c8, instance addr: 0x000900a8
 pc:0x2e op = 0x2a, ALOAD_N (addr: 0x0309153e)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x900a8 to stack
- - 1: 0x409aed02, 2: 0xbf94855e
 >> new sp = 0xd0
 pc:0x2f op = 0x17, FLOAD (addr: 0x0309153f)
  - local variable index = 5
@@ -16471,10 +16358,7 @@ pc:0x34 op = 0xb5, PUTFIELD (addr: 0x03091544)
  - set val = 1077147544 (hex:0x4033f798), at addr(m):0x000900cc, instance addr: 0x000900a8
 pc:0x37 op = 0x2a, ALOAD_N (addr: 0x03091547)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x900a8 to stack
- - 1: 0x409aed02, 2: 0xbf94855e
 >> new sp = 0xd0
 pc:0x38 op = 0x17, FLOAD (addr: 0x03091548)
  - local variable index = 6
@@ -16499,10 +16383,7 @@ pc:0x3d op = 0xb5, PUTFIELD (addr: 0x0309154d)
  - set val = -1127311684 (hex:0xbcce96bc), at addr(m):0x000900d0, instance addr: 0x000900a8
 pc:0x40 op = 0x2a, ALOAD_N (addr: 0x03091550)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x900a8 to stack
- - 1: 0x409aed02, 2: 0xbf94855e
 >> new sp = 0xd0
 pc:0x41 op = 0x17, FLOAD (addr: 0x03091551)
  - local variable index = 7
@@ -16560,10 +16441,7 @@ pc:0x19 op = 0x05, ICONST_N (addr: 0x03091ea9)
 >> new sp = 0x6c
 pc:0x1a op = 0x2a, ALOAD_N (addr: 0x03091eaa)
  - 0
- - Current frame ptr: 0x48
- - max locals = 9
  - Load ref 0x90008 to stack
- - 1: 0x4, 2: 0x20
 >> new sp = 0x70
 pc:0x1b op = 0xb4, GETFIELD (addr: 0x03091eab)
  - fieldref in cp index = 10
@@ -16677,10 +16555,7 @@ pc:0x12 op = 0xb7, INVOKESPECIAL (addr: 0x03091612)
 ------------------------------ End Create Frame ------------------------------
 pc:0x0 op = 0x2a, ALOAD_N (addr: 0x03091510)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x900d8 to stack
- - 1: 0x41057e6e, 2: 0x4083fe5a
 >> new sp = 0xd0
 pc:0x1 op = 0xb7, INVOKESPECIAL (addr: 0x03091511)
  - class-ref-cp-index = 15
@@ -16716,10 +16591,7 @@ return - last-sp = 0xcc
  - bytecodes addr: 03091510
 pc:0x4 op = 0x2a, ALOAD_N (addr: 0x03091514)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x900d8 to stack
- - 1: 0x41057e6e, 2: 0x4083fe5a
 >> new sp = 0xd0
 pc:0x5 op = 0x12, LDC (addr: 0x03091515)
  - constant table index = 20
@@ -16733,10 +16605,7 @@ pc:0x7 op = 0xb5, PUTFIELD (addr: 0x03091517)
  - set val = 1078530011 (hex:0x40490fdb), at addr(m):0x000900e0, instance addr: 0x000900d8
 pc:0xa op = 0x2a, ALOAD_N (addr: 0x0309151a)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x900d8 to stack
- - 1: 0x41057e6e, 2: 0x4083fe5a
 >> new sp = 0xd0
 pc:0xb op = 0x12, LDC (addr: 0x0309151b)
  - constant table index = 3
@@ -16750,10 +16619,7 @@ pc:0xd op = 0xb5, PUTFIELD (addr: 0x0309151d)
  - set val = 1109256679 (hex:0x421de9e7), at addr(m):0x000900e4, instance addr: 0x000900d8
 pc:0x10 op = 0x2a, ALOAD_N (addr: 0x03091520)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x900d8 to stack
- - 1: 0x41057e6e, 2: 0x4083fe5a
 >> new sp = 0xd0
 pc:0x11 op = 0x12, LDC (addr: 0x03091521)
  - constant table index = 27
@@ -16767,10 +16633,7 @@ pc:0x13 op = 0xb5, PUTFIELD (addr: 0x03091523)
  - set val = 1136041656 (hex:0x43b69eb8), at addr(m):0x000900e8, instance addr: 0x000900d8
 pc:0x16 op = 0x2a, ALOAD_N (addr: 0x03091526)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x900d8 to stack
- - 1: 0x41057e6e, 2: 0x4083fe5a
 >> new sp = 0xd0
 pc:0x17 op = 0x23, FLOAD_N (addr: 0x03091527)
  - 1
@@ -16784,10 +16647,7 @@ pc:0x18 op = 0xb5, PUTFIELD (addr: 0x03091528)
  - set val = 1090879086 (hex:0x41057e6e), at addr(m):0x000900ec, instance addr: 0x000900d8
 pc:0x1b op = 0x2a, ALOAD_N (addr: 0x0309152b)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x900d8 to stack
- - 1: 0x41057e6e, 2: 0x4083fe5a
 >> new sp = 0xd0
 pc:0x1c op = 0x24, FLOAD_N (addr: 0x0309152c)
  - 2
@@ -16801,10 +16661,7 @@ pc:0x1d op = 0xb5, PUTFIELD (addr: 0x0309152d)
  - set val = 1082392154 (hex:0x4083fe5a), at addr(m):0x000900f0, instance addr: 0x000900d8
 pc:0x20 op = 0x2a, ALOAD_N (addr: 0x03091530)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x900d8 to stack
- - 1: 0x41057e6e, 2: 0x4083fe5a
 >> new sp = 0xd0
 pc:0x21 op = 0x25, FLOAD_N (addr: 0x03091531)
  - 3
@@ -16818,10 +16675,7 @@ pc:0x22 op = 0xb5, PUTFIELD (addr: 0x03091532)
  - set val = -1093756257 (hex:0xbece9a9f), at addr(m):0x000900f4, instance addr: 0x000900d8
 pc:0x25 op = 0x2a, ALOAD_N (addr: 0x03091535)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x900d8 to stack
- - 1: 0x41057e6e, 2: 0x4083fe5a
 >> new sp = 0xd0
 pc:0x26 op = 0x17, FLOAD (addr: 0x03091536)
  - local variable index = 4
@@ -16846,10 +16700,7 @@ pc:0x2b op = 0xb5, PUTFIELD (addr: 0x0309153b)
  - set val = -1082040051 (hex:0xbf81610d), at addr(m):0x000900f8, instance addr: 0x000900d8
 pc:0x2e op = 0x2a, ALOAD_N (addr: 0x0309153e)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x900d8 to stack
- - 1: 0x41057e6e, 2: 0x4083fe5a
 >> new sp = 0xd0
 pc:0x2f op = 0x17, FLOAD (addr: 0x0309153f)
  - local variable index = 5
@@ -16874,10 +16725,7 @@ pc:0x34 op = 0xb5, PUTFIELD (addr: 0x03091544)
  - set val = 1072279373 (hex:0x3fe9af4d), at addr(m):0x000900fc, instance addr: 0x000900d8
 pc:0x37 op = 0x2a, ALOAD_N (addr: 0x03091547)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x900d8 to stack
- - 1: 0x41057e6e, 2: 0x4083fe5a
 >> new sp = 0xd0
 pc:0x38 op = 0x17, FLOAD (addr: 0x03091548)
  - local variable index = 6
@@ -16902,10 +16750,7 @@ pc:0x3d op = 0xb5, PUTFIELD (addr: 0x0309154d)
  - set val = 1007280707 (hex:0x3c09e243), at addr(m):0x00090100, instance addr: 0x000900d8
 pc:0x40 op = 0x2a, ALOAD_N (addr: 0x03091550)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x900d8 to stack
- - 1: 0x41057e6e, 2: 0x4083fe5a
 >> new sp = 0xd0
 pc:0x41 op = 0x17, FLOAD (addr: 0x03091551)
  - local variable index = 7
@@ -16963,10 +16808,7 @@ pc:0x23 op = 0x06, ICONST_N (addr: 0x03091eb3)
 >> new sp = 0x6c
 pc:0x24 op = 0x2a, ALOAD_N (addr: 0x03091eb4)
  - 0
- - Current frame ptr: 0x48
- - max locals = 9
  - Load ref 0x90008 to stack
- - 1: 0x4, 2: 0x20
 >> new sp = 0x70
 pc:0x25 op = 0xb4, GETFIELD (addr: 0x03091eb5)
  - fieldref in cp index = 10
@@ -17080,10 +16922,7 @@ pc:0x12 op = 0xb7, INVOKESPECIAL (addr: 0x03091642)
 ------------------------------ End Create Frame ------------------------------
 pc:0x0 op = 0x2a, ALOAD_N (addr: 0x03091510)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x90108 to stack
- - 1: 0x414e4f56, 2: 0xc171c747
 >> new sp = 0xd0
 pc:0x1 op = 0xb7, INVOKESPECIAL (addr: 0x03091511)
  - class-ref-cp-index = 15
@@ -17119,10 +16958,7 @@ return - last-sp = 0xcc
  - bytecodes addr: 03091510
 pc:0x4 op = 0x2a, ALOAD_N (addr: 0x03091514)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x90108 to stack
- - 1: 0x414e4f56, 2: 0xc171c747
 >> new sp = 0xd0
 pc:0x5 op = 0x12, LDC (addr: 0x03091515)
  - constant table index = 20
@@ -17136,10 +16972,7 @@ pc:0x7 op = 0xb5, PUTFIELD (addr: 0x03091517)
  - set val = 1078530011 (hex:0x40490fdb), at addr(m):0x00090110, instance addr: 0x00090108
 pc:0xa op = 0x2a, ALOAD_N (addr: 0x0309151a)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x90108 to stack
- - 1: 0x414e4f56, 2: 0xc171c747
 >> new sp = 0xd0
 pc:0xb op = 0x12, LDC (addr: 0x0309151b)
  - constant table index = 3
@@ -17153,10 +16986,7 @@ pc:0xd op = 0xb5, PUTFIELD (addr: 0x0309151d)
  - set val = 1109256679 (hex:0x421de9e7), at addr(m):0x00090114, instance addr: 0x00090108
 pc:0x10 op = 0x2a, ALOAD_N (addr: 0x03091520)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x90108 to stack
- - 1: 0x414e4f56, 2: 0xc171c747
 >> new sp = 0xd0
 pc:0x11 op = 0x12, LDC (addr: 0x03091521)
  - constant table index = 27
@@ -17170,10 +17000,7 @@ pc:0x13 op = 0xb5, PUTFIELD (addr: 0x03091523)
  - set val = 1136041656 (hex:0x43b69eb8), at addr(m):0x00090118, instance addr: 0x00090108
 pc:0x16 op = 0x2a, ALOAD_N (addr: 0x03091526)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x90108 to stack
- - 1: 0x414e4f56, 2: 0xc171c747
 >> new sp = 0xd0
 pc:0x17 op = 0x23, FLOAD_N (addr: 0x03091527)
  - 1
@@ -17187,10 +17014,7 @@ pc:0x18 op = 0xb5, PUTFIELD (addr: 0x03091528)
  - set val = 1095651158 (hex:0x414e4f56), at addr(m):0x0009011c, instance addr: 0x00090108
 pc:0x1b op = 0x2a, ALOAD_N (addr: 0x0309152b)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x90108 to stack
- - 1: 0x414e4f56, 2: 0xc171c747
 >> new sp = 0xd0
 pc:0x1c op = 0x24, FLOAD_N (addr: 0x0309152c)
  - 2
@@ -17204,10 +17028,7 @@ pc:0x1d op = 0xb5, PUTFIELD (addr: 0x0309152d)
  - set val = -1049508025 (hex:0xc171c747), at addr(m):0x00090120, instance addr: 0x00090108
 pc:0x20 op = 0x2a, ALOAD_N (addr: 0x03091530)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x90108 to stack
- - 1: 0x414e4f56, 2: 0xc171c747
 >> new sp = 0xd0
 pc:0x21 op = 0x25, FLOAD_N (addr: 0x03091531)
  - 3
@@ -17221,10 +17042,7 @@ pc:0x22 op = 0xb5, PUTFIELD (addr: 0x03091532)
  - set val = -1100698946 (hex:0xbe64aabe), at addr(m):0x00090124, instance addr: 0x00090108
 pc:0x25 op = 0x2a, ALOAD_N (addr: 0x03091535)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x90108 to stack
- - 1: 0x414e4f56, 2: 0xc171c747
 >> new sp = 0xd0
 pc:0x26 op = 0x17, FLOAD (addr: 0x03091536)
  - local variable index = 4
@@ -17249,10 +17067,7 @@ pc:0x2b op = 0xb5, PUTFIELD (addr: 0x0309153b)
  - set val = 1066047717 (hex:0x3f8a98e5), at addr(m):0x00090128, instance addr: 0x00090108
 pc:0x2e op = 0x2a, ALOAD_N (addr: 0x0309153e)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x90108 to stack
- - 1: 0x414e4f56, 2: 0xc171c747
 >> new sp = 0xd0
 pc:0x2f op = 0x17, FLOAD (addr: 0x0309153f)
  - local variable index = 5
@@ -17277,10 +17092,7 @@ pc:0x34 op = 0xb5, PUTFIELD (addr: 0x03091544)
  - set val = 1063150585 (hex:0x3f5e63f9), at addr(m):0x0009012c, instance addr: 0x00090108
 pc:0x37 op = 0x2a, ALOAD_N (addr: 0x03091547)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x90108 to stack
- - 1: 0x414e4f56, 2: 0xc171c747
 >> new sp = 0xd0
 pc:0x38 op = 0x17, FLOAD (addr: 0x03091548)
  - local variable index = 6
@@ -17305,10 +17117,7 @@ pc:0x3d op = 0xb5, PUTFIELD (addr: 0x0309154d)
  - set val = -1137607840 (hex:0xbc317b60), at addr(m):0x00090130, instance addr: 0x00090108
 pc:0x40 op = 0x2a, ALOAD_N (addr: 0x03091550)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x90108 to stack
- - 1: 0x414e4f56, 2: 0xc171c747
 >> new sp = 0xd0
 pc:0x41 op = 0x17, FLOAD (addr: 0x03091551)
  - local variable index = 7
@@ -17366,10 +17175,7 @@ pc:0x2d op = 0x07, ICONST_N (addr: 0x03091ebd)
 >> new sp = 0x6c
 pc:0x2e op = 0x2a, ALOAD_N (addr: 0x03091ebe)
  - 0
- - Current frame ptr: 0x48
- - max locals = 9
  - Load ref 0x90008 to stack
- - 1: 0x4, 2: 0x20
 >> new sp = 0x70
 pc:0x2f op = 0xb4, GETFIELD (addr: 0x03091ebf)
  - fieldref in cp index = 10
@@ -17483,10 +17289,7 @@ pc:0x12 op = 0xb7, INVOKESPECIAL (addr: 0x03091672)
 ------------------------------ End Create Frame ------------------------------
 pc:0x0 op = 0x2a, ALOAD_N (addr: 0x03091510)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x90138 to stack
- - 1: 0x4176133d, 2: 0xc1cf5ac2
 >> new sp = 0xd0
 pc:0x1 op = 0xb7, INVOKESPECIAL (addr: 0x03091511)
  - class-ref-cp-index = 15
@@ -17522,10 +17325,7 @@ return - last-sp = 0xcc
  - bytecodes addr: 03091510
 pc:0x4 op = 0x2a, ALOAD_N (addr: 0x03091514)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x90138 to stack
- - 1: 0x4176133d, 2: 0xc1cf5ac2
 >> new sp = 0xd0
 pc:0x5 op = 0x12, LDC (addr: 0x03091515)
  - constant table index = 20
@@ -17539,10 +17339,7 @@ pc:0x7 op = 0xb5, PUTFIELD (addr: 0x03091517)
  - set val = 1078530011 (hex:0x40490fdb), at addr(m):0x00090140, instance addr: 0x00090138
 pc:0xa op = 0x2a, ALOAD_N (addr: 0x0309151a)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x90138 to stack
- - 1: 0x4176133d, 2: 0xc1cf5ac2
 >> new sp = 0xd0
 pc:0xb op = 0x12, LDC (addr: 0x0309151b)
  - constant table index = 3
@@ -17556,10 +17353,7 @@ pc:0xd op = 0xb5, PUTFIELD (addr: 0x0309151d)
  - set val = 1109256679 (hex:0x421de9e7), at addr(m):0x00090144, instance addr: 0x00090138
 pc:0x10 op = 0x2a, ALOAD_N (addr: 0x03091520)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x90138 to stack
- - 1: 0x4176133d, 2: 0xc1cf5ac2
 >> new sp = 0xd0
 pc:0x11 op = 0x12, LDC (addr: 0x03091521)
  - constant table index = 27
@@ -17573,10 +17367,7 @@ pc:0x13 op = 0xb5, PUTFIELD (addr: 0x03091523)
  - set val = 1136041656 (hex:0x43b69eb8), at addr(m):0x00090148, instance addr: 0x00090138
 pc:0x16 op = 0x2a, ALOAD_N (addr: 0x03091526)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x90138 to stack
- - 1: 0x4176133d, 2: 0xc1cf5ac2
 >> new sp = 0xd0
 pc:0x17 op = 0x23, FLOAD_N (addr: 0x03091527)
  - 1
@@ -17590,10 +17381,7 @@ pc:0x18 op = 0xb5, PUTFIELD (addr: 0x03091528)
  - set val = 1098257213 (hex:0x4176133d), at addr(m):0x0009014c, instance addr: 0x00090138
 pc:0x1b op = 0x2a, ALOAD_N (addr: 0x0309152b)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x90138 to stack
- - 1: 0x4176133d, 2: 0xc1cf5ac2
 >> new sp = 0xd0
 pc:0x1c op = 0x24, FLOAD_N (addr: 0x0309152c)
  - 2
@@ -17607,10 +17395,7 @@ pc:0x1d op = 0xb5, PUTFIELD (addr: 0x0309152d)
  - set val = -1043375422 (hex:0xc1cf5ac2), at addr(m):0x00090150, instance addr: 0x00090138
 pc:0x20 op = 0x2a, ALOAD_N (addr: 0x03091530)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x90138 to stack
- - 1: 0x4176133d, 2: 0xc1cf5ac2
 >> new sp = 0xd0
 pc:0x21 op = 0x25, FLOAD_N (addr: 0x03091531)
  - 3
@@ -17624,10 +17409,7 @@ pc:0x22 op = 0xb5, PUTFIELD (addr: 0x03091532)
  - set val = 1043828637 (hex:0x3e378f9d), at addr(m):0x00090154, instance addr: 0x00090138
 pc:0x25 op = 0x2a, ALOAD_N (addr: 0x03091535)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x90138 to stack
- - 1: 0x4176133d, 2: 0xc1cf5ac2
 >> new sp = 0xd0
 pc:0x26 op = 0x17, FLOAD (addr: 0x03091536)
  - local variable index = 4
@@ -17652,10 +17434,7 @@ pc:0x2b op = 0xb5, PUTFIELD (addr: 0x0309153b)
  - set val = 1065002416 (hex:0x3f7aa5b0), at addr(m):0x00090158, instance addr: 0x00090138
 pc:0x2e op = 0x2a, ALOAD_N (addr: 0x0309153e)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x90138 to stack
- - 1: 0x4176133d, 2: 0xc1cf5ac2
 >> new sp = 0xd0
 pc:0x2f op = 0x17, FLOAD (addr: 0x0309153f)
  - local variable index = 5
@@ -17680,10 +17459,7 @@ pc:0x34 op = 0xb5, PUTFIELD (addr: 0x03091544)
  - set val = 1058553393 (hex:0x3f183e31), at addr(m):0x0009015c, instance addr: 0x00090138
 pc:0x37 op = 0x2a, ALOAD_N (addr: 0x03091547)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x90138 to stack
- - 1: 0x4176133d, 2: 0xc1cf5ac2
 >> new sp = 0xd0
 pc:0x38 op = 0x17, FLOAD (addr: 0x03091548)
  - local variable index = 6
@@ -17708,10 +17484,7 @@ pc:0x3d op = 0xb5, PUTFIELD (addr: 0x0309154d)
  - set val = -1123132350 (hex:0xbd0e5c42), at addr(m):0x00090160, instance addr: 0x00090138
 pc:0x40 op = 0x2a, ALOAD_N (addr: 0x03091550)
  - 0
- - Current frame ptr: 0xb4
- - max locals = 8
  - Load ref 0x90138 to stack
- - 1: 0x4176133d, 2: 0xc1cf5ac2
 >> new sp = 0xd0
 pc:0x41 op = 0x17, FLOAD (addr: 0x03091551)
  - local variable index = 7
@@ -17790,10 +17563,7 @@ pc:0x3c op = 0x38, FSTORE (addr: 0x03091ecc)
  - Store float 0.000000 to local 4
 pc:0x3e op = 0x2b, ALOAD_N (addr: 0x03091ece)
  - 1
- - Current frame ptr: 0x48
- - max locals = 9
  - Load ref 0x90058 to stack
- - 1: 0x4, 2: 0x20
 >> new sp = 0x64
 pc:0x3f op = 0x3a, ASTORE (addr: 0x03091ecf)
  - local variable index = 5
@@ -17805,11 +17575,12 @@ pc:0x41 op = 0x19, ALOAD (addr: 0x03091ed1)
 >> new sp = 0x64
 pc:0x43 op = 0xbe, ARRAYLENGTH (addr: 0x03091ed3)
 >> new sp = 0x60
+ - array length = 5
 >> new sp = 0x64
 pc:0x44 op = 0x36, ISTORE (addr: 0x03091ed4)
  - local variable index = 6
 >> new sp = 0x60
- - Store INT 5 to local 6
+ - Store int 5 to local 6
 pc:0x46 op = 0x03, ICONST_N (addr: 0x03091ed6)
  - 0
  - push const 0 to stack
@@ -17817,14 +17588,14 @@ pc:0x46 op = 0x03, ICONST_N (addr: 0x03091ed6)
 pc:0x47 op = 0x36, ISTORE (addr: 0x03091ed7)
  - local variable index = 7
 >> new sp = 0x60
- - Store INT 0 to local 7
+ - Store int 0 to local 7
 pc:0x49 op = 0x15, ILOAD (addr: 0x03091ed9)
  - local variable index = 7
- - Load INT 0 to stack
+ - Load int 0 to stack
 >> new sp = 0x64
 pc:0x4b op = 0x15, ILOAD (addr: 0x03091edb)
  - local variable index = 6
- - Load INT 5 to stack
+ - Load int 5 to stack
 >> new sp = 0x68
 pc:0x4d op = 0xa2, IF_ICMPGE (addr: 0x03091edd)
 >> new sp = 0x64
@@ -17838,7 +17609,7 @@ pc:0x50 op = 0x19, ALOAD (addr: 0x03091ee0)
 >> new sp = 0x64
 pc:0x52 op = 0x15, ILOAD (addr: 0x03091ee2)
  - local variable index = 7
- - Load INT 0 to stack
+ - Load int 0 to stack
 >> new sp = 0x68
 pc:0x54 op = 0x32, ?ALOAD (addr: 0x03091ee4)
 >> new sp = 0x64
@@ -17995,11 +17766,11 @@ pc:0x86 op = 0xa7, GOTO (addr: 0x03091f16)
  - goto 73
 pc:0x49 op = 0x15, ILOAD (addr: 0x03091ed9)
  - local variable index = 7
- - Load INT 1 to stack
+ - Load int 1 to stack
 >> new sp = 0x64
 pc:0x4b op = 0x15, ILOAD (addr: 0x03091edb)
  - local variable index = 6
- - Load INT 5 to stack
+ - Load int 5 to stack
 >> new sp = 0x68
 pc:0x4d op = 0xa2, IF_ICMPGE (addr: 0x03091edd)
 >> new sp = 0x64
@@ -18013,7 +17784,7 @@ pc:0x50 op = 0x19, ALOAD (addr: 0x03091ee0)
 >> new sp = 0x64
 pc:0x52 op = 0x15, ILOAD (addr: 0x03091ee2)
  - local variable index = 7
- - Load INT 1 to stack
+ - Load int 1 to stack
 >> new sp = 0x68
 pc:0x54 op = 0x32, ?ALOAD (addr: 0x03091ee4)
 >> new sp = 0x64
@@ -18170,11 +17941,11 @@ pc:0x86 op = 0xa7, GOTO (addr: 0x03091f16)
  - goto 73
 pc:0x49 op = 0x15, ILOAD (addr: 0x03091ed9)
  - local variable index = 7
- - Load INT 2 to stack
+ - Load int 2 to stack
 >> new sp = 0x64
 pc:0x4b op = 0x15, ILOAD (addr: 0x03091edb)
  - local variable index = 6
- - Load INT 5 to stack
+ - Load int 5 to stack
 >> new sp = 0x68
 pc:0x4d op = 0xa2, IF_ICMPGE (addr: 0x03091edd)
 >> new sp = 0x64
@@ -18188,7 +17959,7 @@ pc:0x50 op = 0x19, ALOAD (addr: 0x03091ee0)
 >> new sp = 0x64
 pc:0x52 op = 0x15, ILOAD (addr: 0x03091ee2)
  - local variable index = 7
- - Load INT 2 to stack
+ - Load int 2 to stack
 >> new sp = 0x68
 pc:0x54 op = 0x32, ?ALOAD (addr: 0x03091ee4)
 >> new sp = 0x64
@@ -18345,11 +18116,11 @@ pc:0x86 op = 0xa7, GOTO (addr: 0x03091f16)
  - goto 73
 pc:0x49 op = 0x15, ILOAD (addr: 0x03091ed9)
  - local variable index = 7
- - Load INT 3 to stack
+ - Load int 3 to stack
 >> new sp = 0x64
 pc:0x4b op = 0x15, ILOAD (addr: 0x03091edb)
  - local variable index = 6
- - Load INT 5 to stack
+ - Load int 5 to stack
 >> new sp = 0x68
 pc:0x4d op = 0xa2, IF_ICMPGE (addr: 0x03091edd)
 >> new sp = 0x64
@@ -18363,7 +18134,7 @@ pc:0x50 op = 0x19, ALOAD (addr: 0x03091ee0)
 >> new sp = 0x64
 pc:0x52 op = 0x15, ILOAD (addr: 0x03091ee2)
  - local variable index = 7
- - Load INT 3 to stack
+ - Load int 3 to stack
 >> new sp = 0x68
 pc:0x54 op = 0x32, ?ALOAD (addr: 0x03091ee4)
 >> new sp = 0x64
@@ -18520,11 +18291,11 @@ pc:0x86 op = 0xa7, GOTO (addr: 0x03091f16)
  - goto 73
 pc:0x49 op = 0x15, ILOAD (addr: 0x03091ed9)
  - local variable index = 7
- - Load INT 4 to stack
+ - Load int 4 to stack
 >> new sp = 0x64
 pc:0x4b op = 0x15, ILOAD (addr: 0x03091edb)
  - local variable index = 6
- - Load INT 5 to stack
+ - Load int 5 to stack
 >> new sp = 0x68
 pc:0x4d op = 0xa2, IF_ICMPGE (addr: 0x03091edd)
 >> new sp = 0x64
@@ -18538,7 +18309,7 @@ pc:0x50 op = 0x19, ALOAD (addr: 0x03091ee0)
 >> new sp = 0x64
 pc:0x52 op = 0x15, ILOAD (addr: 0x03091ee2)
  - local variable index = 7
- - Load INT 4 to stack
+ - Load int 4 to stack
 >> new sp = 0x68
 pc:0x54 op = 0x32, ?ALOAD (addr: 0x03091ee4)
 >> new sp = 0x64
@@ -18695,11 +18466,11 @@ pc:0x86 op = 0xa7, GOTO (addr: 0x03091f16)
  - goto 73
 pc:0x49 op = 0x15, ILOAD (addr: 0x03091ed9)
  - local variable index = 7
- - Load INT 5 to stack
+ - Load int 5 to stack
 >> new sp = 0x64
 pc:0x4b op = 0x15, ILOAD (addr: 0x03091edb)
  - local variable index = 6
- - Load INT 5 to stack
+ - Load int 5 to stack
 >> new sp = 0x68
 pc:0x4d op = 0xa2, IF_ICMPGE (addr: 0x03091edd)
 >> new sp = 0x64
@@ -18710,10 +18481,7 @@ pc:0x4d op = 0xa2, IF_ICMPGE (addr: 0x03091edd)
  - branch to pc = 0x89
 pc:0x89 op = 0x2b, ALOAD_N (addr: 0x03091f19)
  - 1
- - Current frame ptr: 0x48
- - max locals = 9
  - Load ref 0x90058 to stack
- - 1: 0x4, 2: 0x20
 >> new sp = 0x64
 pc:0x8a op = 0x03, ICONST_N (addr: 0x03091f1a)
  - 0
@@ -18770,10 +18538,7 @@ pc:0x90 op = 0xb6, INVOKEVIRTUAL (addr: 0x03091f20)
 ------------------------------ End Create Frame ------------------------------
 pc:0x0 op = 0x2a, ALOAD_N (addr: 0x030914d8)
  - 0
- - Current frame ptr: 0x74
- - max locals = 4
  - Load ref 0x90078 to stack
- - 1: 0x3c7abf0f, 2: 0x3e0468cc
 >> new sp = 0x90
 pc:0x1 op = 0x0b, FCONST_N (addr: 0x030914d9)
  - 0
@@ -18809,10 +18574,7 @@ pc:0x7 op = 0xb5, PUTFIELD (addr: 0x030914df)
  - set val = -1177862321 (hex:0xb9cb3f4f), at addr(m):0x00090098, instance addr: 0x00090078
 pc:0xa op = 0x2a, ALOAD_N (addr: 0x030914e2)
  - 0
- - Current frame ptr: 0x74
- - max locals = 4
  - Load ref 0x90078 to stack
- - 1: 0x3c7abf0f, 2: 0x3e0468cc
 >> new sp = 0x90
 pc:0xb op = 0x0b, FCONST_N (addr: 0x030914e3)
  - 0
@@ -18848,10 +18610,7 @@ pc:0x11 op = 0xb5, PUTFIELD (addr: 0x030914e9)
  - set val = -1151948950 (hex:0xbb56a76a), at addr(m):0x0009009c, instance addr: 0x00090078
 pc:0x14 op = 0x2a, ALOAD_N (addr: 0x030914ec)
  - 0
- - Current frame ptr: 0x74
- - max locals = 4
  - Load ref 0x90078 to stack
- - 1: 0x3c7abf0f, 2: 0x3e0468cc
 >> new sp = 0x90
 pc:0x15 op = 0x0b, FCONST_N (addr: 0x030914ed)
  - 0
@@ -18895,10 +18654,7 @@ return - last-sp = 0x60
  - bytecodes addr: 03091e90
 pc:0x93 op = 0x2b, ALOAD_N (addr: 0x03091f23)
  - 1
- - Current frame ptr: 0x48
- - max locals = 9
  - Load ref 0x90058 to stack
- - 1: 0x4, 2: 0x20
 >> new sp = 0x64
 pc:0x94 op = 0xb0, ARETURN (addr: 0x03091f24)
 >> new sp = 0x60
@@ -18989,17 +18745,14 @@ pc:0x0 op = 0x03, ICONST_N (addr: 0x03091f40)
 pc:0x1 op = 0x3d, ISTORE_N (addr: 0x03091f41)
  - 2
 >> new sp = 0x48
- - Store INT 0 to local 2
+ - Store int 0 to local 2
 pc:0x2 op = 0x1c, ILOAD_N (addr: 0x03091f42)
  - 2
- - Load INT 0 to stack
+ - Load int 0 to stack
 >> new sp = 0x4c
 pc:0x3 op = 0x2a, ALOAD_N (addr: 0x03091f43)
  - 0
- - Current frame ptr: 0x30
- - max locals = 12
  - Load ref 0x90008 to stack
- - 1: (nil), 2: (nil)
 >> new sp = 0x50
 pc:0x4 op = 0xb4, GETFIELD (addr: 0x03091f44)
  - fieldref in cp index = 27
@@ -19011,22 +18764,19 @@ pc:0x4 op = 0xb4, GETFIELD (addr: 0x03091f44)
 >> new sp = 0x50
 pc:0x7 op = 0xbe, ARRAYLENGTH (addr: 0x03091f47)
 >> new sp = 0x4c
+ - array length = 5
 >> new sp = 0x50
 pc:0x8 op = 0xa2, IF_ICMPGE (addr: 0x03091f48)
 >> new sp = 0x4c
 >> new sp = 0x48
- - value 2 = 0
+ - value 2 = 5
  - value 1 = 0
  - branch-target = 0xfc
- - branch to pc = 0xfc
-pc:0xfc op = 0x2a, ALOAD_N (addr: 0x0309203c)
+pc:0xb op = 0x2a, ALOAD_N (addr: 0x03091f4b)
  - 0
- - Current frame ptr: 0x30
- - max locals = 12
  - Load ref 0x90008 to stack
- - 1: (nil), 2: (nil)
 >> new sp = 0x4c
-pc:0xfd op = 0xb4, GETFIELD (addr: 0x0309203d)
+pc:0xc op = 0xb4, GETFIELD (addr: 0x03091f4c)
  - fieldref in cp index = 27
  - cp val = 0x09000000 | 0x000b0000
  - field index in instance = 0
@@ -19034,1450 +18784,28 @@ pc:0xfd op = 0xb4, GETFIELD (addr: 0x0309203d)
  - instance addr(m) = 0x90008, field index = 0, addr(m) = 0x90010
  - field val = 0x90058
 >> new sp = 0x4c
-pc:0x100 op = 0x4d, ASTORE_N (addr: 0x03092040)
+pc:0xf op = 0x1c, ILOAD_N (addr: 0x03091f4f)
  - 2
->> new sp = 0x48
- - Store ref 0x90058 to local 2
-pc:0x101 op = 0x2c, ALOAD_N (addr: 0x03092041)
- - 2
- - Current frame ptr: 0x30
- - max locals = 12
- - Load ref 0x90058 to stack
- - 1: (nil), 2: (nil)
->> new sp = 0x4c
-pc:0x102 op = 0xbe, ARRAYLENGTH (addr: 0x03092042)
->> new sp = 0x48
->> new sp = 0x4c
-pc:0x103 op = 0x3e, ISTORE_N (addr: 0x03092043)
- - 3
->> new sp = 0x48
- - Store INT 589912 to local 3
-pc:0x104 op = 0x03, ICONST_N (addr: 0x03092044)
- - 0
- - push const 0 to stack
->> new sp = 0x4c
-pc:0x105 op = 0x36, ISTORE (addr: 0x03092045)
- - local variable index = 4
->> new sp = 0x48
- - Store INT 0 to local 4
-pc:0x107 op = 0x15, ILOAD (addr: 0x03092047)
- - local variable index = 4
- - Load INT 0 to stack
->> new sp = 0x4c
-pc:0x109 op = 0x1d, ILOAD_N (addr: 0x03092049)
- - 3
- - Load INT 589912 to stack
+ - Load int 0 to stack
 >> new sp = 0x50
-pc:0x10a op = 0xa2, IF_ICMPGE (addr: 0x0309204a)
->> new sp = 0x4c
->> new sp = 0x48
- - value 2 = 589912
- - value 1 = 0
- - branch-target = 0x14f
-pc:0x10d op = 0x2c, ALOAD_N (addr: 0x0309204d)
- - 2
- - Current frame ptr: 0x30
- - max locals = 12
- - Load ref 0x90058 to stack
- - 1: (nil), 2: (nil)
->> new sp = 0x4c
-pc:0x10e op = 0x15, ILOAD (addr: 0x0309204e)
- - local variable index = 4
- - Load INT 0 to stack
->> new sp = 0x50
-pc:0x110 op = 0x32, ?ALOAD (addr: 0x03092050)
+pc:0x10 op = 0x32, ?ALOAD (addr: 0x03091f50)
 >> new sp = 0x4c
 >> new sp = 0x48
  - instance addr(m) = 0x90058, field index = 1, addr(m) = 0x90064
 field val = 0x90078
 >> new sp = 0x4c
-pc:0x111 op = 0x3a, ASTORE (addr: 0x03092051)
- - local variable index = 5
->> new sp = 0x48
- - Store ref 0x90078 to local 5
-pc:0x113 op = 0x19, ALOAD (addr: 0x03092053)
- - local variable index = 5
- - Load ref 0x90078 to stack
->> new sp = 0x4c
-pc:0x115 op = 0x19, ALOAD (addr: 0x03092055)
- - local variable index = 5
- - Load ref 0x90078 to stack
->> new sp = 0x50
-pc:0x117 op = 0xb4, GETFIELD (addr: 0x03092057)
- - fieldref in cp index = 64
- - cp val = 0x09000000 | 0x00070003
- - field index in instance = 3
->> new sp = 0x4c
- - instance addr(m) = 0x90078, field index = 3, addr(m) = 0x9008c
- - field val = 0x0
->> new sp = 0x50
-pc:0x11a op = 0x23, FLOAD_N (addr: 0x0309205a)
- - 1
- - Load float 0.000000 to stack
->> new sp = 0x54
-pc:0x11b op = 0x19, ALOAD (addr: 0x0309205b)
- - local variable index = 5
- - Load ref 0x90078 to stack
->> new sp = 0x58
-pc:0x11d op = 0xb4, GETFIELD (addr: 0x0309205d)
- - fieldref in cp index = 47
- - cp val = 0x09000000 | 0x00070006
- - field index in instance = 6
->> new sp = 0x54
- - instance addr(m) = 0x90078, field index = 6, addr(m) = 0x90098
- - field val = 0xb9cb3f4f
->> new sp = 0x58
-pc:0x120 op = 0x6a, FMUL (addr: 0x03092060)
->> new sp = 0x54
->> new sp = 0x50
- - value 2 = -0.000388
- - value 1 = 0.000000
- - mul result = -0.000000
->> new sp = 0x54
-pc:0x121 op = 0x62, FADD (addr: 0x03092061)
->> new sp = 0x50
->> new sp = 0x4c
- - value 2 = -0.000000
- - value 1 = 0.000000
- - add result = 0.000000
->> new sp = 0x50
-pc:0x122 op = 0xb5, PUTFIELD (addr: 0x03092062)
- - constant table index = 64
- - field index in instance = 3
->> new sp = 0x4c
->> new sp = 0x48
- - set val = 0 (hex:0x00000000), at addr(m):0x0009008c, instance addr: 0x00090078
-pc:0x125 op = 0x19, ALOAD (addr: 0x03092065)
- - local variable index = 5
- - Load ref 0x90078 to stack
->> new sp = 0x4c
-pc:0x127 op = 0x19, ALOAD (addr: 0x03092067)
- - local variable index = 5
- - Load ref 0x90078 to stack
->> new sp = 0x50
-pc:0x129 op = 0xb4, GETFIELD (addr: 0x03092069)
- - fieldref in cp index = 67
- - cp val = 0x09000000 | 0x00070004
- - field index in instance = 4
->> new sp = 0x4c
- - instance addr(m) = 0x90078, field index = 4, addr(m) = 0x90090
- - field val = 0x0
->> new sp = 0x50
-pc:0x12c op = 0x23, FLOAD_N (addr: 0x0309206c)
- - 1
- - Load float 0.000000 to stack
->> new sp = 0x54
-pc:0x12d op = 0x19, ALOAD (addr: 0x0309206d)
- - local variable index = 5
- - Load ref 0x90078 to stack
->> new sp = 0x58
-pc:0x12f op = 0xb4, GETFIELD (addr: 0x0309206f)
- - fieldref in cp index = 54
- - cp val = 0x09000000 | 0x00070007
- - field index in instance = 7
->> new sp = 0x54
- - instance addr(m) = 0x90078, field index = 7, addr(m) = 0x9009c
- - field val = 0xbb56a76a
->> new sp = 0x58
-pc:0x132 op = 0x6a, FMUL (addr: 0x03092072)
->> new sp = 0x54
->> new sp = 0x50
- - value 2 = -0.003275
- - value 1 = 0.000000
- - mul result = -0.000000
->> new sp = 0x54
-pc:0x133 op = 0x62, FADD (addr: 0x03092073)
->> new sp = 0x50
->> new sp = 0x4c
- - value 2 = -0.000000
- - value 1 = 0.000000
- - add result = 0.000000
->> new sp = 0x50
-pc:0x134 op = 0xb5, PUTFIELD (addr: 0x03092074)
- - constant table index = 67
- - field index in instance = 4
->> new sp = 0x4c
->> new sp = 0x48
- - set val = 0 (hex:0x00000000), at addr(m):0x00090090, instance addr: 0x00090078
-pc:0x137 op = 0x19, ALOAD (addr: 0x03092077)
- - local variable index = 5
- - Load ref 0x90078 to stack
->> new sp = 0x4c
-pc:0x139 op = 0x19, ALOAD (addr: 0x03092079)
- - local variable index = 5
- - Load ref 0x90078 to stack
->> new sp = 0x50
-pc:0x13b op = 0xb4, GETFIELD (addr: 0x0309207b)
- - fieldref in cp index = 70
- - cp val = 0x09000000 | 0x00070005
- - field index in instance = 5
->> new sp = 0x4c
- - instance addr(m) = 0x90078, field index = 5, addr(m) = 0x90094
- - field val = 0x0
->> new sp = 0x50
-pc:0x13e op = 0x23, FLOAD_N (addr: 0x0309207e)
- - 1
- - Load float 0.000000 to stack
->> new sp = 0x54
-pc:0x13f op = 0x19, ALOAD (addr: 0x0309207f)
- - local variable index = 5
- - Load ref 0x90078 to stack
->> new sp = 0x58
-pc:0x141 op = 0xb4, GETFIELD (addr: 0x03092081)
- - fieldref in cp index = 57
- - cp val = 0x09000000 | 0x00070008
- - field index in instance = 8
->> new sp = 0x54
- - instance addr(m) = 0x90078, field index = 8, addr(m) = 0x900a0
- - field val = 0x37c8c999
->> new sp = 0x58
-pc:0x144 op = 0x6a, FMUL (addr: 0x03092084)
->> new sp = 0x54
->> new sp = 0x50
- - value 2 = 0.000024
- - value 1 = 0.000000
- - mul result = 0.000000
->> new sp = 0x54
-pc:0x145 op = 0x62, FADD (addr: 0x03092085)
->> new sp = 0x50
->> new sp = 0x4c
- - value 2 = 0.000000
- - value 1 = 0.000000
- - add result = 0.000000
->> new sp = 0x50
-pc:0x146 op = 0xb5, PUTFIELD (addr: 0x03092086)
- - constant table index = 70
- - field index in instance = 5
->> new sp = 0x4c
->> new sp = 0x48
- - set val = 0 (hex:0x00000000), at addr(m):0x00090094, instance addr: 0x00090078
-pc:0x149 op = 0x84, IINC (addr: 0x03092089)
- - local variable index = 4, increment value = 1
-pc:0x14c op = 0xa7, GOTO (addr: 0x0309208c)
- - cur 332, offset -69
- - goto 263
-pc:0x107 op = 0x15, ILOAD (addr: 0x03092047)
- - local variable index = 4
- - Load INT 1 to stack
->> new sp = 0x4c
-pc:0x109 op = 0x1d, ILOAD_N (addr: 0x03092049)
+pc:0x11 op = 0x4e, ASTORE_N (addr: 0x03091f51)
  - 3
- - Load INT 589912 to stack
->> new sp = 0x50
-pc:0x10a op = 0xa2, IF_ICMPGE (addr: 0x0309204a)
->> new sp = 0x4c
 >> new sp = 0x48
- - value 2 = 589912
- - value 1 = 1
- - branch-target = 0x14f
-pc:0x10d op = 0x2c, ALOAD_N (addr: 0x0309204d)
+ - Store ref 0x90078 to local 3
+pc:0x12 op = 0x1c, ILOAD_N (addr: 0x03091f52)
  - 2
- - Current frame ptr: 0x30
- - max locals = 12
- - Load ref 0x90058 to stack
- - 1: (nil), 2: (nil)
+ - Load int 0 to stack
 >> new sp = 0x4c
-pc:0x10e op = 0x15, ILOAD (addr: 0x0309204e)
- - local variable index = 4
- - Load INT 1 to stack
->> new sp = 0x50
-pc:0x110 op = 0x32, ?ALOAD (addr: 0x03092050)
->> new sp = 0x4c
->> new sp = 0x48
- - instance addr(m) = 0x90058, field index = 2, addr(m) = 0x90068
-field val = 0x900a8
->> new sp = 0x4c
-pc:0x111 op = 0x3a, ASTORE (addr: 0x03092051)
- - local variable index = 5
->> new sp = 0x48
- - Store ref 0x900a8 to local 5
-pc:0x113 op = 0x19, ALOAD (addr: 0x03092053)
- - local variable index = 5
- - Load ref 0x900a8 to stack
->> new sp = 0x4c
-pc:0x115 op = 0x19, ALOAD (addr: 0x03092055)
- - local variable index = 5
- - Load ref 0x900a8 to stack
->> new sp = 0x50
-pc:0x117 op = 0xb4, GETFIELD (addr: 0x03092057)
- - fieldref in cp index = 64
- - cp val = 0x09000000 | 0x00070003
- - field index in instance = 3
->> new sp = 0x4c
- - instance addr(m) = 0x900a8, field index = 3, addr(m) = 0x900bc
- - field val = 0x409aed02
->> new sp = 0x50
-pc:0x11a op = 0x23, FLOAD_N (addr: 0x0309205a)
+pc:0x13 op = 0x04, ICONST_N (addr: 0x03091f53)
  - 1
- - Load float 0.000000 to stack
->> new sp = 0x54
-pc:0x11b op = 0x19, ALOAD (addr: 0x0309205b)
- - local variable index = 5
- - Load ref 0x900a8 to stack
->> new sp = 0x58
-pc:0x11d op = 0xb4, GETFIELD (addr: 0x0309205d)
- - fieldref in cp index = 47
- - cp val = 0x09000000 | 0x00070006
- - field index in instance = 6
->> new sp = 0x54
- - instance addr(m) = 0x900a8, field index = 6, addr(m) = 0x900c8
- - field val = 0x3f1b3835
->> new sp = 0x58
-pc:0x120 op = 0x6a, FMUL (addr: 0x03092060)
->> new sp = 0x54
->> new sp = 0x50
- - value 2 = 0.606326
- - value 1 = 0.000000
- - mul result = 0.000000
->> new sp = 0x54
-pc:0x121 op = 0x62, FADD (addr: 0x03092061)
->> new sp = 0x50
->> new sp = 0x4c
- - value 2 = 0.000000
- - value 1 = 4.841432
- - add result = 4.841432
->> new sp = 0x50
-pc:0x122 op = 0xb5, PUTFIELD (addr: 0x03092062)
- - constant table index = 64
- - field index in instance = 3
->> new sp = 0x4c
->> new sp = 0x48
- - set val = 1083895042 (hex:0x409aed02), at addr(m):0x000900bc, instance addr: 0x000900a8
-pc:0x125 op = 0x19, ALOAD (addr: 0x03092065)
- - local variable index = 5
- - Load ref 0x900a8 to stack
->> new sp = 0x4c
-pc:0x127 op = 0x19, ALOAD (addr: 0x03092067)
- - local variable index = 5
- - Load ref 0x900a8 to stack
->> new sp = 0x50
-pc:0x129 op = 0xb4, GETFIELD (addr: 0x03092069)
- - fieldref in cp index = 67
- - cp val = 0x09000000 | 0x00070004
- - field index in instance = 4
->> new sp = 0x4c
- - instance addr(m) = 0x900a8, field index = 4, addr(m) = 0x900c0
- - field val = 0xbf94855e
->> new sp = 0x50
-pc:0x12c op = 0x23, FLOAD_N (addr: 0x0309206c)
- - 1
- - Load float 0.000000 to stack
->> new sp = 0x54
-pc:0x12d op = 0x19, ALOAD (addr: 0x0309206d)
- - local variable index = 5
- - Load ref 0x900a8 to stack
->> new sp = 0x58
-pc:0x12f op = 0xb4, GETFIELD (addr: 0x0309206f)
- - fieldref in cp index = 54
- - cp val = 0x09000000 | 0x00070007
- - field index in instance = 7
->> new sp = 0x54
- - instance addr(m) = 0x900a8, field index = 7, addr(m) = 0x900cc
- - field val = 0x4033f798
->> new sp = 0x58
-pc:0x132 op = 0x6a, FMUL (addr: 0x03092072)
->> new sp = 0x54
->> new sp = 0x50
- - value 2 = 2.811987
- - value 1 = 0.000000
- - mul result = 0.000000
->> new sp = 0x54
-pc:0x133 op = 0x62, FADD (addr: 0x03092073)
->> new sp = 0x50
->> new sp = 0x4c
- - value 2 = 0.000000
- - value 1 = -1.160320
- - add result = -1.160320
->> new sp = 0x50
-pc:0x134 op = 0xb5, PUTFIELD (addr: 0x03092074)
- - constant table index = 67
- - field index in instance = 4
->> new sp = 0x4c
->> new sp = 0x48
- - set val = -1080785570 (hex:0xbf94855e), at addr(m):0x000900c0, instance addr: 0x000900a8
-pc:0x137 op = 0x19, ALOAD (addr: 0x03092077)
- - local variable index = 5
- - Load ref 0x900a8 to stack
->> new sp = 0x4c
-pc:0x139 op = 0x19, ALOAD (addr: 0x03092079)
- - local variable index = 5
- - Load ref 0x900a8 to stack
->> new sp = 0x50
-pc:0x13b op = 0xb4, GETFIELD (addr: 0x0309207b)
- - fieldref in cp index = 70
- - cp val = 0x09000000 | 0x00070005
- - field index in instance = 5
->> new sp = 0x4c
- - instance addr(m) = 0x900a8, field index = 5, addr(m) = 0x900c4
- - field val = 0xbdd437cb
->> new sp = 0x50
-pc:0x13e op = 0x23, FLOAD_N (addr: 0x0309207e)
- - 1
- - Load float 0.000000 to stack
->> new sp = 0x54
-pc:0x13f op = 0x19, ALOAD (addr: 0x0309207f)
- - local variable index = 5
- - Load ref 0x900a8 to stack
->> new sp = 0x58
-pc:0x141 op = 0xb4, GETFIELD (addr: 0x03092081)
- - fieldref in cp index = 57
- - cp val = 0x09000000 | 0x00070008
- - field index in instance = 8
->> new sp = 0x54
- - instance addr(m) = 0x900a8, field index = 8, addr(m) = 0x900d0
- - field val = 0xbcce96bc
->> new sp = 0x58
-pc:0x144 op = 0x6a, FMUL (addr: 0x03092084)
->> new sp = 0x54
->> new sp = 0x50
- - value 2 = -0.025218
- - value 1 = 0.000000
- - mul result = -0.000000
->> new sp = 0x54
-pc:0x145 op = 0x62, FADD (addr: 0x03092085)
->> new sp = 0x50
->> new sp = 0x4c
- - value 2 = -0.000000
- - value 1 = -0.103622
- - add result = -0.103622
->> new sp = 0x50
-pc:0x146 op = 0xb5, PUTFIELD (addr: 0x03092086)
- - constant table index = 70
- - field index in instance = 5
->> new sp = 0x4c
->> new sp = 0x48
- - set val = -1110165557 (hex:0xbdd437cb), at addr(m):0x000900c4, instance addr: 0x000900a8
-pc:0x149 op = 0x84, IINC (addr: 0x03092089)
- - local variable index = 4, increment value = 1
-pc:0x14c op = 0xa7, GOTO (addr: 0x0309208c)
- - cur 332, offset -69
- - goto 263
-pc:0x107 op = 0x15, ILOAD (addr: 0x03092047)
- - local variable index = 4
- - Load INT 2 to stack
->> new sp = 0x4c
-pc:0x109 op = 0x1d, ILOAD_N (addr: 0x03092049)
- - 3
- - Load INT 589912 to stack
->> new sp = 0x50
-pc:0x10a op = 0xa2, IF_ICMPGE (addr: 0x0309204a)
->> new sp = 0x4c
->> new sp = 0x48
- - value 2 = 589912
- - value 1 = 2
- - branch-target = 0x14f
-pc:0x10d op = 0x2c, ALOAD_N (addr: 0x0309204d)
- - 2
- - Current frame ptr: 0x30
- - max locals = 12
- - Load ref 0x90058 to stack
- - 1: (nil), 2: (nil)
->> new sp = 0x4c
-pc:0x10e op = 0x15, ILOAD (addr: 0x0309204e)
- - local variable index = 4
- - Load INT 2 to stack
->> new sp = 0x50
-pc:0x110 op = 0x32, ?ALOAD (addr: 0x03092050)
->> new sp = 0x4c
->> new sp = 0x48
- - instance addr(m) = 0x90058, field index = 3, addr(m) = 0x9006c
-field val = 0x900d8
->> new sp = 0x4c
-pc:0x111 op = 0x3a, ASTORE (addr: 0x03092051)
- - local variable index = 5
->> new sp = 0x48
- - Store ref 0x900d8 to local 5
-pc:0x113 op = 0x19, ALOAD (addr: 0x03092053)
- - local variable index = 5
- - Load ref 0x900d8 to stack
->> new sp = 0x4c
-pc:0x115 op = 0x19, ALOAD (addr: 0x03092055)
- - local variable index = 5
- - Load ref 0x900d8 to stack
->> new sp = 0x50
-pc:0x117 op = 0xb4, GETFIELD (addr: 0x03092057)
- - fieldref in cp index = 64
- - cp val = 0x09000000 | 0x00070003
- - field index in instance = 3
->> new sp = 0x4c
- - instance addr(m) = 0x900d8, field index = 3, addr(m) = 0x900ec
- - field val = 0x41057e6e
->> new sp = 0x50
-pc:0x11a op = 0x23, FLOAD_N (addr: 0x0309205a)
- - 1
- - Load float 0.000000 to stack
->> new sp = 0x54
-pc:0x11b op = 0x19, ALOAD (addr: 0x0309205b)
- - local variable index = 5
- - Load ref 0x900d8 to stack
->> new sp = 0x58
-pc:0x11d op = 0xb4, GETFIELD (addr: 0x0309205d)
- - fieldref in cp index = 47
- - cp val = 0x09000000 | 0x00070006
- - field index in instance = 6
->> new sp = 0x54
- - instance addr(m) = 0x900d8, field index = 6, addr(m) = 0x900f8
- - field val = 0xbf81610d
->> new sp = 0x58
-pc:0x120 op = 0x6a, FMUL (addr: 0x03092060)
->> new sp = 0x54
->> new sp = 0x50
- - value 2 = -1.010774
- - value 1 = 0.000000
- - mul result = -0.000000
->> new sp = 0x54
-pc:0x121 op = 0x62, FADD (addr: 0x03092061)
->> new sp = 0x50
->> new sp = 0x4c
- - value 2 = -0.000000
- - value 1 = 8.343367
- - add result = 8.343367
->> new sp = 0x50
-pc:0x122 op = 0xb5, PUTFIELD (addr: 0x03092062)
- - constant table index = 64
- - field index in instance = 3
->> new sp = 0x4c
->> new sp = 0x48
- - set val = 1090879086 (hex:0x41057e6e), at addr(m):0x000900ec, instance addr: 0x000900d8
-pc:0x125 op = 0x19, ALOAD (addr: 0x03092065)
- - local variable index = 5
- - Load ref 0x900d8 to stack
->> new sp = 0x4c
-pc:0x127 op = 0x19, ALOAD (addr: 0x03092067)
- - local variable index = 5
- - Load ref 0x900d8 to stack
->> new sp = 0x50
-pc:0x129 op = 0xb4, GETFIELD (addr: 0x03092069)
- - fieldref in cp index = 67
- - cp val = 0x09000000 | 0x00070004
- - field index in instance = 4
->> new sp = 0x4c
- - instance addr(m) = 0x900d8, field index = 4, addr(m) = 0x900f0
- - field val = 0x4083fe5a
->> new sp = 0x50
-pc:0x12c op = 0x23, FLOAD_N (addr: 0x0309206c)
- - 1
- - Load float 0.000000 to stack
->> new sp = 0x54
-pc:0x12d op = 0x19, ALOAD (addr: 0x0309206d)
- - local variable index = 5
- - Load ref 0x900d8 to stack
->> new sp = 0x58
-pc:0x12f op = 0xb4, GETFIELD (addr: 0x0309206f)
- - fieldref in cp index = 54
- - cp val = 0x09000000 | 0x00070007
- - field index in instance = 7
->> new sp = 0x54
- - instance addr(m) = 0x900d8, field index = 7, addr(m) = 0x900fc
- - field val = 0x3fe9af4d
->> new sp = 0x58
-pc:0x132 op = 0x6a, FMUL (addr: 0x03092072)
->> new sp = 0x54
->> new sp = 0x50
- - value 2 = 1.825662
- - value 1 = 0.000000
- - mul result = 0.000000
->> new sp = 0x54
-pc:0x133 op = 0x62, FADD (addr: 0x03092073)
->> new sp = 0x50
->> new sp = 0x4c
- - value 2 = 0.000000
- - value 1 = 4.124799
- - add result = 4.124799
->> new sp = 0x50
-pc:0x134 op = 0xb5, PUTFIELD (addr: 0x03092074)
- - constant table index = 67
- - field index in instance = 4
->> new sp = 0x4c
->> new sp = 0x48
- - set val = 1082392154 (hex:0x4083fe5a), at addr(m):0x000900f0, instance addr: 0x000900d8
-pc:0x137 op = 0x19, ALOAD (addr: 0x03092077)
- - local variable index = 5
- - Load ref 0x900d8 to stack
->> new sp = 0x4c
-pc:0x139 op = 0x19, ALOAD (addr: 0x03092079)
- - local variable index = 5
- - Load ref 0x900d8 to stack
->> new sp = 0x50
-pc:0x13b op = 0xb4, GETFIELD (addr: 0x0309207b)
- - fieldref in cp index = 70
- - cp val = 0x09000000 | 0x00070005
- - field index in instance = 5
->> new sp = 0x4c
- - instance addr(m) = 0x900d8, field index = 5, addr(m) = 0x900f4
- - field val = 0xbece9a9f
->> new sp = 0x50
-pc:0x13e op = 0x23, FLOAD_N (addr: 0x0309207e)
- - 1
- - Load float 0.000000 to stack
->> new sp = 0x54
-pc:0x13f op = 0x19, ALOAD (addr: 0x0309207f)
- - local variable index = 5
- - Load ref 0x900d8 to stack
->> new sp = 0x58
-pc:0x141 op = 0xb4, GETFIELD (addr: 0x03092081)
- - fieldref in cp index = 57
- - cp val = 0x09000000 | 0x00070008
- - field index in instance = 8
->> new sp = 0x54
- - instance addr(m) = 0x900d8, field index = 8, addr(m) = 0x90100
- - field val = 0x3c09e243
->> new sp = 0x58
-pc:0x144 op = 0x6a, FMUL (addr: 0x03092084)
->> new sp = 0x54
->> new sp = 0x50
- - value 2 = 0.008416
- - value 1 = 0.000000
- - mul result = 0.000000
->> new sp = 0x54
-pc:0x145 op = 0x62, FADD (addr: 0x03092085)
->> new sp = 0x50
->> new sp = 0x4c
- - value 2 = 0.000000
- - value 1 = -0.403523
- - add result = -0.403523
->> new sp = 0x50
-pc:0x146 op = 0xb5, PUTFIELD (addr: 0x03092086)
- - constant table index = 70
- - field index in instance = 5
->> new sp = 0x4c
->> new sp = 0x48
- - set val = -1093756257 (hex:0xbece9a9f), at addr(m):0x000900f4, instance addr: 0x000900d8
-pc:0x149 op = 0x84, IINC (addr: 0x03092089)
- - local variable index = 4, increment value = 1
-pc:0x14c op = 0xa7, GOTO (addr: 0x0309208c)
- - cur 332, offset -69
- - goto 263
-pc:0x107 op = 0x15, ILOAD (addr: 0x03092047)
- - local variable index = 4
- - Load INT 3 to stack
->> new sp = 0x4c
-pc:0x109 op = 0x1d, ILOAD_N (addr: 0x03092049)
- - 3
- - Load INT 589912 to stack
->> new sp = 0x50
-pc:0x10a op = 0xa2, IF_ICMPGE (addr: 0x0309204a)
->> new sp = 0x4c
->> new sp = 0x48
- - value 2 = 589912
- - value 1 = 3
- - branch-target = 0x14f
-pc:0x10d op = 0x2c, ALOAD_N (addr: 0x0309204d)
- - 2
- - Current frame ptr: 0x30
- - max locals = 12
- - Load ref 0x90058 to stack
- - 1: (nil), 2: (nil)
->> new sp = 0x4c
-pc:0x10e op = 0x15, ILOAD (addr: 0x0309204e)
- - local variable index = 4
- - Load INT 3 to stack
->> new sp = 0x50
-pc:0x110 op = 0x32, ?ALOAD (addr: 0x03092050)
->> new sp = 0x4c
->> new sp = 0x48
- - instance addr(m) = 0x90058, field index = 4, addr(m) = 0x90070
-field val = 0x90108
->> new sp = 0x4c
-pc:0x111 op = 0x3a, ASTORE (addr: 0x03092051)
- - local variable index = 5
->> new sp = 0x48
- - Store ref 0x90108 to local 5
-pc:0x113 op = 0x19, ALOAD (addr: 0x03092053)
- - local variable index = 5
- - Load ref 0x90108 to stack
->> new sp = 0x4c
-pc:0x115 op = 0x19, ALOAD (addr: 0x03092055)
- - local variable index = 5
- - Load ref 0x90108 to stack
->> new sp = 0x50
-pc:0x117 op = 0xb4, GETFIELD (addr: 0x03092057)
- - fieldref in cp index = 64
- - cp val = 0x09000000 | 0x00070003
- - field index in instance = 3
->> new sp = 0x4c
- - instance addr(m) = 0x90108, field index = 3, addr(m) = 0x9011c
- - field val = 0x414e4f56
->> new sp = 0x50
-pc:0x11a op = 0x23, FLOAD_N (addr: 0x0309205a)
- - 1
- - Load float 0.000000 to stack
->> new sp = 0x54
-pc:0x11b op = 0x19, ALOAD (addr: 0x0309205b)
- - local variable index = 5
- - Load ref 0x90108 to stack
->> new sp = 0x58
-pc:0x11d op = 0xb4, GETFIELD (addr: 0x0309205d)
- - fieldref in cp index = 47
- - cp val = 0x09000000 | 0x00070006
- - field index in instance = 6
->> new sp = 0x54
- - instance addr(m) = 0x90108, field index = 6, addr(m) = 0x90128
- - field val = 0x3f8a98e5
->> new sp = 0x58
-pc:0x120 op = 0x6a, FMUL (addr: 0x03092060)
->> new sp = 0x54
->> new sp = 0x50
- - value 2 = 1.082791
- - value 1 = 0.000000
- - mul result = 0.000000
->> new sp = 0x54
-pc:0x121 op = 0x62, FADD (addr: 0x03092061)
->> new sp = 0x50
->> new sp = 0x4c
- - value 2 = 0.000000
- - value 1 = 12.894369
- - add result = 12.894369
->> new sp = 0x50
-pc:0x122 op = 0xb5, PUTFIELD (addr: 0x03092062)
- - constant table index = 64
- - field index in instance = 3
->> new sp = 0x4c
->> new sp = 0x48
- - set val = 1095651158 (hex:0x414e4f56), at addr(m):0x0009011c, instance addr: 0x00090108
-pc:0x125 op = 0x19, ALOAD (addr: 0x03092065)
- - local variable index = 5
- - Load ref 0x90108 to stack
->> new sp = 0x4c
-pc:0x127 op = 0x19, ALOAD (addr: 0x03092067)
- - local variable index = 5
- - Load ref 0x90108 to stack
->> new sp = 0x50
-pc:0x129 op = 0xb4, GETFIELD (addr: 0x03092069)
- - fieldref in cp index = 67
- - cp val = 0x09000000 | 0x00070004
- - field index in instance = 4
->> new sp = 0x4c
- - instance addr(m) = 0x90108, field index = 4, addr(m) = 0x90120
- - field val = 0xc171c747
->> new sp = 0x50
-pc:0x12c op = 0x23, FLOAD_N (addr: 0x0309206c)
- - 1
- - Load float 0.000000 to stack
->> new sp = 0x54
-pc:0x12d op = 0x19, ALOAD (addr: 0x0309206d)
- - local variable index = 5
- - Load ref 0x90108 to stack
->> new sp = 0x58
-pc:0x12f op = 0xb4, GETFIELD (addr: 0x0309206f)
- - fieldref in cp index = 54
- - cp val = 0x09000000 | 0x00070007
- - field index in instance = 7
->> new sp = 0x54
- - instance addr(m) = 0x90108, field index = 7, addr(m) = 0x9012c
- - field val = 0x3f5e63f9
->> new sp = 0x58
-pc:0x132 op = 0x6a, FMUL (addr: 0x03092072)
->> new sp = 0x54
->> new sp = 0x50
- - value 2 = 0.868713
- - value 1 = 0.000000
- - mul result = 0.000000
->> new sp = 0x54
-pc:0x133 op = 0x62, FADD (addr: 0x03092073)
->> new sp = 0x50
->> new sp = 0x4c
- - value 2 = 0.000000
- - value 1 = -15.111152
- - add result = -15.111152
->> new sp = 0x50
-pc:0x134 op = 0xb5, PUTFIELD (addr: 0x03092074)
- - constant table index = 67
- - field index in instance = 4
->> new sp = 0x4c
->> new sp = 0x48
- - set val = -1049508025 (hex:0xc171c747), at addr(m):0x00090120, instance addr: 0x00090108
-pc:0x137 op = 0x19, ALOAD (addr: 0x03092077)
- - local variable index = 5
- - Load ref 0x90108 to stack
->> new sp = 0x4c
-pc:0x139 op = 0x19, ALOAD (addr: 0x03092079)
- - local variable index = 5
- - Load ref 0x90108 to stack
->> new sp = 0x50
-pc:0x13b op = 0xb4, GETFIELD (addr: 0x0309207b)
- - fieldref in cp index = 70
- - cp val = 0x09000000 | 0x00070005
- - field index in instance = 5
->> new sp = 0x4c
- - instance addr(m) = 0x90108, field index = 5, addr(m) = 0x90124
- - field val = 0xbe64aabe
->> new sp = 0x50
-pc:0x13e op = 0x23, FLOAD_N (addr: 0x0309207e)
- - 1
- - Load float 0.000000 to stack
->> new sp = 0x54
-pc:0x13f op = 0x19, ALOAD (addr: 0x0309207f)
- - local variable index = 5
- - Load ref 0x90108 to stack
->> new sp = 0x58
-pc:0x141 op = 0xb4, GETFIELD (addr: 0x03092081)
- - fieldref in cp index = 57
- - cp val = 0x09000000 | 0x00070008
- - field index in instance = 8
->> new sp = 0x54
- - instance addr(m) = 0x90108, field index = 8, addr(m) = 0x90130
- - field val = 0xbc317b60
->> new sp = 0x58
-pc:0x144 op = 0x6a, FMUL (addr: 0x03092084)
->> new sp = 0x54
->> new sp = 0x50
- - value 2 = -0.010833
- - value 1 = 0.000000
- - mul result = -0.000000
->> new sp = 0x54
-pc:0x145 op = 0x62, FADD (addr: 0x03092085)
->> new sp = 0x50
->> new sp = 0x4c
- - value 2 = -0.000000
- - value 1 = -0.223308
- - add result = -0.223308
->> new sp = 0x50
-pc:0x146 op = 0xb5, PUTFIELD (addr: 0x03092086)
- - constant table index = 70
- - field index in instance = 5
->> new sp = 0x4c
->> new sp = 0x48
- - set val = -1100698946 (hex:0xbe64aabe), at addr(m):0x00090124, instance addr: 0x00090108
-pc:0x149 op = 0x84, IINC (addr: 0x03092089)
- - local variable index = 4, increment value = 1
-pc:0x14c op = 0xa7, GOTO (addr: 0x0309208c)
- - cur 332, offset -69
- - goto 263
-pc:0x107 op = 0x15, ILOAD (addr: 0x03092047)
- - local variable index = 4
- - Load INT 4 to stack
->> new sp = 0x4c
-pc:0x109 op = 0x1d, ILOAD_N (addr: 0x03092049)
- - 3
- - Load INT 589912 to stack
->> new sp = 0x50
-pc:0x10a op = 0xa2, IF_ICMPGE (addr: 0x0309204a)
->> new sp = 0x4c
->> new sp = 0x48
- - value 2 = 589912
- - value 1 = 4
- - branch-target = 0x14f
-pc:0x10d op = 0x2c, ALOAD_N (addr: 0x0309204d)
- - 2
- - Current frame ptr: 0x30
- - max locals = 12
- - Load ref 0x90058 to stack
- - 1: (nil), 2: (nil)
->> new sp = 0x4c
-pc:0x10e op = 0x15, ILOAD (addr: 0x0309204e)
- - local variable index = 4
- - Load INT 4 to stack
->> new sp = 0x50
-pc:0x110 op = 0x32, ?ALOAD (addr: 0x03092050)
->> new sp = 0x4c
->> new sp = 0x48
- - instance addr(m) = 0x90058, field index = 5, addr(m) = 0x90074
-field val = 0x90138
->> new sp = 0x4c
-pc:0x111 op = 0x3a, ASTORE (addr: 0x03092051)
- - local variable index = 5
->> new sp = 0x48
- - Store ref 0x90138 to local 5
-pc:0x113 op = 0x19, ALOAD (addr: 0x03092053)
- - local variable index = 5
- - Load ref 0x90138 to stack
->> new sp = 0x4c
-pc:0x115 op = 0x19, ALOAD (addr: 0x03092055)
- - local variable index = 5
- - Load ref 0x90138 to stack
->> new sp = 0x50
-pc:0x117 op = 0xb4, GETFIELD (addr: 0x03092057)
- - fieldref in cp index = 64
- - cp val = 0x09000000 | 0x00070003
- - field index in instance = 3
->> new sp = 0x4c
- - instance addr(m) = 0x90138, field index = 3, addr(m) = 0x9014c
- - field val = 0x4176133d
->> new sp = 0x50
-pc:0x11a op = 0x23, FLOAD_N (addr: 0x0309205a)
- - 1
- - Load float 0.000000 to stack
->> new sp = 0x54
-pc:0x11b op = 0x19, ALOAD (addr: 0x0309205b)
- - local variable index = 5
- - Load ref 0x90138 to stack
->> new sp = 0x58
-pc:0x11d op = 0xb4, GETFIELD (addr: 0x0309205d)
- - fieldref in cp index = 47
- - cp val = 0x09000000 | 0x00070006
- - field index in instance = 6
->> new sp = 0x54
- - instance addr(m) = 0x90138, field index = 6, addr(m) = 0x90158
- - field val = 0x3f7aa5b0
->> new sp = 0x58
-pc:0x120 op = 0x6a, FMUL (addr: 0x03092060)
->> new sp = 0x54
->> new sp = 0x50
- - value 2 = 0.979091
- - value 1 = 0.000000
- - mul result = 0.000000
->> new sp = 0x54
-pc:0x121 op = 0x62, FADD (addr: 0x03092061)
->> new sp = 0x50
->> new sp = 0x4c
- - value 2 = 0.000000
- - value 1 = 15.379697
- - add result = 15.379697
->> new sp = 0x50
-pc:0x122 op = 0xb5, PUTFIELD (addr: 0x03092062)
- - constant table index = 64
- - field index in instance = 3
->> new sp = 0x4c
->> new sp = 0x48
- - set val = 1098257213 (hex:0x4176133d), at addr(m):0x0009014c, instance addr: 0x00090138
-pc:0x125 op = 0x19, ALOAD (addr: 0x03092065)
- - local variable index = 5
- - Load ref 0x90138 to stack
->> new sp = 0x4c
-pc:0x127 op = 0x19, ALOAD (addr: 0x03092067)
- - local variable index = 5
- - Load ref 0x90138 to stack
->> new sp = 0x50
-pc:0x129 op = 0xb4, GETFIELD (addr: 0x03092069)
- - fieldref in cp index = 67
- - cp val = 0x09000000 | 0x00070004
- - field index in instance = 4
->> new sp = 0x4c
- - instance addr(m) = 0x90138, field index = 4, addr(m) = 0x90150
- - field val = 0xc1cf5ac2
->> new sp = 0x50
-pc:0x12c op = 0x23, FLOAD_N (addr: 0x0309206c)
- - 1
- - Load float 0.000000 to stack
->> new sp = 0x54
-pc:0x12d op = 0x19, ALOAD (addr: 0x0309206d)
- - local variable index = 5
- - Load ref 0x90138 to stack
->> new sp = 0x58
-pc:0x12f op = 0xb4, GETFIELD (addr: 0x0309206f)
- - fieldref in cp index = 54
- - cp val = 0x09000000 | 0x00070007
- - field index in instance = 7
->> new sp = 0x54
- - instance addr(m) = 0x90138, field index = 7, addr(m) = 0x9015c
- - field val = 0x3f183e31
->> new sp = 0x58
-pc:0x132 op = 0x6a, FMUL (addr: 0x03092072)
->> new sp = 0x54
->> new sp = 0x50
- - value 2 = 0.594699
- - value 1 = 0.000000
- - mul result = 0.000000
->> new sp = 0x54
-pc:0x133 op = 0x62, FADD (addr: 0x03092073)
->> new sp = 0x50
->> new sp = 0x4c
- - value 2 = 0.000000
- - value 1 = -25.919315
- - add result = -25.919315
->> new sp = 0x50
-pc:0x134 op = 0xb5, PUTFIELD (addr: 0x03092074)
- - constant table index = 67
- - field index in instance = 4
->> new sp = 0x4c
->> new sp = 0x48
- - set val = -1043375422 (hex:0xc1cf5ac2), at addr(m):0x00090150, instance addr: 0x00090138
-pc:0x137 op = 0x19, ALOAD (addr: 0x03092077)
- - local variable index = 5
- - Load ref 0x90138 to stack
->> new sp = 0x4c
-pc:0x139 op = 0x19, ALOAD (addr: 0x03092079)
- - local variable index = 5
- - Load ref 0x90138 to stack
->> new sp = 0x50
-pc:0x13b op = 0xb4, GETFIELD (addr: 0x0309207b)
- - fieldref in cp index = 70
- - cp val = 0x09000000 | 0x00070005
- - field index in instance = 5
->> new sp = 0x4c
- - instance addr(m) = 0x90138, field index = 5, addr(m) = 0x90154
- - field val = 0x3e378f9d
->> new sp = 0x50
-pc:0x13e op = 0x23, FLOAD_N (addr: 0x0309207e)
- - 1
- - Load float 0.000000 to stack
->> new sp = 0x54
-pc:0x13f op = 0x19, ALOAD (addr: 0x0309207f)
- - local variable index = 5
- - Load ref 0x90138 to stack
->> new sp = 0x58
-pc:0x141 op = 0xb4, GETFIELD (addr: 0x03092081)
- - fieldref in cp index = 57
- - cp val = 0x09000000 | 0x00070008
- - field index in instance = 8
->> new sp = 0x54
- - instance addr(m) = 0x90138, field index = 8, addr(m) = 0x90160
- - field val = 0xbd0e5c42
->> new sp = 0x58
-pc:0x144 op = 0x6a, FMUL (addr: 0x03092084)
->> new sp = 0x54
->> new sp = 0x50
- - value 2 = -0.034756
- - value 1 = 0.000000
- - mul result = -0.000000
->> new sp = 0x54
-pc:0x145 op = 0x62, FADD (addr: 0x03092085)
->> new sp = 0x50
->> new sp = 0x4c
- - value 2 = -0.000000
- - value 1 = 0.179259
- - add result = 0.179259
->> new sp = 0x50
-pc:0x146 op = 0xb5, PUTFIELD (addr: 0x03092086)
- - constant table index = 70
- - field index in instance = 5
->> new sp = 0x4c
->> new sp = 0x48
- - set val = 1043828637 (hex:0x3e378f9d), at addr(m):0x00090154, instance addr: 0x00090138
-pc:0x149 op = 0x84, IINC (addr: 0x03092089)
- - local variable index = 4, increment value = 1
-pc:0x14c op = 0xa7, GOTO (addr: 0x0309208c)
- - cur 332, offset -69
- - goto 263
-pc:0x107 op = 0x15, ILOAD (addr: 0x03092047)
- - local variable index = 4
- - Load INT 5 to stack
->> new sp = 0x4c
-pc:0x109 op = 0x1d, ILOAD_N (addr: 0x03092049)
- - 3
- - Load INT 589912 to stack
->> new sp = 0x50
-pc:0x10a op = 0xa2, IF_ICMPGE (addr: 0x0309204a)
->> new sp = 0x4c
->> new sp = 0x48
- - value 2 = 589912
- - value 1 = 5
- - branch-target = 0x14f
-pc:0x10d op = 0x2c, ALOAD_N (addr: 0x0309204d)
- - 2
- - Current frame ptr: 0x30
- - max locals = 12
- - Load ref 0x90058 to stack
- - 1: (nil), 2: (nil)
->> new sp = 0x4c
-pc:0x10e op = 0x15, ILOAD (addr: 0x0309204e)
- - local variable index = 4
- - Load INT 5 to stack
->> new sp = 0x50
-pc:0x110 op = 0x32, ?ALOAD (addr: 0x03092050)
->> new sp = 0x4c
->> new sp = 0x48
- - instance addr(m) = 0x90058, field index = 6, addr(m) = 0x90078
-field val = 0x0
->> new sp = 0x4c
-pc:0x111 op = 0x3a, ASTORE (addr: 0x03092051)
- - local variable index = 5
->> new sp = 0x48
- - Store ref (nil) to local 5
-pc:0x113 op = 0x19, ALOAD (addr: 0x03092053)
- - local variable index = 5
- - Load ref (nil) to stack
->> new sp = 0x4c
-pc:0x115 op = 0x19, ALOAD (addr: 0x03092055)
- - local variable index = 5
- - Load ref (nil) to stack
->> new sp = 0x50
-pc:0x117 op = 0xb4, GETFIELD (addr: 0x03092057)
- - fieldref in cp index = 64
- - cp val = 0x09000000 | 0x00070003
- - field index in instance = 3
->> new sp = 0x4c
- - instance addr(m) = (nil), field index = 3, addr(m) = 0x14
- - field val = 0x0
->> new sp = 0x50
-pc:0x11a op = 0x23, FLOAD_N (addr: 0x0309205a)
- - 1
- - Load float 0.000000 to stack
->> new sp = 0x54
-pc:0x11b op = 0x19, ALOAD (addr: 0x0309205b)
- - local variable index = 5
- - Load ref (nil) to stack
->> new sp = 0x58
-pc:0x11d op = 0xb4, GETFIELD (addr: 0x0309205d)
- - fieldref in cp index = 47
- - cp val = 0x09000000 | 0x00070006
- - field index in instance = 6
->> new sp = 0x54
- - instance addr(m) = (nil), field index = 6, addr(m) = 0x20
- - field val = 0x0
->> new sp = 0x58
-pc:0x120 op = 0x6a, FMUL (addr: 0x03092060)
->> new sp = 0x54
->> new sp = 0x50
- - value 2 = 0.000000
- - value 1 = 0.000000
- - mul result = 0.000000
->> new sp = 0x54
-pc:0x121 op = 0x62, FADD (addr: 0x03092061)
->> new sp = 0x50
->> new sp = 0x4c
- - value 2 = 0.000000
- - value 1 = 0.000000
- - add result = 0.000000
->> new sp = 0x50
-pc:0x122 op = 0xb5, PUTFIELD (addr: 0x03092062)
- - constant table index = 64
- - field index in instance = 3
->> new sp = 0x4c
->> new sp = 0x48
- - set val = 0 (hex:0x00000000), at addr(m):0x00000014, instance addr: 0x00000000
-pc:0x125 op = 0x19, ALOAD (addr: 0x03092065)
- - local variable index = 5
- - Load ref (nil) to stack
->> new sp = 0x4c
-pc:0x127 op = 0x19, ALOAD (addr: 0x03092067)
- - local variable index = 5
- - Load ref (nil) to stack
->> new sp = 0x50
-pc:0x129 op = 0xb4, GETFIELD (addr: 0x03092069)
- - fieldref in cp index = 67
- - cp val = 0x09000000 | 0x00070004
- - field index in instance = 4
->> new sp = 0x4c
- - instance addr(m) = (nil), field index = 4, addr(m) = 0x18
- - field val = 0x0
->> new sp = 0x50
-pc:0x12c op = 0x23, FLOAD_N (addr: 0x0309206c)
- - 1
- - Load float 0.000000 to stack
->> new sp = 0x54
-pc:0x12d op = 0x19, ALOAD (addr: 0x0309206d)
- - local variable index = 5
- - Load ref (nil) to stack
->> new sp = 0x58
-pc:0x12f op = 0xb4, GETFIELD (addr: 0x0309206f)
- - fieldref in cp index = 54
- - cp val = 0x09000000 | 0x00070007
- - field index in instance = 7
->> new sp = 0x54
- - instance addr(m) = (nil), field index = 7, addr(m) = 0x24
- - field val = 0x0
->> new sp = 0x58
-pc:0x132 op = 0x6a, FMUL (addr: 0x03092072)
->> new sp = 0x54
->> new sp = 0x50
- - value 2 = 0.000000
- - value 1 = 0.000000
- - mul result = 0.000000
->> new sp = 0x54
-pc:0x133 op = 0x62, FADD (addr: 0x03092073)
->> new sp = 0x50
->> new sp = 0x4c
- - value 2 = 0.000000
- - value 1 = 0.000000
- - add result = 0.000000
->> new sp = 0x50
-pc:0x134 op = 0xb5, PUTFIELD (addr: 0x03092074)
- - constant table index = 67
- - field index in instance = 4
->> new sp = 0x4c
->> new sp = 0x48
- - set val = 0 (hex:0x00000000), at addr(m):0x00000018, instance addr: 0x00000000
-pc:0x137 op = 0x19, ALOAD (addr: 0x03092077)
- - local variable index = 5
- - Load ref (nil) to stack
->> new sp = 0x4c
-pc:0x139 op = 0x19, ALOAD (addr: 0x03092079)
- - local variable index = 5
- - Load ref (nil) to stack
->> new sp = 0x50
-pc:0x13b op = 0xb4, GETFIELD (addr: 0x0309207b)
- - fieldref in cp index = 70
- - cp val = 0x09000000 | 0x00070005
- - field index in instance = 5
->> new sp = 0x4c
- - instance addr(m) = (nil), field index = 5, addr(m) = 0x1c
- - field val = 0x0
->> new sp = 0x50
-pc:0x13e op = 0x23, FLOAD_N (addr: 0x0309207e)
- - 1
- - Load float 0.000000 to stack
->> new sp = 0x54
-pc:0x13f op = 0x19, ALOAD (addr: 0x0309207f)
- - local variable index = 5
- - Load ref (nil) to stack
->> new sp = 0x58
-pc:0x141 op = 0xb4, GETFIELD (addr: 0x03092081)
- - fieldref in cp index = 57
- - cp val = 0x09000000 | 0x00070008
- - field index in instance = 8
->> new sp = 0x54
- - instance addr(m) = (nil), field index = 8, addr(m) = 0x28
- - field val = 0x0
->> new sp = 0x58
-pc:0x144 op = 0x6a, FMUL (addr: 0x03092084)
->> new sp = 0x54
->> new sp = 0x50
- - value 2 = 0.000000
- - value 1 = 0.000000
- - mul result = 0.000000
->> new sp = 0x54
-pc:0x145 op = 0x62, FADD (addr: 0x03092085)
->> new sp = 0x50
->> new sp = 0x4c
- - value 2 = 0.000000
- - value 1 = 0.000000
- - add result = 0.000000
->> new sp = 0x50
-pc:0x146 op = 0xb5, PUTFIELD (addr: 0x03092086)
- - constant table index = 70
- - field index in instance = 5
->> new sp = 0x4c
->> new sp = 0x48
- - set val = 0 (hex:0x00000000), at addr(m):0x0000001c, instance addr: 0x00000000
-pc:0x149 op = 0x84, IINC (addr: 0x03092089)
- - local variable index = 4, increment value = 1
-pc:0x14c op = 0xa7, GOTO (addr: 0x0309208c)
- - cur 332, offset -69
- - goto 263
-pc:0x107 op = 0x15, ILOAD (addr: 0x03092047)
- - local variable index = 4
- - Load INT 6 to stack
->> new sp = 0x4c
-pc:0x109 op = 0x1d, ILOAD_N (addr: 0x03092049)
- - 3
- - Load INT 589912 to stack
->> new sp = 0x50
-pc:0x10a op = 0xa2, IF_ICMPGE (addr: 0x0309204a)
->> new sp = 0x4c
->> new sp = 0x48
- - value 2 = 589912
- - value 1 = 6
- - branch-target = 0x14f
-pc:0x10d op = 0x2c, ALOAD_N (addr: 0x0309204d)
- - 2
- - Current frame ptr: 0x30
- - max locals = 12
- - Load ref 0x90058 to stack
- - 1: (nil), 2: (nil)
->> new sp = 0x4c
-pc:0x10e op = 0x15, ILOAD (addr: 0x0309204e)
- - local variable index = 4
- - Load INT 6 to stack
->> new sp = 0x50
-pc:0x110 op = 0x32, ?ALOAD (addr: 0x03092050)
->> new sp = 0x4c
->> new sp = 0x48
- - instance addr(m) = 0x90058, field index = 7, addr(m) = 0x9007c
-field val = 0x30911d0
->> new sp = 0x4c
-pc:0x111 op = 0x3a, ASTORE (addr: 0x03092051)
- - local variable index = 5
->> new sp = 0x48
- - Store ref 0x30911d0 to local 5
-pc:0x113 op = 0x19, ALOAD (addr: 0x03092053)
- - local variable index = 5
- - Load ref 0x30911d0 to stack
->> new sp = 0x4c
-pc:0x115 op = 0x19, ALOAD (addr: 0x03092055)
- - local variable index = 5
- - Load ref 0x30911d0 to stack
->> new sp = 0x50
-pc:0x117 op = 0xb4, GETFIELD (addr: 0x03092057)
- - fieldref in cp index = 64
- - cp val = 0x09000000 | 0x00070003
- - field index in instance = 3
->> new sp = 0x4c
- - instance addr(m) = 0x30911d0, field index = 3, addr(m) = 0x30911e4
- - field val = 0x3091208
->> new sp = 0x50
-pc:0x11a op = 0x23, FLOAD_N (addr: 0x0309205a)
- - 1
- - Load float 0.000000 to stack
->> new sp = 0x54
-pc:0x11b op = 0x19, ALOAD (addr: 0x0309205b)
- - local variable index = 5
- - Load ref 0x30911d0 to stack
->> new sp = 0x58
-pc:0x11d op = 0xb4, GETFIELD (addr: 0x0309205d)
- - fieldref in cp index = 47
- - cp val = 0x09000000 | 0x00070006
- - field index in instance = 6
->> new sp = 0x54
- - instance addr(m) = 0x30911d0, field index = 6, addr(m) = 0x30911f0
- - field val = 0x8
->> new sp = 0x58
-pc:0x120 op = 0x6a, FMUL (addr: 0x03092060)
->> new sp = 0x54
->> new sp = 0x50
- - value 2 = 0.000000
- - value 1 = 0.000000
- - mul result = 0.000000
->> new sp = 0x54
-pc:0x121 op = 0x62, FADD (addr: 0x03092061)
->> new sp = 0x50
->> new sp = 0x4c
- - value 2 = 0.000000
- - value 1 = 0.000000
- - add result = 0.000000
->> new sp = 0x50
-pc:0x122 op = 0xb5, PUTFIELD (addr: 0x03092062)
- - constant table index = 64
- - field index in instance = 3
->> new sp = 0x4c
->> new sp = 0x48
- - set val = 50926088 (hex:0x03091208), at addr(m):0x030911e4, instance addr: 0x030911d0
-pc:0x125 op = 0x19, ALOAD (addr: 0x03092065)
- - local variable index = 5
- - Load ref 0x30911d0 to stack
->> new sp = 0x4c
-pc:0x127 op = 0x19, ALOAD (addr: 0x03092067)
- - local variable index = 5
- - Load ref 0x30911d0 to stack
->> new sp = 0x50
-pc:0x129 op = 0xb4, GETFIELD (addr: 0x03092069)
- - fieldref in cp index = 67
- - cp val = 0x09000000 | 0x00070004
- - field index in instance = 4
->> new sp = 0x4c
- - instance addr(m) = 0x30911d0, field index = 4, addr(m) = 0x30911e8
- - field val = 0xa
->> new sp = 0x50
-pc:0x12c op = 0x23, FLOAD_N (addr: 0x0309206c)
- - 1
- - Load float 0.000000 to stack
->> new sp = 0x54
-pc:0x12d op = 0x19, ALOAD (addr: 0x0309206d)
- - local variable index = 5
- - Load ref 0x30911d0 to stack
->> new sp = 0x58
-pc:0x12f op = 0xb4, GETFIELD (addr: 0x0309206f)
- - fieldref in cp index = 54
- - cp val = 0x09000000 | 0x00070007
- - field index in instance = 7
->> new sp = 0x54
- - instance addr(m) = 0x30911d0, field index = 7, addr(m) = 0x30911f4
- - field val = 0x30914c0
->> new sp = 0x58
-pc:0x132 op = 0x6a, FMUL (addr: 0x03092072)
->> new sp = 0x54
->> new sp = 0x50
- - value 2 = 0.000000
- - value 1 = 0.000000
- - mul result = 0.000000
->> new sp = 0x54
-pc:0x133 op = 0x62, FADD (addr: 0x03092073)
->> new sp = 0x50
->> new sp = 0x4c
- - value 2 = 0.000000
- - value 1 = 0.000000
- - add result = 0.000000
->> new sp = 0x50
-pc:0x134 op = 0xb5, PUTFIELD (addr: 0x03092074)
- - constant table index = 67
- - field index in instance = 4
->> new sp = 0x4c
->> new sp = 0x48
- - set val = 10 (hex:0x0000000a), at addr(m):0x030911e8, instance addr: 0x030911d0
-pc:0x137 op = 0x19, ALOAD (addr: 0x03092077)
- - local variable index = 5
- - Load ref 0x30911d0 to stack
->> new sp = 0x4c
-pc:0x139 op = 0x19, ALOAD (addr: 0x03092079)
- - local variable index = 5
- - Load ref 0x30911d0 to stack
->> new sp = 0x50
-pc:0x13b op = 0xb4, GETFIELD (addr: 0x0309207b)
- - fieldref in cp index = 70
- - cp val = 0x09000000 | 0x00070005
- - field index in instance = 5
->> new sp = 0x4c
- - instance addr(m) = 0x30911d0, field index = 5, addr(m) = 0x30911ec
- - field val = 0x30914c0
->> new sp = 0x50
-pc:0x13e op = 0x23, FLOAD_N (addr: 0x0309207e)
- - 1
- - Load float 0.000000 to stack
->> new sp = 0x54
-pc:0x13f op = 0x19, ALOAD (addr: 0x0309207f)
- - local variable index = 5
- - Load ref 0x30911d0 to stack
->> new sp = 0x58
-pc:0x141 op = 0xb4, GETFIELD (addr: 0x03092081)
- - fieldref in cp index = 57
- - cp val = 0x09000000 | 0x00070008
- - field index in instance = 8
->> new sp = 0x54
- - instance addr(m) = 0x30911d0, field index = 8, addr(m) = 0x30911f8
- - field val = 0x155
->> new sp = 0x58
-pc:0x144 op = 0x6a, FMUL (addr: 0x03092084)
->> new sp = 0x54
->> new sp = 0x50
- - value 2 = 0.000000
- - value 1 = 0.000000
- - mul result = 0.000000
->> new sp = 0x54
-pc:0x145 op = 0x62, FADD (addr: 0x03092085)
->> new sp = 0x50
->> new sp = 0x4c
- - value 2 = 0.000000
- - value 1 = 0.000000
- - add result = 0.000000
->> new sp = 0x50
-pc:0x146 op = 0xb5, PUTFIELD (addr: 0x03092086)
- - constant table index = 70
- - field index in instance = 5
->> new sp = 0x4c
->> new sp = 0x48
- - set val = 50926784 (hex:0x030914c0), at addr(m):0x030911ec, instance addr: 0x030911d0
-pc:0x149 op = 0x84, IINC (addr: 0x03092089)
- - local variable index = 4, increment value = 1
-pc:0x14c op = 0xa7, GOTO (addr: 0x0309208c)
- - cur 332, offset -69
- - goto 263
-pc:0x107 op = 0x15, ILOAD (addr: 0x03092047)
- - local variable index = 4
- - Load INT 7 to stack
->> new sp = 0x4c
-pc:0x109 op = 0x1d, ILOAD_N (addr: 0x03092049)
- - 3
- - Load INT 589912 to stack
->> new sp = 0x50
-pc:0x10a op = 0xa2, IF_ICMPGE (addr: 0x0309204a)
->> new sp = 0x4c
->> new sp = 0x48
- - value 2 = 589912
- - value 1 = 7
- - branch-target = 0x14f
-pc:0x10d op = 0x2c, ALOAD_N (addr: 0x0309204d)
- - 2
- - Current frame ptr: 0x30
- - max locals = 12
- - Load ref 0x90058 to stack
- - 1: (nil), 2: (nil)
->> new sp = 0x4c
-pc:0x10e op = 0x15, ILOAD (addr: 0x0309204e)
- - local variable index = 4
- - Load INT 7 to stack
->> new sp = 0x50
-pc:0x110 op = 0x32, ?ALOAD (addr: 0x03092050)
->> new sp = 0x4c
->> new sp = 0x48
- - instance addr(m) = 0x90058, field index = 8, addr(m) = 0x90080
-field val = 0x40490fdb
->> new sp = 0x4c
-pc:0x111 op = 0x3a, ASTORE (addr: 0x03092051)
- - local variable index = 5
->> new sp = 0x48
- - Store ref 0x40490fdb to local 5
-pc:0x113 op = 0x19, ALOAD (addr: 0x03092053)
- - local variable index = 5
- - Load ref 0x40490fdb to stack
->> new sp = 0x4c
-pc:0x115 op = 0x19, ALOAD (addr: 0x03092055)
- - local variable index = 5
- - Load ref 0x40490fdb to stack
->> new sp = 0x50
-pc:0x117 op = 0xb4, GETFIELD (addr: 0x03092057)
- - fieldref in cp index = 64
- - cp val = 0x09000000 | 0x00070003
- - field index in instance = 3
->> new sp = 0x4c
- - instance addr(m) = 0x40490fdb, field index = 3, addr(m) = 0x40490fef
+ - push const 1 to stack
+>> new sp = 0x50
+pc:0x14 op = 0x60, UNKNOW (addr: 0x03091f54)
+ND DPU) -----------------------------
+[0m

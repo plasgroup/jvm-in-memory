@@ -61,7 +61,7 @@ void interp(struct function_thunk func_thunk)
             DEBUG_OUT_INSN_PARSED("ILOAD_N")
             DEBUG_PRINT(" - %d\n", current_code - ILOAD_0);
             op1 = FRAME_GET_LOCALS(current_fp[tasklet_id], func->max_locals, (current_code - ILOAD_0));
-            DEBUG_PRINT(" - Load INT %d to stack\n", op1);
+            DEBUG_PRINT(" - Load int %d to stack\n", op1);
             PUSH_EVAL_STACK(op1)
             break;
 
@@ -71,7 +71,7 @@ void interp(struct function_thunk func_thunk)
             DEBUG_PRINT(" - local variable index = %d\n", op1);
             pc += 1;
             op2 = FRAME_GET_LOCALS(current_fp[tasklet_id], func->max_locals, op1);
-            DEBUG_PRINT(" - Load INT %d to stack\n", op2);
+            DEBUG_PRINT(" - Load int %d to stack\n", op2);
             PUSH_EVAL_STACK(op2)
             break;
 
@@ -83,7 +83,7 @@ void interp(struct function_thunk func_thunk)
             DEBUG_PRINT(" - %d\n", current_code - ISTORE_0);
             POP_EVAL_STACK(op1)
             FRAME_GET_LOCALS(current_fp[tasklet_id], func->max_locals, (current_code - ISTORE_0)) = op1;
-            DEBUG_PRINT(" - Store INT %d to local %d\n", op1, (current_code - ISTORE_0));
+            DEBUG_PRINT(" - Store int %d to local %d\n", op1, (current_code - ISTORE_0));
             break;
 
         case ISTORE:
@@ -93,7 +93,7 @@ void interp(struct function_thunk func_thunk)
             pc += 1;
             POP_EVAL_STACK(op2)
             FRAME_GET_LOCALS(current_fp[tasklet_id], func->max_locals, op1) = op2;
-            DEBUG_PRINT(" - Store INT %d to local %d\n", op2, op1);
+            DEBUG_PRINT(" - Store int %d to local %d\n", op2, op1);
             break;
 
         case ALOAD_0:
@@ -104,10 +104,7 @@ void interp(struct function_thunk func_thunk)
             DEBUG_PRINT(" - %d\n", current_code - ALOAD_0);
 
             op1 = FRAME_GET_LOCALS(current_fp[tasklet_id], func->max_locals, (current_code - ALOAD_0));
-            DEBUG_PRINT(" - Current frame ptr: %p\n", current_fp[tasklet_id]);
-            DEBUG_PRINT(" - max locals = %d\n", func->max_locals);
             DEBUG_PRINT(" - Load ref %p to stack\n", op1);
-            DEBUG_PRINT(" - 1: %p, 2: %p\n", FRAME_GET_LOCALS(current_fp[tasklet_id], func->params_count, 1), FRAME_GET_LOCALS(current_fp[tasklet_id], func->params_count, 2));
 
             PUSH_EVAL_STACK(op1)
             break;
@@ -726,7 +723,8 @@ void interp(struct function_thunk func_thunk)
             POP_EVAL_STACK(op1)
 
             // read array length
-            op2 = *(uint32_t __mram_ptr *)(op2 + 8);
+            op2 = *(uint32_t __mram_ptr *)(op1 + 8);
+            DEBUG_PRINT(" - array length = %d\n", op2);
 
             PUSH_EVAL_STACK(op2);
 
@@ -748,9 +746,11 @@ void interp(struct function_thunk func_thunk)
           */
             /* 1. pop array length from stack to op1. */
             POP_EVAL_STACK(op1);
+            DEBUG_PRINT(" - array length = %d\n", op1);
 
             /* 2. push the beginning of the new allocated array to the stack. It is the reference of the new allocated array */
             PUSH_EVAL_STACK(mram_heap_pt);
+            DEBUG_PRINT(" - allocate array in mram %p\n", mram_heap_pt);
 
             /* 3. write atype to 4~8 bytes of the array */
             *(uint32_t __mram_ptr *)(mram_heap_pt + 4) = code_buffer[pc];
@@ -775,15 +775,19 @@ void interp(struct function_thunk func_thunk)
             /*1. read class index (2 bytes)*/
             op1 = (code_buffer[pc] << 8) | code_buffer[pc + 1];
             pc += 2; // important
+            DEBUG_PRINT(" -- class index = %d\n", op1);
 
             /*2. read class reference*/
             op2 = (func_thunk.jc->items[op1].direct_value); // type reference
+            DEBUG_PRINT(" -- class addr = %p\n", op2);
 
             /* 3. pop array length from stack to op1. */
             POP_EVAL_STACK(op1);
+            DEBUG_PRINT(" - array length = %d\n", op1);
 
             /* 4. push the beginning of the new allocated array to the stack. It is the reference of the new allocated array */
             PUSH_EVAL_STACK(mram_heap_pt);
+            DEBUG_PRINT(" - allocate array in mram %p\n", mram_heap_pt);
 
             /* 5. write class reference to 4~8 bytes of the array */
             *(uint32_t __mram_ptr *)(mram_heap_pt + 4) = op2;
