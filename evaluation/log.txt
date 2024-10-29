@@ -6710,7 +6710,7 @@ get DPUID = 0 class =  application/bst/Body from cache
 begin preresolve classfile
 
 
-constant table item count = 87
+constant table item count = 88
 
 
 ====================== Begin analyze constant table item ====================
@@ -7317,6 +7317,11 @@ UTF8
 UTF8
 
 
+ >> Item 87 
+
+UTF8
+
+
 ====================== End analyze constant table item ====================
 
 
@@ -7562,27 +7567,30 @@ ffffffffffffffff ff ff ff|b8 c7 90 38
 01 00 00 00|00 00 00 0f
 
  - item 79 line =  
-01 00 00 00|00 00 00 07
+01 00 00 00|00 00 00 05
 
  - item 80 line =  
-01 00 00 00|00 00 00 18
+01 00 00 00|00 00 00 07
 
  - item 81 line =  
-01 00 00 00|00 00 00 06
+01 00 00 00|00 00 00 18
 
  - item 82 line =  
 01 00 00 00|00 00 00 06
 
  - item 83 line =  
-01 00 00 00|00 00 00 07
+01 00 00 00|00 00 00 06
 
  - item 84 line =  
-01 00 00 00|00 00 00 03
+01 00 00 00|00 00 00 07
 
  - item 85 line =  
-01 00 00 00|00 00 00 0a
+01 00 00 00|00 00 00 03
 
  - item 86 line =  
+01 00 00 00|00 00 00 0a
+
+ - item 87 line =  
 01 00 00 00|00 00 00 09
 
 ==== ----------------------------------------------------------------------- ====
@@ -7612,7 +7620,7 @@ thisClassName:  superClassName:
 thisClassNameIndex: 2 superClassNameIndex: 17
 
 
-rescan for filling utf_8 string and number area, total size = 341 bytes
+rescan for filling utf_8 string and number area, total size = 346 bytes
 
 
 >> Entry #2 is UTF8, len = 20
@@ -7720,47 +7728,52 @@ Fill UTF8 string in constantArea offset = 126
 
 Fill UTF8 string in constantArea offset = 130
 
->> Entry #79 is UTF8, len = 7
+>> Entry #79 is UTF8, len = 5
 
 
 Fill UTF8 string in constantArea offset = 145
 
->> Entry #80 is UTF8, len = 24
+>> Entry #80 is UTF8, len = 7
 
 
-Fill UTF8 string in constantArea offset = 152
+Fill UTF8 string in constantArea offset = 150
 
->> Entry #81 is UTF8, len = 6
+>> Entry #81 is UTF8, len = 24
 
 
-Fill UTF8 string in constantArea offset = 176
+Fill UTF8 string in constantArea offset = 157
 
 >> Entry #82 is UTF8, len = 6
 
 
-Fill UTF8 string in constantArea offset = 182
+Fill UTF8 string in constantArea offset = 181
 
->> Entry #83 is UTF8, len = 7
-
-
-Fill UTF8 string in constantArea offset = 188
-
->> Entry #84 is UTF8, len = 3
+>> Entry #83 is UTF8, len = 6
 
 
-Fill UTF8 string in constantArea offset = 195
+Fill UTF8 string in constantArea offset = 187
 
->> Entry #85 is UTF8, len = 10
-
-
-Fill UTF8 string in constantArea offset = 198
-
->> Entry #86 is UTF8, len = 9
+>> Entry #84 is UTF8, len = 7
 
 
-Fill UTF8 string in constantArea offset = 208
+Fill UTF8 string in constantArea offset = 193
 
-filled 217/341 bytes
+>> Entry #85 is UTF8, len = 3
+
+
+Fill UTF8 string in constantArea offset = 200
+
+>> Entry #86 is UTF8, len = 10
+
+
+Fill UTF8 string in constantArea offset = 203
+
+>> Entry #87 is UTF8, len = 9
+
+
+Fill UTF8 string in constantArea offset = 213
+
+filled 222/346 bytes
 
 ==== Entries Table After Resolution Phase 2 - fill constant value to constantDataArea ====
 
@@ -8001,28 +8014,31 @@ ffffffffffffffff ff ff ff|b8 c7 90 38
 01 00 0f 00|00 00 00 82
 
  - item 79 line =  
-01 00 07 00|00 00 00 91
+01 00 05 00|00 00 00 91
 
  - item 80 line =  
-01 00 18 00|00 00 00 98
+01 00 07 00|00 00 00 96
 
  - item 81 line =  
-01 00 06 00|00 00 00 b0
+01 00 18 00|00 00 00 9d
 
  - item 82 line =  
-01 00 06 00|00 00 00 b6
+01 00 06 00|00 00 00 b5
 
  - item 83 line =  
-01 00 07 00|00 00 00 bc
+01 00 06 00|00 00 00 bb
 
  - item 84 line =  
-01 00 03 00|00 00 00 c3
+01 00 07 00|00 00 00 c1
 
  - item 85 line =  
-01 00 0a 00|00 00 00 c6
+01 00 03 00|00 00 00 c8
 
  - item 86 line =  
-01 00 09 00|00 00 00 d0
+01 00 0a 00|00 00 00 cb
+
+ - item 87 line =  
+01 00 09 00|00 00 00 d5
 
 ==== ----------------------------------------------------------------------- ====
 
@@ -8153,7 +8169,7 @@ Field >> access_flag = 10, name_index = 42, desc_index = 7, attr_count = 0
 desc = (FFF)V
 
 
-Attr From Addr: 0x2cf / 0x56f
+Attr From Addr: 0x2d7 / 0x58b
 
  --- attr name in index 77 = Code
 
@@ -8226,7 +8242,7 @@ b1
 desc = (FFFFFFF)V
 
 
-Attr From Addr: 0x320 / 0x56f
+Attr From Addr: 0x328 / 0x58b
 
  --- attr name in index 77 = Code
 
@@ -8348,7 +8364,7 @@ b1
  - name_index = 18
 
 
- - desc_index = 19
+ - desc_index = 79
 
 
  - attr count = 1
@@ -8357,17 +8373,17 @@ b1
 -------------------- Method 2 attr count = 1------------------
 
 
-desc = ()V
+desc = (FF)V
 
 
-Attr From Addr: 0x3bc / 0x56f
+Attr From Addr: 0x3c4 / 0x58b
 
  --- attr name in index 77 = Code
 
 
-Attribute len = 126 (0x7e)
+Attribute len = 146 (0x92)
 
-[Code maxStack = 2, maxLocals = 1, codeLen = 58, params_count = 1]
+[Code maxStack = 2, maxLocals = 6, codeLen = 66, params_count = 3]
 
 2a	
 b7	
@@ -8398,7 +8414,7 @@ b5
 00	
 1c	
 2a	
-0b	
+23	
 
 
 
@@ -8406,7 +8422,7 @@ b5
 00	
 1f	
 2a	
-0b	
+24	
 b5	
 00	
 22	
@@ -8447,6 +8463,17 @@ b5
 
 
 28	
+03	
+3e	
+03	
+36	
+04	
+03	
+36	
+
+
+
+05	
 b1	
 
 
@@ -8457,10 +8484,10 @@ b1
  - acc flag = 0
 
 
- - name_index = 79
+ - name_index = 80
 
 
- - desc_index = 80
+ - desc_index = 81
 
 
  - attr count = 1
@@ -8472,7 +8499,7 @@ b1
 desc = ()Lapplication/bst/Body;
 
 
-Attr From Addr: 0x448 / 0x56f
+Attr From Addr: 0x464 / 0x58b
 
  --- attr name in index 77 = Code
 
@@ -8518,10 +8545,10 @@ b0
  - acc flag = 0
 
 
- - name_index = 81
+ - name_index = 82
 
 
- - desc_index = 80
+ - desc_index = 81
 
 
  - attr count = 1
@@ -8533,7 +8560,7 @@ b0
 desc = ()Lapplication/bst/Body;
 
 
-Attr From Addr: 0x484 / 0x56f
+Attr From Addr: 0x4a0 / 0x58b
 
  --- attr name in index 77 = Code
 
@@ -8579,10 +8606,10 @@ b0
  - acc flag = 0
 
 
- - name_index = 82
+ - name_index = 83
 
 
- - desc_index = 80
+ - desc_index = 81
 
 
  - attr count = 1
@@ -8594,7 +8621,7 @@ b0
 desc = ()Lapplication/bst/Body;
 
 
-Attr From Addr: 0x4c0 / 0x56f
+Attr From Addr: 0x4dc / 0x58b
 
  --- attr name in index 77 = Code
 
@@ -8640,10 +8667,10 @@ b0
  - acc flag = 0
 
 
- - name_index = 83
+ - name_index = 84
 
 
- - desc_index = 80
+ - desc_index = 81
 
 
  - attr count = 1
@@ -8655,7 +8682,7 @@ b0
 desc = ()Lapplication/bst/Body;
 
 
-Attr From Addr: 0x4fc / 0x56f
+Attr From Addr: 0x518 / 0x58b
 
  --- attr name in index 77 = Code
 
@@ -8701,10 +8728,10 @@ b0
  - acc flag = 0
 
 
- - name_index = 84
+ - name_index = 85
 
 
- - desc_index = 80
+ - desc_index = 81
 
 
  - attr count = 1
@@ -8716,7 +8743,7 @@ b0
 desc = ()Lapplication/bst/Body;
 
 
-Attr From Addr: 0x538 / 0x56f
+Attr From Addr: 0x554 / 0x58b
 
  --- attr name in index 77 = Code
 
@@ -8984,28 +9011,31 @@ ffffffffffffffff ff ff ff|b8 c7 90 38
 01 00 0f 00|00 00 00 82
 
  - item 79 line =  
-01 00 07 00|00 00 00 91
+01 00 05 00|00 00 00 91
 
  - item 80 line =  
-01 00 18 00|00 00 00 98
+01 00 07 00|00 00 00 96
 
  - item 81 line =  
-01 00 06 00|00 00 00 b0
+01 00 18 00|00 00 00 9d
 
  - item 82 line =  
-01 00 06 00|00 00 00 b6
+01 00 06 00|00 00 00 b5
 
  - item 83 line =  
-01 00 07 00|00 00 00 bc
+01 00 06 00|00 00 00 bb
 
  - item 84 line =  
-01 00 03 00|00 00 00 c3
+01 00 07 00|00 00 00 c1
 
  - item 85 line =  
-01 00 0a 00|00 00 00 c6
+01 00 03 00|00 00 00 c8
 
  - item 86 line =  
-01 00 09 00|00 00 00 d0
+01 00 0a 00|00 00 00 cb
+
+ - item 87 line =  
+01 00 09 00|00 00 00 d5
 
 super class name = java/lang/Object
 
@@ -9017,21 +9047,21 @@ get DPUID = 0 class =  java/lang/Object from cache
 get DPUID = 0 class =  application/bst/Body from cache
 set framework.pim.dpu.java_strut.DPUJClass@78e03bb5 to com.upmem.dpu.Dpu@6267c3bb, key=application/bst/Body, val = 30911d0 class name = application/bst/Body
 
-set method: offsetMomentum:(FFF)V of class application/bst/Body to com.upmem.dpu.Dpu@6267c3bb v = 30914c0
+set method: offsetMomentum:(FFF)V of class application/bst/Body to com.upmem.dpu.Dpu@6267c3bb v = 30914c8
 
-set method: <init>:(FFFFFFF)V of class application/bst/Body to com.upmem.dpu.Dpu@6267c3bb v = 30914f8
+set method: <init>:(FFFFFFF)V of class application/bst/Body to com.upmem.dpu.Dpu@6267c3bb v = 3091500
 
-set method: <init>:()V of class application/bst/Body to com.upmem.dpu.Dpu@6267c3bb v = 3091560
+set method: <init>:(FF)V of class application/bst/Body to com.upmem.dpu.Dpu@6267c3bb v = 3091568
 
-set method: jupiter:()Lapplication/bst/Body; of class application/bst/Body to com.upmem.dpu.Dpu@6267c3bb v = 30915b8
+set method: jupiter:()Lapplication/bst/Body; of class application/bst/Body to com.upmem.dpu.Dpu@6267c3bb v = 30915c8
 
-set method: saturn:()Lapplication/bst/Body; of class application/bst/Body to com.upmem.dpu.Dpu@6267c3bb v = 30915e8
+set method: saturn:()Lapplication/bst/Body; of class application/bst/Body to com.upmem.dpu.Dpu@6267c3bb v = 30915f8
 
-set method: uranus:()Lapplication/bst/Body; of class application/bst/Body to com.upmem.dpu.Dpu@6267c3bb v = 3091618
+set method: uranus:()Lapplication/bst/Body; of class application/bst/Body to com.upmem.dpu.Dpu@6267c3bb v = 3091628
 
-set method: neptune:()Lapplication/bst/Body; of class application/bst/Body to com.upmem.dpu.Dpu@6267c3bb v = 3091648
+set method: neptune:()Lapplication/bst/Body; of class application/bst/Body to com.upmem.dpu.Dpu@6267c3bb v = 3091658
 
-set method: sun:()Lapplication/bst/Body; of class application/bst/Body to com.upmem.dpu.Dpu@6267c3bb v = 3091678
+set method: sun:()Lapplication/bst/Body; of class application/bst/Body to com.upmem.dpu.Dpu@6267c3bb v = 3091688
 
 set field: PI of class application/bst/Body to com.upmem.dpu.Dpu@6267c3bb v(index) = 0
 
@@ -9114,7 +9144,7 @@ vtable #13 application/bst/Body.offsetMomentum:(FFF)V
 vtable #14 application/bst/Body.<init>:(FFFFFFF)V
 
 
-vtable #15 application/bst/Body.<init>:()V
+vtable #15 application/bst/Body.<init>:(FF)V
 
 
 vtable #16 application/bst/Body.jupiter:()Lapplication/bst/Body;
@@ -9370,28 +9400,31 @@ ffffffffffffffff ff ff ff|b8 c7 90 38
 01 00 0f 00|00 00 00 82
 
  - item 79 line =  
-01 00 07 00|00 00 00 91
+01 00 05 00|00 00 00 91
 
  - item 80 line =  
-01 00 18 00|00 00 00 98
+01 00 07 00|00 00 00 96
 
  - item 81 line =  
-01 00 06 00|00 00 00 b0
+01 00 18 00|00 00 00 9d
 
  - item 82 line =  
-01 00 06 00|00 00 00 b6
+01 00 06 00|00 00 00 b5
 
  - item 83 line =  
-01 00 07 00|00 00 00 bc
+01 00 06 00|00 00 00 bb
 
  - item 84 line =  
-01 00 03 00|00 00 00 c3
+01 00 07 00|00 00 00 c1
 
  - item 85 line =  
-01 00 0a 00|00 00 00 c6
+01 00 03 00|00 00 00 c8
 
  - item 86 line =  
-01 00 09 00|00 00 00 d0
+01 00 0a 00|00 00 00 cb
+
+ - item 87 line =  
+01 00 09 00|00 00 00 d5
 
  - In class application.bst.Body resolve unknow name
 
@@ -9757,7 +9790,7 @@ return val = V
 params desc = FFFFFFF
 
 
-30914f8
+3091500
 
 In #51 of class 2 application.bst.Body: tag = 12, whole line = c00000000120034
 
@@ -9843,28 +9876,31 @@ In #77 of class 2 application.bst.Body: tag = 1, whole line = 10004000000007e
 In #78 of class 2 application.bst.Body: tag = 1, whole line = 1000f0000000082
 
 
-In #79 of class 2 application.bst.Body: tag = 1, whole line = 100070000000091
+In #79 of class 2 application.bst.Body: tag = 1, whole line = 100050000000091
 
 
-In #80 of class 2 application.bst.Body: tag = 1, whole line = 100180000000098
+In #80 of class 2 application.bst.Body: tag = 1, whole line = 100070000000096
 
 
-In #81 of class 2 application.bst.Body: tag = 1, whole line = 1000600000000b0
+In #81 of class 2 application.bst.Body: tag = 1, whole line = 10018000000009d
 
 
-In #82 of class 2 application.bst.Body: tag = 1, whole line = 1000600000000b6
+In #82 of class 2 application.bst.Body: tag = 1, whole line = 1000600000000b5
 
 
-In #83 of class 2 application.bst.Body: tag = 1, whole line = 1000700000000bc
+In #83 of class 2 application.bst.Body: tag = 1, whole line = 1000600000000bb
 
 
-In #84 of class 2 application.bst.Body: tag = 1, whole line = 1000300000000c3
+In #84 of class 2 application.bst.Body: tag = 1, whole line = 1000700000000c1
 
 
-In #85 of class 2 application.bst.Body: tag = 1, whole line = 1000a00000000c6
+In #85 of class 2 application.bst.Body: tag = 1, whole line = 1000300000000c8
 
 
-In #86 of class 2 application.bst.Body: tag = 1, whole line = 1000900000000d0
+In #86 of class 2 application.bst.Body: tag = 1, whole line = 1000a00000000cb
+
+
+In #87 of class 2 application.bst.Body: tag = 1, whole line = 1000900000000d5
 
 
 End of for loop: resolve unknow name
@@ -9914,7 +9950,7 @@ get DPUID = 0 class =  application/bst/Body from cache
 get DPUID = 0 method =  <init>:(FFFFFFF)V of class application/bst/Body from cache
 
 get DPUID = 0 class =  application/bst/Body from cache
-get DPUID = 0 method =  <init>:()V of class application/bst/Body from cache
+get DPUID = 0 method =  <init>:(FF)V of class application/bst/Body from cache
 
 get DPUID = 0 class =  application/bst/Body from cache
 get DPUID = 0 method =  jupiter:()Lapplication/bst/Body; of class application/bst/Body from cache
@@ -9933,29 +9969,29 @@ get DPUID = 0 method =  sun:()Lapplication/bst/Body; of class application/bst/Bo
 
 get DPUID = 0 class =  application/bst/Body from cache
 get DPUID = 0 class =  application/bst/Body from cache
-print 0x155 to 28
+print 0x15a to 28
 
 print 3091208 in 14
 
-print 0x30914c0 to 24
+print 0x30914c8 to 24
 
-method 0 from 0x2f0 === 0x0
+method 0 from 0x2f8 === 0x0
 
-method 1 from 0x328 === 0x38
+method 1 from 0x330 === 0x38
 
-method 2 from 0x390 === 0xa0
+method 2 from 0x398 === 0xa0
 
-method 3 from 0x3e8 === 0xf8
+method 3 from 0x3f8 === 0x100
 
-method 4 from 0x418 === 0x128
+method 4 from 0x428 === 0x130
 
-method 5 from 0x448 === 0x158
+method 5 from 0x458 === 0x160
 
-method 6 from 0x478 === 0x188
+method 6 from 0x488 === 0x190
 
-method 7 from 0x4a8 === 0x1b8
+method 7 from 0x4b8 === 0x1c0
 
-=============== !Alert pos = 1744 === total-size = 1744 ================
+=============== !Alert pos = 1768 === total-size = 1768 ================
 
  ==========--> End of load class application.bst.Body to dpu#0 <--==========
 
@@ -10565,13 +10601,13 @@ get DPUID = 0 class =  java/lang/Object from cache
 
 
 get DPUID = 0 class =  application/bst/Sqrt from cache
-set framework.pim.dpu.java_strut.DPUJClass@1376c05c to com.upmem.dpu.Dpu@6267c3bb, key=application/bst/Sqrt, val = 30918a0 class name = application/bst/Sqrt
+set framework.pim.dpu.java_strut.DPUJClass@1376c05c to com.upmem.dpu.Dpu@6267c3bb, key=application/bst/Sqrt, val = 30918b8 class name = application/bst/Sqrt
 
-set method: <init>:()V of class application/bst/Sqrt to com.upmem.dpu.Dpu@6267c3bb v = 3091978
+set method: <init>:()V of class application/bst/Sqrt to com.upmem.dpu.Dpu@6267c3bb v = 3091990
 
-set method: compute:(F)F of class application/bst/Sqrt to com.upmem.dpu.Dpu@6267c3bb v = 3091998
+set method: compute:(F)F of class application/bst/Sqrt to com.upmem.dpu.Dpu@6267c3bb v = 30919b0
 
-set method: absolute:(F)F of class application/bst/Sqrt to com.upmem.dpu.Dpu@6267c3bb v = 30919d8
+set method: absolute:(F)F of class application/bst/Sqrt to com.upmem.dpu.Dpu@6267c3bb v = 30919f0
 
 in java class = application/bst/Sqrt
 
@@ -10782,7 +10818,7 @@ description = application/bst/Sqrt.absolute:(F)F
 
 get DPUID = 0 method =  absolute:(F)F of class application/bst/Sqrt from cache
 
-class application/bst/Sqrt loaded, mram addr = 0x30918a0
+class application/bst/Sqrt loaded, mram addr = 0x30918b8
 
 get DPUID = 0 class =  application/bst/Sqrt from cache
 methodName = absolute
@@ -10797,7 +10833,7 @@ return val = F
 params desc = F
 
 
-30919d8
+30919f0
 
 In #9 of class 11 application.bst.Sqrt: tag = 7, whole line = 700000b0000000b
 
@@ -10808,7 +10844,7 @@ In #9 ClassRef:
 className = application/bst/Sqrt, index = #11
 
 
-class application/bst/Sqrt loaded, mram addr = 0x30918a0
+class application/bst/Sqrt loaded, mram addr = 0x30918b8
 
 In #10 of class 11 application.bst.Sqrt: tag = 12, whole line = c000000000c000d
 
@@ -10893,9 +10929,9 @@ get DPUID = 0 class =  application/bst/Sqrt from cache
 get DPUID = 0 class =  application/bst/Sqrt from cache
 print 0x77 to 28
 
-print 30918d8 in 14
+print 30918f0 in 14
 
-print 0x3091978 to 24
+print 0x3091990 to 24
 
 method 0 from 0xd8 === 0x0
 
@@ -10919,7 +10955,7 @@ get DPUID = 0 class =  application/bst/NBodySystem from cache
 begin preresolve classfile
 
 
-constant table item count = 72
+constant table item count = 76
 
 
 ====================== Begin analyze constant table item ====================
@@ -10979,26 +11015,26 @@ UTF8
 
  >> Item 9 
 
-Methodref
+Float
 
 
-	 -> Mark Class and NameAndType index 9: 7|3
+	 -> value 9: 8.0
 
 
  >> Item 10 
 
-Fieldref
+Float
 
 
-	 -> Mark Class and NameAndType index 10: 11|12
+	 -> value 10: 9.0
 
 
  >> Item 11 
 
-Class
+Methodref
 
 
-	 -> Mark UTF8 index 11: 13
+	 -> Mark Class and NameAndType index 11: 7|12
 
 
  >> Item 12 
@@ -11006,7 +11042,7 @@ Class
 NameAndType
 
 
-	 -> Mark Name and Type in index 12: 14|15
+	 -> Mark Name and Type in index 12: 5|13
 
 
  >> Item 13 
@@ -11016,28 +11052,31 @@ UTF8
 
  >> Item 14 
 
-UTF8
+Fieldref
+
+
+	 -> Mark Class and NameAndType index 14: 15|16
 
 
  >> Item 15 
 
-UTF8
+Class
+
+
+	 -> Mark UTF8 index 15: 17
 
 
  >> Item 16 
 
-Methodref
+NameAndType
 
 
-	 -> Mark Class and NameAndType index 16: 11|17
+	 -> Mark Name and Type in index 16: 18|19
 
 
  >> Item 17 
 
-NameAndType
-
-
-	 -> Mark Name and Type in index 17: 18|19
+UTF8
 
 
  >> Item 18 
@@ -11052,10 +11091,10 @@ UTF8
 
  >> Item 20 
 
-Fieldref
+Methodref
 
 
-	 -> Mark Class and NameAndType index 20: 11|21
+	 -> Mark Class and NameAndType index 20: 15|21
 
 
  >> Item 21 
@@ -11078,10 +11117,10 @@ UTF8
 
  >> Item 24 
 
-Methodref
+Fieldref
 
 
-	 -> Mark Class and NameAndType index 24: 7|25
+	 -> Mark Class and NameAndType index 24: 15|25
 
 
  >> Item 25 
@@ -11115,7 +11154,7 @@ Methodref
 NameAndType
 
 
-	 -> Mark Name and Type in index 29: 30|27
+	 -> Mark Name and Type in index 29: 30|31
 
 
  >> Item 30 
@@ -11125,86 +11164,86 @@ UTF8
 
  >> Item 31 
 
-Methodref
-
-
-	 -> Mark Class and NameAndType index 31: 7|32
+UTF8
 
 
  >> Item 32 
 
-NameAndType
+Methodref
 
 
-	 -> Mark Name and Type in index 32: 33|27
+	 -> Mark Class and NameAndType index 32: 7|33
 
 
  >> Item 33 
 
-UTF8
+NameAndType
+
+
+	 -> Mark Name and Type in index 33: 34|31
 
 
  >> Item 34 
 
-Methodref
-
-
-	 -> Mark Class and NameAndType index 34: 7|35
+UTF8
 
 
  >> Item 35 
 
-NameAndType
+Methodref
 
 
-	 -> Mark Name and Type in index 35: 36|27
+	 -> Mark Class and NameAndType index 35: 7|36
 
 
  >> Item 36 
 
-UTF8
+NameAndType
+
+
+	 -> Mark Name and Type in index 36: 37|31
 
 
  >> Item 37 
 
-Methodref
-
-
-	 -> Mark Class and NameAndType index 37: 7|38
+UTF8
 
 
  >> Item 38 
 
-NameAndType
+Methodref
 
 
-	 -> Mark Name and Type in index 38: 39|27
+	 -> Mark Class and NameAndType index 38: 7|39
 
 
  >> Item 39 
 
-UTF8
+NameAndType
+
+
+	 -> Mark Name and Type in index 39: 40|31
 
 
  >> Item 40 
 
-Fieldref
-
-
-	 -> Mark Class and NameAndType index 40: 7|41
+UTF8
 
 
  >> Item 41 
 
-NameAndType
+Methodref
 
 
-	 -> Mark Name and Type in index 41: 42|43
+	 -> Mark Class and NameAndType index 41: 7|42
 
 
  >> Item 42 
 
-UTF8
+NameAndType
+
+
+	 -> Mark Name and Type in index 42: 43|31
 
 
  >> Item 43 
@@ -11225,7 +11264,7 @@ Fieldref
 NameAndType
 
 
-	 -> Mark Name and Type in index 45: 46|43
+	 -> Mark Name and Type in index 45: 46|47
 
 
  >> Item 46 
@@ -11235,65 +11274,65 @@ UTF8
 
  >> Item 47 
 
-Fieldref
-
-
-	 -> Mark Class and NameAndType index 47: 7|48
+UTF8
 
 
  >> Item 48 
 
-NameAndType
+Fieldref
 
 
-	 -> Mark Name and Type in index 48: 49|43
+	 -> Mark Class and NameAndType index 48: 7|49
 
 
  >> Item 49 
 
-UTF8
+NameAndType
+
+
+	 -> Mark Name and Type in index 49: 50|47
 
 
  >> Item 50 
 
-Fieldref
-
-
-	 -> Mark Class and NameAndType index 50: 7|51
+UTF8
 
 
  >> Item 51 
 
-NameAndType
+Fieldref
 
 
-	 -> Mark Name and Type in index 51: 52|43
+	 -> Mark Class and NameAndType index 51: 7|52
 
 
  >> Item 52 
 
-UTF8
+NameAndType
+
+
+	 -> Mark Name and Type in index 52: 53|47
 
 
  >> Item 53 
 
-Methodref
-
-
-	 -> Mark Class and NameAndType index 53: 7|54
+UTF8
 
 
  >> Item 54 
 
-NameAndType
+Fieldref
 
 
-	 -> Mark Name and Type in index 54: 55|56
+	 -> Mark Class and NameAndType index 54: 7|55
 
 
  >> Item 55 
 
-UTF8
+NameAndType
+
+
+	 -> Mark Name and Type in index 55: 56|47
 
 
  >> Item 56 
@@ -11306,12 +11345,15 @@ UTF8
 Methodref
 
 
-	 -> Mark Class and NameAndType index 57: 11|3
+	 -> Mark Class and NameAndType index 57: 7|58
 
 
  >> Item 58 
 
-UTF8
+NameAndType
+
+
+	 -> Mark Name and Type in index 58: 59|60
 
 
  >> Item 59 
@@ -11326,7 +11368,10 @@ UTF8
 
  >> Item 61 
 
-UTF8
+Methodref
+
+
+	 -> Mark Class and NameAndType index 61: 15|3
 
 
  >> Item 62 
@@ -11336,10 +11381,7 @@ UTF8
 
  >> Item 63 
 
-Class
-
-
-	 -> Mark UTF8 index 63: 23
+UTF8
 
 
  >> Item 64 
@@ -11359,7 +11401,10 @@ UTF8
 
  >> Item 67 
 
-UTF8
+Class
+
+
+	 -> Mark UTF8 index 67: 27
 
 
  >> Item 68 
@@ -11378,6 +11423,26 @@ UTF8
 
 
  >> Item 71 
+
+UTF8
+
+
+ >> Item 72 
+
+UTF8
+
+
+ >> Item 73 
+
+UTF8
+
+
+ >> Item 74 
+
+UTF8
+
+
+ >> Item 75 
 
 UTF8
 
@@ -11417,192 +11482,204 @@ UTF8
 01 00 00 00|00 00 00 14
 
  - item 9 line =  
-0a 00 00 00|00 07 00 03
+04 00 00 00|41 00 00 00
 
  - item 10 line =  
-09 00 00 00|00 0b 00 0c
+04 00 00 00|41 10 00 00
 
  - item 11 line =  
-07 00 00 0d|00 00 00 0d
+0a 00 00 00|00 07 00 0c
 
  - item 12 line =  
-0c 00 00 00|00 0e 00 0f
+0c 00 00 00|00 05 00 0d
 
  - item 13 line =  
-01 00 00 00|00 00 00 1b
+01 00 00 00|00 00 00 05
 
  - item 14 line =  
-01 00 00 00|00 00 00 04
+09 00 00 00|00 0f 00 10
 
  - item 15 line =  
-01 00 00 00|00 00 00 16
+07 00 00 11|00 00 00 11
 
  - item 16 line =  
-0a 00 00 00|00 0b 00 11
-
- - item 17 line =  
 0c 00 00 00|00 12 00 13
 
+ - item 17 line =  
+01 00 00 00|00 00 00 1b
+
  - item 18 line =  
-01 00 00 00|00 00 00 0c
+01 00 00 00|00 00 00 04
 
  - item 19 line =  
-01 00 00 00|00 00 00 19
+01 00 00 00|00 00 00 16
 
  - item 20 line =  
-09 00 00 00|00 0b 00 15
+0a 00 00 00|00 0f 00 15
 
  - item 21 line =  
 0c 00 00 00|00 16 00 17
 
  - item 22 line =  
-01 00 00 00|00 00 00 06
+01 00 00 00|00 00 00 0c
 
  - item 23 line =  
-01 00 00 00|00 00 00 17
+01 00 00 00|00 00 00 19
 
  - item 24 line =  
-0a 00 00 00|00 07 00 19
+09 00 00 00|00 0f 00 19
 
  - item 25 line =  
 0c 00 00 00|00 1a 00 1b
 
  - item 26 line =  
-01 00 00 00|00 00 00 03
+01 00 00 00|00 00 00 06
 
  - item 27 line =  
-01 00 00 00|00 00 00 18
+01 00 00 00|00 00 00 17
 
  - item 28 line =  
 0a 00 00 00|00 07 00 1d
 
  - item 29 line =  
-0c 00 00 00|00 1e 00 1b
+0c 00 00 00|00 1e 00 1f
 
  - item 30 line =  
-01 00 00 00|00 00 00 07
+01 00 00 00|00 00 00 03
 
  - item 31 line =  
-0a 00 00 00|00 07 00 20
+01 00 00 00|00 00 00 18
 
  - item 32 line =  
-0c 00 00 00|00 21 00 1b
+0a 00 00 00|00 07 00 21
 
  - item 33 line =  
-01 00 00 00|00 00 00 06
+0c 00 00 00|00 22 00 1f
 
  - item 34 line =  
-0a 00 00 00|00 07 00 23
-
- - item 35 line =  
-0c 00 00 00|00 24 00 1b
-
- - item 36 line =  
-01 00 00 00|00 00 00 06
-
- - item 37 line =  
-0a 00 00 00|00 07 00 26
-
- - item 38 line =  
-0c 00 00 00|00 27 00 1b
-
- - item 39 line =  
 01 00 00 00|00 00 00 07
 
+ - item 35 line =  
+0a 00 00 00|00 07 00 24
+
+ - item 36 line =  
+0c 00 00 00|00 25 00 1f
+
+ - item 37 line =  
+01 00 00 00|00 00 00 06
+
+ - item 38 line =  
+0a 00 00 00|00 07 00 27
+
+ - item 39 line =  
+0c 00 00 00|00 28 00 1f
+
  - item 40 line =  
-09 00 00 00|00 07 00 29
+01 00 00 00|00 00 00 06
 
  - item 41 line =  
-0c 00 00 00|00 2a 00 2b
+0a 00 00 00|00 07 00 2a
 
  - item 42 line =  
-01 00 00 00|00 00 00 02
+0c 00 00 00|00 2b 00 1f
 
  - item 43 line =  
-01 00 00 00|00 00 00 01
+01 00 00 00|00 00 00 07
 
  - item 44 line =  
 09 00 00 00|00 07 00 2d
 
  - item 45 line =  
-0c 00 00 00|00 2e 00 2b
+0c 00 00 00|00 2e 00 2f
 
  - item 46 line =  
-01 00 00 00|00 00 00 04
+01 00 00 00|00 00 00 02
 
  - item 47 line =  
-09 00 00 00|00 07 00 30
+01 00 00 00|00 00 00 01
 
  - item 48 line =  
-0c 00 00 00|00 31 00 2b
+09 00 00 00|00 07 00 31
 
  - item 49 line =  
-01 00 00 00|00 00 00 02
+0c 00 00 00|00 32 00 2f
 
  - item 50 line =  
-09 00 00 00|00 07 00 33
+01 00 00 00|00 00 00 04
 
  - item 51 line =  
-0c 00 00 00|00 34 00 2b
+09 00 00 00|00 07 00 34
 
  - item 52 line =  
-01 00 00 00|00 00 00 02
+0c 00 00 00|00 35 00 2f
 
  - item 53 line =  
-0a 00 00 00|00 07 00 36
+01 00 00 00|00 00 00 02
 
  - item 54 line =  
-0c 00 00 00|00 37 00 38
+09 00 00 00|00 07 00 37
 
  - item 55 line =  
-01 00 00 00|00 00 00 0e
+0c 00 00 00|00 38 00 2f
 
  - item 56 line =  
-01 00 00 00|00 00 00 06
+01 00 00 00|00 00 00 02
 
  - item 57 line =  
-0a 00 00 00|00 0b 00 03
+0a 00 00 00|00 07 00 3a
 
  - item 58 line =  
-01 00 00 00|00 00 00 04
+0c 00 00 00|00 3b 00 3c
 
  - item 59 line =  
-01 00 00 00|00 00 00 0f
+01 00 00 00|00 00 00 0e
 
  - item 60 line =  
-01 00 00 00|00 00 00 04
-
- - item 61 line =  
-01 00 00 00|00 00 00 03
-
- - item 62 line =  
-01 00 00 00|00 00 00 0d
-
- - item 63 line =  
-07 00 00 17|00 00 00 17
-
- - item 64 line =  
-01 00 00 00|00 00 00 07
-
- - item 65 line =  
-01 00 00 00|00 00 00 04
-
- - item 66 line =  
 01 00 00 00|00 00 00 06
 
- - item 67 line =  
-01 00 00 00|00 00 00 03
+ - item 61 line =  
+0a 00 00 00|00 0f 00 03
 
- - item 68 line =  
+ - item 62 line =  
 01 00 00 00|00 00 00 04
 
+ - item 63 line =  
+01 00 00 00|00 00 00 0f
+
+ - item 64 line =  
+01 00 00 00|00 00 00 04
+
+ - item 65 line =  
+01 00 00 00|00 00 00 03
+
+ - item 66 line =  
+01 00 00 00|00 00 00 0d
+
+ - item 67 line =  
+07 00 00 1b|00 00 00 1b
+
+ - item 68 line =  
+01 00 00 00|00 00 00 07
+
  - item 69 line =  
-01 00 00 00|00 00 00 1f
+01 00 00 00|00 00 00 04
 
  - item 70 line =  
-01 00 00 00|00 00 00 0a
+01 00 00 00|00 00 00 06
 
  - item 71 line =  
+01 00 00 00|00 00 00 03
+
+ - item 72 line =  
+01 00 00 00|00 00 00 04
+
+ - item 73 line =  
+01 00 00 00|00 00 00 1f
+
+ - item 74 line =  
+01 00 00 00|00 00 00 0a
+
+ - item 75 line =  
 01 00 00 00|00 00 00 10
 
 ==== ----------------------------------------------------------------------- ====
@@ -11614,7 +11691,7 @@ UTF8
 
 access_flag = 0x0021
 
- - this class = 11
+ - this class = 15
 
 
 tEntries Table After Resolution Phase 1 - read CPs, and mark information. This_class ref index = 0
@@ -11629,10 +11706,10 @@ super_class ref index = 0
 thisClassName:  superClassName: 
 
 
-thisClassNameIndex: 13 superClassNameIndex: 4
+thisClassNameIndex: 17 superClassNameIndex: 4
 
 
-rescan for filling utf_8 string and number area, total size = 368 bytes
+rescan for filling utf_8 string and number area, total size = 381 bytes
 
 
 >> Entry #4 is UTF8, len = 16
@@ -11655,172 +11732,177 @@ Fill UTF8 string in constantArea offset = 22
 
 Fill UTF8 string in constantArea offset = 25
 
->> Entry #13 is UTF8, len = 27
+>> Entry #13 is UTF8, len = 5
 
 
 Fill UTF8 string in constantArea offset = 45
 
->> Entry #14 is UTF8, len = 4
+>> Entry #17 is UTF8, len = 27
 
 
-Fill UTF8 string in constantArea offset = 72
+Fill UTF8 string in constantArea offset = 50
 
->> Entry #15 is UTF8, len = 22
-
-
-Fill UTF8 string in constantArea offset = 76
-
->> Entry #18 is UTF8, len = 12
+>> Entry #18 is UTF8, len = 4
 
 
-Fill UTF8 string in constantArea offset = 98
+Fill UTF8 string in constantArea offset = 77
 
->> Entry #19 is UTF8, len = 25
-
-
-Fill UTF8 string in constantArea offset = 110
-
->> Entry #22 is UTF8, len = 6
+>> Entry #19 is UTF8, len = 22
 
 
-Fill UTF8 string in constantArea offset = 135
+Fill UTF8 string in constantArea offset = 81
 
->> Entry #23 is UTF8, len = 23
-
-
-Fill UTF8 string in constantArea offset = 141
-
->> Entry #26 is UTF8, len = 3
+>> Entry #22 is UTF8, len = 12
 
 
-Fill UTF8 string in constantArea offset = 164
+Fill UTF8 string in constantArea offset = 103
 
->> Entry #27 is UTF8, len = 24
-
-
-Fill UTF8 string in constantArea offset = 167
-
->> Entry #30 is UTF8, len = 7
+>> Entry #23 is UTF8, len = 25
 
 
-Fill UTF8 string in constantArea offset = 191
+Fill UTF8 string in constantArea offset = 115
 
->> Entry #33 is UTF8, len = 6
-
-
-Fill UTF8 string in constantArea offset = 198
-
->> Entry #36 is UTF8, len = 6
+>> Entry #26 is UTF8, len = 6
 
 
-Fill UTF8 string in constantArea offset = 204
+Fill UTF8 string in constantArea offset = 140
 
->> Entry #39 is UTF8, len = 7
-
-
-Fill UTF8 string in constantArea offset = 210
-
->> Entry #42 is UTF8, len = 2
+>> Entry #27 is UTF8, len = 23
 
 
-Fill UTF8 string in constantArea offset = 217
+Fill UTF8 string in constantArea offset = 146
 
->> Entry #43 is UTF8, len = 1
-
-
-Fill UTF8 string in constantArea offset = 219
-
->> Entry #46 is UTF8, len = 4
+>> Entry #30 is UTF8, len = 3
 
 
-Fill UTF8 string in constantArea offset = 220
+Fill UTF8 string in constantArea offset = 169
 
->> Entry #49 is UTF8, len = 2
+>> Entry #31 is UTF8, len = 24
+
+
+Fill UTF8 string in constantArea offset = 172
+
+>> Entry #34 is UTF8, len = 7
+
+
+Fill UTF8 string in constantArea offset = 196
+
+>> Entry #37 is UTF8, len = 6
+
+
+Fill UTF8 string in constantArea offset = 203
+
+>> Entry #40 is UTF8, len = 6
+
+
+Fill UTF8 string in constantArea offset = 209
+
+>> Entry #43 is UTF8, len = 7
+
+
+Fill UTF8 string in constantArea offset = 215
+
+>> Entry #46 is UTF8, len = 2
+
+
+Fill UTF8 string in constantArea offset = 222
+
+>> Entry #47 is UTF8, len = 1
 
 
 Fill UTF8 string in constantArea offset = 224
 
->> Entry #52 is UTF8, len = 2
+>> Entry #50 is UTF8, len = 4
 
 
-Fill UTF8 string in constantArea offset = 226
+Fill UTF8 string in constantArea offset = 225
 
->> Entry #55 is UTF8, len = 14
-
-
-Fill UTF8 string in constantArea offset = 228
-
->> Entry #56 is UTF8, len = 6
+>> Entry #53 is UTF8, len = 2
 
 
-Fill UTF8 string in constantArea offset = 242
+Fill UTF8 string in constantArea offset = 229
 
->> Entry #58 is UTF8, len = 4
-
-
-Fill UTF8 string in constantArea offset = 248
-
->> Entry #59 is UTF8, len = 15
+>> Entry #56 is UTF8, len = 2
 
 
-Fill UTF8 string in constantArea offset = 252
+Fill UTF8 string in constantArea offset = 231
 
->> Entry #60 is UTF8, len = 4
-
-
-Fill UTF8 string in constantArea offset = 267
-
->> Entry #61 is UTF8, len = 3
+>> Entry #59 is UTF8, len = 14
 
 
-Fill UTF8 string in constantArea offset = 271
+Fill UTF8 string in constantArea offset = 233
 
->> Entry #62 is UTF8, len = 13
-
-
-Fill UTF8 string in constantArea offset = 274
-
->> Entry #64 is UTF8, len = 7
+>> Entry #60 is UTF8, len = 6
 
 
-Fill UTF8 string in constantArea offset = 287
+Fill UTF8 string in constantArea offset = 247
 
->> Entry #65 is UTF8, len = 4
-
-
-Fill UTF8 string in constantArea offset = 294
-
->> Entry #66 is UTF8, len = 6
+>> Entry #62 is UTF8, len = 4
 
 
-Fill UTF8 string in constantArea offset = 298
+Fill UTF8 string in constantArea offset = 253
 
->> Entry #67 is UTF8, len = 3
-
-
-Fill UTF8 string in constantArea offset = 304
-
->> Entry #68 is UTF8, len = 4
+>> Entry #63 is UTF8, len = 15
 
 
-Fill UTF8 string in constantArea offset = 307
+Fill UTF8 string in constantArea offset = 257
 
->> Entry #69 is UTF8, len = 31
-
-
-Fill UTF8 string in constantArea offset = 311
-
->> Entry #70 is UTF8, len = 10
+>> Entry #64 is UTF8, len = 4
 
 
-Fill UTF8 string in constantArea offset = 342
+Fill UTF8 string in constantArea offset = 272
 
->> Entry #71 is UTF8, len = 16
+>> Entry #65 is UTF8, len = 3
 
 
-Fill UTF8 string in constantArea offset = 352
+Fill UTF8 string in constantArea offset = 276
 
-filled 368/368 bytes
+>> Entry #66 is UTF8, len = 13
+
+
+Fill UTF8 string in constantArea offset = 279
+
+>> Entry #68 is UTF8, len = 7
+
+
+Fill UTF8 string in constantArea offset = 292
+
+>> Entry #69 is UTF8, len = 4
+
+
+Fill UTF8 string in constantArea offset = 299
+
+>> Entry #70 is UTF8, len = 6
+
+
+Fill UTF8 string in constantArea offset = 303
+
+>> Entry #71 is UTF8, len = 3
+
+
+Fill UTF8 string in constantArea offset = 309
+
+>> Entry #72 is UTF8, len = 4
+
+
+Fill UTF8 string in constantArea offset = 312
+
+>> Entry #73 is UTF8, len = 31
+
+
+Fill UTF8 string in constantArea offset = 316
+
+>> Entry #74 is UTF8, len = 10
+
+
+Fill UTF8 string in constantArea offset = 347
+
+>> Entry #75 is UTF8, len = 16
+
+
+Fill UTF8 string in constantArea offset = 357
+
+filled 373/381 bytes
 
 ==== Entries Table After Resolution Phase 2 - fill constant value to constantDataArea ====
 
@@ -11851,193 +11933,205 @@ filled 368/368 bytes
 01 00 14 00|00 00 00 19
 
  - item 9 line =  
-0a 00 00 00|00 07 00 03
+04 00 00 00|41 00 00 00
 
  - item 10 line =  
-09 00 00 00|00 0b 00 0c
+04 00 00 00|41 10 00 00
 
  - item 11 line =  
-07 00 00 0d|00 00 00 0d
+0a 00 00 00|00 07 00 0c
 
  - item 12 line =  
-0c 00 00 00|00 0e 00 0f
+0c 00 00 00|00 05 00 0d
 
  - item 13 line =  
-01 00 1b 00|00 00 00 2d
+01 00 05 00|00 00 00 2d
 
  - item 14 line =  
-01 00 04 00|00 00 00 48
+09 00 00 00|00 0f 00 10
 
  - item 15 line =  
-01 00 16 00|00 00 00 4c
+07 00 00 11|00 00 00 11
 
  - item 16 line =  
-0a 00 00 00|00 0b 00 11
-
- - item 17 line =  
 0c 00 00 00|00 12 00 13
 
+ - item 17 line =  
+01 00 1b 00|00 00 00 32
+
  - item 18 line =  
-01 00 0c 00|00 00 00 62
+01 00 04 00|00 00 00 4d
 
  - item 19 line =  
-01 00 19 00|00 00 00 6e
+01 00 16 00|00 00 00 51
 
  - item 20 line =  
-09 00 00 00|00 0b 00 15
+0a 00 00 00|00 0f 00 15
 
  - item 21 line =  
 0c 00 00 00|00 16 00 17
 
  - item 22 line =  
-01 00 06 00|00 00 00 87
+01 00 0c 00|00 00 00 67
 
  - item 23 line =  
-01 00 17 00|00 00 00 8d
+01 00 19 00|00 00 00 73
 
  - item 24 line =  
-0a 00 00 00|00 07 00 19
+09 00 00 00|00 0f 00 19
 
  - item 25 line =  
 0c 00 00 00|00 1a 00 1b
 
  - item 26 line =  
-01 00 03 00|00 00 00 a4
+01 00 06 00|00 00 00 8c
 
  - item 27 line =  
-01 00 18 00|00 00 00 a7
+01 00 17 00|00 00 00 92
 
  - item 28 line =  
 0a 00 00 00|00 07 00 1d
 
  - item 29 line =  
-0c 00 00 00|00 1e 00 1b
+0c 00 00 00|00 1e 00 1f
 
  - item 30 line =  
-01 00 07 00|00 00 00 bf
+01 00 03 00|00 00 00 a9
 
  - item 31 line =  
-0a 00 00 00|00 07 00 20
+01 00 18 00|00 00 00 ac
 
  - item 32 line =  
-0c 00 00 00|00 21 00 1b
+0a 00 00 00|00 07 00 21
 
  - item 33 line =  
-01 00 06 00|00 00 00 c6
+0c 00 00 00|00 22 00 1f
 
  - item 34 line =  
-0a 00 00 00|00 07 00 23
+01 00 07 00|00 00 00 c4
 
  - item 35 line =  
-0c 00 00 00|00 24 00 1b
+0a 00 00 00|00 07 00 24
 
  - item 36 line =  
-01 00 06 00|00 00 00 cc
+0c 00 00 00|00 25 00 1f
 
  - item 37 line =  
-0a 00 00 00|00 07 00 26
+01 00 06 00|00 00 00 cb
 
  - item 38 line =  
-0c 00 00 00|00 27 00 1b
+0a 00 00 00|00 07 00 27
 
  - item 39 line =  
-01 00 07 00|00 00 00 d2
+0c 00 00 00|00 28 00 1f
 
  - item 40 line =  
-09 00 00 00|00 07 00 29
+01 00 06 00|00 00 00 d1
 
  - item 41 line =  
-0c 00 00 00|00 2a 00 2b
+0a 00 00 00|00 07 00 2a
 
  - item 42 line =  
-01 00 02 00|00 00 00 d9
+0c 00 00 00|00 2b 00 1f
 
  - item 43 line =  
-01 00 01 00|00 00 00 db
+01 00 07 00|00 00 00 d7
 
  - item 44 line =  
 09 00 00 00|00 07 00 2d
 
  - item 45 line =  
-0c 00 00 00|00 2e 00 2b
+0c 00 00 00|00 2e 00 2f
 
  - item 46 line =  
-01 00 04 00|00 00 00 dc
+01 00 02 00|00 00 00 de
 
  - item 47 line =  
-09 00 00 00|00 07 00 30
+01 00 01 00|00 00 00 e0
 
  - item 48 line =  
-0c 00 00 00|00 31 00 2b
+09 00 00 00|00 07 00 31
 
  - item 49 line =  
-01 00 02 00|00 00 00 e0
+0c 00 00 00|00 32 00 2f
 
  - item 50 line =  
-09 00 00 00|00 07 00 33
+01 00 04 00|00 00 00 e1
 
  - item 51 line =  
-0c 00 00 00|00 34 00 2b
+09 00 00 00|00 07 00 34
 
  - item 52 line =  
-01 00 02 00|00 00 00 e2
+0c 00 00 00|00 35 00 2f
 
  - item 53 line =  
-0a 00 00 00|00 07 00 36
+01 00 02 00|00 00 00 e5
 
  - item 54 line =  
-0c 00 00 00|00 37 00 38
+09 00 00 00|00 07 00 37
 
  - item 55 line =  
-01 00 0e 00|00 00 00 e4
+0c 00 00 00|00 38 00 2f
 
  - item 56 line =  
-01 00 06 00|00 00 00 f2
+01 00 02 00|00 00 00 e7
 
  - item 57 line =  
-0a 00 00 00|00 0b 00 03
+0a 00 00 00|00 07 00 3a
 
  - item 58 line =  
-01 00 04 00|00 00 00 f8
+0c 00 00 00|00 3b 00 3c
 
  - item 59 line =  
-01 00 0f 00|00 00 00 fc
+01 00 0e 00|00 00 00 e9
 
  - item 60 line =  
-01 00 04 00|00 00 01 0b
+01 00 06 00|00 00 00 f7
 
  - item 61 line =  
-01 00 03 00|00 00 01 0f
+0a 00 00 00|00 0f 00 03
 
  - item 62 line =  
-01 00 0d 00|00 00 01 12
+01 00 04 00|00 00 00 fd
 
  - item 63 line =  
-07 00 00 17|00 00 00 17
+01 00 0f 00|00 00 01 01
 
  - item 64 line =  
-01 00 07 00|00 00 01 1f
+01 00 04 00|00 00 01 10
 
  - item 65 line =  
-01 00 04 00|00 00 01 26
+01 00 03 00|00 00 01 14
 
  - item 66 line =  
-01 00 06 00|00 00 01 2a
+01 00 0d 00|00 00 01 17
 
  - item 67 line =  
-01 00 03 00|00 00 01 30
+07 00 00 1b|00 00 00 1b
 
  - item 68 line =  
-01 00 04 00|00 00 01 33
+01 00 07 00|00 00 01 24
 
  - item 69 line =  
-01 00 1f 00|00 00 01 37
+01 00 04 00|00 00 01 2b
 
  - item 70 line =  
-01 00 0a 00|00 00 01 56
+01 00 06 00|00 00 01 2f
 
  - item 71 line =  
-01 00 10 00|00 00 01 60
+01 00 03 00|00 00 01 35
+
+ - item 72 line =  
+01 00 04 00|00 00 01 38
+
+ - item 73 line =  
+01 00 1f 00|00 00 01 3c
+
+ - item 74 line =  
+01 00 0a 00|00 00 01 5b
+
+ - item 75 line =  
+01 00 10 00|00 00 01 65
 
 ==== ----------------------------------------------------------------------- ====
 
@@ -12055,18 +12149,18 @@ field count = 2
 >> Field 0
 
 
- -- Mark name index 22 as this class's field name
+ -- Mark name index 26 as this class's field name
 
 
-Field >> access_flag = 12, name_index = 22, desc_index = 23, attr_count = 0
+Field >> access_flag = 12, name_index = 26, desc_index = 27, attr_count = 0
 
 >> Field 1
 
 
- -- Mark name index 14 as this class's field name
+ -- Mark name index 18 as this class's field name
 
 
-Field >> access_flag = 12, name_index = 14, desc_index = 15, attr_count = 0
+Field >> access_flag = 12, name_index = 18, desc_index = 19, attr_count = 0
 
 ======================= Begin Method Analysis ===========================
 
@@ -12095,14 +12189,14 @@ Field >> access_flag = 12, name_index = 14, desc_index = 15, attr_count = 0
 desc = ()V
 
 
-Attr From Addr: 0x2af / 0x4b9
+Attr From Addr: 0x2c6 / 0x4d4
 
- --- attr name in index 58 = Code
+ --- attr name in index 62 = Code
 
 
-Attribute len = 60 (0x3c)
+Attribute len = 64 (0x40)
 
-[Code maxStack = 3, maxLocals = 1, codeLen = 24, params_count = 1]
+[Code maxStack = 5, maxLocals = 1, codeLen = 28, params_count = 1]
 
 2a	
 b7	
@@ -12116,23 +12210,30 @@ bb
 
 
 59	
+12	
+09	
+12	
+0a	
 b7	
 00	
-09	
+0b	
+
+
+
 b5	
 00	
-0a	
+0e	
 2a	
-
-
-
 2a	
 b6	
 00	
-10	
+14	
+
+
+
 b5	
 00	
-14	
+18	
 b1	
 
 
@@ -12143,10 +12244,10 @@ b1
  - acc flag = 1
 
 
- - name_index = 60
+ - name_index = 64
 
 
- - desc_index = 61
+ - desc_index = 65
 
 
  - attr count = 1
@@ -12158,9 +12259,9 @@ b1
 desc = ()I
 
 
-Attr From Addr: 0x2f9 / 0x4b9
+Attr From Addr: 0x314 / 0x4d4
 
- --- attr name in index 58 = Code
+ --- attr name in index 62 = Code
 
 
 Attribute len = 26 (0x1a)
@@ -12178,10 +12279,10 @@ ac
  - acc flag = 1
 
 
- - name_index = 18
+ - name_index = 22
 
 
- - desc_index = 19
+ - desc_index = 23
 
 
  - attr count = 1
@@ -12193,9 +12294,9 @@ ac
 desc = ()[Lapplication/bst/Body;
 
 
-Attr From Addr: 0x321 / 0x4b9
+Attr From Addr: 0x33c / 0x4d4
 
- --- attr name in index 58 = Code
+ --- attr name in index 62 = Code
 
 
 Attribute len = 261 (0x105)
@@ -12214,10 +12315,10 @@ b4
 
 
 00	
-0a	
+0e	
 b6	
 00	
-18	
+1c	
 53	
 59	
 04	
@@ -12227,10 +12328,10 @@ b6
 2a	
 b4	
 00	
-0a	
+0e	
 b6	
 00	
-1c	
+20	
 53	
 
 
@@ -12240,26 +12341,26 @@ b6
 2a	
 b4	
 00	
-0a	
+0e	
 b6	
 00	
 
 
 
-1f	
+23	
 53	
 59	
 06	
 2a	
 b4	
 00	
-0a	
+0e	
 
 
 
 b6	
 00	
-22	
+26	
 53	
 59	
 07	
@@ -12269,10 +12370,10 @@ b4
 
 
 00	
-0a	
+0e	
 b6	
 00	
-25	
+29	
 53	
 4c	
 0b	
@@ -12327,7 +12428,7 @@ a2
 08	
 b4	
 00	
-28	
+2c	
 19	
 08	
 b4	
@@ -12335,7 +12436,7 @@ b4
 
 
 00	
-2c	
+30	
 6a	
 62	
 45	
@@ -12347,12 +12448,12 @@ b4
 
 b4	
 00	
-2f	
+33	
 19	
 08	
 b4	
 00	
-2c	
+30	
 
 
 
@@ -12368,12 +12469,12 @@ b4
 
 
 00	
-32	
+36	
 19	
 08	
 b4	
 00	
-2c	
+30	
 6a	
 
 
@@ -12402,7 +12503,7 @@ c3
 
 b6	
 00	
-35	
+39	
 2b	
 b0	
 
@@ -12414,10 +12515,10 @@ b0
  - acc flag = 1
 
 
- - name_index = 64
+ - name_index = 68
 
 
- - desc_index = 65
+ - desc_index = 69
 
 
  - attr count = 1
@@ -12429,9 +12530,9 @@ b0
 desc = (F)V
 
 
-Attr From Addr: 0x434 / 0x4b9
+Attr From Addr: 0x44f / 0x4d4
 
- --- attr name in index 58 = Code
+ --- attr name in index 62 = Code
 
 
 Attribute len = 25 (0x19)
@@ -12448,10 +12549,10 @@ b1
  - acc flag = 1
 
 
- - name_index = 66
+ - name_index = 70
 
 
- - desc_index = 67
+ - desc_index = 71
 
 
  - attr count = 1
@@ -12463,9 +12564,9 @@ b1
 desc = ()F
 
 
-Attr From Addr: 0x45b / 0x4b9
+Attr From Addr: 0x476 / 0x4d4
 
- --- attr name in index 58 = Code
+ --- attr name in index 62 = Code
 
 
 Attribute len = 32 (0x20)
@@ -12485,10 +12586,10 @@ ae
  - acc flag = 1
 
 
- - name_index = 68
+ - name_index = 72
 
 
- - desc_index = 69
+ - desc_index = 73
 
 
  - attr count = 1
@@ -12500,9 +12601,9 @@ ae
 desc = ()Lapplication/bst/NBodySystem;
 
 
-Attr From Addr: 0x489 / 0x4b9
+Attr From Addr: 0x4a4 / 0x4d4
 
- --- attr name in index 58 = Code
+ --- attr name in index 62 = Code
 
 
 Attribute len = 32 (0x20)
@@ -12511,11 +12612,11 @@ Attribute len = 32 (0x20)
 
 bb	
 00	
-0b	
+0f	
 59	
 b7	
 00	
-39	
+3d	
 b0	
 
 
@@ -12548,193 +12649,205 @@ b0
 01 00 14 00|00 00 00 19
 
  - item 9 line =  
-0a 00 00 00|00 07 00 03
+04 00 00 00|41 00 00 00
 
  - item 10 line =  
-09 00 00 00|00 0b 00 0c
+04 00 00 00|41 10 00 00
 
  - item 11 line =  
-07 00 00 0d|00 00 00 0d
+0a 00 00 00|00 07 00 0c
 
  - item 12 line =  
-0c 00 00 00|00 0e 00 0f
+0c 00 00 00|00 05 00 0d
 
  - item 13 line =  
-01 00 1b 00|00 00 00 2d
+01 00 05 00|00 00 00 2d
 
  - item 14 line =  
-01 00 04 00|00 00 00 48
+09 00 00 00|00 0f 00 10
 
  - item 15 line =  
-01 00 16 00|00 00 00 4c
+07 00 00 11|00 00 00 11
 
  - item 16 line =  
-0a 00 00 00|00 0b 00 11
-
- - item 17 line =  
 0c 00 00 00|00 12 00 13
 
+ - item 17 line =  
+01 00 1b 00|00 00 00 32
+
  - item 18 line =  
-01 00 0c 00|00 00 00 62
+01 00 04 00|00 00 00 4d
 
  - item 19 line =  
-01 00 19 00|00 00 00 6e
+01 00 16 00|00 00 00 51
 
  - item 20 line =  
-09 00 00 00|00 0b 00 15
+0a 00 00 00|00 0f 00 15
 
  - item 21 line =  
 0c 00 00 00|00 16 00 17
 
  - item 22 line =  
-01 00 06 00|00 00 00 87
+01 00 0c 00|00 00 00 67
 
  - item 23 line =  
-01 00 17 00|00 00 00 8d
+01 00 19 00|00 00 00 73
 
  - item 24 line =  
-0a 00 00 00|00 07 00 19
+09 00 00 00|00 0f 00 19
 
  - item 25 line =  
 0c 00 00 00|00 1a 00 1b
 
  - item 26 line =  
-01 00 03 00|00 00 00 a4
+01 00 06 00|00 00 00 8c
 
  - item 27 line =  
-01 00 18 00|00 00 00 a7
+01 00 17 00|00 00 00 92
 
  - item 28 line =  
 0a 00 00 00|00 07 00 1d
 
  - item 29 line =  
-0c 00 00 00|00 1e 00 1b
+0c 00 00 00|00 1e 00 1f
 
  - item 30 line =  
-01 00 07 00|00 00 00 bf
+01 00 03 00|00 00 00 a9
 
  - item 31 line =  
-0a 00 00 00|00 07 00 20
+01 00 18 00|00 00 00 ac
 
  - item 32 line =  
-0c 00 00 00|00 21 00 1b
+0a 00 00 00|00 07 00 21
 
  - item 33 line =  
-01 00 06 00|00 00 00 c6
+0c 00 00 00|00 22 00 1f
 
  - item 34 line =  
-0a 00 00 00|00 07 00 23
+01 00 07 00|00 00 00 c4
 
  - item 35 line =  
-0c 00 00 00|00 24 00 1b
+0a 00 00 00|00 07 00 24
 
  - item 36 line =  
-01 00 06 00|00 00 00 cc
+0c 00 00 00|00 25 00 1f
 
  - item 37 line =  
-0a 00 00 00|00 07 00 26
+01 00 06 00|00 00 00 cb
 
  - item 38 line =  
-0c 00 00 00|00 27 00 1b
+0a 00 00 00|00 07 00 27
 
  - item 39 line =  
-01 00 07 00|00 00 00 d2
+0c 00 00 00|00 28 00 1f
 
  - item 40 line =  
-09 00 00 00|00 07 00 29
+01 00 06 00|00 00 00 d1
 
  - item 41 line =  
-0c 00 00 00|00 2a 00 2b
+0a 00 00 00|00 07 00 2a
 
  - item 42 line =  
-01 00 02 00|00 00 00 d9
+0c 00 00 00|00 2b 00 1f
 
  - item 43 line =  
-01 00 01 00|00 00 00 db
+01 00 07 00|00 00 00 d7
 
  - item 44 line =  
 09 00 00 00|00 07 00 2d
 
  - item 45 line =  
-0c 00 00 00|00 2e 00 2b
+0c 00 00 00|00 2e 00 2f
 
  - item 46 line =  
-01 00 04 00|00 00 00 dc
+01 00 02 00|00 00 00 de
 
  - item 47 line =  
-09 00 00 00|00 07 00 30
+01 00 01 00|00 00 00 e0
 
  - item 48 line =  
-0c 00 00 00|00 31 00 2b
+09 00 00 00|00 07 00 31
 
  - item 49 line =  
-01 00 02 00|00 00 00 e0
+0c 00 00 00|00 32 00 2f
 
  - item 50 line =  
-09 00 00 00|00 07 00 33
+01 00 04 00|00 00 00 e1
 
  - item 51 line =  
-0c 00 00 00|00 34 00 2b
+09 00 00 00|00 07 00 34
 
  - item 52 line =  
-01 00 02 00|00 00 00 e2
+0c 00 00 00|00 35 00 2f
 
  - item 53 line =  
-0a 00 00 00|00 07 00 36
+01 00 02 00|00 00 00 e5
 
  - item 54 line =  
-0c 00 00 00|00 37 00 38
+09 00 00 00|00 07 00 37
 
  - item 55 line =  
-01 00 0e 00|00 00 00 e4
+0c 00 00 00|00 38 00 2f
 
  - item 56 line =  
-01 00 06 00|00 00 00 f2
+01 00 02 00|00 00 00 e7
 
  - item 57 line =  
-0a 00 00 00|00 0b 00 03
+0a 00 00 00|00 07 00 3a
 
  - item 58 line =  
-01 00 04 00|00 00 00 f8
+0c 00 00 00|00 3b 00 3c
 
  - item 59 line =  
-01 00 0f 00|00 00 00 fc
+01 00 0e 00|00 00 00 e9
 
  - item 60 line =  
-01 00 04 00|00 00 01 0b
+01 00 06 00|00 00 00 f7
 
  - item 61 line =  
-01 00 03 00|00 00 01 0f
+0a 00 00 00|00 0f 00 03
 
  - item 62 line =  
-01 00 0d 00|00 00 01 12
+01 00 04 00|00 00 00 fd
 
  - item 63 line =  
-07 00 00 17|00 00 00 17
+01 00 0f 00|00 00 01 01
 
  - item 64 line =  
-01 00 07 00|00 00 01 1f
+01 00 04 00|00 00 01 10
 
  - item 65 line =  
-01 00 04 00|00 00 01 26
+01 00 03 00|00 00 01 14
 
  - item 66 line =  
-01 00 06 00|00 00 01 2a
+01 00 0d 00|00 00 01 17
 
  - item 67 line =  
-01 00 03 00|00 00 01 30
+07 00 00 1b|00 00 00 1b
 
  - item 68 line =  
-01 00 04 00|00 00 01 33
+01 00 07 00|00 00 01 24
 
  - item 69 line =  
-01 00 1f 00|00 00 01 37
+01 00 04 00|00 00 01 2b
 
  - item 70 line =  
-01 00 0a 00|00 00 01 56
+01 00 06 00|00 00 01 2f
 
  - item 71 line =  
-01 00 10 00|00 00 01 60
+01 00 03 00|00 00 01 35
+
+ - item 72 line =  
+01 00 04 00|00 00 01 38
+
+ - item 73 line =  
+01 00 1f 00|00 00 01 3c
+
+ - item 74 line =  
+01 00 0a 00|00 00 01 5b
+
+ - item 75 line =  
+01 00 10 00|00 00 01 65
 
 super class name = java/lang/Object
 
@@ -12744,19 +12857,19 @@ get DPUID = 0 class =  java/lang/Object from cache
 
 
 get DPUID = 0 class =  application/bst/NBodySystem from cache
-set framework.pim.dpu.java_strut.DPUJClass@f2a0b8e to com.upmem.dpu.Dpu@6267c3bb, key=application/bst/NBodySystem, val = 3091af8 class name = application/bst/NBodySystem
+set framework.pim.dpu.java_strut.DPUJClass@f2a0b8e to com.upmem.dpu.Dpu@6267c3bb, key=application/bst/NBodySystem, val = 3091b10 class name = application/bst/NBodySystem
 
-set method: <init>:()V of class application/bst/NBodySystem to com.upmem.dpu.Dpu@6267c3bb v = 3091d70
+set method: <init>:()V of class application/bst/NBodySystem to com.upmem.dpu.Dpu@6267c3bb v = 3091da8
 
-set method: test:()I of class application/bst/NBodySystem to com.upmem.dpu.Dpu@6267c3bb v = 3091da0
+set method: test:()I of class application/bst/NBodySystem to com.upmem.dpu.Dpu@6267c3bb v = 3091de0
 
-set method: createBodies:()[Lapplication/bst/Body; of class application/bst/NBodySystem to com.upmem.dpu.Dpu@6267c3bb v = 3091dc0
+set method: createBodies:()[Lapplication/bst/Body; of class application/bst/NBodySystem to com.upmem.dpu.Dpu@6267c3bb v = 3091e00
 
-set method: advance:(F)V of class application/bst/NBodySystem to com.upmem.dpu.Dpu@6267c3bb v = 3091e70
+set method: advance:(F)V of class application/bst/NBodySystem to com.upmem.dpu.Dpu@6267c3bb v = 3091eb0
 
-set method: energy:()F of class application/bst/NBodySystem to com.upmem.dpu.Dpu@6267c3bb v = 3091e90
+set method: energy:()F of class application/bst/NBodySystem to com.upmem.dpu.Dpu@6267c3bb v = 3091ed0
 
-set method: _new:()Lapplication/bst/NBodySystem; of class application/bst/NBodySystem to com.upmem.dpu.Dpu@6267c3bb v = 3091eb0
+set method: _new:()Lapplication/bst/NBodySystem; of class application/bst/NBodySystem to com.upmem.dpu.Dpu@6267c3bb v = 3091ef0
 
 set field: bodies of class application/bst/NBodySystem to com.upmem.dpu.Dpu@6267c3bb v(index) = 0
 
@@ -12772,58 +12885,58 @@ get DPUID = 0 class =  java/lang/Object from cache
 set #1 java/lang/Object.<init>:()V index 1
 
 
- - #9 is MethodRef, description = application/bst/Body.<init>:()V
+ - #11 is MethodRef, description = application/bst/Body.<init>:(FF)V
 
 
-set #9 application/bst/Body.<init>:()V index 15
+set #11 application/bst/Body.<init>:(FF)V index 15
 
 
- - #16 is MethodRef, description = application/bst/NBodySystem.createBodies:()[Lapplication/bst/Body;
+ - #20 is MethodRef, description = application/bst/NBodySystem.createBodies:()[Lapplication/bst/Body;
 
 
-set #16 application/bst/NBodySystem.createBodies:()[Lapplication/bst/Body; index 15
+set #20 application/bst/NBodySystem.createBodies:()[Lapplication/bst/Body; index 15
 
 
- - #24 is MethodRef, description = application/bst/Body.sun:()Lapplication/bst/Body;
+ - #28 is MethodRef, description = application/bst/Body.sun:()Lapplication/bst/Body;
 
 
-set #24 application/bst/Body.sun:()Lapplication/bst/Body; index 20
+set #28 application/bst/Body.sun:()Lapplication/bst/Body; index 20
 
 
- - #28 is MethodRef, description = application/bst/Body.jupiter:()Lapplication/bst/Body;
+ - #32 is MethodRef, description = application/bst/Body.jupiter:()Lapplication/bst/Body;
 
 
-set #28 application/bst/Body.jupiter:()Lapplication/bst/Body; index 16
+set #32 application/bst/Body.jupiter:()Lapplication/bst/Body; index 16
 
 
- - #31 is MethodRef, description = application/bst/Body.saturn:()Lapplication/bst/Body;
+ - #35 is MethodRef, description = application/bst/Body.saturn:()Lapplication/bst/Body;
 
 
-set #31 application/bst/Body.saturn:()Lapplication/bst/Body; index 17
+set #35 application/bst/Body.saturn:()Lapplication/bst/Body; index 17
 
 
- - #34 is MethodRef, description = application/bst/Body.uranus:()Lapplication/bst/Body;
+ - #38 is MethodRef, description = application/bst/Body.uranus:()Lapplication/bst/Body;
 
 
-set #34 application/bst/Body.uranus:()Lapplication/bst/Body; index 18
+set #38 application/bst/Body.uranus:()Lapplication/bst/Body; index 18
 
 
- - #37 is MethodRef, description = application/bst/Body.neptune:()Lapplication/bst/Body;
+ - #41 is MethodRef, description = application/bst/Body.neptune:()Lapplication/bst/Body;
 
 
-set #37 application/bst/Body.neptune:()Lapplication/bst/Body; index 19
+set #41 application/bst/Body.neptune:()Lapplication/bst/Body; index 19
 
 
- - #53 is MethodRef, description = application/bst/Body.offsetMomentum:(FFF)V
+ - #57 is MethodRef, description = application/bst/Body.offsetMomentum:(FFF)V
 
 
-set #53 application/bst/Body.offsetMomentum:(FFF)V index 13
+set #57 application/bst/Body.offsetMomentum:(FFF)V index 13
 
 
- - #57 is MethodRef, description = application/bst/NBodySystem.<init>:()V
+ - #61 is MethodRef, description = application/bst/NBodySystem.<init>:()V
 
 
-set #57 application/bst/NBodySystem.<init>:()V index 13
+set #61 application/bst/NBodySystem.<init>:()V index 13
 
 
 vtable #0 .
@@ -12911,201 +13024,213 @@ vtable #18 application/bst/NBodySystem._new:()Lapplication/bst/NBodySystem;
 01 00 14 00|00 00 00 19
 
  - item 9 line =  
-0a 00 00 00|00 03 00 0f
+04 00 00 00|41 00 00 00
 
  - item 10 line =  
-09 00 00 00|00 0b 00 0c
+04 00 00 00|41 10 00 00
 
  - item 11 line =  
-07 00 00 0d|00 00 00 0d
+0a 00 00 00|00 03 00 0f
 
  - item 12 line =  
-0c 00 00 00|00 0e 00 0f
+0c 00 00 00|00 05 00 0d
 
  - item 13 line =  
-01 00 1b 00|00 00 00 2d
+01 00 05 00|00 00 00 2d
 
  - item 14 line =  
-01 00 04 00|00 00 00 48
+09 00 00 00|00 0f 00 10
 
  - item 15 line =  
-01 00 16 00|00 00 00 4c
+07 00 00 11|00 00 00 11
 
  - item 16 line =  
-0a 00 00 00|00 05 00 0f
-
- - item 17 line =  
 0c 00 00 00|00 12 00 13
 
+ - item 17 line =  
+01 00 1b 00|00 00 00 32
+
  - item 18 line =  
-01 00 0c 00|00 00 00 62
+01 00 04 00|00 00 00 4d
 
  - item 19 line =  
-01 00 19 00|00 00 00 6e
+01 00 16 00|00 00 00 51
 
  - item 20 line =  
-09 00 00 00|00 0b 00 15
+0a 00 00 00|00 05 00 0f
 
  - item 21 line =  
 0c 00 00 00|00 16 00 17
 
  - item 22 line =  
-01 00 06 00|00 00 00 87
+01 00 0c 00|00 00 00 67
 
  - item 23 line =  
-01 00 17 00|00 00 00 8d
+01 00 19 00|00 00 00 73
 
  - item 24 line =  
-0a 00 00 00|00 03 00 14
+09 00 00 00|00 0f 00 19
 
  - item 25 line =  
 0c 00 00 00|00 1a 00 1b
 
  - item 26 line =  
-01 00 03 00|00 00 00 a4
+01 00 06 00|00 00 00 8c
 
  - item 27 line =  
-01 00 18 00|00 00 00 a7
+01 00 17 00|00 00 00 92
 
  - item 28 line =  
-0a 00 00 00|00 03 00 10
+0a 00 00 00|00 03 00 14
 
  - item 29 line =  
-0c 00 00 00|00 1e 00 1b
+0c 00 00 00|00 1e 00 1f
 
  - item 30 line =  
-01 00 07 00|00 00 00 bf
+01 00 03 00|00 00 00 a9
 
  - item 31 line =  
-0a 00 00 00|00 03 00 11
+01 00 18 00|00 00 00 ac
 
  - item 32 line =  
-0c 00 00 00|00 21 00 1b
+0a 00 00 00|00 03 00 10
 
  - item 33 line =  
-01 00 06 00|00 00 00 c6
+0c 00 00 00|00 22 00 1f
 
  - item 34 line =  
-0a 00 00 00|00 03 00 12
+01 00 07 00|00 00 00 c4
 
  - item 35 line =  
-0c 00 00 00|00 24 00 1b
+0a 00 00 00|00 03 00 11
 
  - item 36 line =  
-01 00 06 00|00 00 00 cc
+0c 00 00 00|00 25 00 1f
 
  - item 37 line =  
-0a 00 00 00|00 03 00 13
+01 00 06 00|00 00 00 cb
 
  - item 38 line =  
-0c 00 00 00|00 27 00 1b
+0a 00 00 00|00 03 00 12
 
  - item 39 line =  
-01 00 07 00|00 00 00 d2
+0c 00 00 00|00 28 00 1f
 
  - item 40 line =  
-09 00 00 00|00 07 00 29
+01 00 06 00|00 00 00 d1
 
  - item 41 line =  
-0c 00 00 00|00 2a 00 2b
+0a 00 00 00|00 03 00 13
 
  - item 42 line =  
-01 00 02 00|00 00 00 d9
+0c 00 00 00|00 2b 00 1f
 
  - item 43 line =  
-01 00 01 00|00 00 00 db
+01 00 07 00|00 00 00 d7
 
  - item 44 line =  
 09 00 00 00|00 07 00 2d
 
  - item 45 line =  
-0c 00 00 00|00 2e 00 2b
+0c 00 00 00|00 2e 00 2f
 
  - item 46 line =  
-01 00 04 00|00 00 00 dc
+01 00 02 00|00 00 00 de
 
  - item 47 line =  
-09 00 00 00|00 07 00 30
+01 00 01 00|00 00 00 e0
 
  - item 48 line =  
-0c 00 00 00|00 31 00 2b
+09 00 00 00|00 07 00 31
 
  - item 49 line =  
-01 00 02 00|00 00 00 e0
+0c 00 00 00|00 32 00 2f
 
  - item 50 line =  
-09 00 00 00|00 07 00 33
+01 00 04 00|00 00 00 e1
 
  - item 51 line =  
-0c 00 00 00|00 34 00 2b
+09 00 00 00|00 07 00 34
 
  - item 52 line =  
-01 00 02 00|00 00 00 e2
+0c 00 00 00|00 35 00 2f
 
  - item 53 line =  
-0a 00 00 00|00 03 00 0d
+01 00 02 00|00 00 00 e5
 
  - item 54 line =  
-0c 00 00 00|00 37 00 38
+09 00 00 00|00 07 00 37
 
  - item 55 line =  
-01 00 0e 00|00 00 00 e4
+0c 00 00 00|00 38 00 2f
 
  - item 56 line =  
-01 00 06 00|00 00 00 f2
+01 00 02 00|00 00 00 e7
 
  - item 57 line =  
-0a 00 00 00|00 05 00 0d
+0a 00 00 00|00 03 00 0d
 
  - item 58 line =  
-01 00 04 00|00 00 00 f8
+0c 00 00 00|00 3b 00 3c
 
  - item 59 line =  
-01 00 0f 00|00 00 00 fc
+01 00 0e 00|00 00 00 e9
 
  - item 60 line =  
-01 00 04 00|00 00 01 0b
+01 00 06 00|00 00 00 f7
 
  - item 61 line =  
-01 00 03 00|00 00 01 0f
+0a 00 00 00|00 05 00 0d
 
  - item 62 line =  
-01 00 0d 00|00 00 01 12
+01 00 04 00|00 00 00 fd
 
  - item 63 line =  
-07 00 00 17|00 00 00 17
+01 00 0f 00|00 00 01 01
 
  - item 64 line =  
-01 00 07 00|00 00 01 1f
+01 00 04 00|00 00 01 10
 
  - item 65 line =  
-01 00 04 00|00 00 01 26
+01 00 03 00|00 00 01 14
 
  - item 66 line =  
-01 00 06 00|00 00 01 2a
+01 00 0d 00|00 00 01 17
 
  - item 67 line =  
-01 00 03 00|00 00 01 30
+07 00 00 1b|00 00 00 1b
 
  - item 68 line =  
-01 00 04 00|00 00 01 33
+01 00 07 00|00 00 01 24
 
  - item 69 line =  
-01 00 1f 00|00 00 01 37
+01 00 04 00|00 00 01 2b
 
  - item 70 line =  
-01 00 0a 00|00 00 01 56
+01 00 06 00|00 00 01 2f
 
  - item 71 line =  
-01 00 10 00|00 00 01 60
+01 00 03 00|00 00 01 35
+
+ - item 72 line =  
+01 00 04 00|00 00 01 38
+
+ - item 73 line =  
+01 00 1f 00|00 00 01 3c
+
+ - item 74 line =  
+01 00 0a 00|00 00 01 5b
+
+ - item 75 line =  
+01 00 10 00|00 00 01 65
 
  - In class application.bst.NBodySystem resolve unknow name
 
 
-In #0 of class 13 application.bst.NBodySystem: tag = 0, whole line = 0
+In #0 of class 17 application.bst.NBodySystem: tag = 0, whole line = 0
 
 
-In #1 of class 13 application.bst.NBodySystem: tag = 10, whole line = a00000000000001
+In #1 of class 17 application.bst.NBodySystem: tag = 10, whole line = a00000000000001
 
 
 In #1 MethodRef: 
@@ -13140,7 +13265,7 @@ params desc =
 
 3090318
 
-In #2 of class 13 application.bst.NBodySystem: tag = 7, whole line = 700000400000004
+In #2 of class 17 application.bst.NBodySystem: tag = 7, whole line = 700000400000004
 
 
 In #2 ClassRef: 
@@ -13151,19 +13276,19 @@ className = java/lang/Object, index = #4
 
 class java/lang/Object loaded, mram addr = 0x3090000
 
-In #3 of class 13 application.bst.NBodySystem: tag = 12, whole line = c00000000050006
+In #3 of class 17 application.bst.NBodySystem: tag = 12, whole line = c00000000050006
 
 
-In #4 of class 13 application.bst.NBodySystem: tag = 1, whole line = 100100000000000
+In #4 of class 17 application.bst.NBodySystem: tag = 1, whole line = 100100000000000
 
 
-In #5 of class 13 application.bst.NBodySystem: tag = 1, whole line = 100060000000010
+In #5 of class 17 application.bst.NBodySystem: tag = 1, whole line = 100060000000010
 
 
-In #6 of class 13 application.bst.NBodySystem: tag = 1, whole line = 100030000000016
+In #6 of class 17 application.bst.NBodySystem: tag = 1, whole line = 100030000000016
 
 
-In #7 of class 13 application.bst.NBodySystem: tag = 7, whole line = 700000800000008
+In #7 of class 17 application.bst.NBodySystem: tag = 7, whole line = 700000800000008
 
 
 In #7 ClassRef: 
@@ -13174,13 +13299,19 @@ className = application/bst/Body, index = #8
 
 class application/bst/Body loaded, mram addr = 0x30911d0
 
-In #8 of class 13 application.bst.NBodySystem: tag = 1, whole line = 100140000000019
+In #8 of class 17 application.bst.NBodySystem: tag = 1, whole line = 100140000000019
 
 
-In #9 of class 13 application.bst.NBodySystem: tag = 10, whole line = a0000000003000f
+In #9 of class 17 application.bst.NBodySystem: tag = 4, whole line = 400000041000000
 
 
-In #9 MethodRef: 
+In #10 of class 17 application.bst.NBodySystem: tag = 4, whole line = 400000041100000
+
+
+In #11 of class 17 application.bst.NBodySystem: tag = 10, whole line = a0000000003000f
+
+
+In #11 MethodRef: 
 
 
 method Table Index = 15
@@ -13190,10 +13321,10 @@ global class Index = 3
 
 
 get DPUID = 0 class =  application/bst/Body from cache
-description = application/bst/Body.<init>:()V
+description = application/bst/Body.<init>:(FF)V
 
 
-get DPUID = 0 method =  <init>:()V of class application/bst/Body from cache
+get DPUID = 0 method =  <init>:(FF)V of class application/bst/Body from cache
 
 class application/bst/Body loaded, mram addr = 0x30911d0
 
@@ -13201,60 +13332,66 @@ get DPUID = 0 class =  application/bst/Body from cache
 methodName = <init>
 
 
-type desc = ()V
+type desc = (FF)V
 
 
 return val = V
 
 
-params desc = 
+params desc = FF
 
 
-3091560
+3091568
 
-In #10 of class 13 application.bst.NBodySystem: tag = 9, whole line = 9000000000b000c
+In #12 of class 17 application.bst.NBodySystem: tag = 12, whole line = c0000000005000d
 
 
-In #10 FieldRef: 
+In #13 of class 17 application.bst.NBodySystem: tag = 1, whole line = 10005000000002d
+
+
+In #14 of class 17 application.bst.NBodySystem: tag = 9, whole line = 9000000000f0010
+
+
+In #14 FieldRef: 
 
 
 class name = application/bst/NBodySystem
 
 
-class application/bst/NBodySystem loaded, mram addr = 0x3091af8
+class application/bst/NBodySystem loaded, mram addr = 0x3091b10
 
 fieldName = body
 
 
 get DPUID = 0 field =  body, of class application/bst/NBodySystem from cache
 
-In #11 of class 13 application.bst.NBodySystem: tag = 7, whole line = 700000d0000000d
+In #15 of class 17 application.bst.NBodySystem: tag = 7, whole line = 700001100000011
 
 
-In #11 ClassRef: 
+In #15 ClassRef: 
 
 
-className = application/bst/NBodySystem, index = #13
+className = application/bst/NBodySystem, index = #17
 
 
-class application/bst/NBodySystem loaded, mram addr = 0x3091af8
+class application/bst/NBodySystem loaded, mram addr = 0x3091b10
 
-In #12 of class 13 application.bst.NBodySystem: tag = 12, whole line = c000000000e000f
-
-
-In #13 of class 13 application.bst.NBodySystem: tag = 1, whole line = 1001b000000002d
+In #16 of class 17 application.bst.NBodySystem: tag = 12, whole line = c00000000120013
 
 
-In #14 of class 13 application.bst.NBodySystem: tag = 1, whole line = 100040000000048
+In #17 of class 17 application.bst.NBodySystem: tag = 1, whole line = 1001b0000000032
 
 
-In #15 of class 13 application.bst.NBodySystem: tag = 1, whole line = 10016000000004c
+In #18 of class 17 application.bst.NBodySystem: tag = 1, whole line = 10004000000004d
 
 
-In #16 of class 13 application.bst.NBodySystem: tag = 10, whole line = a0000000005000f
+In #19 of class 17 application.bst.NBodySystem: tag = 1, whole line = 100160000000051
 
 
-In #16 MethodRef: 
+In #20 of class 17 application.bst.NBodySystem: tag = 10, whole line = a0000000005000f
+
+
+In #20 MethodRef: 
 
 
 method Table Index = 15
@@ -13269,7 +13406,7 @@ description = application/bst/NBodySystem.createBodies:()[Lapplication/bst/Body;
 
 get DPUID = 0 method =  createBodies:()[Lapplication/bst/Body; of class application/bst/NBodySystem from cache
 
-class application/bst/NBodySystem loaded, mram addr = 0x3091af8
+class application/bst/NBodySystem loaded, mram addr = 0x3091b10
 
 get DPUID = 0 class =  application/bst/NBodySystem from cache
 methodName = createBodies
@@ -13284,46 +13421,46 @@ return val = [Lapplication/bst/Body;
 params desc = 
 
 
-3091dc0
+3091e00
 
-In #17 of class 13 application.bst.NBodySystem: tag = 12, whole line = c00000000120013
-
-
-In #18 of class 13 application.bst.NBodySystem: tag = 1, whole line = 1000c0000000062
+In #21 of class 17 application.bst.NBodySystem: tag = 12, whole line = c00000000160017
 
 
-In #19 of class 13 application.bst.NBodySystem: tag = 1, whole line = 10019000000006e
+In #22 of class 17 application.bst.NBodySystem: tag = 1, whole line = 1000c0000000067
 
 
-In #20 of class 13 application.bst.NBodySystem: tag = 9, whole line = 9000000000b0015
+In #23 of class 17 application.bst.NBodySystem: tag = 1, whole line = 100190000000073
 
 
-In #20 FieldRef: 
+In #24 of class 17 application.bst.NBodySystem: tag = 9, whole line = 9000000000f0019
+
+
+In #24 FieldRef: 
 
 
 class name = application/bst/NBodySystem
 
 
-class application/bst/NBodySystem loaded, mram addr = 0x3091af8
+class application/bst/NBodySystem loaded, mram addr = 0x3091b10
 
 fieldName = bodies
 
 
 get DPUID = 0 field =  bodies, of class application/bst/NBodySystem from cache
 
-In #21 of class 13 application.bst.NBodySystem: tag = 12, whole line = c00000000160017
+In #25 of class 17 application.bst.NBodySystem: tag = 12, whole line = c000000001a001b
 
 
-In #22 of class 13 application.bst.NBodySystem: tag = 1, whole line = 100060000000087
+In #26 of class 17 application.bst.NBodySystem: tag = 1, whole line = 10006000000008c
 
 
-In #23 of class 13 application.bst.NBodySystem: tag = 1, whole line = 10017000000008d
+In #27 of class 17 application.bst.NBodySystem: tag = 1, whole line = 100170000000092
 
 
-In #24 of class 13 application.bst.NBodySystem: tag = 10, whole line = a00000000030014
+In #28 of class 17 application.bst.NBodySystem: tag = 10, whole line = a00000000030014
 
 
-In #24 MethodRef: 
+In #28 MethodRef: 
 
 
 method Table Index = 20
@@ -13357,21 +13494,21 @@ get DPUID = 0 class =  application/bst/Body from cache
 class application/bst/Body loaded
 
 
-3091678
+3091688
 
-In #25 of class 13 application.bst.NBodySystem: tag = 12, whole line = c000000001a001b
-
-
-In #26 of class 13 application.bst.NBodySystem: tag = 1, whole line = 1000300000000a4
+In #29 of class 17 application.bst.NBodySystem: tag = 12, whole line = c000000001e001f
 
 
-In #27 of class 13 application.bst.NBodySystem: tag = 1, whole line = 1001800000000a7
+In #30 of class 17 application.bst.NBodySystem: tag = 1, whole line = 1000300000000a9
 
 
-In #28 of class 13 application.bst.NBodySystem: tag = 10, whole line = a00000000030010
+In #31 of class 17 application.bst.NBodySystem: tag = 1, whole line = 1001800000000ac
 
 
-In #28 MethodRef: 
+In #32 of class 17 application.bst.NBodySystem: tag = 10, whole line = a00000000030010
+
+
+In #32 MethodRef: 
 
 
 method Table Index = 16
@@ -13405,18 +13542,18 @@ get DPUID = 0 class =  application/bst/Body from cache
 class application/bst/Body loaded
 
 
-30915b8
+30915c8
 
-In #29 of class 13 application.bst.NBodySystem: tag = 12, whole line = c000000001e001b
-
-
-In #30 of class 13 application.bst.NBodySystem: tag = 1, whole line = 1000700000000bf
+In #33 of class 17 application.bst.NBodySystem: tag = 12, whole line = c0000000022001f
 
 
-In #31 of class 13 application.bst.NBodySystem: tag = 10, whole line = a00000000030011
+In #34 of class 17 application.bst.NBodySystem: tag = 1, whole line = 1000700000000c4
 
 
-In #31 MethodRef: 
+In #35 of class 17 application.bst.NBodySystem: tag = 10, whole line = a00000000030011
+
+
+In #35 MethodRef: 
 
 
 method Table Index = 17
@@ -13450,18 +13587,18 @@ get DPUID = 0 class =  application/bst/Body from cache
 class application/bst/Body loaded
 
 
-30915e8
+30915f8
 
-In #32 of class 13 application.bst.NBodySystem: tag = 12, whole line = c0000000021001b
-
-
-In #33 of class 13 application.bst.NBodySystem: tag = 1, whole line = 1000600000000c6
+In #36 of class 17 application.bst.NBodySystem: tag = 12, whole line = c0000000025001f
 
 
-In #34 of class 13 application.bst.NBodySystem: tag = 10, whole line = a00000000030012
+In #37 of class 17 application.bst.NBodySystem: tag = 1, whole line = 1000600000000cb
 
 
-In #34 MethodRef: 
+In #38 of class 17 application.bst.NBodySystem: tag = 10, whole line = a00000000030012
+
+
+In #38 MethodRef: 
 
 
 method Table Index = 18
@@ -13495,18 +13632,18 @@ get DPUID = 0 class =  application/bst/Body from cache
 class application/bst/Body loaded
 
 
-3091618
+3091628
 
-In #35 of class 13 application.bst.NBodySystem: tag = 12, whole line = c0000000024001b
-
-
-In #36 of class 13 application.bst.NBodySystem: tag = 1, whole line = 1000600000000cc
+In #39 of class 17 application.bst.NBodySystem: tag = 12, whole line = c0000000028001f
 
 
-In #37 of class 13 application.bst.NBodySystem: tag = 10, whole line = a00000000030013
+In #40 of class 17 application.bst.NBodySystem: tag = 1, whole line = 1000600000000d1
 
 
-In #37 MethodRef: 
+In #41 of class 17 application.bst.NBodySystem: tag = 10, whole line = a00000000030013
+
+
+In #41 MethodRef: 
 
 
 method Table Index = 19
@@ -13540,18 +13677,18 @@ get DPUID = 0 class =  application/bst/Body from cache
 class application/bst/Body loaded
 
 
-3091648
+3091658
 
-In #38 of class 13 application.bst.NBodySystem: tag = 12, whole line = c0000000027001b
-
-
-In #39 of class 13 application.bst.NBodySystem: tag = 1, whole line = 1000700000000d2
+In #42 of class 17 application.bst.NBodySystem: tag = 12, whole line = c000000002b001f
 
 
-In #40 of class 13 application.bst.NBodySystem: tag = 9, whole line = 900000000070029
+In #43 of class 17 application.bst.NBodySystem: tag = 1, whole line = 1000700000000d7
 
 
-In #40 FieldRef: 
+In #44 of class 17 application.bst.NBodySystem: tag = 9, whole line = 90000000007002d
+
+
+In #44 FieldRef: 
 
 
 class name = application/bst/Body
@@ -13564,19 +13701,19 @@ fieldName = vx
 
 get DPUID = 0 field =  vx, of class application/bst/Body from cache
 
-In #41 of class 13 application.bst.NBodySystem: tag = 12, whole line = c000000002a002b
+In #45 of class 17 application.bst.NBodySystem: tag = 12, whole line = c000000002e002f
 
 
-In #42 of class 13 application.bst.NBodySystem: tag = 1, whole line = 1000200000000d9
+In #46 of class 17 application.bst.NBodySystem: tag = 1, whole line = 1000200000000de
 
 
-In #43 of class 13 application.bst.NBodySystem: tag = 1, whole line = 1000100000000db
+In #47 of class 17 application.bst.NBodySystem: tag = 1, whole line = 1000100000000e0
 
 
-In #44 of class 13 application.bst.NBodySystem: tag = 9, whole line = 90000000007002d
+In #48 of class 17 application.bst.NBodySystem: tag = 9, whole line = 900000000070031
 
 
-In #44 FieldRef: 
+In #48 FieldRef: 
 
 
 class name = application/bst/Body
@@ -13589,16 +13726,16 @@ fieldName = mass
 
 get DPUID = 0 field =  mass, of class application/bst/Body from cache
 
-In #45 of class 13 application.bst.NBodySystem: tag = 12, whole line = c000000002e002b
+In #49 of class 17 application.bst.NBodySystem: tag = 12, whole line = c0000000032002f
 
 
-In #46 of class 13 application.bst.NBodySystem: tag = 1, whole line = 1000400000000dc
+In #50 of class 17 application.bst.NBodySystem: tag = 1, whole line = 1000400000000e1
 
 
-In #47 of class 13 application.bst.NBodySystem: tag = 9, whole line = 900000000070030
+In #51 of class 17 application.bst.NBodySystem: tag = 9, whole line = 900000000070034
 
 
-In #47 FieldRef: 
+In #51 FieldRef: 
 
 
 class name = application/bst/Body
@@ -13611,16 +13748,16 @@ fieldName = vy
 
 get DPUID = 0 field =  vy, of class application/bst/Body from cache
 
-In #48 of class 13 application.bst.NBodySystem: tag = 12, whole line = c0000000031002b
+In #52 of class 17 application.bst.NBodySystem: tag = 12, whole line = c0000000035002f
 
 
-In #49 of class 13 application.bst.NBodySystem: tag = 1, whole line = 1000200000000e0
+In #53 of class 17 application.bst.NBodySystem: tag = 1, whole line = 1000200000000e5
 
 
-In #50 of class 13 application.bst.NBodySystem: tag = 9, whole line = 900000000070033
+In #54 of class 17 application.bst.NBodySystem: tag = 9, whole line = 900000000070037
 
 
-In #50 FieldRef: 
+In #54 FieldRef: 
 
 
 class name = application/bst/Body
@@ -13633,16 +13770,16 @@ fieldName = vz
 
 get DPUID = 0 field =  vz, of class application/bst/Body from cache
 
-In #51 of class 13 application.bst.NBodySystem: tag = 12, whole line = c0000000034002b
+In #55 of class 17 application.bst.NBodySystem: tag = 12, whole line = c0000000038002f
 
 
-In #52 of class 13 application.bst.NBodySystem: tag = 1, whole line = 1000200000000e2
+In #56 of class 17 application.bst.NBodySystem: tag = 1, whole line = 1000200000000e7
 
 
-In #53 of class 13 application.bst.NBodySystem: tag = 10, whole line = a0000000003000d
+In #57 of class 17 application.bst.NBodySystem: tag = 10, whole line = a0000000003000d
 
 
-In #53 MethodRef: 
+In #57 MethodRef: 
 
 
 method Table Index = 13
@@ -13672,21 +13809,21 @@ return val = V
 params desc = FFF
 
 
-30914c0
+30914c8
 
-In #54 of class 13 application.bst.NBodySystem: tag = 12, whole line = c00000000370038
-
-
-In #55 of class 13 application.bst.NBodySystem: tag = 1, whole line = 1000e00000000e4
+In #58 of class 17 application.bst.NBodySystem: tag = 12, whole line = c000000003b003c
 
 
-In #56 of class 13 application.bst.NBodySystem: tag = 1, whole line = 1000600000000f2
+In #59 of class 17 application.bst.NBodySystem: tag = 1, whole line = 1000e00000000e9
 
 
-In #57 of class 13 application.bst.NBodySystem: tag = 10, whole line = a0000000005000d
+In #60 of class 17 application.bst.NBodySystem: tag = 1, whole line = 1000600000000f7
 
 
-In #57 MethodRef: 
+In #61 of class 17 application.bst.NBodySystem: tag = 10, whole line = a0000000005000d
+
+
+In #61 MethodRef: 
 
 
 method Table Index = 13
@@ -13701,7 +13838,7 @@ description = application/bst/NBodySystem.<init>:()V
 
 get DPUID = 0 method =  <init>:()V of class application/bst/NBodySystem from cache
 
-class application/bst/NBodySystem loaded, mram addr = 0x3091af8
+class application/bst/NBodySystem loaded, mram addr = 0x3091b10
 
 get DPUID = 0 class =  application/bst/NBodySystem from cache
 methodName = <init>
@@ -13716,54 +13853,54 @@ return val = V
 params desc = 
 
 
-3091d70
+3091da8
 
-In #58 of class 13 application.bst.NBodySystem: tag = 1, whole line = 1000400000000f8
-
-
-In #59 of class 13 application.bst.NBodySystem: tag = 1, whole line = 1000f00000000fc
+In #62 of class 17 application.bst.NBodySystem: tag = 1, whole line = 1000400000000fd
 
 
-In #60 of class 13 application.bst.NBodySystem: tag = 1, whole line = 10004000000010b
+In #63 of class 17 application.bst.NBodySystem: tag = 1, whole line = 1000f0000000101
 
 
-In #61 of class 13 application.bst.NBodySystem: tag = 1, whole line = 10003000000010f
+In #64 of class 17 application.bst.NBodySystem: tag = 1, whole line = 100040000000110
 
 
-In #62 of class 13 application.bst.NBodySystem: tag = 1, whole line = 1000d0000000112
+In #65 of class 17 application.bst.NBodySystem: tag = 1, whole line = 100030000000114
 
 
-In #63 of class 13 application.bst.NBodySystem: tag = 7, whole line = 700001700000017
+In #66 of class 17 application.bst.NBodySystem: tag = 1, whole line = 1000d0000000117
 
 
-In #63 ClassRef: 
+In #67 of class 17 application.bst.NBodySystem: tag = 7, whole line = 700001b0000001b
 
 
-className = [Lapplication/bst/Body;, index = #23
+In #67 ClassRef: 
 
 
-In #64 of class 13 application.bst.NBodySystem: tag = 1, whole line = 10007000000011f
+className = [Lapplication/bst/Body;, index = #27
 
 
-In #65 of class 13 application.bst.NBodySystem: tag = 1, whole line = 100040000000126
+In #68 of class 17 application.bst.NBodySystem: tag = 1, whole line = 100070000000124
 
 
-In #66 of class 13 application.bst.NBodySystem: tag = 1, whole line = 10006000000012a
+In #69 of class 17 application.bst.NBodySystem: tag = 1, whole line = 10004000000012b
 
 
-In #67 of class 13 application.bst.NBodySystem: tag = 1, whole line = 100030000000130
+In #70 of class 17 application.bst.NBodySystem: tag = 1, whole line = 10006000000012f
 
 
-In #68 of class 13 application.bst.NBodySystem: tag = 1, whole line = 100040000000133
+In #71 of class 17 application.bst.NBodySystem: tag = 1, whole line = 100030000000135
 
 
-In #69 of class 13 application.bst.NBodySystem: tag = 1, whole line = 1001f0000000137
+In #72 of class 17 application.bst.NBodySystem: tag = 1, whole line = 100040000000138
 
 
-In #70 of class 13 application.bst.NBodySystem: tag = 1, whole line = 1000a0000000156
+In #73 of class 17 application.bst.NBodySystem: tag = 1, whole line = 1001f000000013c
 
 
-In #71 of class 13 application.bst.NBodySystem: tag = 1, whole line = 100100000000160
+In #74 of class 17 application.bst.NBodySystem: tag = 1, whole line = 1000a000000015b
+
+
+In #75 of class 17 application.bst.NBodySystem: tag = 1, whole line = 100100000000165
 
 
 End of for loop: resolve unknow name
@@ -13826,30 +13963,30 @@ get DPUID = 0 method =  _new:()Lapplication/bst/NBodySystem; of class applicatio
 
 get DPUID = 0 class =  application/bst/NBodySystem from cache
 get DPUID = 0 class =  application/bst/NBodySystem from cache
-print 0x170 to 28
+print 0x17d to 28
 
-print 3091b30 in 14
+print 3091b48 in 14
 
-print 0x3091d70 to 24
+print 0x3091da8 to 24
 
-method 0 from 0x278 === 0x0
+method 0 from 0x298 === 0x0
 
-method 1 from 0x2a8 === 0x30
+method 1 from 0x2d0 === 0x38
 
-method 2 from 0x2c8 === 0x50
+method 2 from 0x2f0 === 0x58
 
-method 3 from 0x378 === 0x100
+method 3 from 0x3a0 === 0x108
 
-method 4 from 0x398 === 0x120
+method 4 from 0x3c0 === 0x128
 
-method 5 from 0x3b8 === 0x140
+method 5 from 0x3e0 === 0x148
 
-=============== !Alert pos = 1504 === total-size = 1504 ================
+=============== !Alert pos = 1560 === total-size = 1560 ================
 
  ==========--> End of load class application.bst.NBodySystem to dpu#0 <--==========
 
 
-thisClass: 11 superClass: 2
+thisClass: 15 superClass: 2
 
 
 createObject: after loadClassToDPU
@@ -13908,7 +14045,7 @@ param_buffer(wram)=0x3890000, sim_wram(wram)=(nil), mram = 0x120018
 param_buffer(wram)=0x3890000, sim_wram(wram)=(nil), mram = 0x120018
 param_buffer(wram)=0x3890000, sim_wram(wram)=(nil), mram = 0x120018
 [31m --------------------- (IN DPU) -----------------------------
-[0mmeta_space_pt = 0x30920d8, heap_space_pt = 0x90018, param_pt = 0x3890010
+[0mmeta_space_pt = 0x3092128, heap_space_pt = 0x90018, param_pt = 0x3890010
 [31m
 --------------------------------- Create Frame ---------------------------------
 --------- [0] Frame from ((nil)) ------------
@@ -13918,24 +14055,21 @@ param_buffer(wram)=0x3890000, sim_wram(wram)=(nil), mram = 0x120018
 (0x4) --> FP = (0x4) -> old-frame-fp = (nil) 
 (0x8) old-stack-pointer = (nil) 
 (0xc) return pc = 0x0 
-(0x10) method-ref = 0x3091d70 
-(0x14) class-ref = 0x3091af8 
-(0x18) constant-pool-ref = 0x3091b30 
-(0x1c) bytecodes = 0x3091d88 
+(0x10) method-ref = 0x3091da8 
+(0x14) class-ref = 0x3091b10 
+(0x18) constant-pool-ref = 0x3091b48 
+(0x1c) bytecodes = 0x3091dc0 
 ------------------------------ End Create Frame ------------------------------
-code_buffer = 0x3091d88
+code_buffer = 0x3091dc0
 create frame finished
 FP = (0x4)
-pc:0x0 op = 0x2a, ALOAD_0 (addr: 0x03091d88)
- - Current frame ptr: 0x4
- - param count = 1
+pc:0x0 op = 0x2a, ALOAD_0 (addr: 0x03091dc0)
  - Load ref 0x90008 to stack
- - 1: (nil), 2: (nil)
 >> new sp = 0x20
-pc:0x1 op = 0xb7, INVOKESPECIAL (addr: 0x03091d89)
+pc:0x1 op = 0xb7, INVOKESPECIAL (addr: 0x03091dc1)
  - class-ref-cp-index = 2
  - jclass-ref = 0x3090000
- - method-ref-cp-index = 1, current_jc = 3091af8, target_jc = 3090000
+ - method-ref-cp-index = 1, current_jc = 3091b10, target_jc = 3090000
  - jmethod-v-index = 0x1
  - jmethod-ref = 0x3090318
  - pop 1 elements from operand stack
@@ -13957,15 +14091,12 @@ pc:0x1 op = 0xb7, INVOKESPECIAL (addr: 0x03091d89)
 (0x3c) bytecodes = 0x3090330 
 ------------------------------ End Create Frame ------------------------------
 pc:0x0 op = 0xb1, RETURN (addr: 0x03090330)
- - reset func pt to 0x03091d70
- - bytecodes addr: 03091d88
-pc:0x4 op = 0x2a, ALOAD_0 (addr: 0x03091d8c)
- - Current frame ptr: 0x4
- - param count = 1
+ - reset func pt to 0x03091da8
+ - bytecodes addr: 03091dc0
+pc:0x4 op = 0x2a, ALOAD_0 (addr: 0x03091dc4)
  - Load ref 0x90008 to stack
- - 1: (nil), 2: (nil)
 >> new sp = 0x20
-pc:0x5 op = 0xbb, NEW (addr: 0x03091d8d)
+pc:0x5 op = 0xbb, NEW (addr: 0x03091dc5)
  - count field count
  - + 10
  -- super class index = 15
@@ -13977,302 +14108,173 @@ pc:0x5 op = 0xbb, NEW (addr: 0x03091d8d)
  - allocate instance in mram 0x90018
 >> new sp = 0x24
  - write class addr: 0x30911d0
-pc:0x8 op = 0x59, DUP (addr: 0x03091d90)
+pc:0x8 op = 0x59, DUP (addr: 0x03091dc8)
 >> new sp = 0x28
-pc:0x9 op = 0xb7, INVOKESPECIAL (addr: 0x03091d91)
+pc:0x9 op = 0x12, LDC (addr: 0x03091dc9)
+ - constant table index = 9
+ - constant value = 8.000000
+>> new sp = 0x2c
+pc:0xb op = 0x12, LDC (addr: 0x03091dcb)
+ - constant table index = 10
+ - constant value = 9.000000
+>> new sp = 0x30
+pc:0xd op = 0xb7, INVOKESPECIAL (addr: 0x03091dcd)
  - class-ref-cp-index = 7
  - jclass-ref = 0x30911d0
- - method-ref-cp-index = 9, current_jc = 3091af8, target_jc = 30911d0
+ - method-ref-cp-index = 11, current_jc = 3091b10, target_jc = 30911d0
  - jmethod-v-index = 0xf
- - jmethod-ref = 0x3091560
- - pop 1 elements from operand stack
+ - jmethod-ref = 0x3091568
+ - pop 3 elements from operand stack
  -- new sp = 0x24
- -- params-pt = 0x28
- -- return pc = 12
+ -- params-pt = 0x30
+ -- return pc = 16
 
 --------------------------------- Create Frame ---------------------------------
 --------- [0] Frame from (0x24) ------------
  >> create frame from an existed function call
 (0x28) (param) local 0 = 589848
--------> new current_sp = 0x2c
-(0x2c) --> FP = (0x2c) -> old-frame-fp = 0x4 
-(0x30) old-stack-pointer = 0x24 
-(0x34) return pc = 0xc 
-(0x38) method-ref = 0x3091560 
-(0x3c) class-ref = 0x30911d0 
-(0x40) constant-pool-ref = 0x3091208 
-(0x44) bytecodes = 0x3091578 
+(0x2c) (param) local 1 = 1090519040
+(0x30) (param) local 2 = 1091567616
+(0x34) local 3 = 50921472
+(0x38) local 4 = 50921528
+(0x3c) local 5 = 50922288
+-------> new current_sp = 0x40
+(0x40) --> FP = (0x40) -> old-frame-fp = 0x4 
+(0x44) old-stack-pointer = 0x24 
+(0x48) return pc = 0x10 
+(0x4c) method-ref = 0x3091568 
+(0x50) class-ref = 0x30911d0 
+(0x54) constant-pool-ref = 0x3091208 
+(0x58) bytecodes = 0x3091580 
 ------------------------------ End Create Frame ------------------------------
-pc:0x0 op = 0x2a, ALOAD_0 (addr: 0x03091578)
- - Current frame ptr: 0x2c
- - param count = 1
- - Load ref 0x90018 to stack
- - 1: 0x4, 2: 0x24
->> new sp = 0x48
-pc:0x1 op = 0xb7, INVOKESPECIAL (addr: 0x03091579)
+pc:0x0 op = 0x2a, ALOAD_0 (addr: 0x03091580)
+ - Load ref 0x3090000 to stack
+>> new sp = 0x5c
+pc:0x1 op = 0xb7, INVOKESPECIAL (addr: 0x03091581)
  - class-ref-cp-index = 15
  - jclass-ref = 0x3090000
  - method-ref-cp-index = 14, current_jc = 30911d0, target_jc = 3090000
  - jmethod-v-index = 0x1
  - jmethod-ref = 0x3090318
  - pop 1 elements from operand stack
- -- new sp = 0x44
- -- params-pt = 0x48
+ -- new sp = 0x58
+ -- params-pt = 0x5c
  -- return pc = 4
 
 --------------------------------- Create Frame ---------------------------------
---------- [0] Frame from (0x44) ------------
+--------- [0] Frame from (0x58) ------------
  >> create frame from an existed function call
-(0x48) (param) local 0 = 589848
--------> new current_sp = 0x4c
-(0x4c) --> FP = (0x4c) -> old-frame-fp = 0x2c 
-(0x50) old-stack-pointer = 0x44 
-(0x54) return pc = 0x4 
-(0x58) method-ref = 0x3090318 
-(0x5c) class-ref = 0x3090000 
-(0x60) constant-pool-ref = 0x3090038 
-(0x64) bytecodes = 0x3090330 
+(0x5c) (param) local 0 = 50921472
+-------> new current_sp = 0x60
+(0x60) --> FP = (0x60) -> old-frame-fp = 0x40 
+(0x64) old-stack-pointer = 0x58 
+(0x68) return pc = 0x4 
+(0x6c) method-ref = 0x3090318 
+(0x70) class-ref = 0x3090000 
+(0x74) constant-pool-ref = 0x3090038 
+(0x78) bytecodes = 0x3090330 
 ------------------------------ End Create Frame ------------------------------
 pc:0x0 op = 0xb1, RETURN (addr: 0x03090330)
- - reset func pt to 0x03091560
- - bytecodes addr: 03091578
-pc:0x4 op = 0x2a, ALOAD_0 (addr: 0x0309157c)
- - Current frame ptr: 0x2c
- - param count = 1
- - Load ref 0x90018 to stack
- - 1: 0x4, 2: 0x24
->> new sp = 0x48
-pc:0x5 op = 0x12, LDC (addr: 0x0309157d)
+ - reset func pt to 0x03091568
+ - bytecodes addr: 03091580
+pc:0x4 op = 0x2a, ALOAD_0 (addr: 0x03091584)
+ - Load ref 0x3090000 to stack
+>> new sp = 0x5c
+pc:0x5 op = 0x12, LDC (addr: 0x03091585)
  - constant table index = 20
  - constant value = 3.141593
->> new sp = 0x4c
-pc:0x7 op = 0xb5, PUTFIELD (addr: 0x0309157f)
- - constant table index = 21
- - field index in instance = 0
->> new sp = 0x48
->> new sp = 0x44
- - set val = 1078530011 (hex:0x40490fdb), at addr(m):0x00090020, instance addr: 0x00090018
-pc:0xa op = 0x2a, ALOAD_0 (addr: 0x03091582)
- - Current frame ptr: 0x2c
- - param count = 1
- - Load ref 0x90018 to stack
- - 1: 0x4, 2: 0x24
->> new sp = 0x48
-pc:0xb op = 0x12, LDC (addr: 0x03091583)
+>> new sp = 0x60
+pc:0x7 op = 0xb5, PUTFIELD (addr: 0x03091587)
+>> new sp = 0x5c
+>> new sp = 0x58
+ - set val = 1078530011 (hex:0x40490fdb), at addr(m):0x03090008, instance addr: 0x03090000
+pc:0xa op = 0x2a, ALOAD_0 (addr: 0x0309158a)
+ - Load ref 0x3090000 to stack
+>> new sp = 0x5c
+pc:0xb op = 0x12, LDC (addr: 0x0309158b)
  - constant table index = 3
  - constant value = 39.478420
->> new sp = 0x4c
-pc:0xd op = 0xb5, PUTFIELD (addr: 0x03091585)
- - constant table index = 24
- - field index in instance = 1
->> new sp = 0x48
->> new sp = 0x44
- - set val = 1109256679 (hex:0x421de9e7), at addr(m):0x00090024, instance addr: 0x00090018
-pc:0x10 op = 0x2a, ALOAD_0 (addr: 0x03091588)
- - Current frame ptr: 0x2c
- - param count = 1
- - Load ref 0x90018 to stack
- - 1: 0x4, 2: 0x24
->> new sp = 0x48
-pc:0x11 op = 0x12, LDC (addr: 0x03091589)
+>> new sp = 0x60
+pc:0xd op = 0xb5, PUTFIELD (addr: 0x0309158d)
+>> new sp = 0x5c
+>> new sp = 0x58
+ - set val = 1109256679 (hex:0x421de9e7), at addr(m):0x0309000c, instance addr: 0x03090000
+pc:0x10 op = 0x2a, ALOAD_0 (addr: 0x03091590)
+ - Load ref 0x3090000 to stack
+>> new sp = 0x5c
+pc:0x11 op = 0x12, LDC (addr: 0x03091591)
  - constant table index = 27
  - constant value = 365.239990
->> new sp = 0x4c
-pc:0x13 op = 0xb5, PUTFIELD (addr: 0x0309158b)
- - constant table index = 28
- - field index in instance = 2
->> new sp = 0x48
->> new sp = 0x44
- - set val = 1136041656 (hex:0x43b69eb8), at addr(m):0x00090028, instance addr: 0x00090018
-pc:0x16 op = 0x2a, ALOAD_0 (addr: 0x0309158e)
- - Current frame ptr: 0x2c
- - param count = 1
- - Load ref 0x90018 to stack
- - 1: 0x4, 2: 0x24
->> new sp = 0x48
-pc:0x17 op = 0x0b, FCONST_0 (addr: 0x0309158f)
- - push const 0.0 to stack
->> new sp = 0x4c
-pc:0x18 op = 0xb5, PUTFIELD (addr: 0x03091590)
- - constant table index = 31
- - field index in instance = 3
->> new sp = 0x48
->> new sp = 0x44
- - set val = 0 (hex:0x00000000), at addr(m):0x0009002c, instance addr: 0x00090018
-pc:0x1b op = 0x2a, ALOAD_0 (addr: 0x03091593)
- - Current frame ptr: 0x2c
- - param count = 1
- - Load ref 0x90018 to stack
- - 1: 0x4, 2: 0x24
->> new sp = 0x48
-pc:0x1c op = 0x0b, FCONST_0 (addr: 0x03091594)
- - push const 0.0 to stack
->> new sp = 0x4c
-pc:0x1d op = 0xb5, PUTFIELD (addr: 0x03091595)
- - constant table index = 34
- - field index in instance = 4
->> new sp = 0x48
->> new sp = 0x44
- - set val = 0 (hex:0x00000000), at addr(m):0x00090030, instance addr: 0x00090018
-pc:0x20 op = 0x2a, ALOAD_0 (addr: 0x03091598)
- - Current frame ptr: 0x2c
- - param count = 1
- - Load ref 0x90018 to stack
- - 1: 0x4, 2: 0x24
->> new sp = 0x48
-pc:0x21 op = 0x0b, FCONST_0 (addr: 0x03091599)
- - push const 0.0 to stack
->> new sp = 0x4c
-pc:0x22 op = 0xb5, PUTFIELD (addr: 0x0309159a)
- - constant table index = 37
- - field index in instance = 5
->> new sp = 0x48
->> new sp = 0x44
- - set val = 0 (hex:0x00000000), at addr(m):0x00090034, instance addr: 0x00090018
-pc:0x25 op = 0x2a, ALOAD_0 (addr: 0x0309159d)
- - Current frame ptr: 0x2c
- - param count = 1
- - Load ref 0x90018 to stack
- - 1: 0x4, 2: 0x24
->> new sp = 0x48
-pc:0x26 op = 0x0b, FCONST_0 (addr: 0x0309159e)
- - push const 0.0 to stack
->> new sp = 0x4c
-pc:0x27 op = 0xb5, PUTFIELD (addr: 0x0309159f)
- - constant table index = 4
- - field index in instance = 6
->> new sp = 0x48
->> new sp = 0x44
- - set val = 0 (hex:0x00000000), at addr(m):0x00090038, instance addr: 0x00090018
-pc:0x2a op = 0x2a, ALOAD_0 (addr: 0x030915a2)
- - Current frame ptr: 0x2c
- - param count = 1
- - Load ref 0x90018 to stack
- - 1: 0x4, 2: 0x24
->> new sp = 0x48
-pc:0x2b op = 0x0b, FCONST_0 (addr: 0x030915a3)
- - push const 0.0 to stack
->> new sp = 0x4c
-pc:0x2c op = 0xb5, PUTFIELD (addr: 0x030915a4)
- - constant table index = 8
- - field index in instance = 7
->> new sp = 0x48
->> new sp = 0x44
- - set val = 0 (hex:0x00000000), at addr(m):0x0009003c, instance addr: 0x00090018
-pc:0x2f op = 0x2a, ALOAD_0 (addr: 0x030915a7)
- - Current frame ptr: 0x2c
- - param count = 1
- - Load ref 0x90018 to stack
- - 1: 0x4, 2: 0x24
->> new sp = 0x48
-pc:0x30 op = 0x0b, FCONST_0 (addr: 0x030915a8)
- - push const 0.0 to stack
->> new sp = 0x4c
-pc:0x31 op = 0xb5, PUTFIELD (addr: 0x030915a9)
- - constant table index = 11
- - field index in instance = 8
->> new sp = 0x48
->> new sp = 0x44
- - set val = 0 (hex:0x00000000), at addr(m):0x00090040, instance addr: 0x00090018
-pc:0x34 op = 0x2a, ALOAD_0 (addr: 0x030915ac)
- - Current frame ptr: 0x2c
- - param count = 1
- - Load ref 0x90018 to stack
- - 1: 0x4, 2: 0x24
->> new sp = 0x48
-pc:0x35 op = 0x0b, FCONST_0 (addr: 0x030915ad)
- - push const 0.0 to stack
->> new sp = 0x4c
-pc:0x36 op = 0xb5, PUTFIELD (addr: 0x030915ae)
- - constant table index = 40
- - field index in instance = 9
->> new sp = 0x48
->> new sp = 0x44
- - set val = 0 (hex:0x00000000), at addr(m):0x00090044, instance addr: 0x00090018
-pc:0x39 op = 0xb1, RETURN (addr: 0x030915b1)
- - reset func pt to 0x03091d70
- - bytecodes addr: 03091d88
-pc:0xc op = 0xb5, PUTFIELD (addr: 0x03091d94)
- - constant table index = 10
- - field index in instance = 1
->> new sp = 0x20
->> new sp = 0x1c
- - set val = 589848 (hex:0x00090018), at addr(m):0x00090014, instance addr: 0x00090008
-pc:0xf op = 0x2a, ALOAD_0 (addr: 0x03091d97)
- - Current frame ptr: 0x4
- - param count = 1
- - Load ref 0x90008 to stack
- - 1: (nil), 2: (nil)
->> new sp = 0x20
-pc:0x10 op = 0x2a, ALOAD_0 (addr: 0x03091d98)
- - Current frame ptr: 0x4
- - param count = 1
- - Load ref 0x90008 to stack
- - 1: (nil), 2: (nil)
->> new sp = 0x24
-pc:0x11 op = 0xb6, INVOKEVIRTUAL (addr: 0x03091d99)
- - current-class-ref = 0x3091af8
- - method-ref-cp-index = 16
- - v-index = 0xf
- - class-ref-cp-index = 11
- - jclass-ref = 0x3091af8
- - instance-address [me()]= 0x90008, 0x24
- - instance-class-address = 0x3091af8
- - jclass-ref = 0x3091af8
- - jmethod-ref = 0x3091dc0
- - pop 1 elements from operand stack
- -- new sp = 0x20
- -- params-pt = 0x24
- -- return pc = 20
-
---------------------------------- Create Frame ---------------------------------
---------- [0] Frame from (0x20) ------------
- >> create frame from an existed function call
-(0x24) (param) local 0 = 589832
-(0x28) local 1 = 589848
-(0x2c) local 2 = 4
-(0x30) local 3 = 36
-(0x34) local 4 = 12
-(0x38) local 5 = 50926944
-(0x3c) local 6 = 50926032
-(0x40) local 7 = 50926088
-(0x44) local 8 = 50926968
--------> new current_sp = 0x48
-(0x48) --> FP = (0x48) -> old-frame-fp = 0x4 
-(0x4c) old-stack-pointer = 0x20 
-(0x50) return pc = 0x14 
-(0x54) method-ref = 0x3091dc0 
-(0x58) class-ref = 0x3091af8 
-(0x5c) constant-pool-ref = 0x3091b30 
-(0x60) bytecodes = 0x3091dd8 
------------------------------- End Create Frame ------------------------------
-pc:0x0 op = 0x08, ICONST_5 (addr: 0x03091dd8)
->> new sp = 0x64
-pc:0x1 op = 0xbd, ANEWARRAY (addr: 0x03091dd9)
 >> new sp = 0x60
->> new sp = 0x64
-pc:0x4 op = 0x59, DUP (addr: 0x03091ddc)
->> new sp = 0x68
-pc:0x5 op = 0x03, ICONST_0 (addr: 0x03091ddd)
->> new sp = 0x6c
-pc:0x6 op = 0x2a, ALOAD_0 (addr: 0x03091dde)
- - Current frame ptr: 0x48
- - param count = 1
- - Load ref 0x3091578 to stack
- - 1: 0x4, 2: 0x20
->> new sp = 0x70
-pc:0x7 op = 0xb4, GETFIELD (addr: 0x03091ddf)
- - fieldref in cp index = 10
- - cp val = 0x09000000 | 0x000b0001
- - field index in instance = 1
->> new sp = 0x6c
- - instance addr(m) = 0x3091578, field index = 1, addr(m) = 0x3091584
- - field val = 0x1800b503
->> new sp = 0x70
-pc:0xa op = 0xb6, INVOKEVIRTUAL (addr: 0x03091de2)
- - current-class-ref = 0x3091af8
- - method-ref-cp-index = 24
- - v-index = 0x14
- - class-ref-cp-index = 7
- - jclass-ref = 0x30911d0
- - instance-address [me()]= 0x1800b503, 0x70
+pc:0x13 op = 0xb5, PUTFIELD (addr: 0x03091593)
+>> new sp = 0x5c
+>> new sp = 0x58
+ - set val = 1136041656 (hex:0x43b69eb8), at addr(m):0x03090010, instance addr: 0x03090000
+pc:0x16 op = 0x2a, ALOAD_0 (addr: 0x03091596)
+ - Load ref 0x3090000 to stack
+>> new sp = 0x5c
+pc:0x17 op = 0x23, FLOAD_1 (addr: 0x03091597)
+ - Load float 0.000000 to stack
+>> new sp = 0x60
+pc:0x18 op = 0xb5, PUTFIELD (addr: 0x03091598)
+>> new sp = 0x5c
+>> new sp = 0x58
+ - set val = 50921528 (hex:0x03090038), at addr(m):0x03090014, instance addr: 0x03090000
+pc:0x1b op = 0x2a, ALOAD_0 (addr: 0x0309159b)
+ - Load ref 0x3090000 to stack
+>> new sp = 0x5c
+pc:0x1c op = 0x24, FLOAD_2 (addr: 0x0309159c)
+ - Load float 0.000000 to stack
+>> new sp = 0x60
+pc:0x1d op = 0xb5, PUTFIELD (addr: 0x0309159d)
+>> new sp = 0x5c
+>> new sp = 0x58
+ - set val = 50922288 (hex:0x03090330), at addr(m):0x03090018, instance addr: 0x03090000
+pc:0x20 op = 0x2a, ALOAD_0 (addr: 0x030915a0)
+ - Load ref 0x3090000 to stack
+>> new sp = 0x5c
+pc:0x21 op = 0x0b, FCONST_0 (addr: 0x030915a1)
+>> new sp = 0x60
+pc:0x22 op = 0xb5, PUTFIELD (addr: 0x030915a2)
+>> new sp = 0x5c
+>> new sp = 0x58
+ - set val = 0 (hex:0x00000000), at addr(m):0x0309001c, instance addr: 0x03090000
+pc:0x25 op = 0x2a, ALOAD_0 (addr: 0x030915a5)
+ - Load ref 0x3090000 to stack
+>> new sp = 0x5c
+pc:0x26 op = 0x0b, FCONST_0 (addr: 0x030915a6)
+>> new sp = 0x60
+pc:0x27 op = 0xb5, PUTFIELD (addr: 0x030915a7)
+>> new sp = 0x5c
+>> new sp = 0x58
+ - set val = 0 (hex:0x00000000), at addr(m):0x03090020, instance addr: 0x03090000
+pc:0x2a op = 0x2a, ALOAD_0 (addr: 0x030915aa)
+ - Load ref 0x3090000 to stack
+>> new sp = 0x5c
+pc:0x2b op = 0x0b, FCONST_0 (addr: 0x030915ab)
+>> new sp = 0x60
+pc:0x2c op = 0xb5, PUTFIELD (addr: 0x030915ac)
+>> new sp = 0x5c
+>> new sp = 0x58
+ - set val = 0 (hex:0x00000000), at addr(m):0x03090024, instance addr: 0x03090000
+pc:0x2f op = 0x2a, ALOAD_0 (addr: 0x030915af)
+ - Load ref 0x3090000 to stack
+>> new sp = 0x5c
+pc:0x30 op = 0x0b, FCONST_0 (addr: 0x030915b0)
+>> new sp = 0x60
+pc:0x31 op = 0xb5, PUTFIELD (addr: 0x030915b1)
+>> new sp = 0x5c
+>> new sp = 0x58
+ - set val = 0 (hex:0x00000000), at addr(m):0x03090028, instance addr: 0x03090000
+pc:0x34 op = 0x2a, ALOAD_0 (addr: 0x030915b4)
+ - Load ref 0x3090000 to stack
+>> new sp = 0x5c
+pc:0x35 op = 0x0b, FCONST_0 (addr: 0x030915b5)
+>> new sp = 0x60
+pc:0x36 op = 0xb5, PUTFIELD (addr: 0x030915b6)
+>> new sp = 0x5c
+>> new sp = 0x58
+ - set val = 0 (hex:0x00000000), at addr(m):0x0309002c, instance addr: 0x03090000
+pc:0x39 op = 0x03, ICONST_0 (addr: 0x030915b9)
+>> new sp = 0x5c
+pc:0x3a op = 0x3e, UNKNOW (addr: 0x030915ba)

@@ -68,10 +68,10 @@ void interp(struct function_thunk func_thunk)
             DEBUG_OUT_INSN_PARSED("ALOAD_0")
 
             op1 = FRAME_GET_LOCALS(current_fp[tasklet_id], func->params_count, 0);
-            DEBUG_PRINT(" - Current frame ptr: %p\n", current_fp[tasklet_id]);
-            DEBUG_PRINT(" - param count = %d\n", func->params_count);
+            // DEBUG_PRINT(" - Current frame ptr: %p\n", current_fp[tasklet_id]);
+            // DEBUG_PRINT(" - param count = %d\n", func->params_count);
             DEBUG_PRINT(" - Load ref %p to stack\n", op1);
-            DEBUG_PRINT(" - 1: %p, 2: %p\n", FRAME_GET_LOCALS(current_fp[tasklet_id], func->params_count, 1), FRAME_GET_LOCALS(current_fp[tasklet_id], func->params_count, 2));
+            // DEBUG_PRINT(" - 1: %p, 2: %p\n", FRAME_GET_LOCALS(current_fp[tasklet_id], func->params_count, 1), FRAME_GET_LOCALS(current_fp[tasklet_id], func->params_count, 2));
 
             PUSH_EVAL_STACK(op1)
             break;
@@ -82,24 +82,24 @@ void interp(struct function_thunk func_thunk)
             PUSH_EVAL_STACK(op1)
             break;
 
-            // case FLOAD_0:
-            //     DEBUG_OUT_INSN_PARSED("FLOAD_0")
-            //     op1 = FRAME_GET_LOCALS(current_fp[tasklet_id], func->params_count, 0);
-            //     DEBUG_PRINT(" - Load float %f to stack\n", *(float *)&op1);
-            //     PUSH_EVAL_STACK(op1)
-            //     break;
-            // case FLOAD_1:
-            //     DEBUG_OUT_INSN_PARSED("FLOAD_1")
-            //     op1 = FRAME_GET_LOCALS(current_fp[tasklet_id], func->params_count, 1);
-            //     DEBUG_PRINT(" - Load float %f to stack\n", *(float *)&op1);
-            //     PUSH_EVAL_STACK(op1)
-            //     break;
-            // case FLOAD_2:
-            //     DEBUG_OUT_INSN_PARSED("FLOAD_2")
-            //     op1 = FRAME_GET_LOCALS(current_fp[tasklet_id], func->params_count, 2);
-            //     DEBUG_PRINT(" - Load float %f to stack\n", *(float *)&op1);
-            //     PUSH_EVAL_STACK(op1)
-            //     break;
+        // case FLOAD_0:
+        //     // DEBUG_OUT_INSN_PARSED("FLOAD_0")
+        //     op1 = FRAME_GET_LOCALS(current_fp[tasklet_id], func->params_count, 0);
+        //     // DEBUG_PRINT(" - Load float %f to stack\n", *(float *)&op1);
+        //     PUSH_EVAL_STACK(op1)
+        //     break;
+        case FLOAD_1:
+            DEBUG_OUT_INSN_PARSED("FLOAD_1")
+            op1 = FRAME_GET_LOCALS(current_fp[tasklet_id], func->params_count, 1);
+            DEBUG_PRINT(" - Load float %f to stack\n", *(float *)&op1);
+            PUSH_EVAL_STACK(op1)
+            break;
+        case FLOAD_2:
+            DEBUG_OUT_INSN_PARSED("FLOAD_2")
+            op1 = FRAME_GET_LOCALS(current_fp[tasklet_id], func->params_count, 2);
+            DEBUG_PRINT(" - Load float %f to stack\n", *(float *)&op1);
+            PUSH_EVAL_STACK(op1)
+            break;
             // case FLOAD_3:
             //     DEBUG_OUT_INSN_PARSED("FLOAD_3")
             //     op1 = FRAME_GET_LOCALS(current_fp[tasklet_id], func->params_count, 3);
@@ -150,13 +150,13 @@ void interp(struct function_thunk func_thunk)
         //     break;
         case ACONST_NULL:
             DEBUG_OUT_INSN_PARSED("ACONST_NULL")
-            DEBUG_PRINT(" - push const NULL to stack\n");
+            // DEBUG_PRINT(" - push const NULL to stack\n");
             ;
             PUSH_EVAL_STACK(0);
             break;
         case FCONST_0:
             DEBUG_OUT_INSN_PARSED("FCONST_0")
-            DEBUG_PRINT(" - push const 0.0 to stack\n");
+            // DEBUG_PRINT(" - push const 0.0 to stack\n");
             ;
             PUSH_EVAL_STACK(0);
             break;
@@ -257,10 +257,10 @@ void interp(struct function_thunk func_thunk)
             // op1 <- constant table index
             op1 = (code_buffer[pc] << 8) | code_buffer[pc + 1];
             pc += 2;
-            DEBUG_PRINT(" - fieldref in cp index = %d\n", op1);
-            DEBUG_PRINT(" - cp val = 0x%08x | 0x%08x\n", func_thunk.jc->items[op1].info, func_thunk.jc->items[op1].direct_value);
+            // DEBUG_PRINT(" - fieldref in cp index = %d\n", op1);
+            // DEBUG_PRINT(" - cp val = 0x%08x | 0x%08x\n", func_thunk.jc->items[op1].info, func_thunk.jc->items[op1].direct_value);
             op2 = func_thunk.jc->items[op1].direct_value & 0xFFFF;
-            DEBUG_PRINT(" - field index in instance = %d\n", op2);
+            // DEBUG_PRINT(" - field index in instance = %d\n", op2);
             POP_EVAL_STACK(op3)
             DEBUG_PRINT(" - instance addr(m) = %p, field index = %d, addr(m) = %p\n",
                         op3, op2, op3 + 8 + 4 * op2);
@@ -274,10 +274,10 @@ void interp(struct function_thunk func_thunk)
         case PUTFIELD:
             DEBUG_OUT_INSN_PARSED("PUTFIELD")
             op1 = (code_buffer[pc] << 8) | code_buffer[pc + 1]; // constant table index
-            DEBUG_PRINT(" - constant table index = %d\n", op1);
+            // DEBUG_PRINT(" - constant table index = %d\n", op1);
             pc += 2;
             op2 = (jc->items[op1].direct_value >> 16 & 0xFFFF);
-            DEBUG_PRINT(" - field index in instance = %d\n", (jc->items[op1].direct_value & 0xFFFF));
+            // DEBUG_PRINT(" - field index in instance = %d\n", (jc->items[op1].direct_value & 0xFFFF));
             op1 = jc->items[op1].direct_value & 0xFFFF; // index in instance fields
             POP_EVAL_STACK(op3);                        // val
             POP_EVAL_STACK(op4);                        // instance addr
