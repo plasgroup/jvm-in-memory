@@ -7,14 +7,14 @@ package application.bst;
 
 public class NBodySystem {
     private final Body[] bodies;
-    // private final Sqrt sqrt;
+    private final Sqrt sqrt;
     private final Body body;
     // private final IBody body;
 
     public NBodySystem() {
         // body = new IBody();
         body = new Body();
-        // sqrt = new Sqrt();
+        sqrt = new Sqrt();
         bodies = createBodies();
     }
 
@@ -46,56 +46,56 @@ public class NBodySystem {
 
     public void advance(final float dt) {
 
-        // for (int i = 0; i < bodies.length; ++i) {
-        // Body iBody = bodies[i];
+        for (int i = 0; i < bodies.length; ++i) {
+            Body iBody = bodies[i];
 
-        // for (int j = i + 1; j < bodies.length; ++j) {
-        // Body jBody = bodies[j];
-        // float dx = iBody.x - jBody.x;
-        // float dy = iBody.y - jBody.y;
-        // float dz = iBody.z - jBody.z;
+            for (int j = i + 1; j < bodies.length; ++j) {
+                Body jBody = bodies[j];
+                float dx = iBody.x - jBody.x;
+                float dy = iBody.y - jBody.y;
+                float dz = iBody.z - jBody.z;
 
-        // float dSquared = dx * dx + dy * dy + dz * dz;
-        // float distance = (float) sqrt.compute(dSquared);
-        // float mag = dt / (dSquared * distance);
+                float dSquared = dx * dx + dy * dy + dz * dz;
+                float distance = (float) sqrt.compute(dSquared);
+                float mag = dt / (dSquared * distance);
 
-        // iBody.vx = iBody.vx - (dx * jBody.mass * mag);
-        // iBody.vy = iBody.vy - (dy * jBody.mass * mag);
-        // iBody.vz = iBody.vz - (dz * jBody.mass * mag);
+                iBody.vx = iBody.vx - (dx * jBody.mass * mag);
+                iBody.vy = iBody.vy - (dy * jBody.mass * mag);
+                iBody.vz = iBody.vz - (dz * jBody.mass * mag);
 
-        // jBody.vx = jBody.vx + (dx * iBody.mass * mag);
-        // jBody.vy = jBody.vy + (dy * iBody.mass * mag);
-        // jBody.vz = jBody.vz + (dz * iBody.mass * mag);
-        // }
-        // }
+                jBody.vx = jBody.vx + (dx * iBody.mass * mag);
+                jBody.vy = jBody.vy + (dy * iBody.mass * mag);
+                jBody.vz = jBody.vz + (dz * iBody.mass * mag);
+            }
+        }
 
-        // for (Body body : bodies) {
-        // body.x = body.x + dt * body.vx;
-        // body.y = body.y + dt * body.vy;
-        // body.z = body.z + dt * body.vz;
-        // }
+        for (Body body : bodies) {
+            body.x = body.x + dt * body.vx;
+            body.y = body.y + dt * body.vy;
+            body.z = body.z + dt * body.vz;
+        }
     }
 
     public float energy() {
         float e = (float) 0.0;
 
-        // for (int i = 0; i < bodies.length; ++i) {
-        // Body iBody = bodies[i];
-        // e += (float) 0.5 * iBody.mass
-        // * (iBody.vx * iBody.vx +
-        // iBody.vy * iBody.vy +
-        // iBody.vz * iBody.vz);
+        for (int i = 0; i < bodies.length; ++i) {
+            Body iBody = bodies[i];
+            e += (float) 0.5 * iBody.mass
+                    * (iBody.vx * iBody.vx +
+                            iBody.vy * iBody.vy +
+                            iBody.vz * iBody.vz);
 
-        // for (int j = i + 1; j < bodies.length; ++j) {
-        // Body jBody = bodies[j];
-        // float dx = iBody.x - jBody.x;
-        // float dy = iBody.y - jBody.y;
-        // float dz = iBody.z - jBody.z;
+            for (int j = i + 1; j < bodies.length; ++j) {
+                Body jBody = bodies[j];
+                float dx = iBody.x - jBody.x;
+                float dy = iBody.y - jBody.y;
+                float dz = iBody.z - jBody.z;
 
-        // float distance = (float) sqrt.compute(dx * dx + dy * dy + dz * dz);
-        // e -= (iBody.mass * jBody.mass) / distance;
-        // }
-        // }
+                float distance = (float) sqrt.compute(dx * dx + dy * dy + dz * dz);
+                e -= (iBody.mass * jBody.mass) / distance;
+            }
+        }
         return (float) e;
     }
 

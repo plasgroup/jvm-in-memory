@@ -164,7 +164,8 @@ public class Main {
         UPMEM.getInstance().getDPUManager(0).dpuClassFileManager.loadClassToDPU(Sqrt.class);
         NBodySystemProxy nbs = (NBodySystemProxy) UPMEM.getInstance().createObject(0,
                 NBodySystem.class);
-        System.out.println("nbs.test() = " + nbs.test());
+        // System.out.println("nbs.test() = " + nbs.test());
+        nbs.advance(0.01f);
 
         // DPUTreeNodeProxy dpuTreeNode = (DPUTreeNodeProxy)
         // UPMEM.getInstance().createObject(0, DPUTreeNode.class, 1, 1);

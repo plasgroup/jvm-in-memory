@@ -43,9 +43,6 @@ public final class Body {
         this.vy = 0;
         this.vz = 0;
         this.mass = 0;
-        // int i = 0;
-        // int j = 0;
-        // int k = 0;
     }
 
     Body jupiter() {
