@@ -13,7 +13,7 @@ public class NBodySystem {
 
     public NBodySystem() {
         // body = new IBody();
-        body = new Body(8.0f, 9.0f);
+        body = new Body();
         // sqrt = new Sqrt();
         bodies = createBodies();
     }

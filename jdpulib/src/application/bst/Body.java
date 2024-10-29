@@ -35,17 +35,17 @@ public final class Body {
         this.mass = mass * SOLAR_MASS;
     }
 
-    Body(float x, float y) {
-        this.x = x;
-        this.y = y;
+    Body() {
+        this.x = 0;
+        this.y = 0;
         this.z = 0;
         this.vx = 0;
         this.vy = 0;
         this.vz = 0;
         this.mass = 0;
-        int i = 0;
-        int j = 0;
-        int k = 0;
+        // int i = 0;
+        // int j = 0;
+        // int k = 0;
     }
 
     Body jupiter() {
