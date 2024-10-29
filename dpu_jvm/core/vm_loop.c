@@ -169,8 +169,10 @@ void interp(struct function_thunk func_thunk)
             DEBUG_PRINT(" - %d\n", current_code - FSTORE_0);
             POP_EVAL_STACK(op1)
             FRAME_GET_LOCALS(current_fp[tasklet_id], func->max_locals, (current_code - FSTORE_0)) = op1;
-            uint8_t tmp = FRAME_GET_LOCALS(current_fp[tasklet_id], func->max_locals, (current_code - FSTORE_0));
-            DEBUG_PRINT(" - Store float %f to local %d\n", *(float *)&tmp, (current_code - FSTORE_0));
+            {
+                REGVAL tmp = FRAME_GET_LOCALS(current_fp[tasklet_id], func->max_locals, (current_code - FSTORE_0));
+                DEBUG_PRINT(" - Store float %f to local %d\n", *(float *)&tmp, (current_code - FSTORE_0));
+            }
             break;
 
         case FSTORE:
@@ -205,6 +207,7 @@ void interp(struct function_thunk func_thunk)
             break;
         case FCONST_0:
         case FCONST_1:
+        case FCONST_2:
             DEBUG_OUT_INSN_PARSED("FCONST_N")
             DEBUG_PRINT(" - %d\n", current_code - FCONST_0);
             {
@@ -221,7 +224,20 @@ void interp(struct function_thunk func_thunk)
             op1 = pc + (short)op1 - 1;
             DEBUG_PRINT(" - branch addr = %p\n - cmp value = %d\n", op1, op2);
             pc += 2;
-            if (op2 >= 0)
+            if (((int)op2) >= 0)
+            {
+                pc = op1;
+                DEBUG_PRINT(" - branch to pc = %p\n", op1);
+            }
+            break;
+        case IFLE:
+            DEBUG_OUT_INSN_PARSED("IFLE")
+            op1 = (uint8_t)code_buffer[pc] << 8 | code_buffer[pc + 1];
+            POP_EVAL_STACK(op2)
+            op1 = pc + (short)op1 - 1;
+            DEBUG_PRINT(" - branch addr = %p\n - cmp value = %d\n", op1, op2);
+            pc += 2;
+            if (((int)op2) <= 0)
             {
                 pc = op1;
                 DEBUG_PRINT(" - branch to pc = %p\n", op1);
@@ -261,50 +277,79 @@ void interp(struct function_thunk func_thunk)
                 DEBUG_PRINT(" - branch to pc = %p\n", op1);
             }
             break;
-        case IF_ICMPLT:
-            DEBUG_OUT_INSN_PARSED("IF_ICMPLT")
-            op1 = (uint8_t)code_buffer[pc] << 8 | code_buffer[pc + 1];
+        // case IF_ICMPLT:
+        //     DEBUG_OUT_INSN_PARSED("IF_ICMPLT")
+        //     op1 = (uint8_t)code_buffer[pc] << 8 | code_buffer[pc + 1];
+        //     POP_EVAL_STACK(op2);
+        //     POP_EVAL_STACK(op3);
+        //     DEBUG_PRINT(" - value 2 = %d\n", op2);
+        //     DEBUG_PRINT(" - value 1 = %d\n", op3);
+        //     op1 = pc + (short)op1 - 1;
+        //     DEBUG_PRINT(" - branch-target = 0x%02x\n", op1);
+        //     pc += 2;
+        //     if (op3 < op2)
+        //     {
+        //         pc = op1;
+        //         DEBUG_PRINT(" - branch to pc = %p\n", op1);
+        //     }
+        //     break;
+        // case IFNONNULL:
+        //     DEBUG_OUT_INSN_PARSED("IFNONNULL")
+        //     op1 = (uint8_t)code_buffer[pc] << 8 | code_buffer[pc + 1];
+        //     POP_EVAL_STACK(op2); // ref
+        //     DEBUG_PRINT(" - value 1 = %d\n", op2);
+        //     op1 = pc + (short)op1 - 1;
+        //     DEBUG_PRINT(" - branch-target = 0x%02x\n", op1);
+        //     pc += 2;
+        //     if (op2 != 0)
+        //     {
+        //         pc = op1;
+        //         DEBUG_PRINT(" - branch to pc = %p\n", op1);
+        //     }
+        //     break;
+        // case IFNULL:
+        //     DEBUG_OUT_INSN_PARSED("IFNULL")
+        //     op1 = (uint8_t)code_buffer[pc] << 8 | code_buffer[pc + 1];
+        //     POP_EVAL_STACK(op2); // ref
+        //     DEBUG_PRINT(" - value 1 = %d\n", op2);
+        //     op1 = pc + (short)op1 - 1;
+        //     DEBUG_PRINT(" - branch-target = 0x%02x\n", op1);
+        //     pc += 2;
+        //     if (op2 == 0)
+        //     {
+        //         pc = op1;
+        //         DEBUG_PRINT(" - branch to pc = %p\n", op1);
+        //     }
+        //     break;
+        case FCMPG:
+        case FCMPL:
+            DEBUG_OUT_INSN_PARSED((current_code == FCMPG) ? "FCMPG" : "FCMPL")
+            POP_EVAL_STACK(op1);
             POP_EVAL_STACK(op2);
-            POP_EVAL_STACK(op3);
-            DEBUG_PRINT(" - value 2 = %d\n", op2);
-            DEBUG_PRINT(" - value 1 = %d\n", op3);
-            op1 = pc + (short)op1 - 1;
-            DEBUG_PRINT(" - branch-target = 0x%02x\n", op1);
-            pc += 2;
-            if (op3 < op2)
+            DEBUG_PRINT(" - value 2 = %f\n", *(float *)&op2);
+            DEBUG_PRINT(" - value 1 = %f\n", *(float *)&op1);
             {
-                pc = op1;
-                DEBUG_PRINT(" - branch to pc = %p\n", op1);
+                float f1 = *(float *)&op1;
+                float f2 = *(float *)&op2;
+                if ((f1 != f1) || (f2 != f2))
+                {
+                    PUSH_EVAL_STACK((current_code == FCMPG) ? 1 : -1);
+                }
+                else if (f2 > f1)
+                {
+                    PUSH_EVAL_STACK(1);
+                }
+                else if (f2 < f1)
+                {
+                    PUSH_EVAL_STACK(-1);
+                }
+                else
+                {
+                    PUSH_EVAL_STACK(0);
+                }
             }
             break;
-        case IFNONNULL:
-            DEBUG_OUT_INSN_PARSED("IFNONNULL")
-            op1 = (uint8_t)code_buffer[pc] << 8 | code_buffer[pc + 1];
-            POP_EVAL_STACK(op2); // ref
-            DEBUG_PRINT(" - value 1 = %d\n", op2);
-            op1 = pc + (short)op1 - 1;
-            DEBUG_PRINT(" - branch-target = 0x%02x\n", op1);
-            pc += 2;
-            if (op2 != 0)
-            {
-                pc = op1;
-                DEBUG_PRINT(" - branch to pc = %p\n", op1);
-            }
-            break;
-        case IFNULL:
-            DEBUG_OUT_INSN_PARSED("IFNULL")
-            op1 = (uint8_t)code_buffer[pc] << 8 | code_buffer[pc + 1];
-            POP_EVAL_STACK(op2); // ref
-            DEBUG_PRINT(" - value 1 = %d\n", op2);
-            op1 = pc + (short)op1 - 1;
-            DEBUG_PRINT(" - branch-target = 0x%02x\n", op1);
-            pc += 2;
-            if (op2 == 0)
-            {
-                pc = op1;
-                DEBUG_PRINT(" - branch to pc = %p\n", op1);
-            }
-            break;
+
         case GETFIELD:
             DEBUG_OUT_INSN_PARSED("GETFIELD")
 
@@ -504,11 +549,12 @@ void interp(struct function_thunk func_thunk)
             func_thunk.jc = jc;
             break;
         case IRETURN:
-            DEBUG_OUT_INSN_PARSED("IRETURN")
+        case FRETURN:
+            DEBUG_OUT_INSN_PARSED((current_code == IRETURN) ? "IRETURN" : "FRETURN")
             if (FRAME_GET_OPERAND_STACK_SIZE(current_fp[tasklet_id], current_sp[tasklet_id]) >= 0)
             {
                 POP_EVAL_STACK(op1);
-                DEBUG_PRINT(" - ret val = %d\n", op1);
+                DEBUG_PRINT(" - ret val = %d, %f\n", op1, *(float *)&op1);
             }
             DEBUG_PRINT(" - last-sp = %p\n", FRAME_GET_OLDSP(current_fp[tasklet_id]));
             DEBUG_PRINT(" - last-fp = %p\n", FRAME_GET_OLDFP(current_fp[tasklet_id]));
@@ -542,15 +588,25 @@ void interp(struct function_thunk func_thunk)
             func_thunk.jc = jc;
             break;
 
-            // case ISUB:
-            //     DEBUG_OUT_INSN_PARSED("ISUB")
-            //     POP_EVAL_STACK(op1);
-            //     POP_EVAL_STACK(op2);
-            //     DEBUG_PRINT(" - value 2 = %d\n", op1);
-            //     DEBUG_PRINT(" - value 1 = %d\n", op2);
-            //     DEBUG_PRINT(" - sub result = %d\n", op2 - op1);
-            //     PUSH_EVAL_STACK(op2 - op1);
-            //     break;
+        case IADD:
+            DEBUG_OUT_INSN_PARSED("IADD")
+            POP_EVAL_STACK(op1);
+            POP_EVAL_STACK(op2);
+            DEBUG_PRINT(" - value 2 = %d\n", op1);
+            DEBUG_PRINT(" - value 1 = %d\n", op2);
+            DEBUG_PRINT(" - add result = %d\n", op2 + op1);
+            PUSH_EVAL_STACK(op2 + op1);
+            break;
+
+        case ISUB:
+            DEBUG_OUT_INSN_PARSED("ISUB")
+            POP_EVAL_STACK(op1);
+            POP_EVAL_STACK(op2);
+            DEBUG_PRINT(" - value 2 = %d\n", op1);
+            DEBUG_PRINT(" - value 1 = %d\n", op2);
+            DEBUG_PRINT(" - sub result = %d\n", op2 - op1);
+            PUSH_EVAL_STACK(op2 - op1);
+            break;
 
         case IMUL:
             DEBUG_OUT_INSN_PARSED("IMUL")
@@ -683,7 +739,7 @@ void interp(struct function_thunk func_thunk)
             break;
         case AALOAD:
         case IALOAD:
-            DEBUG_OUT_INSN_PARSED("?ALOAD")
+            DEBUG_OUT_INSN_PARSED((current_code == AALOAD) ? "AALOAD" : "IALOAD")
 
             // element index
             POP_EVAL_STACK(op1)
@@ -700,7 +756,7 @@ void interp(struct function_thunk func_thunk)
             break;
         case AASTORE:
         case IASTORE:
-            DEBUG_OUT_INSN_PARSED("?ASTORE")
+            DEBUG_OUT_INSN_PARSED((current_code == AASTORE) ? "AASTORE" : "IASTORE")
 
             // value
             POP_EVAL_STACK(op1)
