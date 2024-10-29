@@ -3,7 +3,7 @@
  *
  * Based on nbody.java and adapted basde on the SOM version.
  */
-package application.bst;
+package application.nbody;
 
 public final class Body {
     private final float PI = (float) 3.141592653589793;

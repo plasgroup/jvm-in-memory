@@ -3,7 +3,7 @@
  *
  * Based on nbody.java and adapted basde on the SOM version.
  */
-package application.bst;
+package application.nbody;
 
 import framework.lang.struct.IDPUProxyObject;
 import framework.pim.UPMEM;
@@ -39,19 +39,19 @@ public class NBodySystemProxy extends NBodySystem implements IDPUProxyObject {
 
     @Override
     public void advance(final float dt) {
-        invokeMethod(dpuID, address, "application/bst/NBodySystem", "advance:(F)V", dt);
+        invokeMethod(dpuID, address, "application/nbody/NBodySystem", "advance:(F)V", dt);
         return;
     }
 
     @Override
     public float energy() {
-        invokeMethod(dpuID, address, "application/bst/NBodySystem", "energy:()F");
+        invokeMethod(dpuID, address, "application/nbody/NBodySystem", "energy:()F");
         return getFReturnValue(dpuID);
     }
 
     @Override
     public NBodySystem _new() {
-        invokeMethod(dpuID, address, "application/bst/NBodySystem", "_new:()Lapplication/bst/NBodySystem;");
+        invokeMethod(dpuID, address, "application/nbody/NBodySystem", "_new:()Lapplication/nbody/NBodySystem;");
         return (NBodySystem) getAReturnValue(dpuID, NBodySystemProxy.class);
     }
 }

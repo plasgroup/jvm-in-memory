@@ -1,13 +1,13 @@
-package application.bst;
+package application.nbody;
 
 import framework.pim.BatchDispatcher;
 import framework.pim.ExperimentConfigurator;
 import framework.pim.UPMEM;
 import framework.pim.UPMEMConfigurator;
-import application.bst.NBodySystem;
-import application.bst.NBodySystemProxy;
-import application.bst.Body;
-import application.bst.Sqrt;
+import application.nbody.NBodySystem;
+import application.nbody.NBodySystemProxy;
+import application.nbody.Body;
+import application.nbody.Sqrt;
 
 import framework.pim.dpu.classloader.ClassWriter;
 import framework.primitive.control.ControlPrimitives;
@@ -30,8 +30,10 @@ public class Main {
     public static UPMEMConfigurator upmemConfigurator = new UPMEMConfigurator();
 
     public static void main(String[] args) throws RemoteException {
-        // Configure UPMEM
+        // Get the number of iterations
+        int iterations = Integer.parseInt(args[0]);
 
+        // Configure UPMEM
         upmemConfigurator
                 .setDpuInUseCount(1)
                 .setThreadPerDPU(1)
@@ -42,13 +44,18 @@ public class Main {
 
         // UPMEM initialization
         UPMEM.initialize(upmemConfigurator);
-        UPMEM.setPackageSearchPath("application.bst.");
+        UPMEM.setPackageSearchPath("application.nbody.");
 
         // Test DPUTreeNode
         UPMEM.getInstance().getDPUManager(0).dpuClassFileManager.loadClassToDPU(Body.class);
         UPMEM.getInstance().getDPUManager(0).dpuClassFileManager.loadClassToDPU(Sqrt.class);
         NBodySystemProxy nbs = (NBodySystemProxy) UPMEM.getInstance().createObject(0, NBodySystem.class);
-        nbs.advance(0.01f);
-        System.out.println(nbs.energy());
+        System.out.println("[INFO] Start DPU advance");
+        for (int i = 0; i < iterations; i++) {
+            nbs.advance(0.01f);
+        }
+        System.out.println("[INFO] End DPU advance");
+        float result = nbs.energy();
+        System.out.println("\tResult of " + iterations + " iterations is: " + result);
     }
 }

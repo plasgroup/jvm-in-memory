@@ -3,7 +3,7 @@
  *
  * Based on nbody.java and adapted basde on the SOM version.
  */
-package application.bst;
+package application.nbody;
 
 public class NBodySystem {
     private final Body[] bodies;

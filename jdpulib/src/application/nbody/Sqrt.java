@@ -1,4 +1,4 @@
-package application.bst;
+package application.nbody;
 
 public class Sqrt {
 
