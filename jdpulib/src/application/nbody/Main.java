@@ -58,14 +58,15 @@ public class Main {
         for (int i = 0; i < iterations; i++) {
             nbs.advance(0.01f);
         }
-        float energy = nbs.energy();
         long end = System.nanoTime();
+
         long durationInMicros = TimeUnit.NANOSECONDS.toMicros(end - start);
         long durationInMillis = TimeUnit.NANOSECONDS.toMillis(end - start);
         System.out.println("[INFO] Duration of " + iterations + " iterations: " + durationInMicros + " us");
         System.out.println("[INFO] Duration of " + iterations + " iterations: " + durationInMillis + " ms");
 
         System.out.println("[INFO] End DPU advance");
+        float energy = nbs.energy();
         System.out.println("\tResult of " + iterations + " iterations is: " + energy);
     }
 }
